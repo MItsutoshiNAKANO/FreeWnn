@@ -1,3 +1,46 @@
+Mon Jul 28 22:27:44 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* パッチ patch-1.1.1-a002 として内部リリース
+	
+Wed Jul 28 22:12:25 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* configure, configure.in: BSD/OS 対応 (富樫さん提供のパッチ)
+
+Wed Jul 28 22:07:32 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/jutil/wddel.c:main() にて gets() を使っていたので fgets() に
+	変更 ([freewnn:00024] 矢吹＠SRAさんの指摘による)
+
+	* Wnn/etc/msg.c:msg_get() にてローカル変数のアドレスを返している部
+	分があったので修正([freewnn:00024] 矢吹＠SRAさんの指摘による)
+
+
+Tue Jul 27 01:41:14 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	main() 関数の戻り値型が int になっていないのを修正
+	([freewnn:00024] 矢吹＠SRAさんの指摘による)
+	Wnn/jserver/de.c
+	Wnn/jutil/wnnstat.c
+	Wnn/jutil/wnnkill.c
+	Wnn/jutil/wddel.c
+	Wnn/jutil/wdreg.c
+	Wnn/jutil/oldatonewa.c
+	Wnn/jutil/dtoa.c
+	Wnn/jutil/atod.c
+	Wnn/jutil/atof.c
+	Wnn/jutil/wnntouch.c
+
+	Makefile.in で定義されている _NULLCMD_ を全て削除した
+	([freewnn:00024] 矢吹＠SRAさんの指摘による)。OS によっては、
+	(_NULLCMD_ が定義している) echo -n で -n が表示されてしまうため。_
+ 	NULLCMD_ そのものは Makefile.in の自動生成時にできる副作用的なマク
+	ロと推測され、それ自体には意味はない(と思う ^^;)。
+
+
+Mon Jul 19 04:44:37 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* パッチ patch-1.1.1-a001 として内部リリース
+	
 Mon Jul 19 04:02:14 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
 
 	* CHANGES: 古川竜雄

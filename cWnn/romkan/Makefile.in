@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.2 2000-01-16 05:35:45 ura Exp $
+# $Id: Makefile.in,v 1.3 2000-01-16 05:49:05 ura Exp $
 #
 
 # FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -36,8 +36,6 @@
 all::
 
 .SUFFIXES: .i
-
- _NULLCMD_ = @ echo -n
 
 TKLIBNAME = tk80
 
@@ -638,30 +636,14 @@ SRCS= rk_bltinfn.c 	rk_main.c 	rk_modread.c 	rk_read.c 	rk_vars.c
 OBJS= rk_bltinfn.o 	rk_main.o 	rk_modread.o 	rk_read.o 	rk_vars.o
 
 all::
-	$(_NULLCMD_)
-	$(_NULLCMD_)
-	$(_NULLCMD_)
-	$(_NULLCMD_)
 
 includes::
-	$(_NULLCMD_)
-	$(_NULLCMD_)
-	$(_NULLCMD_)
-	$(_NULLCMD_)
 
 .c.o:
-	$(_NULLCMD_)
-	$(_NULLCMD_)
 	$(RM) $@
-	 $(CC) -c $(CFLAGS) $(_NOOP_) $*.c
-	$(_NULLCMD_)
-	$(_NULLCMD_)
+	$(CC) -c $(CFLAGS) $(_NOOP_) $*.c
 
 clean::
-	$(_NULLCMD_)
-	$(_NULLCMD_)
-	$(_NULLCMD_)
-	$(_NULLCMD_)
 
 all:: $(HDRS) $(SRCS) $(OBJS)
 

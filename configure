@@ -711,6 +711,13 @@ case $hosttype in
         CPP=/usr/libexec/cpp
     fi
     ;;
+"BSD/OS")
+    CCOPTIONS="-DCSRG_BASED"
+    CDEBUGFLAGS="-O2 -fno-strength-reduce"
+    if test -x /usr/bin/cpp; then
+        CPP=/usr/bin/cpp
+    fi
+    ;;
 "SunOS")
     case `uname -r` in
     4.*)

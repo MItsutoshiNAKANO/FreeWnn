@@ -1,5 +1,5 @@
 dnl
-dnl $Id: configure.in,v 1.2 2000-01-16 05:35:32 ura Exp $
+dnl $Id: configure.in,v 1.3 2000-01-16 05:48:51 ura Exp $
 dnl
 
 dnl FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -59,6 +59,13 @@ case $hosttype in
     CDEBUGFLAGS="-O2 -fno-strength-reduce"
     if test -x /usr/libexec/cpp; then
         CPP=/usr/libexec/cpp
+    fi
+    ;;
+"BSD/OS")
+    CCOPTIONS="-DCSRG_BASED"
+    CDEBUGFLAGS="-O2 -fno-strength-reduce"
+    if test -x /usr/bin/cpp; then
+        CPP=/usr/bin/cpp
     fi
     ;;
 "SunOS")
