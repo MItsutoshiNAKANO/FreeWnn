@@ -1,3 +1,42 @@
+Mon Sep 13 03:37:15 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* パッチ patch-1.1.1-a005 として内部リリース
+
+Mon Sep 13 03:35:56 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+        * ファイル CONTRIBUTORS を作成
+
+Mon Sep 13 02:04:34 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/include/Makefile.in: config.h を wnn_config.h に改名したが、
+	FreeWnn 以外のクライアントは依然として config.h をインクルードしよ
+	うとするはずなので、インストール時に "ln -s wnn_config.h config.h" 
+	を実行するようにした。
+	([freewnn:00115] 元木さんの指摘による)
+
+Mon Sep 13 01:56:19 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* configure.in: CPP や CCOPTIONS などの値の決定に OS の判定をして
+	いるところがあるが、知らない OS でもとりあえず configure を続ける
+	ようにした。(いままでは途中で止まっていた)
+
+Sun Sep 12 23:29:59 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* AIX 対応(configure, configure.in)
+	([freewnn:00112] Tomoyuki Niijima 氏提供のパッチ)
+
+	* cpp の出力に行番号情報(#line 1 "" というような感じ)が出る場合
+	(AIX の cpp ではこれが起こる)でも正しく扱えるように以下の 
+	Makefile.in を変更。
+ 	([freewnn:00112] Tomoyuki Niijima 氏提供のパッチ)
+	    Xsi/Wnn/pubdic/Makefile.in
+	    Xsi/cWnn/cdic/Makefile.in
+	    Xsi/kWnn/kdic/Makefile.in
+	    Xsi/cWnn/tdic/Makefile.in
+
+	* Xsi/makerule.mk.in: SUBDIR が未定義の場合にエラーになるのを回避	
+ 	([freewnn:00112] Tomoyuki Niijima 氏提供のパッチ)
+
 Fri Aug 20 03:21:52 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
 
 	* パッチ patch-1.1.1-a004 として内部リリース

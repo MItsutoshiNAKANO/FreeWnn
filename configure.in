@@ -1,5 +1,5 @@
 dnl
-dnl $Id: configure.in,v 1.5 2000-01-16 06:37:13 ura Exp $
+dnl $Id: configure.in,v 1.6 2000-01-16 06:46:03 ura Exp $
 dnl
 
 dnl FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -108,7 +108,7 @@ case $hosttype in
       fi
       ;;
     *)
-      AC_MSG_ERROR("This system is not supported.")
+      AC_MSG_WARN("This system is not supported.  But continuing...")
       ;;
     esac
     ;;
@@ -131,7 +131,7 @@ case $hosttype in
       fi
       ;;
     *)
-      AC_MSG_ERROR("This system is not supported.")
+      AC_MSG_WARN("This system is not supported.  But continuing...")
       ;;
     esac
     ;;
@@ -153,8 +153,17 @@ case $hosttype in
       ;;
     esac
     ;;
+"AIX")
+    if test $CC = gcc; then
+      CDEBUGFLAGS=-O2
+    else
+      CDEBUGFLAGS=-O
+    fi
+    CCOPTIONS="-DSYSV"
+    CPP=/usr/lib/cpp
+    ;;
 *)
-    AC_MSG_ERROR("This system is not supported.")
+    AC_MSG_WARN("This system is not supported.  But continuing...")
     ;;
 esac
 AC_PROG_CPP

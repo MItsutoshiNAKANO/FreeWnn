@@ -403,7 +403,7 @@ depend::
 	@echo "skipping make in my dir"
 
 std.fzk: $(FZK_SRC)
-	$(CPP) $(FZK_FLAG) fzk.master | egrep -v '^(# |$$)' | $(ATOF) -h $(HINSI) $@
+	$(CPP) $(FZK_FLAG) fzk.master | egrep -v '^(# |#line |$$)' | $(ATOF) -h $(HINSI) $@
 
 full.fzk: $(FZK_SRC)
 	$(MAKE) FZK_FLAG=-DKANSAI std.fzk

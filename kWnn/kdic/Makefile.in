@@ -56,7 +56,7 @@ all:: $(ALLTGT)
 $(DICS): $(HINSI)
 
 $(FULL):: $(FZK_SRCS)
-	$(CPP) $(FZK_FLAG) fzk.master | egrep -v '^(# |$$)' | $(ATOF) -h $(HINSI) $@
+	$(CPP) $(FZK_FLAG) fzk.master | egrep -v '^(# |#line |$$)' | $(ATOF) -h $(HINSI) $@
 
 instserver:: install
 

@@ -1,5 +1,5 @@
 #
-# $Id: makerule.mk.in,v 1.1 2000-01-16 06:37:13 ura Exp $
+# $Id: makerule.mk.in,v 1.2 2000-01-16 06:46:03 ura Exp $
 #
 
 # FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -604,7 +604,8 @@ all::
 	@cont=0; \
 	for flag in ${MAKEFLAGS} ''; do \
 	case "$$flag" in *=*) ;; *[ik]*) cont=1;; esac; done; \
-	for i in $(SUBDIRS) ;\
+	SUBDIRS="$(SUBDIRS)" ;\
+	for i in $$SUBDIRS ;\
 	do \
 	echo "making" all "in $(CURRENT_DIR)/$$i..."; \
 	(cd $$i && $(MAKE) $(MFLAGS) $(PARALLELMFLAGS) \
@@ -616,7 +617,8 @@ install::
 	@cont=0; \
 	for flag in ${MAKEFLAGS} ''; do \
 	case "$$flag" in *=*) ;; *[ik]*) cont=1;; esac; done; \
-	for i in $(SUBDIRS) ;\
+	SUBDIRS="$(SUBDIRS)" ;\
+	for i in $$SUBDIRS ;\
 	do \
 	echo "installing" all "in $(CURRENT_DIR)/$$i..."; \
 	(cd $$i && $(MAKE) $(MFLAGS) $(PARALLELMFLAGS) \
@@ -628,7 +630,8 @@ depend::
 	@cont=0; \
 	@for flag in ${MAKEFLAGS} ''; do \
 	case "$$flag" in *=*) ;; *[ik]*) cont=1;; esac; done; \
-	for i in $(SUBDIRS) ;\
+	SUBDIRS="$(SUBDIRS)" ;\
+	for i in $$SUBDIRS ;\
 	do \
 	echo "depending" "in $(CURRENT_DIR)/$$i..."; \
 	(cd $$i && $(MAKE) $(MFLAGS) $(PARALLELMFLAGS) \
@@ -637,7 +640,8 @@ depend::
 	done
 
 clean::
-	for i in $(SUBDIRS) ;\
+	SUBDIRS="$(SUBDIRS)" ;\
+	for i in $$SUBDIRS ;\
 	do \
 	echo "cleaning" "in $(CURRENT_DIR)/$$i..."; \
 	(cd $$i && $(MAKE) $(MFLAGS) $(PARALLELMFLAGS) \

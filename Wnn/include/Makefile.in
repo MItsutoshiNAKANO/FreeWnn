@@ -43,6 +43,7 @@ install::  $(HEADERS)
 	for i in  $(HEADERS); do \
 	(set -x; $(INSTALL) $(INSTALLFLAGS) $(INSTDATFLAGS) $$i $(DESTDIR)$(JWNNINCDIR)); \
 	done
+	(cd $(JWNNINCDIR); @LN_S@ wnn_config.h $(JWNNINCDIR)/config.h)
 
 depend::
 
