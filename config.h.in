@@ -1,14 +1,11 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
-/* $Id: config.h.in,v 1.16 2002-06-17 17:28:52 hiroo Exp $ */
+/* $Id: config.h.in,v 1.17 2002-06-22 13:15:25 hiroo Exp $ */
 
 /* Define `socklen_t' to int if <sys/socket.h> does not define. */
 #undef socklen_t
 
 /* Define to `long' if <sys/types.h> does not define.  */
 #undef time_t
-
-/* Define to `RAND_MAX' if <stdlib.h> does not define. */
-#undef HAVE_RAND_MAX
 
 /*
  * Defined if you allow creating a file in an arbitrary path
@@ -96,6 +93,9 @@
 
 /* Define to 1 if you have the <ncurses.h> header file. */
 #undef HAVE_NCURSES_H
+
+/* Define to 1 if you have the `random' function. */
+#undef HAVE_RANDOM
 
 /* Define to 1 if you have the `recv' function. */
 #undef HAVE_RECV

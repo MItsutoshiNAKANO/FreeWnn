@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.30 2002-06-17 17:28:53 hiroo Exp $
+dnl   $Id: configure.in,v 1.31 2002-06-22 13:15:25 hiroo Exp $
 dnl
 
 dnl
@@ -403,14 +403,6 @@ dnl
 dnl Checks for symbol
 dnl
 
-AC_MSG_CHECKING(for RAND_MAX)
-AC_EGREP_CPP(yes,
-[#include <stdlib.h>
-#ifdef RAND_MAX
-yes
-#endif
-],AC_DEFINE(HAVE_RAND_MAX))
-
 dnl
 dnl Checks for library functions.
 dnl
@@ -428,7 +420,7 @@ AC_FUNC_SETPGRP
 dnl FreeWnn do not use the 3rd parameter of wait3().
 dnl AC_FUNC_WAIT3
 
-AC_CHECK_FUNCS(drand48 fchmod getopt \
+AC_CHECK_FUNCS(random drand48 fchmod getopt \
 	gethostname select socket closesocket setsockopt send recv \
 	getdtablesize getrlimit syslog vsyslog setenv snprintf)
 dnl for bcopy/index -> memcpy/strchr conversion (preparation):
