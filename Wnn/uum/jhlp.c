@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.12 2002-06-22 13:26:21 hiroo Exp $
+ *  $Id: jhlp.c,v 1.13 2002-08-26 09:27:21 aono Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.12 2002-06-22 13:26:21 hiroo Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.13 2002-08-26 09:27:21 aono Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -51,7 +51,7 @@ static char *rcs_id = "$Id: jhlp.c,v 1.12 2002-06-22 13:26:21 hiroo Exp $";
 #    include <malloc.h>
 #  endif
 #endif /* STDC_HEADERS */
-#include <sys/errno.h>
+#include <errno.h>
 #include <sys/ioctl.h>
 #ifdef HAVE_SYS_PARAM_H
 #  include <sys/param.h>
