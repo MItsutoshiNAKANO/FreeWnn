@@ -1,5 +1,5 @@
 /*
- * $Id: malloc.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: malloc.c,v 1.2 2000-01-16 06:37:15 ura Exp $
  */
 
 /*
@@ -44,14 +44,27 @@
 #undef	realloc
 #undef	free
 
+#ifdef hpux
+extern void *malloc(size_t);
+extern void free(void *);
+extern void *realloc(void *, size_t);
+extern void *calloc(size_t, size_t);
+#else
 extern char *malloc();
 extern void free();
 extern char *realloc();
 extern char *calloc();
+#endif /* hpux */
 
+#ifdef hpux
+void *
+malloc0(size)
+size_t size;
+#else
 char *
 malloc0(size)
 int size;
+#endif /* hpux */
 {
     if(size == NULL){
 	size = 1;
@@ -60,19 +73,32 @@ int size;
     return(calloc(size,1));
 }
 
+#ifdef hpux
+void
+free0(pter)
+void *pter;
+#else
 void
 free0(pter)
 char *pter;
+#endif /* hpux */
 {
     if(pter == NULL) return;
     free(pter);
     return;
 }
 
+#ifdef hpux
+void *
+realloc0(pter,size)
+void *pter;
+size_t size;
+#else
 char *
 realloc0(pter,size)
 char *pter;
 int size;
+#endif /* hpux */
 {
     if(size == NULL){
 	size = 1;

@@ -1,5 +1,5 @@
 /*
- * $Id: cvt_head.h,v 1.1.1.1 2000-01-16 05:07:44 ura Exp $
+ * $Id: cvt_head.h,v 1.2 2000-01-16 06:37:13 ura Exp $
  */
 
 /*
@@ -77,7 +77,7 @@
 #define AREASIZE 1024
 
 #ifdef WNNDEFAULT
-#  include "config.h"
+#  include "wnn_config.h"
  /* マクロCONVERT_FILENAMEの定義（のためだけ）。コンパイル時は、ヘッダファイル
     のサーチパスに、Wnnのインクルードファイルのありかを設定しておくこと。*/
 #else
