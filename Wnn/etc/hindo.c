@@ -1,5 +1,5 @@
 /*
- *  $Id: hindo.c,v 1.3 2001-06-14 18:15:55 ura Exp $
+ *  $Id: hindo.c,v 1.3.2.1 2001-07-08 08:43:27 iwao Exp $
  */
 
 /*
@@ -88,21 +88,6 @@ asshuku (hin)
   c += hin / c - 2;
   return (c < 126 ? c : 126);
 }
-
- /** ²¾ÉÑÅÙb¢ª¼ÂÉÑÅÙ(min)a */
-/*
-int
-motoni1(hin)
-int     hin;
-{
-        register int    c;
-
-        if(hin == 127) return(-1);
-        if(hin <= 4) return(hin); 
-        c = hin >> 2;
-        return( (hin - (c << 1)) * (c + 1) );
-}
-*/
 
  /** ²¾ÉÑÅÙb¢ª¼ÂÉÑÅÙ(mid)a */
 int
