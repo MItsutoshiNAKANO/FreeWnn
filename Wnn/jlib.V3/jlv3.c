@@ -1,5 +1,5 @@
 /*
- *  $Id: jlv3.c,v 1.7 2002-05-12 22:51:16 hiroo Exp $
+ *  $Id: jlv3.c,v 1.8 2002-06-22 13:24:31 hiroo Exp $
  */
 
 /*
@@ -76,10 +76,8 @@ extern  Variables
 #include "jlib.h"
 #include "wnnerror.h"
 #include "wnn_string.h"
+#include "wnn_os.h"
 
-#ifdef SYSVR2
-#define bzero(adr,n)    memset((adr),0,(n))
-#endif
 
 /* These are used to convert w_char and char strings */
 static w_char wchartmp[256];

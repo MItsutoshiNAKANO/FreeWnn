@@ -1,5 +1,5 @@
 /*
- * $Id: jutil.c,v 1.2 2001-06-14 18:16:12 ura Exp $
+ * $Id: jutil.c,v 1.3 2002-06-22 13:24:31 hiroo Exp $
  */
 
 /*
@@ -11,6 +11,7 @@
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright 1991, 1992 by Massachusetts Institute of Technology
+ * Copyright FreeWnn Project 2002
  *
  * Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
  *
@@ -33,8 +34,8 @@
  * Change log:
  *      '99/04/19       TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
  *              srandom() の宣言をコメントアウト。
- *
- * Last modified date: 19,Apr.1999
+ *	2002/06/22	Hiroo Ono <hiroo@oikumene.gcd.org>
+ *		Use RAND() and SRAND definde in wnn_os.h for the pseudo random number generator.
  *
  * Code:
  *
@@ -43,8 +44,17 @@
  */
 /* jisho utility routine for otasuke (user interface) process */
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #include <stdio.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#  include <time.h>
+#endif /* STDC_HEADERS */
 #include <X11/Xos.h>
+
 #include "jslib.h"
 #include "commonhd.h"
 #include "sdefine.h"
@@ -54,6 +64,7 @@
 #include "xext.h"
 #include "rk_spclval.h"
 #include "rk_fundecl.h"
+#include "wnn_os.h"
 
 int (*jutil_table[2][6]) () =
 {
@@ -676,14 +687,6 @@ create_pwd_file (env, pwd_file, error_handler, message_handler)
 {
   FILE *fp;
   char gomi[256];
-#ifdef SYSVR2
-  extern int srand ();
-  extern long rand ();
-#else
-/*    extern int srandom(); */
-  extern long random ();
-#endif
-  extern long time ();
 
   if (pwd_file == NULL || *pwd_file == 0)
     return (0);
@@ -702,13 +705,8 @@ create_pwd_file (env, pwd_file, error_handler, message_handler)
       message_out (message_handler, wnn_perror_lang (xjutil->lang), NULL, NULL, NULL);
       return (-1);
     }
-#ifdef SYSVR2
-  srand (time (0) + getuid ());
-  fprintf (fp, "%d\n", rand ());
-#else
-  srandom (time (0) + getuid ());
-  fprintf (fp, "%d\n", random ());
-#endif
+  SRAND (time (0) + getuid ());
+  fprintf (fp, "%d\n", RAND ());
   fclose (fp);
 #define MODE_PWD (0000000 | 0000400)
   chmod (pwd_file, MODE_PWD);

@@ -1,5 +1,5 @@
 /*
- *  $Id: bdic.c,v 1.9 2002-03-24 01:25:13 hiroo Exp $
+ *  $Id: bdic.c,v 1.10 2002-06-22 13:24:31 hiroo Exp $
  */
 
 /*
@@ -441,22 +441,12 @@ make_backup_name (n)
   static char buf[256];
   char base_name[64];
   char *p;
-#ifndef SYSVR2
-  extern char *rindex ();
-#else
-  extern char *strrchr ();
-#endif
 
   if (n == NULL || *n == '\0')
     return NULL;
   strcpy (buf, n);
-#ifndef SYSVR2
-  if ((p = rindex (buf, '/')) == NULL)
-    {
-#else
   if ((p = strrchr (buf, '/')) == NULL)
     {
-#endif
       strcpy (base_name, buf);
       sprintf (buf, "#%s#", base_name);
     }

@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_os.h,v 1.11 2002-06-17 17:28:53 hiroo Exp $
+ *  $Id: wnn_os.h,v 1.12 2002-06-22 13:24:31 hiroo Exp $
  */
 
 /*
@@ -39,10 +39,19 @@
 /* system headers needed for system dependent configuration */
 #include <signal.h>
 #if STDC_HEADERS
+#  include <stdlib.h>
 #  include <limits.h>
 #endif /* STDC_HEADERS */
+
+#include <sys/types.h>
+#include <sys/file.h>
 #if HAVE_SYS_PARAM_H
 #  include <sys/param.h>
+#endif
+
+#ifdef TERMINFO
+#include <curses.h>
+#include <term.h>
 #endif
 
 /* strchr vs. index, etc. */
@@ -66,16 +75,8 @@
 # define re_signal(x, y)
 #endif
 
-#ifndef SIGCHLD
+#if !defined (SIGCHLD) && defined (SIGCLD)
 #  define SIGCHLD SIGCLD
-#endif
-
-#include <sys/types.h>
-#include <sys/file.h>
-
-#ifdef TERMINFO
-#include <curses.h>
-#include <term.h>
 #endif
 
 typedef RETSIGTYPE (*intfnptr) ();
@@ -88,6 +89,34 @@ typedef RETSIGTYPE (*intfnptr) ();
 #elif defined (NOFILE)
 #  define WNN_NFD NOFILE
 #endif /* HAVE_GETDTABLESIZE */
+
+/* pseudo ramdom number */
+#if !defined (RAND_MAX)
+#  if defined (INT_MAX)
+#    define RAND_MAX INT_MAX
+#  else
+#    define RAND_MAX 0x7fffffff
+#  endif /* INT_MAX */
+#endif /* RAND_MAX*/
+
+#if HAVE_DRAND48
+#  define DRAND()  drand48 ()
+#  define SDRAND(x)  srand48 (x)
+#elif HAVE_RAMDOM
+#  define DRAND()  ((double) random() / (double) RAND_MAX)
+#  define SDRAND(x)  srandom (x)
+#else
+#  define DRAND()  ((double) rand() / (double) RAND_MAX)
+#  define SDRAND(x)  srand (x)
+#endif /* HAVE_DRAND48 */
+
+#if HAVE_RANDOM
+#  define RAND()  random ()
+#  define SRAND(x)  srandom (x)
+#else
+#  define RAND()  rand ()
+#  define SRAND(x)  srand (x)
+#endif /* HAVE_RANDOM */
 
 /* function prototypes (temporal use. need reconstruction) */
 unsigned int create_cswidth (char *s);	/* xutoj.c */

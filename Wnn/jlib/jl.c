@@ -1,5 +1,5 @@
 /*
- *  $Id: jl.c,v 1.11 2002-06-15 13:02:14 hiroo Exp $
+ *  $Id: jl.c,v 1.12 2002-06-22 13:24:31 hiroo Exp $
  */
 
 /*
@@ -1708,18 +1708,8 @@ create_pwd_file (env, pwd_file, error_handler, message_handler)
       message_out (message_handler, wnn_perror_lang (env->lang));
       return (-1);
     }
-#ifdef HITACHI
-  srand (time (0) + getuid ());
-  fprintf (fp, "%d\n", rand ());
-#else /* HITACHI */
-#ifdef SYSVR2
-  srand (time (0) + getuid ());
-  fprintf (fp, "%d\n", rand ());
-#else
-  srandom (time (0) + getuid ());
-  fprintf (fp, "%d\n", random ());
-#endif
-#endif /* HITACHI */
+  SRAND (time (0) + getuid ());
+  fprintf (fp, "%d\n", RAND ());
   fclose (fp);
 #define MODE_PWD (0000000 | 0000400)
   chmod (pwd_file, MODE_PWD);
