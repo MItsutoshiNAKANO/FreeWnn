@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.12 2001-08-14 13:43:21 hiroo Exp $
+ *  $Id: de.c,v 1.13 2001-09-16 11:50:47 hiroo Exp $
  */
 
 /*
@@ -112,6 +112,14 @@ extern int errno;               /* Pure BSD */
 #define INET6_ACPT      2
 #endif
 
+#define PROTO_ALL	0x1
+#define PROTO_UN	0x2
+#define PROTO_INET	0x4
+#ifdef INET6
+#define PROTO_INET6	0x8
+#endif
+static listen_proto = PROTO_ALL;
+
 jmp_buf client_dead;
 
 static int port;
@@ -179,9 +187,14 @@ static void daemon_main (), sel_all (), new_client (), daemon_init (), socket_in
 void daemon_fin (), daemon_fin_un (), daemon_fin_in (), del_client (), put2_cur (), putc_cur ();
 static int get_client (), rcv_1_client (), socket_accept_un (), socket_accept_in ();
 int get2_cur ();
-static void usage __P((void));
+static void usage P_((void));
+static void print_version P_((void));
+#ifdef DEBUG
+static void dmp ();
+#endif
 
-char cmd_name[80];
+
+char cmd_name[MAXPATHLEN];
 
 /* No arguments are used. Only options. */
 int
@@ -197,6 +210,7 @@ main (argc, argv)
 
   char nlspath[64];
 
+  strncpy (cmd_name, argv[0], sizeof(cmd_name));
   strcpy (lang_dir, LANG_NAME);
   strcpy (nlspath, LIBDIR);
   strcat (nlspath, "/%L/%N");
@@ -214,15 +228,7 @@ main (argc, argv)
   setuid (geteuid ());
 /* check whether another jserver already exists. */
   get_options (argc, argv);
-#ifdef  CHINESE
-  printf ("\nChinese Multi Client Server (%s)\n", SER_VERSION);
-#else
-# if    KOREAN
-  printf ("\nKorean Multi Client Server (%s)\n", SER_VERSION);
-# else
-  printf ("\nNihongo Multi Client Server (%s)\n", SER_VERSION);
-#endif /* KOREAN */
-#endif /* CHINESE */
+  print_version();
 #ifndef NOTFORK
   if (fork ())
     {
@@ -524,9 +530,16 @@ daemon_init ()                   /* initialize Daemon */
   clientp = 0;                  /* V3.0 */
   cur_clp = 0;                  /* V3.0 */
   socket_disc_init ();
-  socket_init_in ();
+#ifdef INET6
+  if (listen_proto&(PROTO_ALL|PROTO_INET|PROTO_INET6))
+      socket_init_in ();
+#else
+  if (listen_proto&(PROTO_ALL|PROTO_INET))
+      socket_init_in ();
+#endif
 #ifdef  AF_UNIX
-  socket_init_un ();
+  if (listen_proto&(PROTO_ALL|PROTO_UN))
+      socket_init_un ();
 #endif /* AF_UNIX */
 }
 
@@ -927,6 +940,7 @@ socket_init_un ()
           shutdown (sock_d_un, 2);
           xerror ("Can't listen unix domain socket.");
         }
+      chmod (sockname, 0777);
       signal (SIGPIPE, SIG_IGN);
 #ifdef DEBUG
       error1 ("sock_d_un = %d\n", sock_d_un);
@@ -971,14 +985,19 @@ socket_init_in ()
         }
     }
 
-  port = htons (port + serverNO);
+  port += serverNO;
 
 #if DEBUG
   error1 ("port=%x\n", port);
 #endif
 #ifdef INET6
   memset(&hints, 0, sizeof(hints));
-  hints.ai_family = PF_UNSPEC;
+  if (listen_proto&PROTO_INET && !(listen_proto&PROTO_INET6))
+      hints.ai_family = PF_INET;
+  else if (listen_proto&PROTO_INET6 && !(listen_proto&PROTO_INET))
+      hints.ai_family = PF_INET6;
+  else
+      hints.ai_family = PF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
   hints.ai_flags = AI_PASSIVE;
   sprintf(sport, "%d", port);
@@ -992,11 +1011,16 @@ socket_init_in ()
       if ((sock_d_in = socket (res->ai_family, res->ai_socktype, res->ai_protocol)) == ERROR)
 #else
   saddr_in.sin_family = AF_INET;
-  saddr_in.sin_port = port;
+  saddr_in.sin_port = htons (port);
   saddr_in.sin_addr.s_addr = htonl (INADDR_ANY);
   if ((sock_d_in = socket (AF_INET, SOCK_STREAM, 0)) == ERROR)
 #endif
     {
+#ifdef INET6
+      if (res->ai_family == AF_INET6)
+        xerror ("can't create inet6 socket");
+      else if (res->ai_family == AF_INET)
+#endif
       xerror ("can't create inet socket");
     }
   setsockopt (sock_d_in, SOL_SOCKET, SO_REUSEADDR, (char *) &on, sizeof (int));
@@ -1017,11 +1041,21 @@ socket_init_in ()
 #endif
     {
       shutdown (sock_d_in, 2);
+#ifdef INET6
+      if (res->ai_family == AF_INET6)
+        xerror ("can't bind inet6 socket");
+      else if (res->ai_family == AF_INET)
+#endif
       xerror ("can't bind inet socket");
     }
   if (listen (sock_d_in, 5) == ERROR)
     {
       shutdown (sock_d_in, 2);
+#ifdef INET6
+      if (res->ai_family == AF_INET6)
+        xerror ("can't listen inet6 socket");
+      else if (res->ai_family == AF_INET)
+#endif
       xerror ("can't listen inet socket");
     }
 #if DEBUG
@@ -1129,7 +1163,11 @@ get_options (argc, argv)
 
   strcpy (jserverrcfile, LIBDIR);       /* usr/local/lib/wnn */
   strcat (jserverrcfile, SERVER_INIT_FILE);     /* ja_JP/jserverrc */
-  while ((c = getopt (argc, argv, "f:s:h:N:p:v")) != EOF)
+#ifndef INET6
+  while ((c = getopt (argc, argv, "f:s:h:N:p:vu4")) != EOF)
+#else
+  while ((c = getopt (argc, argv, "f:s:h:N:p:vu46")) != EOF)
+#endif
     {
       switch (c)
         {
@@ -1158,16 +1196,23 @@ get_options (argc, argv)
           port = atoi (optarg);
           break;
         case 'v':
-#ifdef  CHINESE
-  printf ("%s %s (Chinese Multi Client Server)\n", cmd_name, SER_VERSION);
-#else
-# ifdef KOREAN
-  printf ("%s %s (Korean Multi Client Server)\n", cmd_name, SER_VERSION);
-# else
-  printf ("%s %s (Nihongo Multi Client Server)\n", cmd_name, SER_VERSION);
-# endif /* KOREAN */
-#endif /* CHINESE */
+          print_version();
+          usage();
 	  exit (0);
+        case 'u':
+	  listen_proto &= ~PROTO_ALL;
+	  listen_proto |= PROTO_UN;
+          break;
+        case '4':
+	  listen_proto &= ~PROTO_ALL;
+	  listen_proto |= PROTO_INET;
+          break;
+#ifdef INET6
+        case '6':
+	  listen_proto &= ~PROTO_ALL;
+	  listen_proto |= PROTO_INET6;
+          break;
+#endif
         default:
 	  usage();
         }
@@ -1218,10 +1263,26 @@ void
 usage ()
 {
   fprintf(stderr, 
-	  "usage: %s [-f <init_file> -s <log_file(\"-\" for stderr)> -h <pos_file> -N <serverNO> -p <port_base>]\n",
+#ifdef INET6
+	  "usage: %s [-f <init_file> -s <log_file(\"-\" for stderr)> -h <pos_file> -N <serverNO> -p <port_base> -u -4 -6]\n",
+#else
+	  "usage: %s [-f <init_file> -s <log_file(\"-\" for stderr)> -h <pos_file> -N <serverNO> -p <port_base> -u -4]\n",
+#endif
 	  cmd_name);
   fprintf(stderr,
 	  "       %s -v\n",
 	  cmd_name);
   exit (1);
+}
+
+void
+print_version ()
+{
+#ifdef  CHINESE
+  printf ("%s (%s) Chinese Multi Client Server\n", cmd_name, SER_VERSION);
+#elsif  KOREAN
+  printf ("%s (%s) Korean Multi Client Server\n", cmd_name, SER_VERSION);
+#else
+  printf ("%s (%s) Nihongo Multi Client Server\n", cmd_name, SER_VERSION);
+#endif /* CHINESE */
 }

@@ -1,5 +1,5 @@
 /*
- *  $Id: dispatch.c,v 1.5 2001-06-18 09:09:40 ura Exp $
+ *  $Id: dispatch.c,v 1.6 2001-09-16 11:50:47 hiroo Exp $
  */
 
 /*
@@ -262,7 +262,13 @@ expand_file_name (buffer, buffer_size)
 {
   char *q;
 
+#ifdef WNN_ALLOW_UNSAFE_PATH
   if (*buffer != '/')
+#else
+    /* XXX: path under jserver_dir only */
+  if (*buffer != '/' 
+      || strncmp(buffer, jserver_dir, strlen(jserver_dir)) != 0)
+#endif
     {
       char *path;
       size_t path_len;
@@ -277,6 +283,9 @@ expand_file_name (buffer, buffer_size)
 
       strcpy (path, jserver_dir);
 /*      strcat(path,c_c->user_name);   */
+#ifndef WNN_ALLOW_UNSAFE_PATH
+      if (path[strlen(path)-1] != '/' && *buffer != '/')
+#endif
       strcat (path, "/");
       strcat (path, buffer);
       strcpy (buffer, path);
@@ -284,6 +293,32 @@ expand_file_name (buffer, buffer_size)
       free (path);
     }
 
+#ifndef WNN_ALLOW_UNSAFE_PATH
+ {
+   char *p, *pp, *p0;
+   p = pp = p0 = malloc(strlen(buffer)+1);
+   for  (q = buffer; *q; p++, q++) {
+     if (*q == '/') {
+       while (*(q+1) == '/')
+	 q++;
+       if (strncmp(q, "/..", 3) == 0 && (*(q+3) == '/' || (*(q+3) == '\0'))) {
+	 q += 2;
+	 p = pp-1;
+	 continue;
+       }
+       pp = p;
+     }
+     *p = *q;
+   }
+   *p = '\0';
+   strcpy(buffer, p0);
+   free(p0);
+ }
+ if (strncmp(buffer, jserver_dir, strlen(jserver_dir)) != 0) {
+   /* unsafe path */
+   return NULL; /* XXX */
+ }
+#endif
   for (q = buffer; *q++;)
     ;
   q -= 2;

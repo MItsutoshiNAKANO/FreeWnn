@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_config.h,v 1.4 2001-06-18 09:09:33 ura Exp $
+ *  $Id: wnn_config.h,v 1.5 2001-09-16 11:50:47 hiroo Exp $
  */
 
 /*
@@ -95,7 +95,7 @@
 # endif /* CHINESE */
 # endif /* JAPANESE */
 #endif
-#define JSERVER_DIR             "/tmp"
+#define JSERVER_DIR             LIBDIR
 
 /* for uum */
 #define RCFILE                  "/uumrc"        /* LIBDIR/@LANG/RCFILE */

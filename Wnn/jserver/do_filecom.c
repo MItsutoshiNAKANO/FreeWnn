@@ -1,5 +1,5 @@
 /*
- *  $Id: do_filecom.c,v 1.5 2001-06-18 09:09:41 ura Exp $
+ *  $Id: do_filecom.c,v 1.6 2001-09-16 11:50:47 hiroo Exp $
  */
 
 /*
@@ -67,9 +67,10 @@ file_init ()
 
 /*      mkdir   */
 
-#define MODE (0000000 | 0000777)
+/* #define MODE (0000000 | 0000777) */
 /* #define      MODE (0040000 | 0000731) */
 /* #define      MODE (0000000 | 0000733) */
+#define      MODE (0000000 | 0000755)
 
 void
 js_mkdir ()

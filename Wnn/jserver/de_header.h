@@ -1,5 +1,5 @@
 /*
- *  $Id: de_header.h,v 1.6 2001-08-14 13:43:21 hiroo Exp $
+ *  $Id: de_header.h,v 1.7 2001-09-16 11:50:47 hiroo Exp $
  */
 
 /*
@@ -183,14 +183,6 @@ extern char *hinsi_file_name;
 
 extern char lang_dir[];
 
-#if !defined(__P)
-#if (defined(__STDC_) && __STDC__) || defined(_cplusplus)
-#define __P(p) p
-#else
-#define __P(p) ()
-#endif
-#endif
-
 /* atojis.c */
 extern w_char *get_giji_knj ();
 extern void giji_hindoup ();
@@ -224,8 +216,8 @@ extern int cmp_hyouka ();
 /* de.c */
 extern void del_client ();
 extern void daemon_fin ();
-extern char *gets_cur __P ((char *buffer, size_t buffer_size));
-extern w_char *getws_cur __P ((w_char * buffer, size_t buffer_size));
+extern char *gets_cur P_ ((char*, size_t));
+extern w_char *getws_cur P_ ((w_char*, size_t));
 extern int get2_cur ();
 extern int get4_cur ();
 extern int getc_cur ();
@@ -241,8 +233,8 @@ extern void js_who ();
 extern void js_kill ();
 /* dispatch.c */
 extern void do_command ();
-extern char *get_file_name __P ((char *buffer, size_t buffer_size));
-extern char *expand_file_name __P ((char *buffer, size_t buffer_size));
+extern char *get_file_name P_ ((char*, size_t));
+extern char *expand_file_name P_ ((char*, size_t));
 extern void error_ret ();
 /* do_dic_env.c */
 extern void js_dic_add ();

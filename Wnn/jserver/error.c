@@ -1,5 +1,5 @@
 /*
- *  $Id: error.c,v 1.7 2001-08-14 13:43:21 hiroo Exp $
+ *  $Id: error.c,v 1.8 2001-09-16 11:50:47 hiroo Exp $
  */
 
 /*
@@ -111,17 +111,24 @@ my_error (x)
   errno = 0;                    /* Reset error number for next calling */
 }
 
+/*
+   NOTICE: バッファの大きさは考慮していないので、プログラマ側で使い方に
+           注意すべきである.
+*/
 void
 error1 (x, y1, y2, y3, y4, y5)
      register char *x;
      int y1, y2, y3, y4, y5;
 {
-  char buf[512];
+  char buf[MAXPATHLEN];
+  int len;
 
-  strcpy (buf, cmd_name);       /* strcpy(buf , "jserver:"); */
-  strcat (buf, ":");
-  strcat (buf, x);
-  sprintf (buf, x, y1, y2, y3, y4, y5);
+  strncpy (buf, cmd_name, sizeof(buf));
+  buf[MAXPATHLEN]='\0';
+  strncat (buf, ":", sizeof(buf));
+  len = strlen(buf);
+  /* skip len to retain cmd_name + ':' . */
+  snprintf (buf + len, sizeof(buf)-len, x, y1, y2, y3, y4, y5);
   my_error (buf);
 }
 
