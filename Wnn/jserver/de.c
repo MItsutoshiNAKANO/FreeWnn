@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.15 2002-03-03 14:06:30 hiroo Exp $
+ *  $Id: de.c,v 1.16 2002-03-08 08:36:02 aono Exp $
  */
 
 /*
@@ -507,9 +507,11 @@ del_client ()
 static void
 daemon_init ()                   /* initialize Daemon */
 {
+  /*
   signal (SIGHUP, SIG_IGN);
   signal (SIGINT, SIG_IGN);
   signal (SIGQUIT, SIG_IGN);
+  */
 
 
   if ((cblk = (COMS_BLOCK *) malloc (max_client * sizeof (COMS_BLOCK))) == NULL)
@@ -1178,7 +1180,7 @@ get_options (argc, argv)
           noisy = 1;
           if (strcmp ("-", optarg) != 0)
             {
-              if (freopen (optarg, "w", stderr) == NULL)
+              if (freopen (optarg, "a", stderr) == NULL)
                 {
                   printf ("Error in opening scriptfile %s.\n", optarg);
                   exit (1);
