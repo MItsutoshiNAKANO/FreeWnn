@@ -1,5 +1,5 @@
 /*
- * $Id: jl.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: jl.c,v 1.3 2000-01-16 06:37:14 ura Exp $
  */
 
 /*
@@ -43,7 +43,7 @@
 */
 
 #include "commonhd.h"
-#include "config.h"
+#include "wnn_config.h"
 #include <stdio.h>
 #include <sys/types.h>
 #ifdef SYSVR2
@@ -2605,9 +2605,6 @@ register char	*s;
 	struct	passwd	*u;
         extern char *getenv();
 	extern struct	passwd	*getpwnam();
-#if defined(SYSVR2) && !defined(AIXV3)
-	extern char * strchr();
-#endif
 
 	if(*s != '~' && *s != '@') return(0);
 	if((int)strlen(s) >= EXPAND_PATH_LENGTH) return(-1);

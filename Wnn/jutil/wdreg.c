@@ -1,5 +1,5 @@
 #ifndef lint
-static char *rcs_id = "$Id: wdreg.c,v 1.1.1.1 2000-01-16 05:07:46 ura Exp $";
+static char *rcs_id = "$Id: wdreg.c,v 1.3 2000-01-16 06:37:15 ura Exp $";
 #endif /* lint */
 
 /*
@@ -46,7 +46,7 @@ static char *rcs_id = "$Id: wdreg.c,v 1.1.1.1 2000-01-16 05:07:46 ura Exp $";
 #include <sys/types.h>
 #include <sys/file.h>
 #include "commonhd.h"
-#include "config.h"
+#include "wnn_config.h"
 #include "jllib.h"
 #include "jslib.h"
 #include "jh.h"
@@ -89,7 +89,7 @@ err()
     exit(1);
 }
 
-void
+int
 main(argc, argv)
 int argc;
 char **argv;

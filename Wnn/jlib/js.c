@@ -1,5 +1,5 @@
 /*
- * $Id: js.c,v 1.1.1.2 2000-01-16 05:10:51 ura Exp $
+ * $Id: js.c,v 1.2 2000-01-16 06:37:14 ura Exp $
  */
 
 /*
@@ -70,8 +70,6 @@ extern	Variables
 */
 
 
-extern	char	*malloc();
-
 #include <stdio.h>
 #include <ctype.h>
 #ifdef UX386
@@ -90,7 +88,7 @@ extern int errno;
 #include "jd_sock.h"
 #include "commonhd.h"
 #include "demcom.h"
-#include "config.h"
+#include "wnn_config.h"
 
 #include "wnnerror.h"
 /*#include "commonhd.h"*/
@@ -103,7 +101,11 @@ extern int errno;
 #include "../etc/bdic.c"
 #include "../etc/pwd.c"
 
+#ifdef hpux
+void *malloc(size_t);
+#else
 char *malloc();
+#endif /* hpux */
 
 #ifdef SYSVR2
 #define	bzero(adr,n)	memset((adr),0,(n))
@@ -178,7 +180,11 @@ demon_dead()
  current_js->js_dead= -1;
  wnn_errorno= WNN_JSERVER_DEAD;
  shutdown(current_sd, 2);
+#ifdef BEOS
+ closesocket(current_sd);
+#else
  close(current_sd);
+#endif
 #if DEBUG
 	fprintf(stderr,"jslib:JSERVER %s is Dead\n",current_js->js_name);
 #endif
@@ -306,7 +312,11 @@ register int timeout;
 #if DEBUG
 	xerror("jslib:Can't connect Inet socket.\n");
 #endif
+#ifdef BEOS
+	closesocket(sd);
+#else
 	close(sd);
+#endif
 	return -1 ;
     }
     return sd;
@@ -382,7 +392,11 @@ int n;
 {int cc,x;
  for(cc=0;cc<n;){
 	errno = 0;
+#ifdef BEOS
+	x=send(current_sd, &snd_buf[cc],n-cc, 0);
+#else
 	x=write(current_sd, &snd_buf[cc],n-cc );
+#endif
 	if(x < 0) {
 	    if (ERRNO_CHECK(errno) || errno == EINTR) {
 		continue;
@@ -458,7 +472,11 @@ get1com()
  if(rbc<=0){
     while(1) {
 	errno = 0;
+#ifdef BEOS
+	rbc = recv(current_sd, rcv_buf, R_BUF_SIZ, 0);
+#else
 	rbc = read(current_sd, rcv_buf, R_BUF_SIZ);
+#endif
 	if(rbc <= 0) {
 	    if (ERRNO_CHECK(errno)) {
 		continue;
@@ -678,7 +696,11 @@ WNN_JSERVER_ID *server;
  snd_flush();
  x=get4com();
  if(x==-1)wnn_errorno=get4com();
+#ifdef BEOS
+ closesocket(current_sd);
+#else
  close(current_sd);
+#endif
  return x;
 }
 

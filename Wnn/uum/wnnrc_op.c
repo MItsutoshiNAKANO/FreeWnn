@@ -1,5 +1,5 @@
 /*
- * $Id: wnnrc_op.c,v 1.1.1.2 2000-01-16 05:11:05 ura Exp $
+ * $Id: wnnrc_op.c,v 1.2 2000-01-16 06:37:19 ura Exp $
  */
 
 /*
@@ -49,7 +49,7 @@
 #include <pwd.h>
 #include "jllib.h"
 #include "commonhd.h"
-#include "config.h"
+#include "wnn_config.h"
 #include "buffer.h"
 #include "rk_spclval.h"
 #include "sdefine.h"

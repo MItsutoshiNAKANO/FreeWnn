@@ -1,0 +1,168 @@
+Mon Sep 13 03:37:15 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* パッチ patch-1.1.1-a005 として内部リリース
+
+Mon Sep 13 03:35:56 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+        * ファイル CONTRIBUTORS を作成
+
+Mon Sep 13 02:04:34 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/include/Makefile.in: config.h を wnn_config.h に改名したが、
+	FreeWnn 以外のクライアントは依然として config.h をインクルードしよ
+	うとするはずなので、インストール時に "ln -s wnn_config.h config.h" 
+	を実行するようにした。
+	([freewnn:00115] 元木さんの指摘による)
+
+Mon Sep 13 01:56:19 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* configure.in: CPP や CCOPTIONS などの値の決定に OS の判定をして
+	いるところがあるが、知らない OS でもとりあえず configure を続ける
+	ようにした。(いままでは途中で止まっていた)
+
+Sun Sep 12 23:29:59 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* AIX 対応(configure, configure.in)
+	([freewnn:00112] Tomoyuki Niijima 氏提供のパッチ)
+
+	* cpp の出力に行番号情報(#line 1 "" というような感じ)が出る場合
+	(AIX の cpp ではこれが起こる)でも正しく扱えるように以下の 
+	Makefile.in を変更。
+ 	([freewnn:00112] Tomoyuki Niijima 氏提供のパッチ)
+	    Xsi/Wnn/pubdic/Makefile.in
+	    Xsi/cWnn/cdic/Makefile.in
+	    Xsi/kWnn/kdic/Makefile.in
+	    Xsi/cWnn/tdic/Makefile.in
+
+	* Xsi/makerule.mk.in: SUBDIR が未定義の場合にエラーになるのを回避	
+ 	([freewnn:00112] Tomoyuki Niijima 氏提供のパッチ)
+
+Fri Aug 20 03:21:52 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* パッチ patch-1.1.1-a004 として内部リリース
+
+Fri Aug 20 02:12:23 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* HP-UX 11.0 対応
+	([freewnn:00079] 濱嶋さん、[freewnn:00081] 矢吹さん提供のパッチ)
+
+Fri Aug 20 01:35:17 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* (元からあった) config.h を wnn_config.h に改名し、configure で
+	config.h を作成するようにした(ただし中身は空)。
+	([freewnn:00050] 元木さん提供のパッチ)
+
+Thu Aug 19 02:22:33 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Makefile.in から共通定義部分を括り出して makerule.mk というファ
+	イルにまとめた
+
+	* コンパイルでエラーが出た時、その時点で make が止まるようにした
+          (いままでそうなっていなかったのがどうかしている!)
+
+	* makerule.mk: WNNINCDIR と WNNLIBDIR を configure の定義に合わせ
+	た(今までは /usr/X11R6 以下に入るようになっていた)
+
+	* install-sh を autoconf パッケージから持ってきた。これで install 
+	コマンドがないマシンでも FreeWnn のインストールが可能になった
+	
+Sat Aug 14 02:49:58 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Intel版BeOS 対応
+	([freewnn:00061] 阿部さん提供のパッチ)
+
+
+Wed Aug 11 01:42:28 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* パッチ patch-1.1.1-a003 として内部リリース
+
+Wed Aug 11 01:00:59 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* OpenBSD/i386, HP-UX 9.X 対応
+	([freewnn:00045] 濱嶋さん提供のパッチ)
+
+Wed Aug 11 00:43:11 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* --prefix=dir を有効にする。(今までは /usr/local で決めうちだった)
+	([freewnn:00036] 永江さん提供のパッチ)
+
+	* configure, configure.in: NetBSD 対応
+	([freewnn:00036] 永江さん提供のパッチ)
+	
+Mon Jul 28 22:27:44 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* パッチ patch-1.1.1-a002 として内部リリース
+	
+Wed Jul 28 22:12:25 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* configure, configure.in: BSD/OS 対応 (冨樫さん提供のパッチ)
+
+Wed Jul 28 22:07:32 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/jutil/wddel.c:main() にて gets() を使っていたので fgets() に
+	変更 ([freewnn:00024] 矢吹＠SRAさんの指摘による)
+
+	* Wnn/etc/msg.c:msg_get() にてローカル変数のアドレスを返している部
+	分があったので修正([freewnn:00024] 矢吹＠SRAさんの指摘による)
+
+
+Tue Jul 27 01:41:14 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	main() 関数の戻り値型が int になっていないのを修正
+	([freewnn:00024] 矢吹＠SRAさんの指摘による)
+	Wnn/jserver/de.c
+	Wnn/jutil/wnnstat.c
+	Wnn/jutil/wnnkill.c
+	Wnn/jutil/wddel.c
+	Wnn/jutil/wdreg.c
+	Wnn/jutil/oldatonewa.c
+	Wnn/jutil/dtoa.c
+	Wnn/jutil/atod.c
+	Wnn/jutil/atof.c
+	Wnn/jutil/wnntouch.c
+
+	Makefile.in で定義されている _NULLCMD_ を全て削除した
+	([freewnn:00024] 矢吹＠SRAさんの指摘による)。OS によっては、
+	(_NULLCMD_ が定義している) echo -n で -n が表示されてしまうため。_
+ 	NULLCMD_ そのものは Makefile.in の自動生成時にできる副作用的なマク
+	ロと推測され、それ自体には意味はない(と思う ^^;)。
+
+
+Mon Jul 19 04:44:37 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* パッチ patch-1.1.1-a001 として内部リリース
+	
+Mon Jul 19 04:02:14 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* CHANGES: 古川竜雄
+
+	Pubdic/Makefile.in を作成。
+	([freewnn:00013] 前原＠DebianProjectさんの指摘による)
+
+Mon Jul 19 03:13:38 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* CHANGES: (片山＠ＰＦＵさん & 川幡＠ＮＴＴさん)
+
+	SunOS4.* でのコンパイルのために configure と configure.in を修正
+
+	Makefile.in にて @LN_S@ に余計な -s がついていた。(ln -s -s と展開
+	されるため SunOS 4 でエラーとなる)。→ -s をとった。
+
+	Wnn/jserver/ddefine.h で ctype.h をインクルードするように変更(もと
+	もとコメントで先に ctype.h をインクルードせよって書いてあった)。
+	Solaris 2.6 では、"wnn_os.h" がインクルードしているファイルが 
+	<ctype.h> をインクルードしているために、<ctype.h> のインクルードが
+	後になることがあり、これによって、isspace() マクロの二重定義が生じ
+	る。通常は warning で済むが、egcs ではエラーになってしまう。
+	(Wnn/jserver/de_vars.c などで起こる)。
+
+	"char *strchr();”の宣言を削除。ANSI C では、<string.h> での宣言と
+	マッチしないため。
+
+	
+Mon Jul 19 02:58:12 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* CHANGES: [freewnn:00013] (前原＠DebianProjectさん)
+
+	strchr() のプロトタイプの修正
+
