@@ -1,5 +1,5 @@
 /*
- *  $Id: jlv3.c,v 1.3 2001-06-14 18:15:59 ura Exp $
+ *  $Id: jlv3.c,v 1.4 2002-03-07 17:35:26 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -52,9 +52,12 @@ extern  Variables
 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include <fcntl.h>
 #include <pwd.h>
+#include <sys/types.h>
+#include <unistd.h>
 #ifdef  SYSVR2
 #include <malloc.h>
 #else
@@ -125,7 +128,8 @@ getlogname ()
  */
 
 /**     jd_close        **/
-jd_close ()
+int
+jd_close (void)
 {
   if (jlib_work_area)
     {

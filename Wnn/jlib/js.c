@@ -1,5 +1,5 @@
 /*
- *  $Id: js.c,v 1.8 2001-08-14 13:43:21 hiroo Exp $
+ *  $Id: js.c,v 1.9 2002-03-07 17:35:25 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2001
+ * Copyright FreeWnn Project 1999, 2000, 2001, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -56,6 +56,7 @@ extern  Variables
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 #ifdef UX386
 #include <X11/Xos.h>
@@ -70,6 +71,7 @@ extern  Variables
 #include <errno.h>
 extern int errno;
 #include <signal.h>
+#include <unistd.h>
 #include "jd_sock.h"
 #include "commonhd.h"
 #include "demcom.h"

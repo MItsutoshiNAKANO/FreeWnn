@@ -1,5 +1,5 @@
 /*
- *  $Id: jl.c,v 1.7 2001-06-18 09:09:36 ura Exp $
+ *  $Id: jl.c,v 1.8 2002-03-07 17:35:25 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -40,7 +40,9 @@
 #include "commonhd.h"
 #include "wnn_config.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/types.h>
+#include <unistd.h>
 #ifdef SYSVR2
 #   include <string.h>
 #endif
@@ -48,8 +50,10 @@
 #   include <strings.h>
 #endif
 #include <sys/file.h>
+#include <sys/stat.h>
 #include <ctype.h>
 #include <pwd.h>
+#include <time.h>
 
 #include "wnnerror.h"
 #include "jd_sock.h"
