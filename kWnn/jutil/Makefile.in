@@ -100,21 +100,21 @@ all:: $(PROGRAMS)
 
 katod: $(OBJATOD)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOD)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOD) @LIBS@
 
 clean::
 	$(RM) katod
 
 katof: $(OBJATOF)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOF)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOF) @LIBS@
 
 clean::
 	$(RM) katof
 
 kwnntouch: $(OBJTOUCH)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJTOUCH)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJTOUCH) @LIBS@
 
 clean::
 	$(RM) kwnntouch
@@ -128,35 +128,35 @@ clean::
 
 kdtoa: $(OBJDTOA)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJDTOA)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJDTOA) @LIBS@
 
 clean::
 	$(RM) kdtoa
 
 kwnnstat: $(OBJSTAT) $(KWNNJLIB)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJSTAT) $(KWNNJLIB)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJSTAT) $(KWNNJLIB) @LIBS@
 
 clean::
 	$(RM) kwnnstat
 
 kwnnkill: $(OBJKILL) $(KWNNJLIB)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJKILL) $(KWNNJLIB)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJKILL) $(KWNNJLIB) @LIBS@
 
 clean::
 	$(RM) kwnnkill
 
 kwddel: $(OBJWDDEL) $(KWNNJLIB)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDDEL) $(KWNNJLIB)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDDEL) $(KWNNJLIB) @LIBS@
 
 clean::
 	$(RM) kwddel
 
 kwdreg: $(OBJWDREG) $(KWNNJLIB)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDREG) $(KWNNJLIB)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDREG) $(KWNNJLIB) @LIBS@
 
 clean::
 	$(RM) kwdreg

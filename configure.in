@@ -1,5 +1,5 @@
 dnl
-dnl $Id: configure.in,v 1.6 2000-01-16 06:46:03 ura Exp $
+dnl $Id: configure.in,v 1.7 2000-01-16 06:55:27 ura Exp $
 dnl
 
 dnl FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -171,8 +171,8 @@ AC_PROG_CPP
 dnl
 dnl Checks for programs.
 dnl
-AC_PROG_YACC
-AC_PROG_LEX
+dnl ### AC_PROG_YACC
+dnl ### AC_PROG_LEX
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
@@ -181,52 +181,52 @@ AC_SUBST(CCOPTIONS)
 AC_SUBST(CDEBUGFLAGS)
 
 dnl Checks for libraries.
-dnl Replace `main' with a function in -lFS:
-AC_CHECK_LIB(FS, main)
-dnl Replace `main' with a function in -lFresco:
-AC_CHECK_LIB(Fresco, main)
-dnl Replace `main' with a function in -lICE:
-AC_CHECK_LIB(ICE, main)
-dnl Replace `main' with a function in -lPEX5:
-AC_CHECK_LIB(PEX5, main)
-dnl Replace `main' with a function in -lSM:
-AC_CHECK_LIB(SM, main)
-dnl Replace `main' with a function in -lX11:
-AC_CHECK_LIB(X11, main)
-dnl Replace `main' with a function in -lXIE:
-AC_CHECK_LIB(XIE, main)
-dnl Replace `main' with a function in -lXau:
-AC_CHECK_LIB(Xau, main)
-dnl Replace `main' with a function in -lXaw:
-AC_CHECK_LIB(Xaw, main)
-dnl Replace `main' with a function in -lXbsd:
-AC_CHECK_LIB(Xbsd, main)
-dnl Replace `main' with a function in -lXdmcp:
-AC_CHECK_LIB(Xdmcp, main)
-dnl Replace `main' with a function in -lXext:
-AC_CHECK_LIB(Xext, main)
-dnl Replace `main' with a function in -lXi:
-AC_CHECK_LIB(Xi, main)
-dnl Replace `main' with a function in -lXmu:
-AC_CHECK_LIB(Xmu, main)
-dnl Replace `main' with a function in -lXt:
-AC_CHECK_LIB(Xt, main)
-dnl Replace `main' with a function in -lXtf:
-AC_CHECK_LIB(Xtf, main)
-dnl Replace `main' with a function in -lXtst:
-AC_CHECK_LIB(Xtst, main)
-dnl Replace `main' with a function in -lcurses:
-AC_CHECK_LIB(curses, main)
-dnl Replace `main' with a function in -lfl:
-AC_CHECK_LIB(fl, main)
-dnl Replace `main' with a function in -lfont:
-AC_CHECK_LIB(font, main)
-dnl Replace `main' with a function in -loldX:
-AC_CHECK_LIB(oldX, main)
-dnl Replace `main' with a function in -lphigs:
-AC_CHECK_LIB(phigs, main)
-dnl Replace `main' with a function in -lxpg4:
-AC_CHECK_LIB(xpg4, main)
+dnl ### dnl Replace `main' with a function in -lFS:
+dnl ### AC_CHECK_LIB(FS, main)
+dnl ### dnl Replace `main' with a function in -lFresco:
+dnl ### AC_CHECK_LIB(Fresco, main)
+dnl ### dnl Replace `main' with a function in -lICE:
+dnl ### AC_CHECK_LIB(ICE, main)
+dnl ### dnl Replace `main' with a function in -lPEX5:
+dnl ### AC_CHECK_LIB(PEX5, main)
+dnl ### dnl Replace `main' with a function in -lSM:
+dnl ### AC_CHECK_LIB(SM, main)
+dnl ### dnl Replace `main' with a function in -lX11:
+dnl ### AC_CHECK_LIB(X11, main)
+dnl ### dnl Replace `main' with a function in -lXIE:
+dnl ### AC_CHECK_LIB(XIE, main)
+dnl ### dnl Replace `main' with a function in -lXau:
+dnl ### AC_CHECK_LIB(Xau, main)
+dnl ### dnl Replace `main' with a function in -lXaw:
+dnl ### AC_CHECK_LIB(Xaw, main)
+dnl ### dnl Replace `main' with a function in -lXbsd:
+dnl ### AC_CHECK_LIB(Xbsd, main)
+dnl ### dnl Replace `main' with a function in -lXdmcp:
+dnl ### AC_CHECK_LIB(Xdmcp, main)
+dnl ### dnl Replace `main' with a function in -lXext:
+dnl ### AC_CHECK_LIB(Xext, main)
+dnl ### dnl Replace `main' with a function in -lXi:
+dnl ### AC_CHECK_LIB(Xi, main)
+dnl ### dnl Replace `main' with a function in -lXmu:
+dnl ### AC_CHECK_LIB(Xmu, main)
+dnl ### dnl Replace `main' with a function in -lXt:
+dnl ### AC_CHECK_LIB(Xt, main)
+dnl ### dnl Replace `main' with a function in -lXtf:
+dnl ### AC_CHECK_LIB(Xtf, main)
+dnl ### dnl Replace `main' with a function in -lXtst:
+dnl ### AC_CHECK_LIB(Xtst, main)
+dnl ### dnl Replace `main' with a function in -lcurses:
+dnl ### AC_CHECK_LIB(curses, main)
+dnl ### dnl Replace `main' with a function in -lfl:
+dnl ### AC_CHECK_LIB(fl, main)
+dnl ### dnl Replace `main' with a function in -lfont:
+dnl ### AC_CHECK_LIB(font, main)
+dnl ### dnl Replace `main' with a function in -loldX:
+dnl ### AC_CHECK_LIB(oldX, main)
+dnl ### dnl Replace `main' with a function in -lphigs:
+dnl ### AC_CHECK_LIB(phigs, main)
+dnl ### dnl Replace `main' with a function in -lxpg4:
+dnl ### AC_CHECK_LIB(xpg4, main)
 
 AC_CHECK_LIB(crypt, main)
 AC_CHECK_LIB(socket, main)

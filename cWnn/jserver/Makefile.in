@@ -89,14 +89,14 @@ all:: $(HDRS) $(SRC0) $(SRC1) $(TSRCS) cserver tserver
 
 cserver: $(OBJS)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) @LIBS@
 
 clean::
 	$(RM) cserver
 
 tserver: $(TOBJS)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(TOBJS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(TOBJS) @LIBS@
 
 clean::
 	$(RM) tserver

@@ -1,3 +1,13 @@
+Sun Sep 19 00:24:33 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* 開発版 1.1.1-a007 として内部リリース
+
+Sat Sep 18 20:09:23 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* crypt ライブラリがリンクされないようになっていたため NetBSD でコ
+	ンパイルできなくなっていたのを修正。
+	([freewnn:00124] のパッチ。[freewnn:00124] にて永江さんが指摘)
+
 Thu Sep 16 03:40:33 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
 
 	* 開発版 1.1.1-a006 として内部リリース

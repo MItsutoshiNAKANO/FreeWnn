@@ -103,21 +103,21 @@ all:: $(PROGRAMS)
 
 catod: $(OBJATOD)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOD)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOD) @LIBS@
 
 clean::
 	$(RM) catod
 
 catof: $(OBJATOF)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOF)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOF) @LIBS@
 
 clean::
 	$(RM) catof
 
 cwnntouch: $(OBJTOUCH)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJTOUCH)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJTOUCH) @LIBS@
 
 clean::
 	$(RM) cwnntouch
@@ -131,35 +131,35 @@ clean::
 
 cdtoa: $(OBJDTOA)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJDTOA)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJDTOA) @LIBS@
 
 clean::
 	$(RM) cdtoa
 
 cwnnstat: $(OBJSTAT) $(CWNNJLIB)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJSTAT) $(CWNNJLIB)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJSTAT) $(CWNNJLIB) @LIBS@
 
 clean::
 	$(RM) cwnnstat
 
 cwnnkill: $(OBJKILL) $(CWNNJLIB)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJKILL) $(CWNNJLIB)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJKILL) $(CWNNJLIB) @LIBS@
 
 clean::
 	$(RM) cwnnkill
 
 cwddel: $(OBJWDDEL) $(CWNNJLIB)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDDEL) $(CWNNJLIB)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDDEL) $(CWNNJLIB) @LIBS@
 
 clean::
 	$(RM) cwddel
 
 cwdreg: $(OBJWDREG) $(CWNNJLIB)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDREG) $(CWNNJLIB)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDREG) $(CWNNJLIB) @LIBS@
 
 clean::
 	$(RM) cwdreg

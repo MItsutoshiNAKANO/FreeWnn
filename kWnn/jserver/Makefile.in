@@ -77,7 +77,7 @@ all:: $(HDRS) $(SRC0) $(SRC1) kserver
 
 kserver: $(OBJS)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) @LIBS@
 
 clean::
 	$(RM) kserver
