@@ -1,5 +1,5 @@
 /*
- *  $Id: msg.c,v 1.5 2001-06-14 18:15:55 ura Exp $
+ *  $Id: msg.c,v 1.6 2001-06-14 18:28:51 ura Exp $
  */
 
 /*
@@ -352,7 +352,9 @@ msg_open (name, nlspath, lang)
         break;
       if (*data == '#')
         continue;               /* comment */
-      for (dp = data; *dp != '\t'; dp++);       /* msg_id:message\n */
+      for (dp = data; *dp && *dp != '\t'; dp++);        /* msg_id:message\n */
+      if (*dp == '\0')
+        continue;
       dp++;
       msg_byte += strlen (dp);
       msg_cnt++;
@@ -375,7 +377,9 @@ msg_open (name, nlspath, lang)
         break;
       if (*data == '#')
         continue;               /* comment */
-      for (dp = data; *dp != '\t'; dp++);       /* msg_id:message\n */
+      for (dp = data; *dp && *dp != '\t'; dp++);        /* msg_id:message\n */
+      if (*dp == '\0')
+        continue;
       *dp = 0;
       dp++;
       bd->msg_id = atoi (data);

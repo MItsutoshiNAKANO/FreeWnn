@@ -1,5 +1,5 @@
 /*
- *  $Id: jishoop.c,v 1.3 2001-06-14 18:16:02 ura Exp $
+ *  $Id: jishoop.c,v 1.4 2001-06-14 18:28:55 ura Exp $
  */
 
 /*
@@ -29,7 +29,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <config.h>
+
 #include <stdio.h>
+
+#if defined(HAVE_SYS_TYPES_H)
+#include <sys/types.h>
+#endif
+
 #include "commonhd.h"
 #include "de_header.h"
 #include "jdata.h"

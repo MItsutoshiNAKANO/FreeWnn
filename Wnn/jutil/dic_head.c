@@ -1,5 +1,5 @@
 /*
- *  $Id: dic_head.c,v 1.3 2001-06-14 18:16:04 ura Exp $
+ *  $Id: dic_head.c,v 1.4 2001-06-14 18:28:55 ura Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ int
 input_header (ifpter, jtp, fhp)
      FILE *ifpter;
      struct JT *jtp;
-     struct file_head *fhp;
+     struct wnn_file_head *fhp;
 {
 
   if (input_file_header (ifpter, fhp) == -1 || input_header_jt (ifpter, jtp) == -1)

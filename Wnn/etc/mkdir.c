@@ -1,5 +1,5 @@
 /*
- *   $Id: config.h.in,v 1.5 2001-06-14 18:28:51 ura Exp $
+ *  $Id: mkdir.c,v 1.1 2001-06-14 18:28:51 ura Exp $
  */
 
 /*
@@ -11,56 +11,66 @@
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright FreeWnn Project 1999, 2000
- * 
+ *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#undef HAVE_UNISTD_H
-#undef HAVE_SYS_TYPES_H
-#undef HAVE_MKDIR
+#include <config.h>
 
-/* *_t が定義されているか? (定義されていればここでは undef になる) */
-#undef time_t
-#undef socklen_t
+#if !defined(HAVE_MKDIR)
 
+#include <stdlib.h>
 
-/*
- *   drand48() があるかどうかを調べる。あれば srand48() もあるはずなので
- *   HAVE_SRAND48 は作らず、これで兼用させる。
- */    
-#undef HAVE_DRAND48
+#include <sys/types.h>
+#include <sys/wait.h>
 
-/*
- *   RAND_MAX が定義されていればこれも定義される。ちなみにこれは rand() が
- *   返す値の最大値である。
- */
-#undef HAVE_RAND_MAX
+#if !defined(WIFEXITED)
+#define WEXITSTATUS(status) (((status) & 0xff00) >> 8)
+#endif /* !WIFEXITED */
+#if !defined(WIFSIGNALED)
+#define WTERMSIG(status) ((status) & 0x7f)
+#endif /* !WIFSIGNALED */
+#if !defined(WIFSTOPPED)
+#define WSTOPSIG(status) WEXITSTATUS(status)
+#endif /* !WIFSTOPPED */
+#if !defined(WIFEXITED)
+#define WIFEXITED(status) (__WTERMSIG(status) == 0)
+#endif /* !WIFEXITED */
 
-/*
- *   perror() が定義されていればこれも定義される。
- */
-#undef HAVE_PERROR
+int
+mkdir (path, mode)
+     const char *path;
+     mode_t mode;
+{
+  const char *args[3];
+  int status;
 
-/*
- *   その他イロイロ
- */
-#undef HAVE_SETSOCKOPT
-#undef HAVE_CLOSESOCKET
-#undef HAVE_SEND
-#undef HAVE_RECV
-#undef HAVE_SETPGRP
-#undef SETPGRP_VOID
+  if (!path)
+    return -1;
+
+  args[0] = "/bin/mkdir";
+  args[1] = path;
+  args[2] = NULL;
+
+  if (!fork ())
+    execv (args[0], args);
+  else
+    wait (&status);
+
+  return !(WIFEXITED (status));
+}
+#endif
