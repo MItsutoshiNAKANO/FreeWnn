@@ -1,4 +1,72 @@
-Sun, 6 Apr 2003 06:30:49  Hiroo Ono <hiroo oikumene.gcd.org>
+Date: Sun, 18 May 2003 14:34:02 Hiroaki Abe <h-abe at pc.highway.ne.jp>
+	* Wnn/jserver/de_header.h, do_filecom.c:
+	  Allocate struct wnn_file files dynamically.
+
+Sun, 11 May 2003 19:01:10 Hiroo Ono <hiroo at oikumene.gcd.org>
+	* Makefile.in, configure.in, makerule.mk.in:
+	 revised CFLAGS and CDEBUGFLAGS usage.
+	* configure: regenerate.
+	* Wnn/etc/bdic.c,  Wnn/include/jd_sock.h, Wnn/jlib/js.c,
+	  Wnn/romkan/rk_modread.c, Wnn/uum/jhlp.c, Wnn/romkan/rk_read.c:
+	 Axed UX386 macro.
+	* Wnn/jlib/jl.c, Wnn/jlib/kankana.c, Wnn/jserver/do_env.c,
+	  Wnn/jserver/do_filecom.c, Wnn/uum/uif.c:
+	 style fix.
+	* Wnn/jserver/ddefine.h, Wnn/jserver/fzk.h, fzk.c, Wnn/uum/sheader.h:
+	 forgot to add edited year.
+	* Wnn/conv/Makefile.in: remove unnecessary variable.
+	* Wnn/jlib/Makefile.in, Wnn/jlib.V3/Makefile.in,
+	  cWnn/jlib/Makefile.in, kWnn/jlib/Makefile.in:
+	 removed unnecessary variable, removed getopt.c, and style fix.
+	* Wnn/jlib/getopt.c: Removed as replaced by libc or GNU getopt.
+	* cWnn/etc/Makefile.in, kWnn/etc/Makefile.in:
+	 remove unnecessary variable.
+	 added GNU getopt.c and getopt1.c which deals with long options.
+	 style fix.
+	* cWnn/include/Makefile.in, kWnn/include/Makefile.in:
+	 added GNU getopt.h and style fix.
+	* Wnn/jserver/Makefile.in, cWnn/jserver/Makefile.in,
+	   kWnn/jserver/Makefile.in:
+	 Remove de_vars.c and jserver_id.c
+	 Replace getopt by GNU getopt.
+	 Removed FORKDEF. cf. de.c changes.
+	* Wnn/jserver/de_vars.c:
+	 Remove. Global variables now dealt in de_header.h and de.c.
+	* Wnn/jserver/de_header.h:
+	 global variable definitions are now in de_header.h and kaiseki.h.
+	 add OPT_* macro. style fix.
+	* Wnn/jserver/kai_area.c: global variables are moved to kaiseki.h
+	* Wnn/jserver/kaiseki.h: now covers global variable definition.
+	* Wnn/jserver/jserver_id.c: Remove. It is not used.
+	* Wnn/jserver/bnsetu_kai.c:
+	 discard jmt_set() return value.
+	 It never returnes -1 (failure), so this change does not matter.
+	* Wnn/jserver/de.c:
+	 use GNU getopt now.
+	 global variable now dealt in de_header.h and de.c.
+	 axed UX386 macro.
+	 add -D option (do not detach tty) and some long options.
+	 changed option setting with OTP_*.
+	* Wnn/etc/getopt.c, Wnn/etc/getopt1.c, Wnn/include/getopt.h:
+	 add GNU getopt (getopt_long).
+	* Wnn/jserver/jmt0.c:
+	 Elimination of unnecessary code brought that
+	 init_jmt() no more returns a value nor take a parameter,
+	 also initjmt is no more needed.
+	* Wnn/jserver/do_dic_no.c, do_henkan1.c:
+	 init_jmt() no more takes a parameter, and style fix.
+	* Wnn/jserver/get_kaiarea.c:
+	 change return value of get_kaiseki_area().
+	 failure now returns NULL, and success returns 1 (non zero)
+	 (a little bit like malloc).
+	 style fix.
+	* Wnn/jserver/initjserv.c, snd_rcv.c, w_string.c:
+	 remove commented out code.
+
+Fri, 9 Apr 2003 Hiroo Ono <hiroo at oikumene.gcd.org>
+	* Tagged freewnn-1-1-1-a020.
+
+Sun, 6 Apr 2003 06:30:49  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Wnn/uum/jhlp.c: Change err() to uum_err().
 	  Avoid overriding err() in libc.
 	* Wnn/uum/sheader.h: ditto.
@@ -17,30 +85,30 @@ Sun, 6 Apr 2003 06:30:49  Hiroo Ono <hiroo oikumene.gcd.org>
 	* Wnn/jserver/fzk.h: typedef word_vector and fzkvect.
 	  include ddefine.h.
 
-Mon, 30 Dec 2002 00:03:24  Hiroo Ono <hiroo oikumene.gcd.org>
+Mon, 30 Dec 2002 00:03:24  Hiroo Ono <hiroo at oikumene.gcd.org>
         * PubdicPlus/pubdic.p
 	  Fixed the word "torawareru".
-          (reported by Mr.Hironori Fujii <fujii chi.its.hiroshima-cu.ac.jp>)
+          (reported by Mr.Hironori Fujii <fujii at chi.its.hiroshima-cu.ac.jp>)
 
-Fri,  8 Nov 2002 09:15:07  Katsuomi Hamajima <hamajima nagoya.ydc.co.jp>
+Fri,  8 Nov 2002 09:15:07  Katsuomi Hamajima <hamajima at nagoya.ydc.co.jp>
         * Wnn/jserver/de_header.h:
 	  Fix compile error by defining UCHAR.
 
-Tue, 12 Nov 2002 10:25:02  Tomoki Aono <aono cc.osaka-kyoiku.ac.jp>
+Tue, 12 Nov 2002 10:25:02  Tomoki Aono <aono at cc.osaka-kyoiku.ac.jp>
         * Wnn/etc/revdic.c:
 	  Fix bug on revdic against WNN_UD_DICT.
 	  atod -U creates wrong dictionary (and even crashes) on little-endian
 	  architecture.
-          (reported by Mr.Kamei <zic-fw ontime.venus.to> in [freewnn:00903]>)
+          (reported by Mr.Kamei <zic-fw at ontime.venus.to> in [freewnn:00903]>)
         * Wnn/jutil/atod.c:
 	  Add -U explanation in the usage.
 
-Sat Sep 07 11:33:53 UTC 2002  Hiroo Ono <hiroo oikumene.gcd.org>
+Sat Sep 07 11:33:53 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
         * Contrib/dic/gerodic/g-jinmei.u:
           PubdicPlus/pubdic.p:
 	  Fix the word "hitachi" and "jouban".
 
-Sun Sep 01 17:48:26 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sun Sep 01 17:48:26 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* configure.in: added check for FD_SET() and AC_HEADER_TIME.
 	* configure:
 	  config.h.in: regenerate.
@@ -59,27 +127,27 @@ Sun Sep 01 17:48:26 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	  Change prototypes to C89 style,
 	  error1 -> log_err/log_debug conversion.
 
-Mon Aug 26 09:27:23 UTC 2002  Tomoki Aono <aono@cc.osaka-kyoiku.ac.jp>
+Mon Aug 26 09:27:23 UTC 2002  Tomoki Aono <aono at cc.osaka-kyoiku.ac.jp>
 	* Wnn/uum/jhlp.c:
 	  #include <errno.h> instead of <sys/errno.h>.
 
-Sat Aug 24 18:11:53 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sat Aug 24 18:11:53 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Wnn/jserver/de.c:
 	  Change prototypes to C89 style.
 	  Remove commented out function.
 
-Fri Aug 16 17:30:29 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Fri Aug 16 17:30:29 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Wnn/jserver/b_index.c:
 	  Change prototypes to C89 style.
 	  error1 -> log_err/debug conversion.
 
-Thu Aug 15 10:31:04 UTC 2002  Tomoki Aono <aono@cc.osaka-kyoiku.ac.jp>
+Thu Aug 15 10:31:04 UTC 2002  Tomoki Aono <aono at cc.osaka-kyoiku.ac.jp>
 	* Wnn/jserver/de.c:
 	  Clear user_name and host_name of deleted client struct
 	 to display username correctly in log_debug()/log_error().
 	  Possible typo fix for IBM compilers (CLINET -> CLIENT).
 
-Mon Aug 12 16:25:48 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Mon Aug 12 16:25:48 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* jserver/de_header.h:
 	  Permit double inclusion.
 	  Add option_flag variable.
@@ -105,7 +173,7 @@ Mon Aug 12 16:25:48 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	  Change read_default_files() buffer size to EXPAND_PATH_LENGTH+1.
 	  Remove commented out function.
 
-Sun Jul 14 04:19:54 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sun Jul 14 04:19:54 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* PubdicPlus/fzk.con:
 	  PubdicPlus/fzk.fzkattr:
 	  PubdicPlus/fzk.shuutan:
@@ -130,12 +198,12 @@ Sun Jul 14 04:19:54 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	  Wnn/etc/sstrings.c:
 	  PubdicPlus/pod.c:     Include string(s).h. 
 
-Sat Jun 22 17:58:58 UTC 2002  Tomoki Aono <aono@cc.osaka-kyoiku.ac.jp>
+Sat Jun 22 17:58:58 UTC 2002  Tomoki Aono <aono at cc.osaka-kyoiku.ac.jp>
 	* Wnn/manual/4.cmd/jserver:
 	  Wnn/man/4.cmd/jserver.man:
 	  Added description about jserver -v option.
 
-Sat Jun 22 13:26:22 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sat Jun 22 13:26:22 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* CONTRIBUTORS:
 	  List the contributors for pubdic+ enhancement (from wnn-users).
 	  Added Mr.Ishida for the fix in Wnn/jserver/de.c [freewnn:00383].
@@ -184,10 +252,10 @@ Sat Jun 22 13:26:22 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	* Wnn/uum/wnnrc_op.c:
 	  Remove prototype for system library function.
 
-Fri Jun 21 19:39:47 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Fri Jun 21 19:39:47 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Wnn/include/wnn_malloc.h: Removed.
 
-Mon Jun 17 17:28:54 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Mon Jun 17 17:28:54 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* configure.in:
 	  Passes autoconf 2.13 again. (cf.[freewnn:00872])
 	  Look for getopt().
@@ -198,7 +266,7 @@ Mon Jun 17 17:28:54 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	* Wnn/jlib/getopt.c:
 	  Enable only when the system do not have getopt()(cf.[freewnn:00874]).
 
-Sat Jun 15 13:11:45 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sat Jun 15 13:11:45 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* acconfig.h:
 	  Added RETSIGTYPE_VOID hack taken from EB Library
 	  <URI:http://www.sra.co.jp/people/m-kasahr/eb/>.
@@ -231,10 +299,10 @@ Sat Jun 15 13:11:45 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	* Wnn/uum/wnnrc_op.c:
 	  Get rid of BSD42 macro.
 
-Fri Jun 14 19:39:30 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Fri Jun 14 19:39:30 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Makefile.in: use $(RM) for remove command.
 
-Thu Jun 13 21:27:51 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Thu Jun 13 21:27:51 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* FreeWnn/Wnn/uum/jhlp.c, termio.c:
 	  Change own setenv() definition to not to print out error message
 	  and getting one more parameter for compatibility.
@@ -242,26 +310,26 @@ Thu Jun 13 21:27:51 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	* FreeWnn/Wnn/uum/termcap.c: curses header inclusion.
 	* FreeWnn/Wnn/uum/sheader.h: cleanup.
 
-Mon Jun 10 22:15:23 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Mon Jun 10 22:15:23 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* PubdicPlus/pod.c: Include config.h.
 
-Sun Jun 09 11:08:41 UTC 2002  Hiroaki Abe <h-abe@pc.highway.ne.jp>
+Sun Jun 09 11:08:41 UTC 2002  Hiroaki Abe <h-abe at pc.highway.ne.jp>
 	* FreeWnn/configure.in:
 	  Add libbind.so check for BeOS R5.1.
 
-Mon May 27 16:33:52 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Mon May 27 16:33:52 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Wnn/pubdicplus/Makefile.in:
 	  Put $(TOP) to include path so that <config.h> can be included.
 
-Sat May 25 11:24:47 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sat May 25 11:24:47 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* FreeWnn/PubdicPlus/ fzk.con, fzk.attr, fzk.jircon:
 	  Enhancement for verb ([wnn-users 973],[wnn-users 975] Y.Katayama).
 	  Enhancement for prefix ([wnn-users 978] Fe2+(T.Matsui)).
 
-Sat May 25 05:57:43 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sat May 25 05:57:43 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Wnn/jserver/ MALLOC.c, malloc.c: Remove malloc() wrapper.
 
-Sun May 12 22:51:18 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sun May 12 22:51:18 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Wnn/conv/cvt_key.c: Remove qualifier register.
 	* Wnn/uum/setutmp.c:
 	  Correct the parameter of setenv().
@@ -288,7 +356,7 @@ Sun May 12 22:51:18 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	* Makefile.in: Add removal of autoconf 2.53 generated
 		files in distclean.
 
-Sun May 12 01:01:47 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sun May 12 01:01:47 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* CONTRIBUTEORS: update
 	* configure.in, configure, config.h.in:
 	  Check for bcopy/bzero/bcmp.
@@ -296,27 +364,27 @@ Sun May 12 01:01:47 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	  Check for bcopy/bzero/bcmp.
 	  Remove qualifier register.
 
-Sat May 11 13:03:37 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sat May 11 13:03:37 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* INSTALL INSTALL.en: Update.
 
-Tue May 07 22:26:30 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Tue May 07 22:26:30 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Wnn/etc/msg.c:
 	  Corrected _search(). ([freewnn:00847] by K.Wada)
 
-Sun May 05 05:13:10 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sun May 05 05:13:10 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Wnn/include/commonhd.h:
 	  Updated _SERVER_VERSION to pl20.
 	  Removed unistd.h inclusion.
 
-Sat May 04 17:15:24 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp> 
+Sat May 04 17:15:24 UTC 2002  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp> 
 	* Wnn/manual/4.cmd/jserver man/4.cmd/jserver.man:
 	  Update.
 
-Thu May 02 15:18:55 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Thu May 02 15:18:55 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Wnn/jserver/do_hindo_s.c:
 	  Corrected inclusion of stdlib.h.
 
-Wed May 01 21:05:10 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Wed May 01 21:05:10 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* configure.in config.h.in configure:
 	  Added checking for syslog(), syslog.h and setenv() that are not
 	  in C89 or POSIX 1,2.
@@ -330,32 +398,32 @@ Wed May 01 21:05:10 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	  However, it should be rewritten to meet other specification, and
 	  it assumes environment variables are in the variable char **environ.
 
-Tue Apr 02 04:16:21 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+Tue Apr 02 04:16:21 UTC 2002  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp>
 	* Wnn/jserver/de.c: include fcntl.h.
 	* Wnn/conv/cvt_read.c: Change include point of cvt_head.h.
 
-Sun Mar 31 11:30:23 UTC 2002  Hiroaki Abe <h-abe@pc.highway.ne.jp>
+Sun Mar 31 11:30:23 UTC 2002  Hiroaki Abe <h-abe at pc.highway.ne.jp>
 	* Wnn/include/commonhd.h:
 	  Remoke unitsd.h inclusion for BeOS.
 	* */jserver/Makefile.in configure.in configure:
 	  BeOS requires to link libbe.so when using syslog function.
 	  Add JS_SUPPORTLIBS to set libraries when building [jckt]server.
 
-Sun Mar 31 06:26:54 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sun Mar 31 06:26:54 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Wnn/jserver/de.c de_header.h:
 	  Changed the value of cmd_name[] from argv[0] to "[cjkt]server".
 	  Style and error message fix.
 
-Sat Mar 30 13:44:22 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sat Mar 30 13:44:22 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Wnn/romkan/rk_modread.c: Include stdlib.h
 
-Sat Mar 30 09:34:48 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+Sat Mar 30 09:34:48 UTC 2002  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp>
 	* (Wnn/cWnn/kWnn)/romkan/Makefile.in:
 	  Added -I$(TOP) to INCLUDES.
 	  Removed LIB_MT_DEFINES. It is not used anywhere.
 	  Preliminary change for enabling build when builddir != srcdir.
 
-Sat Mar 30 02:35:22 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sat Mar 30 02:35:22 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Wnn/etc/yincoding.c: Style fix.
 	* files below Wnn/:
 	  Added header files (string.h/strings.h unistd.h and so on) inclusion
@@ -365,13 +433,13 @@ Sat Mar 30 02:35:22 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	  Remove limits.h check. We see STDC_HEADERS.
 	  Add memory.h check for future bcopy/index -> memmove/strchr change.
 
-Sat Mar 23 21:18:32 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sat Mar 23 21:18:32 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	files under Wnn directory:
 	* See STDC_HEADERS for stdlib.h and string.h.
 	* Include strings.h if no STDC_HEADERS and it exists.
 	* Include config.h if necessary.
 
-Thu Mar 21 06:59:22 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Thu Mar 21 06:59:22 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* configure.in: Removed unecessary comments.
 	* cvt_head.h: Removed commented out codes.
 	* cvt_read.c, bdic.c, yincoding.c:
@@ -379,10 +447,10 @@ Thu Mar 21 06:59:22 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	* config.h.in, configure.in, configure:
 	    add fchmod() check.
 
-Sun Mar 10 10:43:47 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sun Mar 10 10:43:47 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* pubdic.p: Fixed typo. ([freewnn:00812] by Fe2+)
 
-Sat Mar  9 16:50:34 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+Sat Mar  9 16:50:34 UTC 2002  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp>
 	* Makefile.in config.h.in configure configure.in
 	  Wnn/etc/gethinsi.c Wnn/jserver/Makefile.in
 	  cWnn/jserver/Makefile.in cWnn/include/Makefile.in
@@ -406,48 +474,48 @@ Sat Mar  9 16:50:34 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
 	   one line (i.e. it does not add extra new lines).
 	   Usually, at least 3 lines was printed.
 
-Fri Mar  8 20:07:13 2002  Hiroo Ono <hiroo@oikumene.gcd.org>     
+Fri Mar  8 20:07:13 2002  Hiroo Ono <hiroo at oikumene.gcd.org>     
 	* Include system headers which contains the function prototype used.
 	* Wnn/etc/wnn_os.h: Put the prototypes for functions defined in
 	  Wnn/etc.
         * Wnn/etc/msg.c: removed bsearch() implimentation.
 
-Fri Mar  8 08:36:04 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+Fri Mar  8 08:36:04 UTC 2002  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp>
         * Wnn/jserver/de.c
 	  Open log (script) file in append mode.
 	  Delete duplicated signal handler setting in daemon_init().
 
-Tue Mar  5 09:23:50 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+Tue Mar  5 09:23:50 UTC 2002  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp>
 	* Imported vasprintf.c and ansidecl.h from libiberty (bundled with
 	  gcc-3.0.4). Needed for error.c rewrite.
 	  Change from original version:
 	    vasprintf.c does not #include <libiberty.h>. 
 
-Mon Mar  4 04:01:55 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+Mon Mar  4 04:01:55 UTC 2002  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp>
 	* Wnn/man/4.cmd/jserver/man
 	  Fixed option-description formatting for jserver. [freewnn:00759]
 
-Sun Mar  3 14:06:32 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sun Mar  3 14:06:32 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
         * Wnn/include/wnn_os.h et al.
 	  Removed P_ macro for K&R C.
 
-Sun Mar  3 12:53:58 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sun Mar  3 12:53:58 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
         * configure.in: Applied fix from [freewnn:00764] (T.Aono).
 
-Sat Mar  2 11:19:21 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sat Mar  2 11:19:21 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
         * Fixed typo in the manual of wddel ([freewnn:00797] T.Matui).
 
-Mon Sep 24 08:25:28 UTC 2001  Hiroo Ono <hiroo@oikumene.gcd.org>
+Mon Sep 24 08:25:28 UTC 2001  Hiroo Ono <hiroo at oikumene.gcd.org>
         * Fix for configure.in and Makefile.in ([freewnn:00753] by T.Aono).
 
-Sun Sep 16 11:10:20 UTC 2001  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sun Sep 16 11:10:20 UTC 2001  Hiroo Ono <hiroo at oikumene.gcd.org>
         * Added --enable-debug option to the configure script.
 	  it adds -g2 option to CDEBUGFLAGS if CC is GCC, and remove
           -s from INSTPGMFLAGS not to strip the executable.
           An update to the configure.in script for CC other than GCC is
 	  welcome.
 
-Sat Sep 15 17:29:15 UTC 2001  Hiroo Ono <hiroo@oikumene.gcd.org>
+Sat Sep 15 17:29:15 UTC 2001  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Put workaround for remote vulnerability that allow to create 
 	  a file in an arbitrary path.
 	  ([freewnn:00699] by Mr.Ukai via Mr. M.Ishikawa).
@@ -474,7 +542,7 @@ Sat Sep 15 17:29:15 UTC 2001  Hiroo Ono <hiroo@oikumene.gcd.org>
 	  ([freewnn:00730] by T.Aono)
 	* Modified INSTALL.en
 
-Tue Aug 14 11:12:34 UTC 2001 Hiroo Ono <hiroo@oikumene.gcd.org>
+Tue Aug 14 11:12:34 UTC 2001 Hiroo Ono <hiroo at oikumene.gcd.org>
 	* CPP + IPv6 path ([freewnn:00673] Katsuomi Hamajima)
 	* fix to configure.in for beos ([freewnn:00677] Hiroaki Abe)
 	* libtoolized by libtool-1.4 and aclocal.
@@ -486,7 +554,7 @@ Sun Jun 17 15:00:08 UTC 2001
 	* Added -v option to jserver ([freewnn:00581] Y.Yabuki)
 	* Corrected jserver usage. ([freewnn:00606] Francis Bond)
 
-Sat Jun  2 00:27:56 JST 2001 Hiroo Ono <hiroo@oikumene.gcd.org>
+Sat Jun  2 00:27:56 JST 2001 Hiroo Ono <hiroo at oikumene.gcd.org>
 	* config.h.in, configure.in, */*/Makefile.in,
 	  and some other *.h and *.c files:
 	  check if sys/param.h exists.
@@ -496,19 +564,19 @@ Sat Jun  2 00:27:56 JST 2001 Hiroo Ono <hiroo@oikumene.gcd.org>
 	* Wnn/man/6.jutil/atod.man: changed some alphabet characters.
 	* removed some comments for emacs (NEmacs?) editor.
 
-Wed May 30 00:09:15 JST 2001 Hiroo Ono <hiroo@oikumene.gcd.org>
+Wed May 30 00:09:15 JST 2001 Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Wnn/manual/3.libwnn/*,
 	  Wnn/manual/7.Protocol/KKTP:
 	  fix document typo ([[freewnn:00581] by Youichi Yabuki)
 	  The documents in English should also be fixed, but...
 
-Sun May 27 12:55:45 JST 2001 Hiroo Ono <hiroo@oikumene.gcd.org>
+Sun May 27 12:55:45 JST 2001 Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Makefile.in: remove libtool in distclean
 	* Wnn/include/wnn_os.h: remove HAVE_WAIT3 (it is now in configure.in)
 	* configure.in: temporary fix for CPP ([freewnn:00578] H.Abe)
 	  CPP=`$CC -print-prog-name=cpp` on BePC, FreeBSD, Linux
 
-Sun May 20 18:09:02 JST 2001 Hiroo Ono <hiroo@oikumene.gcd.org>
+Sun May 20 18:09:02 JST 2001 Hiroo Ono <hiroo at oikumene.gcd.org>
 
 	* makerule.mk.in: pass -DHAVE_CONFIG_H to $(CC)
 	* PubdicPlus/fzk.con: fix previous patch ([freewnn:00576] by Keiki Sunagawa).
@@ -516,7 +584,7 @@ Sun May 20 18:09:02 JST 2001 Hiroo Ono <hiroo@oikumene.gcd.org>
 	* Wnn/jd/wnnenvrc_R.omr: add gerodic ([freewnn:00346] by Fuminori Uematsu).
 	* Wnn/jlib/js.c: include config.h ([freewnn:00392] by Hiroaki Abe)
 
-Sat May 19 18:20:25 JST 2001 Hiroo Ono <hiroo@oikumene.gcd.org>
+Sat May 19 18:20:25 JST 2001 Hiroo Ono <hiroo at oikumene.gcd.org>
 
 	* PubdicPlus/fzk.con patch ([freewnn:00547] by Keiki Sunagawa)
 	* PubdicPlus/pubdic.p fix ([freewnn:00424] by Tetsuo Tsukamoto)
@@ -533,7 +601,7 @@ Sat May 19 18:20:25 JST 2001 Hiroo Ono <hiroo@oikumene.gcd.org>
 
 	* include config.h only when HAVE_CONFIG_H is defined.
 
-Sat May 19 14:16:00 JST 2001 Hiroo Ono <hiroo@oikumene.gcd.org>
+Sat May 19 14:16:00 JST 2001 Hiroo Ono <hiroo at oikumene.gcd.org>
 
 	* divide and shared library patch ([freewnn:00443] by Satoshi Taoka)
 	* importing
