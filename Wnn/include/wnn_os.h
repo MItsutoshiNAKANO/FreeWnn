@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_os.h,v 1.12 2002-06-22 13:24:31 hiroo Exp $
+ *  $Id: wnn_os.h,v 1.13 2003-06-07 02:19:53 hiroo Exp $
  */
 
 /*
@@ -119,10 +119,11 @@ typedef RETSIGTYPE (*intfnptr) ();
 #endif /* HAVE_RANDOM */
 
 /* function prototypes (temporal use. need reconstruction) */
+int get_short (short *sp, FILE *ifpter);	/* bdic.c */
+char *get_server_env (char *lang);	/* server_env.c */
 unsigned int create_cswidth (char *s);	/* xutoj.c */
 int euksc_to_ksc (unsigned char *ksc,
 		  unsigned char *euksc,
 		  int eusiz);		/* xutoj.c */
-int get_short (short *sp, FILE *ifpter);	/* bdic.c */
 
 #endif  /* WNN_OS_H */
