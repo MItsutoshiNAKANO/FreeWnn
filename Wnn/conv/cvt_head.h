@@ -1,5 +1,5 @@
 /*
- *  $Id: cvt_head.h,v 1.4 2001-06-14 18:15:54 ura Exp $
+ *  $Id: cvt_head.h,v 1.5 2002-03-21 03:32:45 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -36,27 +36,8 @@
         convert_key.c 及び convert_read.c で使われる
         へッダファイル。テーブルのサイズの定義など。
 ***********************************************************************/
-/*      Version 4.0
- */
-#ifdef  nodef
-#if defined(luna)
-#if defined(uniosu)
-# ifndef        SYSVR2
-#  define       SYSVR2
-# endif
-#else /* if defined(MACH) || defined(uniosb) */
-# ifndef        BSD42
-#  define       BSD42
-# endif
-#endif
-#else
-#if defined(sun)
-# ifndef        BSD42
-#  define       BSD42
-# endif
-#endif
-#endif
-#endif
+/*	Version 4.0	*/
+
 #include "commonhd.h"
 
 #if defined(luna) || defined(DGUX)

@@ -1,5 +1,5 @@
 /*
- *  $Id: cvt_read.c,v 1.3 2001-06-14 18:15:54 ura Exp $
+ *  $Id: cvt_read.c,v 1.4 2002-03-21 03:32:45 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -41,14 +41,15 @@
  */
 #include <stdio.h>
 #include <ctype.h>
+#if STDC_HEADERS
+#  include <string.h>
+#elif HAVE_STRINGS_H
+#  include <strings.h>
+#endif /* STDC_HEADERS */
+
 #include "cvt_head.h"
 
-#ifdef BSD42
-#include <strings.h>
-#endif
-
 #ifdef SYSVR2
-#include <string.h>
 #include <fcntl.h>
 #ifdef TERMINFO
 #include <curses.h>
