@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.7 2001-08-14 13:43:21 hiroo Exp $
+#   $Id: Makefile.in,v 1.8 2001-09-16 14:20:17 hiroo Exp $
 #
 
 #
@@ -69,11 +69,11 @@ install.man:: connect.man
  $(DESTDIR)$(MANDIR)/jl_connect.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_connect.$(MANSUFFIX)
 
-install.man:: connect_l.man
+install.man:: connect_lang.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_connect_lang.$(MANSUFFIX)*
-	$(INSTALL) $(INSTMANFLAGS) connect_l.man \
+	$(INSTALL) $(INSTMANFLAGS) connect_lang.man \
  $(DESTDIR)$(MANDIR)/jl_connect_lang.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_connect_lang.$(MANSUFFIX)
 
