@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_os.h,v 1.6 2002-03-03 14:06:29 hiroo Exp $
+ *  $Id: wnn_os.h,v 1.7 2002-03-08 20:07:11 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -83,5 +83,12 @@ typedef int intfntype;
 #define SIGNAL_RETURN   return(0)
 #endif
 typedef intfntype (*intfnptr) ();
+
+/* function prototypes (temporal use. need reconstruction) */
+unsigned int create_cswidth (char *s);	/* xutoj.c */
+int euksc_to_ksc (unsigned char *ksc,
+		  unsigned char *euksc,
+		  int eusiz);		/* xutoj.c */
+int get_short (short *sp, FILE *ifpter);	/* bdic.c */
 
 #endif  /* WNN_OS_H */
