@@ -21,18 +21,24 @@
  */
 
 #ifndef lint
-static char rcsid[] = "$Id: pod.c,v 1.3 2001-06-14 18:15:54 ura Exp $";
+static char rcsid[] = "$Id: pod.c,v 1.4 2002-06-10 22:15:16 hiroo Exp $";
+#endif
+
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
 #endif
 
 #include <stdio.h>
 
 #define bzero(a, c) memset(a, 0, c)
 
-#if __STDC__
-#include <stddef.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
 #else
-extern char *malloc ();
-#endif
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
+#  endif
+#endif /* STDC_HEADERS */
 
 #define POD_WCHAR
 
@@ -92,6 +98,7 @@ static int hinshi_direction = INORDER;  /* see above */
 # define WCG3 0x8000
 # define WCMSK 0x8080
 
+size_t
 Mbstowcs (d, ss, n)
      Wchar *d;
      char *ss;
@@ -128,6 +135,7 @@ Mbstowcs (d, ss, n)
   return p - d;
 }
 
+size_t
 Wcstombs (d, s, n)
      char *d;
      Wchar *s;
@@ -631,7 +639,7 @@ static struct descpack *
 searchdesc (hin, tan, yom)
      Wchar *hin, **tan, **yom;
 {
-  struct descpack *p, **pp, *next = (struct descpack *) 0;
+  struct descpack *p, **pp;
   Wchar *s;
   int key = 0;
 
@@ -810,7 +818,6 @@ intern (key, yomi, kouho, hinshi, hindo, kind, stat, flags)
   struct descpack *dp;
   Wchar nl[1], *yomdesc = nl, *tandesc = nl;
   Wchar *yom = (Wchar *) 0, *tan = (Wchar *) 0, *dhinshi, *dh;
-  int ind;
 
   nl[0] = (Wchar) '\0';
 
@@ -1359,6 +1366,7 @@ dichindocompar (p1, p2)
     }
 }
 
+void
 shrinkargs (argv, n, count)
      char **argv;
      int n, count;
@@ -1572,6 +1580,7 @@ static Wchar kihonh[] = {
   (Wchar) 'k', (Wchar) 'i', (Wchar) 'h', (Wchar) 'o', (Wchar) 'n', (Wchar) 0,
 };
 
+int
 main (argc, argv)
      int argc;
      char *argv[];
