@@ -1,0 +1,57 @@
+ *
+ * $Id: README,v 1.1.2.2 1999/02/08 02:06:53 yamasita Exp $
+ *
+
+ * FreeWnn is a network-extensible Kana-to-Kanji conversion system.
+ * This file is part of FreeWnn.
+ * 
+ * Copyright Kyoto University Research Institute for Mathematical Sciences
+ *                 1987, 1988, 1989, 1990, 1991, 1992
+ * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
+ * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
+ *
+ * Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with GNU Emacs; see the file COPYING.  If not, write to the
+ * Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * Commentary:
+ *
+ * Change log:
+ *
+ * Last modified date: 8,Feb.1999
+ *
+
+本ディレクトリには、主に JUNET のボランティアによる PUBDIC プロジェク
+トの成果である、かな漢字変換用辞書が格納されています。辞書の形式は、
+Wnn version 4 に合わせています。
+
+PUBDIC プロジェクトでは、辞書及びそれに付随する付属語ファイルの作成、
+編集に関する著作権を放棄しており、したがって、それらの複製、変更は、
+目的を問わず、また著作者の許可なしに、自由に行使することができます。
+
+ファイルの内容は以下の通りです。
+
+	hinsi.data	品詞定義ファイル
+	fzk.*		付属語辞書 (ASCII 形式)
+	*.u, *.hd	自立語辞書 (ASCII 形式、本体およびヘッダ)
+
+make により、以下のような Wnn で使用する形式の辞書ファイルが生成されま
+す。
+
+	*.fzk		付属語辞書 (内部形式)
+	*.dic		自立語辞書 (内部形式)
+
+不明な点などについては、pubdic-mgr@kaba.junet (pubdic-mgr@kaba.or.jp) 
+宛にお問い合わせ下さい。

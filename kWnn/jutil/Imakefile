@@ -1,0 +1,168 @@
+XCOMM
+XCOMM $Id: Imakefile,v 1.1.1.1 2000-01-16 05:08:05 ura Exp $
+XCOMM
+
+XCOMM FreeWnn is a network-extensible Kana-to-Kanji conversion system.
+XCOMM This file is part of FreeWnn.
+XCOMM 
+XCOMM Copyright Kyoto University Research Institute for Mathematical Sciences
+XCOMM                 1987, 1988, 1989, 1990, 1991, 1992
+XCOMM Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
+XCOMM Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
+XCOMM
+XCOMM Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+XCOMM
+XCOMM This program is free software; you can redistribute it and/or modify
+XCOMM it under the terms of the GNU General Public License as published by
+XCOMM the Free Software Foundation; either version 2, or (at your option)
+XCOMM any later version.
+XCOMM
+XCOMM This program is distributed in the hope that it will be useful,
+XCOMM but WITHOUT ANY WARRANTY; without even the implied warranty of
+XCOMM MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+XCOMM GNU General Public License for more details.
+XCOMM
+XCOMM You should have received a copy of the GNU General Public License
+XCOMM along with GNU Emacs; see the file COPYING.  If not, write to the
+XCOMM Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+XCOMM
+XCOMM Commentary:
+XCOMM
+XCOMM Change log:
+XCOMM
+XCOMM Last modified date: 8,Feb.1999
+XCOMM
+       INCLUDES = -I$(KWNNINCLUDESRC)
+        DEFINES = $(KWNNDEFINES) $(KWNNLANGDEF)
+   INSTALLFLAGS = $(INSTBINFLAGS) $(INSTPGMFLAGS) -o $(WNNOWNER)
+    HINSIDEFINE = -DHINSIDATA_FILE=\"/$(KWNNLANG)/hinsi.data\"
+
+#if BuildKWnnClients
+CLIENTPROGRAMS = kwnnstat kwnnkill kwddel kwdreg
+#endif
+#if BuildKWnnDicUtil || BuildKWnnWnnDicUtilForCompile
+DICUTIL2PROGRAMS = katod katof kwnntouch
+#endif
+#if BuildWnnDicUtil
+DICUTILPROGRAMS = kdtoa
+#endif
+
+PROGRAMS = $(CLIENTPROGRAMS) $(DICUTILPROGRAMS) $(DICUTIL2PROGRAMS)
+
+LINKS = atod.c atorev.c dic_head.c dtoa.c sort.c ujisf.c \
+    wddel.c wdreg.c wnnkill.c wnnstat.c wnntouch.c atof.c
+
+SRC1= $(KWNNETCSRC)/bdic.c
+OBJ1= bdic.o
+SRC2= $(KWNNETCSRC)/strings.c
+OBJ2= strings.o
+SRC3= $(KWNNETCSRC)/sstrings.c
+OBJ3= sstrings.o
+SRC4= $(KWNNETCSRC)/gethinsi.c
+OBJ4= gethinsi.o
+SRC5= $(KWNNETCSRC)/revdic.c
+OBJ5= revdic.o
+SRC6= $(KWNNETCSRC)/hindo.c
+OBJ6= hindo.o
+SRC7= $(KWNNETCSRC)/pwd.c
+OBJ7= pwd.o
+SRC8= $(KWNNETCSRC)/dic_atojis.c
+OBJ8= dic_atojis.o
+SRC9= $(KWNNETCSRC)/xutoj.c
+OBJ9= xutoj.o
+SRC10= $(KWNNETCSRC)/bcopy.c
+OBJ10= bcopy.o
+SRC11= $(KWNNETCSRC)/server_env.c
+OBJ11= server_env.o
+
+LOCAL_ETCSRCS3= $(SRC1) $(SRC2) $(SRC3) $(SRC4) \
+        $(SRC7) $(SRC8) $(SRC9) $(SRC10)
+LOCAL_ETCOBJS3= $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) \
+        $(OBJ7) $(OBJ8) $(OBJ9) $(OBJ10)
+LOCAL_ETCSRCS2= $(LOCAL_ETCSRCS3) $(SRC6)
+LOCAL_ETCOBJS2= $(LOCAL_ETCOBJS3) $(OBJ6)
+LOCAL_ETCSRCS1= $(LOCAL_ETCSRCS2) $(SRC5)
+LOCAL_ETCOBJS1= $(LOCAL_ETCOBJS2) $(OBJ5)
+
+SRCATOD= atod.c ujisf.c dic_head.c atorev.c $(LOCAL_ETCSRCS1)
+OBJATOD= atod.o ujisf.o dic_head.o atorev.o $(LOCAL_ETCOBJS1)
+SRCDTOA= dtoa.c ujisf.c dic_head.c $(LOCAL_ETCSRCS1)
+OBJDTOA= dtoa.o ujisf.o dic_head.o $(LOCAL_ETCOBJS1)
+SRCTOUCH= wnntouch.c $(LOCAL_ETCSRCS3)
+OBJTOUCH= wnntouch.o $(LOCAL_ETCOBJS3)
+SRCSTAT= wnnstat.c $(SRC3) $(SRC9) $(SRC10) $(SRC11)
+OBJSTAT= wnnstat.o $(OBJ3) $(OBJ9) $(OBJ10) $(OBJ11)
+SRCKILL= wnnkill.c $(SRC3) $(SRC9) $(SRC10) $(SRC11)
+OBJKILL= wnnkill.o $(OBJ3) $(OBJ9) $(OBJ10) $(OBJ11)
+SRCSORT= sort.c ujisf.c $(LOCAL_ETCSRCS2)
+OBJSORT= sort.o ujisf.o $(LOCAL_ETCOBJS2)
+SRCWDDEL= wddel.c $(SRC3) $(SRC9) $(SRC10)
+OBJWDDEL= wddel.o $(OBJ3) $(OBJ9) $(OBJ10)
+SRCWDREG= wdreg.c ujisf.c $(LOCAL_ETCSRCS2)
+OBJWDREG= wdreg.o ujisf.o $(LOCAL_ETCOBJS2)
+SRCATOF= atof.c $(LOCAL_ETCSRCS3)
+OBJATOF= atof.o $(LOCAL_ETCOBJS3)
+
+SRCS= atod.c dic_head.c wddel.c wnnkill.c atof.c dtoa.c ujisf.c \
+      wdreg.c wnnstat.c atorev.c wnntouch.c \
+      $(SRC1) $(SRC2) $(SRC3) $(SRC4) $(SRC5) $(SRC6) $(SRC6) \
+      $(SRC7) $(SRC8) $(SRC9) $(SRC10) $(SRC11)
+OBJS= atod.o dic_head.o wddel.o wnnkill.o atof.o dtoa.o ujisf.o \
+      wdreg.o wnnstat.o atorev.o wnntouch.o \
+      $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6) $(OBJ6) \
+      $(OBJ7) $(OBJ8) $(OBJ9) $(OBJ10) $(OBJ11)
+
+AllTarget($(PROGRAMS))
+
+#if BuildKWnnDicUtil || BuildKWnnDicUtilForCompile
+SingleProgramTarget(katod,$(OBJATOD),,)
+SingleProgramTarget(katof,$(OBJATOF),,)
+SingleProgramTarget(kwnntouch,$(OBJTOUCH),,)
+#endif
+#if BuildKWnnDicUtil
+SingleProgramTarget(kdicsort,$(OBJSORT),,)
+SingleProgramTarget(kdtoa,$(OBJDTOA),,)
+#endif
+#if BuildKWnnClients
+NormalProgramTarget(kwnnstat,$(OBJSTAT),$(KWNNJLIB),$(KWNNJLIB),)
+NormalProgramTarget(kwnnkill,$(OBJKILL),$(KWNNJLIB),$(KWNNJLIB),)
+NormalProgramTarget(kwddel,$(OBJWDDEL),$(KWNNJLIB),$(KWNNJLIB),)
+NormalProgramTarget(kwdreg,$(OBJWDREG),$(KWNNJLIB),$(KWNNJLIB),)
+#endif
+
+includes:: $(LINKS)
+
+LinkSourceFile(atod.c,$(WNNJUTILSRC))
+LinkSourceFile(atorev.c,$(WNNJUTILSRC))
+LinkSourceFile(dic_head.c,$(WNNJUTILSRC))
+LinkSourceFile(dtoa.c,$(WNNJUTILSRC))
+LinkSourceFile(sort.c,$(WNNJUTILSRC))
+LinkSourceFile(ujisf.c,$(WNNJUTILSRC))
+LinkSourceFile(utilbdic.c,$(WNNJUTILSRC))
+LinkSourceFile(wddel.c,$(WNNJUTILSRC))
+LinkSourceFile(wdreg.c,$(WNNJUTILSRC))
+LinkSourceFile(wnnkill.c,$(WNNJUTILSRC))
+LinkSourceFile(wnnstat.c,$(WNNJUTILSRC))
+LinkSourceFile(wnntouch.c,$(WNNJUTILSRC))
+LinkSourceFile(atof.c,$(WNNJUTILSRC))
+
+instclient:: install
+
+InstallMultipleFlags($(PROGRAMS),$(KWNNBINDIR),)
+
+WnnSpecialObjectRule($(OBJ1),$(SRC1),$(KWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ2),$(SRC2),$(KWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ3),$(SRC3),$(KWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ4),$(SRC4),$(KWNNETCSRC),$(HINSIDEFINE))
+WnnSpecialObjectRule($(OBJ5),$(SRC5),$(KWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ6),$(SRC6),$(KWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ7),$(SRC7),$(KWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ8),$(SRC8),$(KWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ9),$(SRC9),$(KWNNETCSRC),$(WNNLANGDEF))
+WnnSpecialObjectRule($(OBJ10),$(SRC10),$(KWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ11),$(SRC11),$(KWNNETCSRC),)
+
+DependTarget()
+
+clean::
+	$(RM) $(LINKS)

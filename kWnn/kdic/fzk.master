@@ -1,0 +1,14 @@
+;;; $Id: fzk.master,v 1.1 1994/06/28 02:27:08 kuwa Exp $
+;;;
+;;;	(kWnn version 0 ¡¢√À ∫§≈Õ ¡§¿« »≠¿œ)
+;;;	(kWnn version 0 Ô»ı∫ ∫§≈Õ Ô“Î˘ »≠¿œ)
+;;;
+
+#include "fzk.attr"
+#include "fzk.jirattr"
+#include "fzk.fzkattr"
+#include "fzk.jircon"
+#include "fzk.con"
+#include "fzk.shuutan"
+
+\bye

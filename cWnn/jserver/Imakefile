@@ -1,0 +1,244 @@
+XCOMM
+XCOMM $Id: Imakefile,v 1.1.1.1 2000-01-16 05:08:03 ura Exp $
+XCOMM
+
+XCOMM FreeWnn is a network-extensible Kana-to-Kanji conversion system.
+XCOMM This file is part of FreeWnn.
+XCOMM 
+XCOMM Copyright Kyoto University Research Institute for Mathematical Sciences
+XCOMM                 1987, 1988, 1989, 1990, 1991, 1992
+XCOMM Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
+XCOMM Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
+XCOMM
+XCOMM Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+XCOMM
+XCOMM This program is free software; you can redistribute it and/or modify
+XCOMM it under the terms of the GNU General Public License as published by
+XCOMM the Free Software Foundation; either version 2, or (at your option)
+XCOMM any later version.
+XCOMM
+XCOMM This program is distributed in the hope that it will be useful,
+XCOMM but WITHOUT ANY WARRANTY; without even the implied warranty of
+XCOMM MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+XCOMM GNU General Public License for more details.
+XCOMM
+XCOMM You should have received a copy of the GNU General Public License
+XCOMM along with GNU Emacs; see the file COPYING.  If not, write to the
+XCOMM Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+XCOMM
+XCOMM Commentary:
+XCOMM
+XCOMM Change log:
+XCOMM
+XCOMM Last modified date: 8,Feb.1999
+XCOMM
+XCOMM FORKDEF = -DNOTFORK
+XCOMM       Jserver usually fork and remove association with controll
+XCOMM       terminal. -DNOTFORK is for DEBUG.
+
+ JSERVERDEFINES = -DJSERVER -DWRITE_CHECK
+       INCLUDES = -I$(CWNNINCLUDESRC) -I$(TOP)
+        DEFINES = $(CWNNDEFINES) $(JSERVERDEFINES) $(WNNTERM) $(CWNNLANGDEF)
+LOCAL_INSTFLAGS = $(INSTUIDFLAGS) -o $(WNNOWNER)
+  SERVERINITDEF = -DSERVER_INIT_FILE=\"/$(CWNNLANG)/cserverrc\"
+    HINSIDEFINE = -DHINSIDATA_FILE=\"/$(CWNNLANG)/cixing.data\"
+ TSERVERINITDEF = -DSERVER_INIT_FILE=\"/$(TWNNLANG)/tserverrc\"
+   THINSIDEFINE = -DHINSIDATA_FILE=\"/$(TWNNLANG)/cixing.data\"
+
+
+HDRS = ddefine.h de_header.h fzk.h kaiseki.h
+
+SRC0 = de.c
+SRC1= de_vars.c \
+	dispatch.c \
+	do_dic_env.c \
+	do_dic_no.c \
+	do_filecom.c \
+	error.c \
+	jbiki.c \
+	jbiki_b.c \
+	jishoop.c \
+	rd_jishoop.c \
+	readfile.c \
+	b_index.c \
+	jishosub.c \
+	jmt0.c \
+	malloc.c \
+	kai_area.c \
+	mknode0.c \
+	mknode1.c \
+	mknode2.c \
+	renbn_kai.c \
+	bnsetu_kai.c \
+	daibn_kai.c \
+	jikouho.c \
+	jikouho_d.c \
+	fzk.c \
+	atojis.c \
+	get_kaiarea.c \
+	snd_rcv.c \
+	do_henkan.c \
+	do_henkan1.c \
+	do_env.c \
+	do_hindo_s.c \
+	initjserv.c \
+	hinsi_list.c \
+	sisheng.c \
+	w_string.c
+
+OBJ0= de.o
+OBJ1= de_vars.o \
+	dispatch.o \
+	do_dic_env.o \
+	do_dic_no.o \
+	do_filecom.o \
+	error.o \
+	jbiki.o \
+	jbiki_b.o \
+	jishoop.o \
+	rd_jishoop.o \
+	readfile.o \
+	b_index.o \
+	jishosub.o \
+	jmt0.o \
+	malloc.o \
+	kai_area.o \
+	mknode0.o \
+	mknode1.o \
+	mknode2.o \
+	renbn_kai.o \
+	bnsetu_kai.o \
+	daibn_kai.o \
+	jikouho.o \
+	jikouho_d.o \
+	fzk.o \
+	atojis.o \
+	get_kaiarea.o \
+	snd_rcv.o \
+	do_henkan.o \
+	do_henkan1.o \
+	do_env.o \
+	do_hindo_s.o \
+	initjserv.o \
+	hinsi_list.o \
+	sisheng.o \
+	w_string.o
+
+SRC2= $(CWNNJLIBSRC)/getopt.c
+OBJ2= getopt.o
+SRC3= $(CWNNJLIBSRC)/wnnerrmsg.c
+OBJ3= wnnerrmsg.o 
+
+SRC4= $(CWNNETCSRC)/strings.c
+OBJ4= strings.o
+SRC5= $(CWNNETCSRC)/sstrings.c
+OBJ5= sstrings.o
+SRC6= $(CWNNETCSRC)/bdic.c
+OBJ6= bdic.o
+SRC7= $(CWNNETCSRC)/dic_atojis.c
+OBJ7= dic_atojis.o
+SRCGETHINSI= $(CWNNETCSRC)/gethinsi.c
+OBJGETHINSI= gethinsi.o
+SRC9= $(CWNNETCSRC)/revdic.c
+OBJ9= revdic.o
+SRC10= $(CWNNETCSRC)/hindo.c
+OBJ10= hindo.o
+SRC11= $(CWNNETCSRC)/pwd.c
+OBJ11= pwd.o
+SRC12= $(CWNNETCSRC)/bcopy.c
+OBJ12= bcopy.o
+SRC13= $(CWNNETCSRC)/msg.c
+OBJ13= msg.o
+SRC14= $(CWNNETCSRC)/xutoj.c
+OBJ14= xutoj.o
+TSRC0= de_t.c
+TOBJ0= de_t.o
+TSRCGETHINSI= gethinsi_t.c
+TOBJGETHINSI= gethinsi_t.o
+TSRCS= $(TSRC0) $(TSRCGETHINSI)
+SRCS= $(SRC0) $(SRC1) $(SRC2) $(SRC3) $(SRC4) $(SRC5) $(SRC6) $(SRC7) \
+      $(SRCGETHINSI) $(SRC9) $(SRC10) $(SRC11) $(SRC12) $(SRC13) $(SRCS14) \
+      $(TSRCS)
+OBJS= $(OBJ0) $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6) $(OBJ7) \
+      $(OBJGETHINSI) $(OBJ9) $(OBJ10) $(OBJ11) $(OBJ12) $(OBJ13) $(OBJ14)
+TOBJS= $(TOBJ0) $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6) $(OBJ7) \
+      $(TOBJGETHINSI) $(OBJ9) $(OBJ10) $(OBJ11) $(OBJ12) $(OBJ13) $(OBJ14)
+
+AllTarget(cserver)
+AllTarget(tserver)
+SingleProgramTarget(cserver,$(OBJS),,)
+SingleProgramTarget(tserver,$(TOBJS),,)
+
+instserver:: install
+
+InstallProgramWithFlags(cserver,$(CWNNBINDIR),$(LOCAL_INSTFLAGS))
+InstallProgramWithFlags(tserver,$(CWNNBINDIR),$(LOCAL_INSTFLAGS))
+
+includes:: $(HDRS) $(SRC0) $(SRC1) $(TSRCS)
+
+LinkDiffNameFile($(TSRC0),$(SRC0),.)
+LinkDiffNameFile($(TSRCGETHINSI),$(SRCGETHINSI),$(CWNNETCSRC))
+
+LinkSourceFile(ddefine.h,$(WNNJSERVERSRC))
+LinkSourceFile(de_header.h,$(WNNJSERVERSRC))
+LinkSourceFile(fzk.h,$(WNNJSERVERSRC))
+LinkSourceFile(kaiseki.h,$(WNNJSERVERSRC))
+LinkSourceFile(de.c,$(WNNJSERVERSRC))
+LinkSourceFile(de_vars.c,$(WNNJSERVERSRC))
+LinkSourceFile(dispatch.c,$(WNNJSERVERSRC))
+LinkSourceFile(do_dic_env.c,$(WNNJSERVERSRC))
+LinkSourceFile(do_dic_no.c,$(WNNJSERVERSRC))
+LinkSourceFile(do_filecom.c,$(WNNJSERVERSRC))
+LinkSourceFile(error.c,$(WNNJSERVERSRC))
+LinkSourceFile(jbiki.c,$(WNNJSERVERSRC))
+LinkSourceFile(jbiki_b.c,$(WNNJSERVERSRC))
+LinkSourceFile(jishoop.c,$(WNNJSERVERSRC))
+LinkSourceFile(rd_jishoop.c,$(WNNJSERVERSRC))
+LinkSourceFile(readfile.c,$(WNNJSERVERSRC))
+LinkSourceFile(b_index.c,$(WNNJSERVERSRC))
+LinkSourceFile(jishosub.c,$(WNNJSERVERSRC))
+LinkSourceFile(jmt0.c,$(WNNJSERVERSRC))
+LinkSourceFile(malloc.c,$(WNNJSERVERSRC))
+LinkSourceFile(kai_area.c,$(WNNJSERVERSRC))
+LinkSourceFile(mknode0.c,$(WNNJSERVERSRC))
+LinkSourceFile(mknode1.c,$(WNNJSERVERSRC))
+LinkSourceFile(mknode2.c,$(WNNJSERVERSRC))
+LinkSourceFile(renbn_kai.c,$(WNNJSERVERSRC))
+LinkSourceFile(bnsetu_kai.c,$(WNNJSERVERSRC))
+LinkSourceFile(daibn_kai.c,$(WNNJSERVERSRC))
+LinkSourceFile(jikouho.c,$(WNNJSERVERSRC))
+LinkSourceFile(jikouho_d.c,$(WNNJSERVERSRC))
+LinkSourceFile(fzk.c,$(WNNJSERVERSRC))
+LinkSourceFile(atojis.c,$(WNNJSERVERSRC))
+LinkSourceFile(get_kaiarea.c,$(WNNJSERVERSRC))
+LinkSourceFile(snd_rcv.c,$(WNNJSERVERSRC))
+LinkSourceFile(do_henkan.c,$(WNNJSERVERSRC))
+LinkSourceFile(do_henkan1.c,$(WNNJSERVERSRC))
+LinkSourceFile(do_env.c,$(WNNJSERVERSRC))
+LinkSourceFile(do_hindo_s.c,$(WNNJSERVERSRC))
+LinkSourceFile(initjserv.c,$(WNNJSERVERSRC))
+LinkSourceFile(hinsi_list.c,$(WNNJSERVERSRC))
+LinkSourceFile(sisheng.c,$(WNNJSERVERSRC))
+LinkSourceFile(w_string.c,$(WNNJSERVERSRC))
+
+WnnSpecialObjectRule($(OBJ0),$(SRC0),.,$(SERVERINITDEF) $(FORKDEF))
+WnnSpecialObjectRule($(OBJ2),$(SRC2),$(CWNNJLIBSRC),)
+WnnSpecialObjectRule($(OBJ3),$(SRC3),$(CWNNJLIBSRC),)
+WnnSpecialObjectRule($(OBJ4),$(SRC4),$(CWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ5),$(SRC5),$(CWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ6),$(SRC6),$(CWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ7),$(SRC7),$(CWNNETCSRC),)
+WnnSpecialObjectRule($(OBJGETHINSI),$(SRCGETHINSI),$(CWNNETCSRC),$(HINSIDEFINE))
+WnnSpecialObjectRule($(OBJ9),$(SRC9),$(CWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ10),$(SRC10),$(CWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ11),$(SRC11),$(CWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ12),$(SRC12),$(CWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ13),$(SRC13),$(CWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ14),$(SRC14),$(CWNNETCSRC),)
+WnnSpecialObjectRule($(TOBJ0),$(TSRC0),.,$(TSERVERINITDEF) $(FORKDEF) $(TWNNLANGDEF))
+WnnSpecialObjectRule($(TOBJGETHINSI),$(TSRCGETHINSI),.,$(THINSIDEFINE) $(TWNNLANGDEF))
+
+DependTarget()
+
+clean::
+	$(RM) $(HDRS) $(SRC0) $(SRC1) $(TSRCS)

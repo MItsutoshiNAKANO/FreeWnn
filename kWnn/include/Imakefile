@@ -1,0 +1,80 @@
+XCOMM
+XCOMM $Id: Imakefile,v 1.1.1.1 2000-01-16 05:08:05 ura Exp $
+XCOMM
+
+XCOMM FreeWnn is a network-extensible Kana-to-Kanji conversion system.
+XCOMM This file is part of FreeWnn.
+XCOMM 
+XCOMM Copyright Kyoto University Research Institute for Mathematical Sciences
+XCOMM                 1987, 1988, 1989, 1990, 1991, 1992
+XCOMM Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
+XCOMM Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
+XCOMM
+XCOMM Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+XCOMM
+XCOMM This program is free software; you can redistribute it and/or modify
+XCOMM it under the terms of the GNU General Public License as published by
+XCOMM the Free Software Foundation; either version 2, or (at your option)
+XCOMM any later version.
+XCOMM
+XCOMM This program is distributed in the hope that it will be useful,
+XCOMM but WITHOUT ANY WARRANTY; without even the implied warranty of
+XCOMM MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+XCOMM GNU General Public License for more details.
+XCOMM
+XCOMM You should have received a copy of the GNU General Public License
+XCOMM along with GNU Emacs; see the file COPYING.  If not, write to the
+XCOMM Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+XCOMM
+XCOMM Commentary:
+XCOMM
+XCOMM Change log:
+XCOMM
+XCOMM Last modified date: 8,Feb.1999
+XCOMM
+INSTALLFLAGS = $(INSTINCFLAGS)
+
+LINKS = commonhd.h config.h copyright.h demcom.h hinsi_file.h jd_sock.h \
+    jdata.h jh.h jlib.h jllib.h jslib.h msg.h rk_spclval.h wnn_malloc.h \
+    wnn_string.h wnnerror.h cplib.h wnn_os.h hinsi.h
+
+HEADERS = jllib.h \
+	jslib.h \
+	rk_spclval.h \
+	wnnerror.h \
+	commonhd.h \
+	cplib.h \
+	msg.h
+
+all::
+
+includes:: $(LINKS)
+
+LinkSourceFile(commonhd.h,$(WNNINCLUDESRC))
+LinkSourceFile(config.h,$(WNNINCLUDESRC))
+LinkSourceFile(copyright.h,$(WNNINCLUDESRC))
+LinkSourceFile(demcom.h,$(WNNINCLUDESRC))
+LinkSourceFile(hinsi_file.h,$(WNNINCLUDESRC))
+LinkSourceFile(jd_sock.h,$(WNNINCLUDESRC))
+LinkSourceFile(jdata.h,$(WNNINCLUDESRC))
+LinkSourceFile(jh.h,$(WNNINCLUDESRC))
+LinkSourceFile(jlib.h,$(WNNINCLUDESRC))
+LinkSourceFile(jllib.h,$(WNNINCLUDESRC))
+LinkSourceFile(jslib.h,$(WNNINCLUDESRC))
+LinkSourceFile(msg.h,$(WNNINCLUDESRC))
+LinkSourceFile(rk_spclval.h,$(WNNINCLUDESRC))
+LinkSourceFile(wnn_malloc.h,$(WNNINCLUDESRC))
+LinkSourceFile(wnn_string.h,$(WNNINCLUDESRC))
+LinkSourceFile(wnnerror.h,$(WNNINCLUDESRC))
+LinkSourceFile(cplib.h,$(WNNINCLUDESRC))
+LinkSourceFile(wnn_os.h,$(WNNINCLUDESRC))
+LinkSourceFile(hinsi.h,$(WNNINCLUDESRC))
+
+instlib:: install
+
+InstallMultipleDest(install, $(HEADERS),$(KWNNINCDIR))
+
+depend::
+
+clean::
+	$(RM) $(LINKS)

@@ -1,0 +1,123 @@
+XCOMM
+XCOMM $Id: Imakefile,v 1.1.1.1 2000-01-16 05:08:05 ura Exp $
+XCOMM
+
+XCOMM FreeWnn is a network-extensible Kana-to-Kanji conversion system.
+XCOMM This file is part of FreeWnn.
+XCOMM 
+XCOMM Copyright Kyoto University Research Institute for Mathematical Sciences
+XCOMM                 1987, 1988, 1989, 1990, 1991, 1992
+XCOMM Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
+XCOMM Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
+XCOMM
+XCOMM Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+XCOMM
+XCOMM This program is free software; you can redistribute it and/or modify
+XCOMM it under the terms of the GNU General Public License as published by
+XCOMM the Free Software Foundation; either version 2, or (at your option)
+XCOMM any later version.
+XCOMM
+XCOMM This program is distributed in the hope that it will be useful,
+XCOMM but WITHOUT ANY WARRANTY; without even the implied warranty of
+XCOMM MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+XCOMM GNU General Public License for more details.
+XCOMM
+XCOMM You should have received a copy of the GNU General Public License
+XCOMM along with GNU Emacs; see the file COPYING.  If not, write to the
+XCOMM Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+XCOMM
+XCOMM Commentary:
+XCOMM
+XCOMM Change log:
+XCOMM
+XCOMM Last modified date: 8,Feb.1999
+XCOMM
+#define DoNormalLib YES
+
+#include <Library.tmpl>
+
+#define PassCDebugFlags 'CDEBUGFLAGS=$(CDEBUGFLAGS)'
+
+LINKS = getopt.c jl.c js.c wnnerrmsg.c
+    JLIBDEFINES = -DWRITE_CHECK
+       INCLUDES = -I$(KWNNINCLUDESRC) -I$(TOP)
+        DEFINES = $(KWNNDEFINES) $(KWNNLANGDEF) $(JLIBDEFINES)
+   INSTALLFLAGS = $(INSTBINFLAGS)
+       LINTLIBS = 
+
+SRC1= js.c \
+	wnnerrmsg.c \
+	jl.c
+OBJ1= js.o \
+	wnnerrmsg.o \
+	jl.o
+SRC2= getopt.c
+OBJ2= getopt.o
+SRC3= $(KWNNETCSRC)/msg.c
+OBJ3= msg.o
+SRC4= $(KWNNETCSRC)/strings.c
+OBJ4= strings.o
+SRC5= $(KWNNETCSRC)/bcopy.c
+OBJ5= bcopy.o
+LOCAL_RKSRCS= $(KWNNROMKANSRC)/rk_bltinfn.c \
+	$(KWNNROMKANSRC)/rk_main.c \
+	$(KWNNROMKANSRC)/rk_modread.c \
+	$(KWNNROMKANSRC)/rk_read.c \
+	$(KWNNROMKANSRC)/rk_vars.c
+
+LOCAL_RKOBJS= $(KWNNROMKANSRC)/rk_bltinfn.o \
+	$(KWNNROMKANSRC)/rk_main.o \
+	$(KWNNROMKANSRC)/rk_modread.o \
+	$(KWNNROMKANSRC)/rk_read.o \
+	$(KWNNROMKANSRC)/rk_vars.o
+
+LOCAL_ETCSRCS = $(SRC4) $(SRC5)
+LOCAL_ETCOBJS = $(OBJ4) $(OBJ5)
+SRCS= $(SRC1) $(SRC3) $(LOCAL_ETCSRCS)
+OBJS= $(OBJ1) $(OBJ3) $(LOCAL_ETCOBJS) $(LOCAL_RKOBJS)
+
+LibraryObjectRule()
+AllTarget($(OBJS) libkwnn.a)
+
+includes:: $(LINKS)
+
+LinkSourceFile(getopt.c,$(WNNJLIBSRC))
+LinkSourceFile(jl.c,$(WNNJLIBSRC))
+LinkSourceFile(js.c,$(WNNJLIBSRC))
+LinkSourceFile(wnnerrmsg.c,$(WNNJLIBSRC))
+
+NormalLibraryTarget(getopt,$(OBJ2))
+LintLibraryTarget(getopt,$(SRC2))
+
+js.o : js.c \
+	$(KWNNETCSRC)/bdic.c \
+	$(KWNNETCSRC)/pwd.c \
+	$(KWNNETCSRC)/gethinsi.c
+
+NormalLintTarget($(SRC2))
+
+NormalLibraryTarget(kwnn,$(OBJS))
+LintLibraryTarget(kwnn,$(SRCS))
+
+instlib:: install
+
+InstallLibrary(kwnn,$(WNNLIBDIR))
+
+#if ProfileLibJlib
+ProfiledLibraryTarget(kwnn,$(OBJS))
+InstallLibrary(kwnn_p,$(WNNLIBDIR))
+#endif
+
+WnnSpecialObjectRule($(OBJ3),$(SRC3),$(KWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ4),$(SRC4),$(KWNNETCSRC),)
+WnnSpecialObjectRule($(OBJ5),$(SRC5),$(KWNNETCSRC),)
+
+$(LOCAL_RKOBJS) : $(LOCAL_RKSRCS)
+	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
+	cd $(KWNNROMKANSRC); echo "making all in $(KWNNROMKANSRC)"; \
+	$(MAKE) 'CDEBUGFLAGS=$(CDEBUGFLAGS)' $(MFLAGS)
+
+DependTarget()
+
+clean::
+	$(RM) $(LINKS)
