@@ -11,7 +11,7 @@ WDDEL( )            UNIX Programmer's Manual             WDDEL( )
 
 形式
 
-     /usr/local/bin/Wnn4/wdreg [-D ホスト名] [-n 環境名] [-d 辞書番号]
+     /usr/local/bin/Wnn4/wddel [-D ホスト名] [-n 環境名] [-d 辞書番号]
              [-H|C|E] [-L] [ファイル名] < テキスト
 
 機能
@@ -46,87 +46,3 @@ WDDEL( )            UNIX Programmer's Manual             WDDEL( )
 
 
 Printed 1/28/92          28 January 1992                        1
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
