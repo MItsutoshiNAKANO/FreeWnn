@@ -1,5 +1,5 @@
 /*
- *  $Id: de_header.h,v 1.14 2002-08-12 16:25:46 hiroo Exp $
+ *  $Id: de_header.h,v 1.15 2002-09-01 17:13:10 hiroo Exp $
  */
 
 /*
@@ -45,6 +45,7 @@
 #endif        /* CHINESE */
 
 #include "jslib.h"
+#include "jdata.h"
 #include "ddefine.h"
 #include "wnn_os.h"
 
@@ -156,7 +157,7 @@ struct wnn_file
   int localf;
   int file_type;
   int ref_count;
-  char *area;
+  void *area;
   char passwd[WNN_PASSWD_LEN];
 };
 
@@ -203,11 +204,11 @@ extern char lang_dir[];
 /* atojis.c */
 extern w_char *get_giji_knj ();
 extern void giji_hindoup ();
-/* b_index.h */
+/* b_index.c */
 #ifdef CONVERT_by_STROKE
-extern int create_b_index ();
-extern int b_index_add ();
-extern void b_index_delete ();
+extern int create_b_index (struct JT *jt);
+extern int b_index_add (struct JT *jt, w_char *yomi, int serial);
+extern void b_index_delete (struct JT *jt, int serial);
 #endif
 /* bnsetu_kai.c */
 extern int sbn_kai ();
@@ -231,23 +232,23 @@ extern int sum_hyouka ();
 extern int ave_hyouka ();
 extern int cmp_hyouka ();
 /* de.c */
-extern void del_client ();
-extern void daemon_fin ();
+extern void del_client (void);
+extern void daemon_fin (void);
 extern char *gets_cur (char*, size_t);
 extern w_char *getws_cur (w_char*, size_t);
-extern int get2_cur ();
-extern int get4_cur ();
-extern int getc_cur ();
-extern void puts_cur ();
-extern void puts_n_cur ();
-extern void putws_cur ();
-extern void putnws_cur ();
-extern void put2_cur ();
-extern void put4_cur ();
-extern void putc_cur ();
-extern void putc_purge ();
-extern void js_who ();
-extern void js_kill ();
+extern int get2_cur (void);
+extern int get4_cur (void);
+extern int getc_cur (void);
+extern void puts_cur (char*);
+extern void puts_n_cur (char*, int);
+extern void putws_cur (w_char*);
+extern void putnws_cur (w_char*, int);
+extern void put2_cur (int);
+extern void put4_cur (int);
+extern void putc_cur (int);
+extern void putc_purge (void);
+extern void js_who (void);
+extern void js_kill (void);
 /* dispatch.c */
 extern void do_command ();
 extern char *get_file_name (char*, size_t);
@@ -459,29 +460,41 @@ extern int rd_word_add1 ();
 extern int rd_word_delete1 ();
 extern int inspect_rd ();
 /* readfile.c */
-extern int read_file ();
-extern int ud_realloc_hontai ();
-extern int ud_realloc_kanji ();
-extern int ud_realloc_serial ();
-extern int ud_realloc_table ();
-extern int rd_realloc_ri1 ();
-extern int hindo_file_realloc ();
+extern int read_file (struct wnn_file *);
+extern int ud_realloc_hontai (struct JT *);
+extern int ud_realloc_kanji (struct JT *);
+extern int ud_realloc_serial (struct JT *);
+extern int ud_realloc_table (struct JT *);
+extern int rd_realloc_ri1 (struct JT *, int);
+extern int hindo_file_realloc (struct HJT *);
 #ifdef CONVERT_by_STROKE
-extern int rd_realloc_bind ();
+extern int rd_realloc_bind (struct JT *);
 #endif
-extern int must_write_file ();
-extern void clear_dirty_bit ();
-extern int rcv_file ();
-extern int write_file ();
-extern int discardfile ();
-extern int create_hindo_file1 ();
-extern int match_dic_and_hindo_p ();
-extern int file_comment_set ();
-extern int file_password_set ();
+extern int must_write_file (struct wnn_file *, struct wnn_file_uniq *);
+extern void clear_dirty_bit (struct wnn_file *);
+extern int rcv_file (struct wnn_file *, int);
+extern int write_file (struct wnn_file *, char *);
+extern int discardfile (struct wnn_file *);
+extern int create_hindo_file1 (struct wnn_file *, char *, w_char *, char *);
+extern int match_dic_and_hindo_p (struct wnn_file *, struct wnn_file *);
+extern int file_comment_set (struct wnn_file *, w_char *);
+extern int file_password_set (struct wnn_file *, int, char *, char *);
 /* renbn_kai.c */
-extern int renbn_kai ();
-extern int tan_dai ();
-extern int tan_syo ();
+#ifndef NO_FZK         
+extern int renbn_kai (int, int, int, w_char*, int, int, int, int, int, struct DSD_DBN **);
+#else /* NO_FZK */
+extern int renbn_kai (int, int, int, int, int, int, int, int, struct DSD_DBN **);
+#endif /* NO_FZK */    
+#ifndef NO_FZK
+extern int tan_dai (int, int, int, w_char *, int, int, int, struct DSD_DBN **);
+#else /* NO_FZK */
+extern int tan_dai (int, int, int, int, int, int, struct DSD_DBN **);
+#endif /* NO_FZK */             
+#ifndef NO_FZK   
+extern int tan_syo (int, int, int, w_char*, int, int, struct DSD_SBN **);
+#else /* NO_FZK */
+extern int tan_syo (int, int, int, int, int, struct DSD_SBN **);
+#endif /* NO_FZK */
 /* sisheng.c */
 extern int get_sisheng ();
 extern w_char *biki_sisheng ();

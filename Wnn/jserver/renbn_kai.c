@@ -1,8 +1,4 @@
 /*
- *  $Id: renbn_kai.c,v 1.3 2001-06-14 18:16:03 ura Exp $
- */
-
-/*
  * FreeWnn is a network-extensible Kana-to-Kanji conversion system.
  * This file is part of FreeWnn.
  * 
@@ -10,7 +6,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -29,44 +25,48 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <stdio.h>              /* koreha debug ga sundare iranai  */
+static char rcs_id[] = "$Id: renbn_kai.c,v 1.4 2002-09-01 17:13:11 hiroo Exp $";
+
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
+/* #include <stdio.h> */	/* for debug only  */
 #include "commonhd.h"
 #include "de_header.h"
 #include "fzk.h"
-
 #include "kaiseki.h"
-static void cnt_bzd ();
-static int cnt_syo (), chk_yomi_endvect (), set_kata_giji_sbn (), set_kata_giji_bzd ();
-static struct DSD_DBN *dcdbn_set ();
-static struct DSD_SBN *dcdsbn_set ();
+
+static struct DSD_DBN *dcdbn_set (struct DSD_DBN *, struct DSD_SBN **, struct BZD *);
+static struct DSD_SBN *dcdsbn_set (struct DSD_SBN *, struct SYO_BNSETSU *);
+static int  cnt_syo (struct SYO_BNSETSU *);
+static void cnt_bzd (struct BZD *, int *, int *);
+static int  chk_yomi_endvect (int, int, int, int);
+static int  set_kata_giji_sbn (int, int, int, int, struct SYO_BNSETSU **);
+static int  set_kata_giji_bzd (int, int, int, int, struct BZD **, int);
 
 int
-renbn_kai (yomi_sno, yomi_eno, beginvect,
+renbn_kai (int yomi_sno,	/* 解析文字列 start index */
+	int yomi_eno,		/* 解析文字列 end index (end char の次) */
+	int beginvect,		/* 前端ベクタ(-1:文節先頭、-2:なんでも)品詞No. */
 #ifndef NO_FZK
-           fzkchar,
-#endif                          /* NO_FZK */
-           endvect, endvect1, endvect2, kaidbno, kaisbno, dsd_dbn)
-     int yomi_sno;              /* 解析文字列 start index */
-     int yomi_eno;              /* 解析文字列 end index (end char no tugi) */
-     int beginvect;             /* 前端ベクタ(-1:文節先頭、-2:なんでも)品詞No. */
-#ifndef NO_FZK
-     w_char *fzkchar;
+	w_char *fzkchar,
 #endif /* NO_FZK */
-     int endvect;               /* 終端ベクタ */
-     int endvect1;              /* 終端ベクタ YOBI */
-     int endvect2;              /* bunsetsu 終端ベクタ */
-     int kaidbno;               /* 解析大文節数 */
-     int kaisbno;               /* 解析小文節数 */
-     struct DSD_DBN **dsd_dbn;  /* 決定大文節情報エリア pointer */
+	int endvect,		/* 終端ベクタ */
+	int endvect1,		/* 終端ベクタ (予備) */
+	int endvect2,		/* bunsetsu 終端ベクタ */
+	int kaidbno,		/* 解析大文節数 */
+	int kaisbno,		/* 解析小文節数 */
+	struct DSD_DBN **dsd_dbn) /* 決定大文節情報エリア pointer */
 {
   int dbn_cnt;
   int sbn_cnt;
   struct DSD_SBN *dsd_sbn;      /* 決定大文節情報エリア pointer */
 
-  register UINT dicidyno,       /* 決定した大文節の index */
+  UINT dicidyno,       /* 決定した大文節の index */
     buncnt = 0;                 /* 決定した大文節数 */
   struct BZD *rbzdptr;          /* 決定の対象となるノード top pointer */
-  register struct BZD *brbzdptr,        /* work pointer */
+  struct BZD *brbzdptr,        /* work pointer */
    *dicide_bp = 0,              /* 決定した大文節の top pointer */
    *dicide_np,                  /* 決定した大文節への pointer */
    *wkbzdptr,                   /* work pointer         */
@@ -99,7 +99,7 @@ renbn_kai (yomi_sno, yomi_eno, beginvect,
 #endif /* NO_FZK */
                        endvect, endvect1, kaisbno, &rbzdptr) < 0)
             {
-              error1 ("CONVERSION_ERROR.\n");
+              log_err ("CONVERSION ERROR.");
               init_work_areas ();
               return (-1);      /* ERROR */
             }
@@ -142,7 +142,7 @@ renbn_kai (yomi_sno, yomi_eno, beginvect,
                     }
                   else if (rtmknode == -1)
                     {
-                      error1 ("CONVERSION_ERROR.\n");
+                      log_err ("CONVERSION ERROR.");
                       init_work_areas ();       /* エラーでいいのかな */
                       return (-1);      /* ERROR */
                     }
@@ -199,28 +199,23 @@ renbn_kai (yomi_sno, yomi_eno, beginvect,
 /*      単文節解析(大文節) routine                          */
 /************************************************************/
 int
-tan_dai (yomi_sno, yomi_eno, beginvect,
+tan_dai (int yomi_sno,		/* 解析文字列 start index */
+	int yomi_eno,		/* 解析文字列 end index (end char の次) */
+	int beginvect,		/* 前端ベクタ(-1:文節先頭、-2:なんでも)品詞No. */
 #ifndef NO_FZK
-         fzkchar,
-#endif                          /* NO_FZK */
-         endvect, endvect1, kaisbno, dsd_dbn)
-     int yomi_sno;              /* 解析文字列 start index */
-     int yomi_eno;              /* 解析文字列 end index (end char no tugi) */
-     int beginvect;             /* 前端ベクタ(-1:文節先頭、-2:なんでも)品詞No. */
-#ifndef NO_FZK
-     w_char *fzkchar;
+	w_char *fzkchar,
 #endif /* NO_FZK */
-     int endvect;               /* 終端ベクタ */
-     int endvect1;              /* 終端ベクタ */
-     int kaisbno;               /* 解析小文節数 */
-     struct DSD_DBN **dsd_dbn;  /* 決定大文節情報エリア pointer */
+	int endvect,		/* 終端ベクタ */
+	int endvect1,		/* 終端ベクタ */
+	int kaisbno,		/* 解析小文節数 */
+	struct DSD_DBN **dsd_dbn) /* 決定大文節情報エリア pointer */
 {
   int dbn_cnt;
   int sbn_cnt;
   struct DSD_SBN *dsd_sbn;      /* 決定大文節情報エリア pointer */
   struct BZD *rbzdptr;          /* 決定の対象となるノードの
                                    トップポインタ */
-  register struct BZD *brbzdptr, *wkbzdptr;
+  struct BZD *brbzdptr, *wkbzdptr;
   struct BZD *maxbzd;           /* 決定の対象となっている文節の
                                    最大の評価値を持つノードへのポインタ */
   extern int _status;
@@ -297,24 +292,19 @@ tan_dai (yomi_sno, yomi_eno, beginvect,
 /*      単文節解析(小文節) routine                          */
 /************************************************************/
 int
-tan_syo (yomi_sno, yomi_eno, beginvect,
+tan_syo (int yomi_sno,		/* 解析文字列 start index */
+	int yomi_eno,		/* 解析文字列 end index (end char の次) */
+	int beginvect,		/* 前端ベクタ(-1:文節先頭、-2:なんでも)品詞No. */
 #ifndef NO_FZK
-         fzkchar,
-#endif                          /* NO_FZK */
-         endvect, endvect1, dsd_sbn)
-     int yomi_sno;              /* 解析文字列 start index */
-     int yomi_eno;              /* 解析文字列 end index (end char no tugi) */
-     int beginvect;             /* 前端ベクタ(-1:文節先頭、-2:なんでも)品詞No. */
-#ifndef NO_FZK
-     w_char *fzkchar;
+	w_char *fzkchar,
 #endif /* NO_FZK */
-     int endvect;               /* 終端ベクタ */
-     int endvect1;              /* 終端ベクタ */
-     struct DSD_SBN **dsd_sbn;  /* 決定小文節情報エリア pointer */
+	int endvect,		/* 終端ベクタ */
+	int endvect1,		/* 終端ベクタ */
+	struct DSD_SBN **dsd_sbn)  /* 決定小文節情報エリア pointer */
 {
   int sbn_cnt;
   struct SYO_BNSETSU *rsbnptr;  /* 決定の対象となるノードのトップポインタ */
-  register struct SYO_BNSETSU *brsbnptr, *wksbnptr;
+  struct SYO_BNSETSU *brsbnptr, *wksbnptr;
   struct SYO_BNSETSU *maxsbn;   /* 決定の対象となっている文節の
                                    最大の評価値を持つノードへのポインタ */
   int divid;
@@ -405,15 +395,14 @@ tan_syo (yomi_sno, yomi_eno, beginvect,
 /* 決定した文節の情報をセットする             */
 /**********************************************/
 static struct DSD_DBN *
-dcdbn_set (dsd_dbn, dsd_sbn, bzd)
-     register struct DSD_DBN *dsd_dbn;
-     register struct DSD_SBN **dsd_sbn;
-     register struct BZD *bzd;
+dcdbn_set (struct DSD_DBN *dsd_dbn,
+	struct DSD_SBN **dsd_sbn,
+	struct BZD *bzd)
 {
-  register struct DSD_DBN *nextp;
+  struct DSD_DBN *nextp;
 #ifdef  CONVERT_from_TOP
-  register struct DSD_DBN *dsd_dbn_head;
-  register struct BZD *s_bzd;   /* Buffer son's bzd     */
+  struct DSD_DBN *dsd_dbn_head;
+  struct BZD *s_bzd;   /* Buffer son's bzd     */
   dsd_dbn_head = dsd_dbn;
   while (bzd != 0)
     {
@@ -454,9 +443,8 @@ dcdbn_set (dsd_dbn, dsd_sbn, bzd)
 }
 
 static struct DSD_SBN *
-dcdsbn_set (dsd_sbn, sbn)
-     register struct DSD_SBN *dsd_sbn;
-     register struct SYO_BNSETSU *sbn;
+dcdsbn_set (struct DSD_SBN *dsd_sbn,
+	struct SYO_BNSETSU *sbn)
 {
   if (sbn == 0)
     return (dsd_sbn);
@@ -482,10 +470,9 @@ dcdsbn_set (dsd_sbn, sbn)
 
 /* 1 大文節中の小文節の数 */
 static int
-cnt_syo (sbn)
-     register struct SYO_BNSETSU *sbn;
+cnt_syo (struct SYO_BNSETSU *sbn)
 {
-  register int cnt;
+  int cnt;
   cnt = 0;
   while (sbn)
     {
@@ -497,10 +484,9 @@ cnt_syo (sbn)
 
 /* 1 大文節の数 */
 static void
-cnt_bzd (bzd, dbn_cnt, sbn_cnt)
-     register struct BZD *bzd;
-     register int *dbn_cnt;
-     register int *sbn_cnt;
+cnt_bzd (struct BZD *bzd,
+	int *dbn_cnt,
+	int *sbn_cnt)
 {
   *dbn_cnt = 0;
   *sbn_cnt = 0;
@@ -513,32 +499,32 @@ cnt_bzd (bzd, dbn_cnt, sbn_cnt)
 }
 
 static int
-chk_yomi_endvect (yomi_sno, yomi_eno, endvect, endvect1)
-     register int yomi_sno;     /* 解析文字列 start index */
-     register int yomi_eno;     /* 解析文字列 end index (end char no tugi) */
-     register int endvect;      /* 終端ベクタ */
-     register int endvect1;     /* 終端ベクタ */
+chk_yomi_endvect (
+	int yomi_sno,		/* 解析文字列 start index */
+	int yomi_eno,		/* 解析文字列 end index (end char の次) */
+	int endvect,		/* 終端ベクタ */
+	int endvect1)		/* 終端ベクタ */
 {
   if (yomi_sno == yomi_eno || (fzk_ckvt (endvect) == NO && fzk_ckvt (endvect1) == NO))
     {
       wnn_errorno = WNN_NO_KOUHO;
-      error1 ("cannot make Tanbunsetu kouho.\n");
+      log_err ("chk_yomi_endvect: cannot make tan-bunsetu kouho.");
       return (-1);
     }
   return (0);
 }
 
 static int
-set_kata_giji_sbn (yomi_sno, yomi_eno, endvect, endvect1, sbn)
-     int yomi_sno;              /* 解析文字列 start index */
-     int yomi_eno;              /* 解析文字列 end index (end char no tugi) */
-     int endvect;               /* 終端ベクタ */
-     int endvect1;              /* 終端ベクタ */
-     struct SYO_BNSETSU **sbn;
+set_kata_giji_sbn (
+	int yomi_sno,		/* 解析文字列 start index */
+	int yomi_eno,		/* 解析文字列 end index (end char の次) */
+	int endvect,		/* 終端ベクタ */
+	int endvect1,		/* 終端ベクタ */
+	struct SYO_BNSETSU **sbn)
 {
   struct ICHBNP *ichbnpbp;      /* ICHBNP のセーブ */
   int fzkcnt;
-  register int tempi;
+  int tempi;
   int connect_flg = NO;
 
   if (chk_yomi_endvect (yomi_sno, yomi_eno, endvect, endvect1) < 0)
@@ -547,7 +533,7 @@ set_kata_giji_sbn (yomi_sno, yomi_eno, endvect, endvect1, sbn)
   fzkcnt = fzk_kai (&bun[yomi_sno], &bun[yomi_eno], endvect, endvect1, &ichbnpbp);
   if (fzkcnt <= 0)
     {
-      error1 ("Cannot make Tanbunsetu kouho in tan_syo.\n");
+      log_err ("tan_syo(): cannot make tan-bunsetu kouho.");
       init_work_areas ();
       return (-1);              /* ERROR */
     }
@@ -572,7 +558,7 @@ set_kata_giji_sbn (yomi_sno, yomi_eno, endvect, endvect1, sbn)
         {
           freeibsp (ichbnpbp);
           wnn_errorno = WNN_NO_KOUHO;
-          error1 ("Cannot make Tanbunsetu kouho in tan_syo.\n");
+          log_err ("tan_syo(): cannot make tanbunsetu kouho.");
           return (-1);
         }
     }
@@ -595,13 +581,13 @@ set_kata_giji_sbn (yomi_sno, yomi_eno, endvect, endvect1, sbn)
 }
 
 static int
-set_kata_giji_bzd (yomi_sno, yomi_eno, endvect, endvect1, bzd, buncnt)
-     int yomi_sno;              /* 解析文字列 start index */
-     int yomi_eno;              /* 解析文字列 end index (end char no tugi) */
-     int endvect;               /* 終端ベクタ */
-     int endvect1;              /* 終端ベクタ */
-     struct BZD **bzd;
-     int buncnt;
+set_kata_giji_bzd (
+	int yomi_sno,		/* 解析文字列 start index */
+	int yomi_eno,		/* 解析文字列 end index (end char の次) */
+	int endvect,		/* 終端ベクタ */
+	int endvect1,		/* 終端ベクタ */
+	struct BZD **bzd,
+	int buncnt)
 {
   if ((*bzd = getbzdsp ()) == 0)
     return (-1);

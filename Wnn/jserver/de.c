@@ -28,7 +28,7 @@
 /*
         Jserver         (Nihongo Daemon)
 */
-static char rcs_id[] = "$Id";
+static char rcs_id[] = "$Id: de.c,v 1.28 2002-09-01 17:13:10 hiroo Exp $";
 
 #if defined(HAVE_CONFIG_H)
 #  include <config.h>
@@ -156,22 +156,37 @@ int clientp;            /** cblkの有効なデータの最後を差している **/
 
 int cur_clp;            /** 現在のクライアントの番号 **/
 
-static int *all_socks;          /** ビットパターン
-                                 which jserver to select を保持 **/
-static int *ready_socks;        /** データのきているソケットの
-                                        ビットパターンを保持 **/
-static int *dummy1_socks, *dummy2_socks;
+static fd_set *all_socks;	/** ビットパターン
+				    which jserver to select を保持 **/
+static fd_set *ready_socks;	/** データのきているソケットの
+				    ビットパターンを保持 **/
+static fd_set *dummy1_socks, *dummy2_socks;
 
 static int no_of_ready_socks;
-static int sel_bwidth,          /** bit width of all_socks **/
-  sel_width;                    /** byte width of all_socks **/
 
 static int nofile;              /** No. of files **/
 
-#define BINTSIZE        (sizeof(int)*8)
-#define sock_set(array,pos)     (array[pos/BINTSIZE] |= (1<<(pos%BINTSIZE)))
-#define sock_clr(array,pos)     (array[pos/BINTSIZE] &= ~(1<<(pos%BINTSIZE)))
-#define sock_tst(array,pos)     (array[pos/BINTSIZE] &  (1<<(pos%BINTSIZE)))
+/*
+ * It may be needless and had better be removed, however,
+ * Wnn4 did not take it for granted that the system provided
+ * FD_SET and other feature that SUS v.2 determines.
+ * So I left Wnn4's own definition with a little modification
+ * in case the system did not provide the feature.
+ * I borrowed some code from FreeBSD.
+ */
+#if !(HAVE_FD_ZERO || defined (FD_ZERO))
+typedef unsigned long fd_mask;
+#define BINTSIZE		(sizeof(unsigend long) *8)
+#define FD_SETSIZE		WNN_NFD
+#define FD_SET_WIDTH		((FD_SETSIZE) + (BINTSIZE - 1U) / (BINTSIZE))
+typedef struct fd_set {
+  fd_mask fds_bits[FD_SET_WIDTH];
+}
+#define FD_SET(pos,array)	(array[pos/BINTSIZE] |= (1<<(pos%BINTSIZE)))
+#define FD_CLR(pos,array)	(array[pos/BINTSIZE] &= ~(1<<(pos%BINTSIZE)))
+#define FD_ISSET(pos,array)	(array[pos/BINTSIZE] &  (1<<(pos%BINTSIZE)))
+#define FD_ZERO(array)		(bzero (array, FD_SET_WIDTH))
+#endif /* !(HAVE_FD_ZERO || defined (FD_ZERO)) */
 
 struct msg_cat *wnn_msg_cat;
 struct msg_cat *js_msg_cat;
@@ -345,29 +360,32 @@ daemon_main (void)
 static void
 socket_disc_init (void)
 {
-  int sel_w;                    /* long word(==int) width of all_socks */
-
-  nofile = WNN_NFD;
-  sel_w = (nofile - 1) / BINTSIZE + 1;
-  all_socks = (int *) malloc (sel_w * (sizeof (int)));
-  ready_socks = (int *) malloc (sel_w * (sizeof (int)));
-  dummy1_socks = (int *) malloc (sel_w * (sizeof (int)));
-  dummy2_socks = (int *) malloc (sel_w * (sizeof (int)));
-  sel_width = sel_w * sizeof (int);     /* byte width */
-  sel_bwidth = sel_width * 8;   /* bit width */
+  if (WNN_NFD <= FD_SETSIZE)
+    {
+      nofile = WNN_NFD;
+    }
+  else
+    {
+      nofile = FD_SETSIZE;
+    }
+  all_socks = (fd_set *) malloc (sizeof (fd_set));
+  FD_ZERO (all_socks);
+  ready_socks = (fd_set *) malloc (sizeof (fd_set));
+  dummy1_socks = (fd_set *) malloc (sizeof (fd_set));
+  dummy2_socks = (fd_set *) malloc (sizeof (fd_set));
 }
 
 /**     全てのソケットについて待つ      **/
 static void
 sel_all (void)
 {
-  bcopy (all_socks, ready_socks, sel_width);
-  bzero (dummy1_socks, sel_width);
-  bzero (dummy2_socks, sel_width);
+  memcpy (ready_socks, all_socks, sizeof (fd_set));
+  bzero (dummy1_socks, sizeof (fd_set));
+  bzero (dummy2_socks, sizeof (fd_set));
 
 top:
   errno = 0;
-  if ((no_of_ready_socks = select (nofile, ready_socks, dummy1_socks, dummy2_socks, 0)) == -1)
+  if ((no_of_ready_socks = select (nofile, ready_socks, dummy1_socks, dummy2_socks, NULL)) == -1)
     {
       if (errno == EINTR)
         goto top;
@@ -384,7 +402,7 @@ top:
 static int
 get_client (void)
 {
-  register int i;
+  int i;
 
   if (no_of_ready_socks == 0)
     return -1;                  /* no client waits service */
@@ -396,9 +414,9 @@ get_client (void)
       i++;
       if (i >= clientp)
         i = 0;
-      if (sock_tst (ready_socks, cblk[i].sd))
+      if (FD_ISSET (cblk[i].sd, ready_socks))
         {
-          sock_clr (ready_socks, cblk[i].sd);
+	  FD_CLR (cblk[i].sd, ready_socks);
           no_of_ready_socks--;
           return cur_clp = i;
         }
@@ -410,31 +428,32 @@ get_client (void)
 static void
 new_client (void)               /* NewClient */
 {
-  register int sd;
-  register int full, i;
+  int sd;
+  int full, i;
   FILE *f[3];
   char gomi[1024];
 #ifdef  AF_UNIX
-  if ((serverNO == 0) && (sock_tst (ready_socks, accept_blk[UNIX_ACPT].sd)))
+  if ((serverNO == 0) &&
+      (FD_ISSET (accept_blk[UNIX_ACPT].sd, ready_socks)))
     {
-      sock_clr (ready_socks, accept_blk[UNIX_ACPT].sd);
+      FD_CLR (accept_blk[UNIX_ACPT].sd, ready_socks);
       no_of_ready_socks--;
       sd = socket_accept_un ();
     }
   else
 #endif
 #ifdef INET6
-  if (sock_tst (ready_socks, accept_blk[INET6_ACPT].sd))
+  if (FD_ISSET (accept_blk[INET6_ACPT].sd, ready_socks))
     {
-      sock_clr (ready_socks, accept_blk[INET6_ACPT].sd);
+      FD_CLR (accept_blk[INET6_ACPT].sd, ready_socks);
       no_of_ready_socks--;
       sd = socket_accept_in (accept_blk[INET6_ACPT].sd);
     }
   else
 #endif
-  if (sock_tst (ready_socks, accept_blk[INET_ACPT].sd))
+  if (FD_ISSET (accept_blk[INET_ACPT].sd, ready_socks))
     {
-      sock_clr (ready_socks, accept_blk[INET_ACPT].sd);
+      FD_CLR (accept_blk[INET_ACPT].sd, ready_socks);
       no_of_ready_socks--;
       sd = socket_accept_in (accept_blk[INET_ACPT].sd);
     }
@@ -459,7 +478,7 @@ new_client (void)               /* NewClient */
 
   if (full || sd >= nofile || clientp >= max_client)
     {
-      fprintf (stderr, "%s: no more client\n", cmd_name);
+      log_err ("no more client.");
 #ifdef HAVE_RECV
       recv (sd, gomi, 1024, 0);
 #else
@@ -475,7 +494,7 @@ new_client (void)               /* NewClient */
     }
 
   cblk[clientp].sd = sd;
-  sock_set (all_socks, sd);
+  FD_SET (sd, all_socks);
   for (i = 0; i < WNN_MAX_ENV_OF_A_CLIENT; i++)
     {
       (client[clientp].env)[i] = -1;
@@ -489,7 +508,7 @@ void
 del_client (void)
 {
   disconnect_all_env_of_client ();
-  sock_clr (all_socks, cblk[cur_clp].sd);
+  FD_CLR (cblk[cur_clp].sd, all_socks);
 #ifdef HAVE_CLOSESOCKET
   closesocket (cblk[cur_clp].sd);
 #else
@@ -498,13 +517,8 @@ del_client (void)
   /* logging here because c_c (used in log_debug) will be broken after
      following section */
   log_debug("Delete Client: cur_clp = %d\n", cur_clp);
-#ifndef IBM
   cblk[cur_clp] = cblk[clientp - 1];
   client[cur_clp] = client[clientp - 1];
-#else /* !IBM : IBM's compiler could not copy structure. */
-  bcopy (&cblk[cur_clp], &cblk[clientp - 1], sizeof (COMS_BLOCK));
-  bcopy (&client[cur_clp], &client[clientp - 1], sizeof (CLIENT));
-#endif /* !IBM */
   /* Clear host/user name with zero - needed for logging */
   client[clientp - 1].user_name[0] = '\0';	/* Should we use bzero()? */
   client[clientp - 1].host_name[0] = '\0';
@@ -525,13 +539,11 @@ daemon_init (void)               /* initialize Daemon */
 
   if ((cblk = (COMS_BLOCK *) malloc (max_client * sizeof (COMS_BLOCK))) == NULL)
     {
-      log_err ("daemon_init: %s.", strerror(errno));
-      exit (1);
+      xerror ("daemon_init: ");
     }
   if ((client = (CLIENT *) malloc (max_client * sizeof (CLIENT))) == NULL)
     {
-      log_err ("daemon_init: %s.", strerror(errno));
-      exit (1);
+      xerror ("daemon_init: ");
     }
   SDRAND (time (NULL));
   clientp = 0;                  /* V3.0 */
@@ -650,7 +662,7 @@ daemon_fin (void)
 #ifdef AF_UNIX
           (fd != sock_d_un) &&
 #endif /* AF_UNIX */
-          sock_tst (all_socks, fd))
+          FD_ISSET (fd, all_socks))
         {
           shutdown (fd, 2);
 #ifdef HAVE_CLOSESOCKET
@@ -716,7 +728,7 @@ getws_cur (w_char *buffer, size_t buffer_size)
 int
 get2_cur (void)
 {
-  register int x;
+  int x;
   x = getc_cur ();
   return (x << 8) | getc_cur ();
 }
@@ -725,7 +737,7 @@ get2_cur (void)
 int
 get4_cur (void)
 {
-  register int x1, x2, x3;
+  int x1, x2, x3;
   x1 = getc_cur ();
   x2 = getc_cur ();
   x3 = getc_cur ();
@@ -750,7 +762,7 @@ getc_cur (void)
 static int
 rcv_1_client (int clp)		/* clp=クライアント番号 */
 {
-  register int cc = 0;
+  int cc = 0;
   while (cc <= 0)
     {
       errno = 0;
@@ -789,7 +801,7 @@ static void
 snd_1_client (int clp,	/* clp: クライアント番号 */
 	      int n	/* n : number of bytes to send */ )
 {
-  register int cc, x;
+  int cc, x;
 #ifdef  DEBUG
   log_debug ("snd: clp = %d, sd = %d", clp, cblk[clp].sd);
   dmp (snd_buf, n);
@@ -822,7 +834,7 @@ snd_1_client (int clp,	/* clp: クライアント番号 */
 void
 puts_cur (char *p)
 {
-  register int c;
+  int c;
   while (c = *p++)
     putc_cur (c);
   putc_cur (0);
@@ -832,7 +844,7 @@ puts_cur (char *p)
 void
 puts_n_cur (char *p, int n)
 {
-  register int c;
+  int c;
   while ((c = *p++) && --n >= 0)
     putc_cur (c);
   putc_cur (0);
@@ -842,7 +854,7 @@ puts_n_cur (char *p, int n)
 void
 putws_cur (w_char *p)
 {
-  register int c;
+  int c;
   while (c = *p++)
     put2_cur (c);
   put2_cur (0);
@@ -852,7 +864,7 @@ putws_cur (w_char *p)
 void
 putnws_cur (w_char *p, int n)
 {
-  register int c;
+  int c;
   for (; n > 0; n--)
     {
       if ((c = *p++) == 0)
@@ -919,25 +931,25 @@ socket_init_un (void)
       strcpy (saddr_un.sun_path, sockname);
       if ((sock_d_un = socket (AF_UNIX, SOCK_STREAM, 0)) == ERROR)
         {
-          xerror ("Can't create unix domain socket.");
+          xerror ("could not create unix domain socket");
         }
       if (bind (sock_d_un, (struct sockaddr *) &saddr_un, strlen (saddr_un.sun_path) + 2) == ERROR)
         {
           shutdown (sock_d_un, 2);
-          xerror ("Can't bind unix domain socket.");
+          xerror ("could not bind unix domain socket");
         }
       if (listen (sock_d_un, 5) == ERROR)
         {
           shutdown (sock_d_un, 2);
-          xerror ("Can't listen unix domain socket.");
+          xerror ("could not listen unix domain socket");
         }
       chmod (sockname, 0777);
       signal (SIGPIPE, SIG_IGN);
 #ifdef DEBUG
-      log_debug ("sock_d_un = %d\n", sock_d_un);
+      log_debug ("sock_d_un = %d", sock_d_un);
 #endif
       accept_blk[UNIX_ACPT].sd = sock_d_un;
-      sock_set (all_socks, sock_d_un);
+      FD_SET (sock_d_un, all_socks);
     }
 }
 #endif /* AF_UNIX */
@@ -1009,10 +1021,10 @@ socket_init_in (void)
     {
 #ifdef INET6
       if (res->ai_family == AF_INET6)
-        xerror ("can't create inet6 socket");
+        xerror ("could not create inet6 socket");
       else if (res->ai_family == AF_INET)
 #endif
-      xerror ("can't create inet socket");
+      xerror ("could not create inet socket");
     }
   setsockopt (sock_d_in, SOL_SOCKET, SO_REUSEADDR, (char *) &on, sizeof (int));
 #ifdef SO_DONTLINGER
@@ -1052,7 +1064,7 @@ socket_init_in (void)
 #if DEBUG
   log_debug ("sock_d_in = %d", sock_d_in);
 #endif
-  sock_set (all_socks, sock_d_in);
+  FD_SET (sock_d_in, all_socks);
 #ifdef INET6
       if (res->ai_family == AF_INET)
 	accept_blk[INET_ACPT].sd = sock_d_in;
@@ -1184,7 +1196,7 @@ get_options (int argc, char **argv)
 void
 js_who (void)
 {
-  register int i, j;
+  int i, j;
 
   put4_cur (clientp);
   for (i = 0; i < clientp; i++)

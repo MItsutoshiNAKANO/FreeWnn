@@ -1,8 +1,4 @@
 /*
- *  $Id: readfile.c,v 1.7 2002-05-12 22:51:17 hiroo Exp $
- */
-
-/*
  * FreeWnn is a network-extensible Kana-to-Kanji conversion system.
  * This file is part of FreeWnn.
  * 
@@ -32,6 +28,7 @@
 /*
   (Updatable, Stable) dictionary read routine.
 */
+static char rcs_id[] = "$Id: readfile.c,v 1.8 2002-09-01 17:13:11 hiroo Exp $";
 
 #if defined(HAVE_CONFIG_H)
 #include <config.h>
@@ -58,10 +55,20 @@
 #include "de_header.h"
 #include "jdata.h"
 
-static struct JT *readdict ();
-static struct HJT *readhindo ();
-struct FT *fzk_read ();
-static int write_file_real (), writedict (), write_hindo_of_dict (), free_dict (), writehindo (), free_hindo (), alloc_dict (), check_and_change_pwd ();
+#ifdef WRITE_CHECK
+static int vfwrite (void*, int, int, FILE *);
+#endif
+static struct JT *readdict (FILE *);
+static struct JT *copy_dict (struct JT *);
+static int write_file_real (struct wnn_file *, FILE *, int);
+static int writedict (struct JT *, FILE *);
+static int write_hindo_of_dict (struct JT *, FILE *);
+static struct JT * free_dict (struct JT *);
+static struct HJT *readhindo (FILE *);
+static int writehindo (struct HJT *, FILE *);
+static struct HJT * free_hindo (struct HJT *);
+static int alloc_dict (struct JT *);
+static int check_and_change_pwd (char *, char *, char *);
 
 #define vfread(A, B, C, fp) ((fp)?fread((A),(B),(C),(fp)):fread_cur((A),(B),(C)))
 #ifndef WRITE_CHECK
@@ -72,10 +79,7 @@ static int write_file_real (), writedict (), write_hindo_of_dict (), free_dict (
 
 #ifdef WRITE_CHECK
 static int
-vfwrite (ptr, size, nitems, fp)
-     char *ptr;
-     int size, nitems;
-     FILE *fp;
+vfwrite (void *ptr, int size, int nitems, FILE *fp)
 {
   if (fp)
     {
@@ -91,8 +95,7 @@ vfwrite (ptr, size, nitems, fp)
 #endif
 
 int
-read_file (wf)
-     struct wnn_file *wf;
+read_file (struct wnn_file *wf)
 {
   FILE *fp;
   struct wnn_file_head fh;
@@ -101,7 +104,7 @@ read_file (wf)
       if (fopen_read_cur (wf->name) == NULL)
         {
           wnn_errorno = WNN_FILE_READ_ERROR;
-          error1 ("read_file:No file %s.\n", wf->name);
+          log_err ("read_file:could not open file %s.", wf->name);
           return (-1);
         }
       fp = NULL;
@@ -114,7 +117,7 @@ read_file (wf)
       if ((fp = fopen (wf->name, "r")) == NULL)
         {
           wnn_errorno = WNN_FILE_READ_ERROR;
-          error1 ("read_file:No file %s.\n", wf->name);
+          log_err("read_file:could not open file %s.", wf->name);
           return (-1);
         }
     }
@@ -155,8 +158,7 @@ ERROR_RET:
 }
 
 static struct JT *
-readdict (fp)
-     FILE *fp;
+readdict (FILE *fp)
 {
   struct JT *jt1;
   long x;
@@ -205,7 +207,7 @@ readdict (fp)
   else
     {
       wnn_errorno = WNN_NOT_A_DICT;
-      error1 ("Not a correct jisho\n");
+      log_err ("not a correct dictionary.");
       free (jt1);
       return (NULL);
     }
@@ -217,27 +219,27 @@ readdict (fp)
   if (vfread (jt1->comment, 2, jt1->maxcomment, fp) != jt1->maxcomment)
     {
       wnn_errorno = WNN_NOT_A_DICT;
-      error1 ("Not a correct jisho\n");
+      log_err ("not a correct dictionary.");
       goto error;
     }
 
   if (vfread (jt1->hinsi_list, 2, jt1->maxhinsi_list, fp) != jt1->maxhinsi_list)
     {
       wnn_errorno = WNN_NOT_A_DICT;
-      error1 ("Not a correct jisho\n");
+      log_err ("not a correct dictionary.");
       goto error;
     }
 
   if (vfread (jt1->hindo, 1, jt1->maxserial, fp) != jt1->maxserial)
     {
       wnn_errorno = WNN_NOT_A_DICT;
-      error1 ("Not a correct jisho\n");
+      log_err ("not a correct dictionary.");
       goto error;
     }
   if (vfread (jt1->hinsi, 2, jt1->maxserial, fp) != jt1->maxserial)
     {
       wnn_errorno = WNN_NOT_A_DICT;
-      error1 ("Not a correct jisho\n");
+      log_err ("not a correct dictionary.");
       goto error;
     }
 #ifdef  CONVERT_with_SiSheng
@@ -245,44 +247,44 @@ readdict (fp)
     if (vfread (jt1->sisheng, 2, jt1->maxserial, fp) != jt1->maxserial)
       {
         wnn_errorno = WNN_NOT_A_DICT;
-        error1 ("Not a correct jisho\n");
+        log_err ("not a correct dictionary.");
         goto error;
       }
 #endif /* CONVERT_with_SiSheng */
   if (vfread (jt1->kanji, 1, jt1->maxkanji, fp) != jt1->maxkanji)
     {
       wnn_errorno = WNN_NOT_A_DICT;
-      error1 ("Not a correct jisho\n");
+      log_err ("not a correct dictionary.");
       goto error;
     }
   if (vfread (jt1->table, sizeof (struct uind1), jt1->maxtable, fp) != jt1->maxtable)
     {
       wnn_errorno = WNN_NOT_A_DICT;
-      error1 ("Not a correct jisho\n");
+      log_err ("not a correct dictionary.");
       goto error;
     }
   if (vfread (jt1->ri1[D_YOMI], sizeof (struct rind1), jt1->maxri1[D_YOMI], fp) != jt1->maxri1[D_YOMI])
     {
       wnn_errorno = WNN_NOT_A_DICT;
-      error1 ("Not a correct jisho\n");
+      log_err ("not a correct dictionary.");
       goto error;
     }
   if (vfread (jt1->ri1[D_KANJI], sizeof (struct rind1), jt1->maxri1[D_KANJI], fp) != jt1->maxri1[D_KANJI])
     {
       wnn_errorno = WNN_NOT_A_DICT;
-      error1 ("Not a correct jisho\n");
+      log_err ("not a correct dictionary.");
       goto error;
     }
   if (vfread (jt1->hontai, 1, jt1->maxhontai, fp) != jt1->maxhontai)
     {
       wnn_errorno = WNN_NOT_A_DICT;
-      error1 ("Not a correct jisho\n");
+      log_err ("not a correct dictionary.");
       goto error;
     }
   if (vfread (jt1->ri2, sizeof (struct rind2), jt1->maxri2, fp) != jt1->maxri2)
     {
       wnn_errorno = WNN_NOT_A_DICT;
-      error1 ("Not a correct jisho\n");
+      log_err ("not a correct dictionary.");
       goto error;
     }
 
@@ -293,7 +295,7 @@ readdict (fp)
       if (x != ftell (fp))
         {
           wnn_errorno = WNN_NOT_A_DICT;
-          error1 ("Not a correct jisho\n");
+	  log_err ("not a correct dictionary.");
           goto error;
         }
     }
@@ -319,70 +321,83 @@ readdict (fp)
 #endif /* CONVERT_by_STROKE */
   return (jt1);
 error:
-  free_dict (jt1);
+  jt1 = free_dict (jt1);
   return (NULL);
 }
 
 /*
- *user_jisho_realloc: ユーザー辞書に語を登録し過ぎて一杯になった時reallocする
+ * user_jisho_realloc: ユーザー辞書に語を登録し過ぎて一杯になった時reallocする
  */
 int
-ud_realloc_hontai (jt1)
-     struct JT *jt1;
+ud_realloc_hontai (struct JT *jt1)
 {
-  error1 ("Hontai Realloc occured\n");
-  if ((jt1->hontai = (UCHAR *) realloc ((char *) jt1->hontai, (jt1->bufsize_hontai = jt1->maxhontai + MAXHONTAI))) == NULL)
+  int new_bufsize;
+
+  log_debug ("hontai realloc occured.");
+  new_bufsize = jt1->maxhontai + MAXHONTAI;
+  if ((jt1->hontai = (UCHAR *) realloc ((char *) jt1->hontai, new_bufsize)) == NULL)
     {
       wnn_errorno = WNN_MALLOC_ERR;
-      error1 ("Can't make the jisho area bigger");
+      log_err ("could not make the jisho area bigger.");
       return (-1);
     }
+  jt1->bufsize_hontai = new_bufsize;
   return (0);
 }
 
 int
-ud_realloc_kanji (jt1)          /* Also for rd */
-     struct JT *jt1;
+ud_realloc_kanji (struct JT *jt1)          /* Also for rd */
 {
-  error1 ("Kanji Realloc occured\n");
-  if ((jt1->kanji = (UCHAR *) realloc ((char *) jt1->kanji, (jt1->bufsize_kanji = jt1->maxkanji + MAXKANJI))) == NULL)
+  int new_bufsize;
+
+  log_debug ("kanji realloc occured.");
+  new_bufsize = jt1->maxkanji + MAXKANJI;
+  if ((jt1->kanji = (UCHAR *) realloc ((char *) jt1->kanji, new_bufsize)) == NULL)
     {
       wnn_errorno = WNN_MALLOC_ERR;
-      error1 ("Can't make the jisho area bigger");
+      log_err ("could not make the jisho area bigger.");
       return (-1);
     }
+  jt1->bufsize_kanji = new_bufsize;
   return (0);
 }
 
 int
-ud_realloc_serial (jt1)         /* Also for rd */
-     struct JT *jt1;
+ud_realloc_serial (struct JT *jt1)         /* Also for rd */
 {
-  error1 ("Serial Realloc occured\n");
-  if ((jt1->hindo = (UCHAR *) realloc ((char *) jt1->hindo,
-                                       (jt1->bufsize_serial =
-                                        jt1->maxserial + MAXSERIAL) * sizeof (*jt1->hindo))) == NULL ||
-      (jt1->hinsi = (unsigned short *) realloc ((char *) jt1->hinsi, (jt1->maxserial + MAXSERIAL) * sizeof (*jt1->hinsi))) == NULL
+  int new_bufsize;
+
+  log_debug ("serial realloc occured.");
+  new_bufsize = jt1->maxserial + MAXSERIAL;
+  jt1->hindo = (UCHAR *) realloc ((char *) jt1->hindo,
+				  new_bufsize * sizeof (*jt1->hindo));
+  jt1->hinsi = (unsigned short *) realloc ((char *) jt1->hinsi,
+					   new_bufsize * sizeof (*jt1->hinsi));
 #ifdef  CONVERT_with_SiSheng
-      || (jt1->sisheng = (unsigned short *) realloc ((char *) jt1->sisheng, (jt1->maxserial + MAXSERIAL) * sizeof (*jt1->sisheng))) == NULL
+  jt1->sisheng = (unsigned short *) realloc ((char *) jt1->sisheng,
+					     new_bufsize * sizeof (*jt1->sisheng));
+#endif /* CONVERT_with_SiSheng */
+  if (jt1->hindo == NULL || jt1->hinsi == NULL
+#ifdef  CONVERT_with_SiSheng
+      || jt1->sisheng == NULL
 #endif /* CONVERT_with_SiSheng */
     )
     {
       wnn_errorno = WNN_MALLOC_ERR;
-      error1 ("Can't make the jisho area bigger");
+      log_err ("could notmake the jisho area bigger.");
       return (-1);
     }
-#if     defined(CONVERT_by_STROKE) || defined(CONVERT_with_SiSheng)
+  jt1->bufsize_serial = new_bufsize;
+#if defined(CONVERT_by_STROKE) || defined(CONVERT_with_SiSheng)
   if ((jt1->syurui & 0xff) == WNN_REV_DICT)
-    {
 #else
   if (jt1->syurui == WNN_REV_DICT)
-    {
 #endif /* CONVERT_by_STROKE || CONVERT_with_SiSheng */
-      if ((jt1->ri2 = (struct rind2 *) realloc ((char *) jt1->ri2, (jt1->maxserial + MAXSERIAL) * sizeof (struct rind2))) == NULL)
+    {
+      if ((jt1->ri2 = (struct rind2 *) realloc ((char *) jt1->ri2, new_bufsize * sizeof (struct rind2))) == NULL)
         {
           wnn_errorno = WNN_MALLOC_ERR;
-          error1 ("Can't make the jisho area bigger");
+          log_err ("could not make the jisho area bigger.");
           return (-1);
         }
     }
@@ -390,29 +405,30 @@ ud_realloc_serial (jt1)         /* Also for rd */
 }
 
 int
-ud_realloc_table (jt1)
-     struct JT *jt1;
+ud_realloc_table (struct JT *jt1)
 {
-  error1 ("Table Realloc occured\n");
-  if ((jt1->table = (struct uind1 *) realloc ((char *) jt1->table, (jt1->bufsize_table = jt1->maxtable + MAXTABLE) * sizeof (struct uind1))) == NULL)
+  int new_bufsize;              
+
+  log_debug ("table realloc occured.");
+  new_bufsize = jt1->maxtable + MAXTABLE;
+  if ((jt1->table = (struct uind1 *) realloc ((char *) jt1->table, new_bufsize * sizeof (struct uind1))) == NULL)
     {
       wnn_errorno = WNN_MALLOC_ERR;
-      error1 ("Can't make the jisho area bigger");
+      log_err ("could not make the jisho area bigger.");
       return (-1);
     }
+  jt1->bufsize_table = new_bufsize;
   return (1);
 }
 
 int
-rd_realloc_ri1 (jt1, which)
-     struct JT *jt1;
-     int which;
+rd_realloc_ri1 (struct JT *jt1, int which)
 {
-  error1 ("ri1 Realloc occured\n");
+  log_debug ("ri1 reallocation occured.");
   if ((jt1->ri1[which] = (struct rind1 *) realloc ((char *) jt1->ri1[which], (jt1->bufsize_ri1[which] = jt1->maxri1[which] + MAXTABLE) * sizeof (struct rind1))) == NULL)
     {
       wnn_errorno = WNN_MALLOC_ERR;
-      error1 ("Can't make the jisho area bigger");
+      log_err ("could not make the jisho area bigger.");
       return (-1);
     }
   return (1);
@@ -420,14 +436,13 @@ rd_realloc_ri1 (jt1, which)
 
 
 int
-hindo_file_realloc (hjt1)
-     struct HJT *hjt1;
+hindo_file_realloc (struct HJT *hjt1)
 {
-  error1 ("Hindo file Realloc Occured\n");
+  log_debug ("hindo file reallocation occured.");
   if ((hjt1->hindo = (UCHAR *) realloc ((char *) hjt1->hindo, (hjt1->bufsize_serial = hjt1->maxserial + MAXSERIAL) * sizeof (*hjt1->hindo))) == NULL)
     {
       wnn_errorno = WNN_MALLOC_ERR;
-      error1 ("Can't make the hindo file area bigger");
+      log_err ("could not make the hindo file area bigger.");
       return (-1);
     }
   return (1);
@@ -435,14 +450,13 @@ hindo_file_realloc (hjt1)
 
 #ifdef CONVERT_by_STROKE
 int
-rd_realloc_bind (jt)
-     struct JT *jt;
+rd_realloc_bind (struct JT *jt)
 {
   jt->bind = (struct b_node *) realloc ((char *) jt->bind, (jt->bufsize_bnode + MAXBIND) * sizeof (struct b_node));
   if (jt->bind == NULL)
     {
       wnn_errorno = WNN_MALLOC_ERR;
-      error1 ("Can't make the jisho area bigger");
+      log_err ("could not make the jisho area bigger.");
       return (-1);
     }
   jt->bufsize_bnode = jt->bufsize_bnode + MAXBIND;
@@ -451,8 +465,7 @@ rd_realloc_bind (jt)
 #endif
 
 static struct JT *
-copy_dict (jt1)
-     struct JT *jt1;
+copy_dict (struct JT *jt1)
 {
   struct JT *jt2;
 
@@ -483,9 +496,7 @@ copy_dict (jt1)
 
 
 int
-must_write_file (wf, uniq)
-     struct wnn_file *wf;
-     struct wnn_file_uniq *uniq;
+must_write_file (struct wnn_file *wf, struct wnn_file_uniq *uniq)
 {
   if (f_uniq_cmp (&(wf->f_uniq), uniq))
     return (3);
@@ -517,8 +528,7 @@ must_write_file (wf, uniq)
 }
 
 void
-clear_dirty_bit (wf)
-     struct wnn_file *wf;
+clear_dirty_bit (struct wnn_file *wf)
 {
   switch (wf->file_type)
     {
@@ -542,9 +552,7 @@ clear_dirty_bit (wf)
 
 
 int
-rcv_file (wf, mode)
-     struct wnn_file *wf;
-     int mode;
+rcv_file (struct wnn_file *wf, int mode)
 {
   FILE *fp;
   int x;
@@ -554,7 +562,7 @@ rcv_file (wf, mode)
 */
   if (fopen_write_cur (wf->name) == NULL)
     {
-      error1 ("receive_file:No file %s.\n", wf->name);
+      log_err ("receive_file:No file %s.", wf->name);
       wnn_errorno = WNN_FILE_WRITE_ERROR;
       return (-1);
     }
@@ -565,9 +573,7 @@ rcv_file (wf, mode)
 }
 
 int
-write_file (wf, n)
-     struct wnn_file *wf;
-     char *n;
+write_file (struct wnn_file *wf, char *n)
 {
   FILE *fp;
   int mode = 3;
@@ -647,10 +653,9 @@ write_file (wf, n)
 }
 
 static int
-write_file_real (wf, fp, mode)
-     struct wnn_file *wf;
-     FILE *fp;
-     int mode;                  /* 1 For All, 2 For only hindo */
+write_file_real (struct wnn_file *wf,
+		 FILE *fp,
+		 int mode	/* 1 For All, 2 For only hindo */ )
 {
   struct wnn_file_head fh;
 
@@ -679,11 +684,11 @@ write_file_real (wf, fp, mode)
             revdic (jt2, 1);
             if (writedict (jt2, fp) == -1)
               goto ERROR_RET;
-            free_dict (jt2);
+            jt2 = free_dict (jt2);
           }
         else
           {
-/*            if(writedict(wf->area,fp) == -1)goto ERROR_RET; */
+/*            if(writedict(wf->area, fp) == -1)goto ERROR_RET; */
             if (mode == 2)
               {
                 if (write_hindo_of_dict (wf->area, fp) == -1)
@@ -711,9 +716,7 @@ ERROR_RET:
 }
 
 static int
-writedict (jt1, fp)
-     struct JT *jt1;
-     FILE *fp;
+writedict (struct JT *jt1, FILE *fp)
 {
 
   if (output_header_jt (fp, jt1) == -1)
@@ -755,9 +758,7 @@ writedict (jt1, fp)
 }
 
 static int
-write_hindo_of_dict (jt1, fp)
-     struct JT *jt1;
-     FILE *fp;
+write_hindo_of_dict (struct JT *jt1, FILE *fp)
 {
   if (output_header_jt (fp, jt1) == -1)
     return (-1);
@@ -774,8 +775,7 @@ write_hindo_of_dict (jt1, fp)
 
 
 int
-discardfile (wf)
-     struct wnn_file *wf;
+discardfile (struct wnn_file *wf)
 {
 #ifdef nodef
   FILE *fp;
@@ -783,7 +783,7 @@ discardfile (wf)
     {
       if ((fp = fopen (wf->name, "r")) == NULL)
         {
-          error1 ("discardfile:No file %s.\n", wf->name);
+          log_err ("discardfile:No file %s.", wf->name);
           return (-1);
         }
       fclose (fp);
@@ -792,10 +792,10 @@ discardfile (wf)
   switch (wf->file_type)
     {
     case WNN_FT_DICT_FILE:
-      free_dict (wf->area);
+      wf->area = free_dict (wf->area);
       break;
     case WNN_FT_HINDO_FILE:
-      free_hindo (wf->area);
+      wf->area = free_hindo (wf->area);
       break;
     case WNN_FT_FUZOKUGO_FILE:
 /*
@@ -806,9 +806,8 @@ discardfile (wf)
   return (0);
 }
 
-static int
-free_dict (jt)
-     struct JT *jt;
+static struct JT *
+free_dict (struct JT *jt)
 {
   if (jt)
     {
@@ -831,14 +830,13 @@ free_dict (jt)
 #endif /* CONVERT_by_STROKE */
       free (jt);
     }
-  return (0);
+  return (NULL);
 }
 
 
 
 static struct HJT *
-readhindo (fp)
-     FILE *fp;
+readhindo (FILE *fp)
 {
   struct HJT *hjt1;
 
@@ -860,35 +858,33 @@ readhindo (fp)
       free (hjt1->hindo);
       free (hjt1->comment);
       free (hjt1);
-      error1 ("Can't alloc hindo area\n");
+      log_err ("could not allocate hindo area.");
       return (NULL);
     }
 
   if (vfread (hjt1->comment, 2, hjt1->maxcomment, fp) != hjt1->maxcomment)
     {
       wnn_errorno = WNN_NOT_HINDO_FILE;
-      error1 ("Not a correct hindo file\n");
+      log_err ("not a correct hindo file.");
       goto error;
     }
 
   if (vfread (hjt1->hindo, 1, hjt1->maxserial, fp) != hjt1->maxserial)
     {
       wnn_errorno = WNN_NOT_HINDO_FILE;
-      error1 ("Not a correct hindo file\n");
+      log_err ("not a correct hindo file.");
       goto error;
     }
   hjt1->hdirty = 0;
   return (hjt1);
 error:
-  free_hindo (hjt1);
+  hjt1 = free_hindo (hjt1);
   return (NULL);
 }
 
 
 static int
-writehindo (hjt1, fp)
-     struct HJT *hjt1;
-     FILE *fp;
+writehindo (struct HJT *hjt1, FILE *fp)
 {
   if (output_header_hjt (fp, hjt1) == -1)
     return (-1);
@@ -901,9 +897,8 @@ writehindo (hjt1, fp)
   return (0);
 }
 
-static int
-free_hindo (hjt)
-     struct HJT *hjt;
+static struct HJT *
+free_hindo (struct HJT *hjt)
 {
   if (hjt)
     {
@@ -911,24 +906,22 @@ free_hindo (hjt)
       free (hjt->comment);
       free (hjt);
     }
-  return (0);
+  return (NULL);
 }
 
 
 int
-create_hindo_file1 (wf, fn, comm, passwd)
-     struct wnn_file *wf;
-     char *fn;
-     w_char *comm;
-     char *passwd;
+create_hindo_file1 (struct wnn_file *wf,
+		    char *fn,
+		    w_char *comm,
+		    char *passwd)
 {
 
   return (create_hindo_file (&(wf->f_uniq_org), fn, comm, passwd, ((struct JT *) (wf->area))->maxserial));
 }
 
 int
-match_dic_and_hindo_p (wfp, whfp)
-     struct wnn_file *wfp, *whfp;
+match_dic_and_hindo_p (struct wnn_file *wfp, struct wnn_file *whfp)
 {
   struct HJT *hjtp;
   hjtp = (struct HJT *) (whfp->area);
@@ -938,8 +931,7 @@ match_dic_and_hindo_p (wfp, whfp)
 }
 
 static int
-alloc_dict (jt1)
-     struct JT *jt1;
+alloc_dict (struct JT *jt1)
 {
   jt1->hindo = (UCHAR *) NULL;
   jt1->hinsi = (unsigned short *) NULL;
@@ -985,16 +977,14 @@ alloc_dict (jt1)
       free (jt1->ri1[D_YOMI]);
       free (jt1->ri1[D_KANJI]);
       free (jt1->ri2);
-      error1 ("Can't alloc jisho area\n");
+      log_err ("could not allocate jisho area.");
       return (-1);
     }
   return (0);
 }
 
 int
-file_comment_set (wf, com)
-     struct wnn_file *wf;
-     w_char *com;
+file_comment_set (struct wnn_file *wf, w_char *com)
 {
   struct JT *jt;
   struct HJT *hjt;
@@ -1023,11 +1013,10 @@ file_comment_set (wf, com)
 }
 
 int
-file_password_set (wf, which, old, new)
-     struct wnn_file *wf;
-     int which;
-     char *old;
-     char *new;
+file_password_set (struct wnn_file *wf,
+		   int which,
+		   char *old,
+		   char *new)
 {
   struct JT *jt;
   struct HJT *hjt;
@@ -1065,8 +1054,7 @@ file_password_set (wf, which, old, new)
 }
 
 static int
-check_and_change_pwd (pwd, old, new)
-     char *pwd, *old, *new;
+check_and_change_pwd (char *pwd, char *old, char *new)
 {
   if (!check_pwd (old, pwd))
     {
