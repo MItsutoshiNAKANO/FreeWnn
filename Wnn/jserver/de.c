@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.7 2001-06-14 17:55:35 ura Exp $
+ *  $Id: de.c,v 1.8 2001-06-14 18:08:31 ura Exp $
  */
 
 /*
@@ -105,6 +105,7 @@ static	int	sock_d_un;		/**	ソケットのfd	**/
 #endif	/* AF_UNIX */
 static	int	sock_d_in;		/**	ソケットのfd	**/
 
+static	int	port; 
 static	int	serverNO = 0;
 
 struct	cmblk	{
@@ -197,6 +198,8 @@ char **argv;
 	}
 	if (cswidth_name = get_cswidth_name(LANG_NAME))
 	    set_cswidth(create_cswidth(cswidth_name));
+
+	port = -1;
 
 	setuid(geteuid());
 /* check whether another jserver already exists. */
@@ -802,22 +805,22 @@ socket_init_in()
 #else /* SOLARIS */
     int on = 0;
 #endif /* SOLARIS */
-    int port; struct servent *sp;
+    struct servent *sp;
 #if !defined(SO_DONTLINGER) && defined(SO_LINGER)
     struct linger linger;
 #endif
 
-    if ((sp = getservbyname(SERVERNAME,"tcp")) == NULL) {
- 	port =  htons(WNN_PORT_IN + serverNO);
-    } else {
-#ifdef UX386
-	int	hs;
-	hs = ntohs(sp->s_port) + serverNO;
-	port = htons(hs);
-#else
-	port = htons(ntohs(sp->s_port) + serverNO); 
-#endif
-    }
+    if (port < 0)
+      {
+	if ((sp = getservbyname(SERVERNAME,"tcp")) == NULL) {
+	  port = WNN_PORT_IN;
+	} else {
+	  port = ntohs(sp->s_port);
+	}
+      }
+
+    port = htons(port + serverNO);
+
 #if DEBUG
     error1("port=%x\n",port);
 #endif
@@ -827,7 +830,7 @@ socket_init_in()
     if ((sock_d_in = socket(AF_INET,SOCK_STREAM, 0)) == ERROR) {
 	xerror("can't create inet socket");
     }
-    setsockopt(sock_d_in, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(int));
+    setsockopt(sock_d_in, SOL_SOCKET, SO_REUSEADDR, (char *)&on, sizeof(int));
 #ifdef SO_DONTLINGER
     setsockopt(sock_d_in, SOL_SOCKET, SO_DONTLINGER, (char *)0, 0);
 #else
@@ -938,7 +941,7 @@ char **argv;
 
     strcpy(jserverrcfile, LIBDIR);	/* usr/local/lib/wnn */
     strcat(jserverrcfile, SERVER_INIT_FILE);	/* ja_JP/jserverrc */
-    while ((c = getopt(argc, argv, "f:s:h:N:")) != EOF) {
+    while ((c = getopt(argc, argv, "f:s:h:N:p:")) != EOF) {
 	switch(c){
 	case 'f':
 	    strcpy(jserverrcfile, optarg);
@@ -959,9 +962,12 @@ char **argv;
 	case 'N':
 	    serverNO = atoi(optarg);
 	    break;
+	case 'p':
+	    port = atoi(optarg);
+	    break;
 	default:
 	    printf(
-"usage: %s [-F <fuzokugo file> -f <initialize-file> -s <script-file(\"-\" for stderr)> -h <hinsi_file>]\n", cmd_name);
+"usage: %s [-F <fuzokugo file> -f <initialize-file> -s <script-file(\"-\" for stderr)> -h <hinsi_file> -N <server-NO> -p <port>] \n", cmd_name);
 	  exit(1);
 	}
     }

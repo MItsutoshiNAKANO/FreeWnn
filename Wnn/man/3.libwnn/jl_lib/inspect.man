@@ -1,7 +1,6 @@
 .\"
-.\"   $Id: inspect.man,v 1.2 2001-06-14 17:55:42 ura Exp $
+.\"   $Id: inspect.man,v 1.3 2001-06-14 18:08:32 ura Exp $
 .\"
-
 .\"
 .\" FreeWnn is a network-extensible Kana-to-Kanji conversion system.
 .\" This file is part of FreeWnn.
@@ -28,7 +27,6 @@
 .\" along with this program; if not, write to the Free Software
 .\" Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 .\"
-
 .TH JL_INSPECT \  "20 September 1991"
 .SH 名称
 .sv 1
@@ -52,7 +50,7 @@ int bun_no;			/* 文節番号 */
 .IP
 文節番号 bun_no で指定された文節の情報を取り出す。
 
-当面の所は、幹語部分についてのみ行なっている。
+当面の所は、語幹部分についてのみ行なっている。
 .SH リターンバリュー
 .sv 1
 .nf

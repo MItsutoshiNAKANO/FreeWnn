@@ -1,5 +1,5 @@
 /*
- *  $Id: do_env.c,v 1.2 2001-06-14 17:55:36 ura Exp $
+ *  $Id: do_env.c,v 1.3 2001-06-14 18:08:31 ura Exp $
  */
 
 /*
@@ -216,6 +216,8 @@ register char *n;
  for(i=0;i<WNN_MAX_FILE_OF_AN_ENV;i++){
 	(e->file)[i]= -1;
  }
+ e->jishomax = 0;
+ e->sticky = 0;
 
  e->fzk_fid = -1;  /* Not Loaded */
  e->nbun = default_para.n;

@@ -41,6 +41,7 @@ readfile pubdic/computer.dic
 readfile pubdic/symbol.dic
 readfile pubdic/tankan.dic
 readfile pubdic/bio.dic
+readfile gerodic/g-jinmei.dic
 
 readfile pubdic/full.fzk
 

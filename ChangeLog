@@ -1,3 +1,63 @@
+Mon Feb 14 02:23:38 2000  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* 開発版 1.1.1-a015 として内部リリース
+
+Sun Feb 13 18:56:32 2000  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* configure.in: socklen_t がうまく検出できない場合があるので変更。
+	([freewnn:00238] 元木さんのパッチ)
+	
+Sun Feb 13 18:41:43 2000  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/jserver/do_env.c: new_env 内で sticky と jishomax を明示的に
+	初期化していないので明示的に初期化するようにした。
+ 	([freewnn:00229] 元木さんのパッチ)
+
+	* Wnn/jserver/do_dic_env.c: del_all_dic_in_env 内ですべての辞書を 
+	env[eid] 内から外しているのに jishomax はそのままなので 0 を入れた。
+  	(でも、この関数を呼んだ後に jishomax を使う箇所は無いはずなのでい
+	らないかも。)
+ 	([freewnn:00229] 元木さんのパッチ)
+
+Sun Feb 13 18:28:02 2000  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/jserver/de.c: Solaris2.4+gcc-2.95.1で出力されるwarningの一部
+	を取った。([freewnn:00206] 鵜川さんのパッチ + [freewnn:00209])
+
+Sun Feb 13 18:16:54 2000  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* makerule.mk.in: ar のコマンドを "clq" から "cq" に変更。SunOS
+ 	2.4 では l コマンドがエラーになるため。ar の l コマンドはHP-UX で
+	は作業ディレクトリの変更、GNUld では No Operation なので省略可能と
+	判断した。 ([freewnn:00207],[freewnn:00208],[freewnn:00210])
+
+Sun Feb 13 18:05:09 2000  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* gerodic をデフォルトで読み込むように rc ファイルを変更
+  	([freewnn:00214] kaz / 大森保英さんのパッチ)
+
+Sun Feb 13 17:54:13 2000  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* *.man の誤字および roff の文法エラーの修正
+	([freewnn:00216] 永江さん作成のパッチ)
+
+Sun Feb 13 16:36:01 2000  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/jserver/de.c: jserver の usage メッセージに -N を追加。
+	([freewnn:00273] 片山さん作成のパッチ)
+
+	* Wnn/jserver/de.c: jserver に -p オプションを追加(ポート番号の指
+	定)
+	([freewnn:00277] 元木さん作成のパッチ)
+
+	* Wnn/man/4.cmd/jserver.man: -p オプション、-N オプションの記述を
+	追加。(英語の方は手抜き。ごめん)
+	
+Thu Feb 10 02:17:38 2000  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* man で冒頭に大量の空白行が作成されるのを直した。
+	([freewnn:00203] 植松 文徳 <uematsu@kgz.com>さんのパッチ)
+
 Mon Feb  7 02:32:22 2000  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
 
 	* 開発版 1.1.1-a014 として内部リリース

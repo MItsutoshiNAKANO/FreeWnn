@@ -1,5 +1,5 @@
 #
-#   $Id: makerule.mk.in,v 1.6 2001-06-14 17:55:29 ura Exp $
+#   $Id: makerule.mk.in,v 1.7 2001-06-14 18:08:31 ura Exp $
 #
 
 #
@@ -49,7 +49,7 @@ all::
    COMPRESSMANCMD = :
 
 
-               AR = ar clq
+               AR = ar cq
                CC = @CC@
                AS = as
 

@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.12 2001-06-14 17:55:29 ura Exp $
+dnl   $Id: configure.in,v 1.13 2001-06-14 18:08:31 ura Exp $
 dnl
 
 dnl
@@ -242,7 +242,17 @@ dnl
 AC_TYPE_MODE_T
 AC_HEADER_TIME
 AC_CHECK_TYPE(time_t, long)
-AC_CHECK_TYPE(socklen_t, int)
+
+dnl
+dnl socklen_t は sys/socket.h や bits/socket.h で定義されているので、
+dnl AC_CHECK_TYPE では検出できない
+dnl
+AC_MSG_CHECKING(for socklen_t)
+AC_EGREP_CPP(socklen_t, [#include <sys/socket.h>], AC_MSG_RESULT(yes), 
+[ 
+AC_DEFINE(socklen_t, int)
+AC_MSG_RESULT(no)
+])
 
 dnl
 dnl Checks for symbol
