@@ -1,5 +1,5 @@
 dnl
-dnl $Id: configure.in,v 1.8 2000-01-16 07:06:07 ura Exp $
+dnl $Id: configure.in,v 1.9 2000-01-16 07:15:50 ura Exp $
 dnl
 
 dnl FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -99,9 +99,9 @@ case $hosttype in
     5.*)
       if test $CC = gcc; then
           CDEBUGFLAGS=-O2
-          CCOPTIONS="-Dsun -Dsparc -DSVR4 -DSYSV"
+          CCOPTIONS="-Dsun -D`uname -p` -DSVR4 -DSYSV"
       else
-          CCOPTIONS="-Xc -xF -xcg92 -Dsun -Dsparc -DSVR4 -DSYSV"
+          CCOPTIONS="-Xc -xF -xcg92 -Dsun -D`uname -p` -DSVR4 -DSYSV"
       fi
       if test -x /usr/ccs/lib/cpp; then
           CPP=/usr/ccs/lib/cpp
@@ -228,9 +228,9 @@ dnl ### AC_CHECK_LIB(phigs, main)
 dnl ### dnl Replace `main' with a function in -lxpg4:
 dnl ### AC_CHECK_LIB(xpg4, main)
 
-AC_CHECK_LIB(crypt, main)
-AC_CHECK_LIB(socket, main)
-AC_CHECK_LIB(nsl, main)
+AC_CHECK_LIB(crypt, crypt)
+AC_CHECK_LIB(socket, connect)
+AC_CHECK_LIB(nsl, gethostbyname)
 
 dnl
 dnl Checks for header files.

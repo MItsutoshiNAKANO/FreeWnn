@@ -1,3 +1,21 @@
+Wed Sep 22 01:53:51 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* 開発版 1.1.1-a009 として内部リリース
+	
+Wed Sep 22 01:48:16 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* configure.in: Intel 版の Solaris に対応(伊藤健二さん提供のパッチ)
+
+	* Wnn/etc/bdic.c: 内部関数 getnstr() の定義が ncurses ライブラリの
+	同名関数のプロトタイプ宣言と干渉を起こすため、名前を getnstring() 
+	に変更。(伊藤健二さん提供のパッチ)
+
+Wed Sep 22 01:38:33 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* configure.in: AC_CHECK_LIB のチェック関数が main になっていたの
+	を各々ふさわしいものに変更。
+	([freewnn:00127] 元木さんのパッチ)
+
 Wed Sep 22 01:15:58 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
 
 	* 開発版 1.1.1-a008 として内部リリース
