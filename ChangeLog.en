@@ -1,4 +1,28 @@
-Date: Sun, 18 May 2003 14:34:02 Hiroaki Abe <h-abe at pc.highway.ne.jp>
+Wed,  4 Jun 2003 14:12:13 Hiroo Ono <hiroo at oikumene.gcd.org>
+	* Wnn/jserver/get_kaiaria.c:
+	  Global variable definitions are moved from kai_area.c to this file.
+	* Wnn/jserver/kai_area.c: Remove.
+	* {Wnn,cWnn,kWnn}/jserver/Makefile.in: Remove kai_area.{c,o}
+
+Wed,  4 Jun 2003 14:05:23 Hiroo Ono <hiroo at oikumene.gcd.org>
+	* configure.in:
+	  Fit to newer AC_CHECK_TYPES and AC_DEFINE usage.
+	* acconfig.h:
+	  New AC_DEFINE usage made this file obsolete. Remove it.
+
+Wed,  4 Jun 2003 08:35:03 Tomoki Aono <aono at cc.osaka-kyoiku.ac.jp>
+	* config.guess, config.sub, ltmain.sh, aclocal.m4:
+	  Update libtool to 1.5. This will probably allow shared library
+	  build on Darwin/MacOS X. Initially submitted in [freewnn:00978]
+	  with a little modification.
+	  Most of libtool lines lack --mode=MODE option resulting in
+	  warning messages from libtool. We will have to fix it.
+
+Fri, 30 May 2003 16:18:00 Hiroo Ono <hiroo at oikumene.gcd.org>
+	* Wnn/include/commonhd.h:
+	  Increment SERVER_VERSION.
+
+Sun, 18 May 2003 14:34:02 Hiroaki Abe <h-abe at pc.highway.ne.jp>
 	* Wnn/jserver/de_header.h, do_filecom.c:
 	  Allocate struct wnn_file files dynamically.
 
@@ -395,8 +419,7 @@ Wed May 01 21:05:10 UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Wnn/uum/jhlp.c sheader.h:
 	  Use system's setenv() function. As it is not in C89 or POSIX 1,2
 	  standards, use our own definition when it is not found.
-	  However, it should be rewritten to meet other specification, and
-	  it assumes environment variables are in the variable char **environ.
+	  However, it should be rewritten to meet other specification.
 
 Tue Apr 02 04:16:21 UTC 2002  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp>
 	* Wnn/jserver/de.c: include fcntl.h.

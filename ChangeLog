@@ -1,4 +1,28 @@
-Date: Sun, 18 May 2003 14:34:02 Hiroaki Abe <h-abe at pc.highway.ne.jp>
+Wed,  4 Jun 2003 14:12:13 Hiroo Ono <hiroo at oikumene.gcd.org>
+	* Wnn/jserver/get_kaiaria.c:
+	  グローバル変数の定義を kai_area.c からこちらに移した。
+	* Wnn/jserver/kai_area.c: 削除。
+	* {Wnn,cWnn,kWnn}/jserver/Makefile.in: kai_area.{c,o} を削除。
+
+Wed,  4 Jun 2003 14:05:23 Hiroo Ono <hiroo at oikumene.gcd.org>
+	* configure.in:
+	  AC_CHECK_TYPES, AC_DEFINE の新しい形式を使うようにした。
+	* acconfig.h:
+	  AC_DEFINE を新しい形式に合わせて不要になったので削除。
+
+Wed,  4 Jun 2003 08:35:03 Tomoki Aono <aono at cc.osaka-kyoiku.ac.jp>
+	* config.guess, config.sub, ltmain.sh, aclocal.m4:
+	  Libtool を 1.5 に更新した。これにより、Darwin/MacOS X 上で共有
+	  ライブラリが作成出来るようになるはずである。[freewnn:00978] で
+	  提出したものをもとにしている。
+	  現時点では、--mode=MODE オプションがない部分が多く、警告がでる。
+	  修正の必要あり。
+
+Fri, 30 May 2003 16:18:00 Hiroo Ono <hiroo at oikumene.gcd.org>
+	* Wnn/include/commonhd.h:
+	  SERVER_VERSION を 1 つ増やした。
+
+Sun, 18 May 2003 14:34:02 Hiroaki Abe <h-abe at pc.highway.ne.jp>
 	* Wnn/jserver/de_header.h, do_filecom.c:
 	  変数 struct wnn_file files を動的に確保する。
 
@@ -387,8 +411,7 @@ Wed May 01 21:05:10  UTC 2002  Hiroo Ono <hiroo at oikumene.gcd.org>
 	  システムの setenv() 関数を利用するように変更。
 	  setenv() は C89, POSIX 1,2 にない為、見つからない場合はもとの
 	  setenv() の定義を利用する。ただし、一般的な仕様と異なるので変更
-	  が必要である。また、char **environ に環境変数が格納されている
-	  ことを前提としている。
+	  が必要である。
 	  
 Tue Apr 02 04:16:21 UTC 2002  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp>
 	* Wnn/jserver/de.c: include fcntl.h.
