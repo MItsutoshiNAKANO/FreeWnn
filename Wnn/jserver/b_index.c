@@ -6,7 +6,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -24,7 +24,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-static char rcs_id[] = "$Id: b_index.c,v 1.7 2002-08-16 17:30:27 hiroo Exp $";
+static char rcs_id[] = "$Id: b_index.c,v 1.8 2003-06-07 02:23:58 hiroo Exp $";
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -204,7 +204,7 @@ delete_b_node (struct JT *jt, w_char *yomi, int level, int p_node)
 		yomi: Cureent character in this level.
 		level: Level number.
 		p_node: cureent b_node.
-  RETERN VALUE:	new or existent node number whether created or existed.
+  RETURN VALUE:	new or existent node number whether created or existed.
 		failure: -1
  +----------------------------------------------------------------*/
 static int
@@ -300,7 +300,7 @@ creat_b_node (struct JT *jt, w_char *yomi, int level, int p_node)
 	Otherwise get a b_node sequencially by doing b_cnt++.
 	When b_cnt is greater than bufsize of b_node, rallocation
 	will be performed.
-  RETERN VALUE:	
+  RETURN VALUE:	
  +----------------------------------------------------------------*/
 static int
 bnode_alloc (struct JT *jt)
@@ -314,7 +314,7 @@ bnode_alloc (struct JT *jt)
       return (i);
     }
   if (b_cnt++ >= jt->bufsize_bnode)     /* Use new  b_nodes */
-    if (rd_realloc_bind (jt) == -1)     /* re-alloc */
+    if (rd_realloc_bind (jt) == NULL)	/* realloc jt->bind */
       return (-1);
   return (jt->bufsize_bnode = b_cnt);   /* Not re-alloc */
 }

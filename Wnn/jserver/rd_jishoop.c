@@ -1,5 +1,5 @@
 /*
- *  $Id: rd_jishoop.c,v 1.3 2001-06-14 18:16:03 ura Exp $
+ *  $Id: rd_jishoop.c,v 1.4 2003-06-07 02:23:58 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -29,12 +29,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #include <stdio.h>
 #include "commonhd.h"
 #include "de_header.h"
 #include "jdata.h"
 
-static void rd_make_space (), rd_remove_space ();
+static void rd_make_space (struct rind1 *, int, struct JT *, int, int);
+static void rd_remove_space (struct rind1 *, int, struct JT *, int, int);
 
 #ifdef  CONVERT_with_SiSheng
 unsigned int sisheng_int;
@@ -43,18 +48,17 @@ w_char pan_yomi[LENGTHYOMI];
 #endif
 
 int
-rd_word_add1 (jtl, pyomi, hinsi, pkanji, comment)
-/* pyomi, pkanji is not reverse (normal) */
-     struct JT *jtl;
-     int hinsi;
-     w_char *pkanji, *comment;
-     register w_char *pyomi;
+rd_word_add1 (struct JT *jtl,
+	      w_char *pyomi,	/* normal order (not reversed) */
+	      int hinsi,
+	      w_char *pkanji,	/* normal order (not reversed) */
+	      w_char *comment)
 {
-  register struct rind1 *tary;
-  register int key, key0, keye;
+  struct rind1 *tary;
+  int key, key0, keye;
   int serial = jtl->maxserial;
   w_char *tmp = (w_char *) 0;
-  register struct rind2 *ri2;
+  struct rind2 *ri2;
   int ind;
   int which;
   w_char *csult;
@@ -81,19 +85,23 @@ rd_word_add1 (jtl, pyomi, hinsi, pkanji, comment)
 # endif /* CONVERT_from_TOP */
 #endif /* CONVERT_with_SiSheng */
 
-  if (jtl->bufsize_kanji <= jtl->maxkanji + (Strlen (kanji) + Strlen (comment) + Strlen (yomi) + 3) * sizeof (w_char) + 1 && ud_realloc_kanji (jtl) == -1)
+  if ((jtl->bufsize_kanji <= jtl->maxkanji + (Strlen (kanji) + Strlen (comment) + Strlen (yomi) + 3) * sizeof (w_char) + 1)
+      && (ud_realloc_kanji (jtl) == NULL))
     {
       return (-1);
     }
-  if (jtl->bufsize_ri1[D_YOMI] <= jtl->maxri1[D_YOMI] + 2 && rd_realloc_ri1 (jtl, D_YOMI) == -1)
+  if (jtl->bufsize_ri1[D_YOMI] <= jtl->maxri1[D_YOMI] + 2
+     && rd_realloc_ri1 (jtl, D_YOMI) == NULL)
     {
       return (-1);
     }
-  if (jtl->bufsize_ri1[D_KANJI] <= jtl->maxri1[D_KANJI] + 2 && rd_realloc_ri1 (jtl, D_KANJI) == -1)
+  if (jtl->bufsize_ri1[D_KANJI] <= jtl->maxri1[D_KANJI] + 2
+     && rd_realloc_ri1 (jtl, D_KANJI) == NULL)
     {
       return (-1);
     }
-  if (jtl->bufsize_serial <= jtl->maxserial + 4 && ud_realloc_serial (jtl) == -1)
+  if (jtl->bufsize_serial <= jtl->maxserial + 4
+     && ud_realloc_serial (jtl) == NULL)
     {
       return (-1);
     }
@@ -194,21 +202,11 @@ rd_word_add1 (jtl, pyomi, hinsi, pkanji, comment)
 }
 
 int
-rd_word_delete1 (jtl, hjtl, serial)
-     struct JT *jtl;
-     struct HJT *hjtl;
-     int serial;
+rd_word_delete1 (struct JT *jtl, struct HJT *hjtl, int serial)
 {
-  /*
-     int k;
-   */
-  register struct rind1 *tary;
-  register int ind1;
+  struct rind1 *tary;
+  int ind1;
   int *pt;
-  /*
-     UCHAR *c;
-     int tmp;
-   */
   w_char *yomi;
   struct rind2 *ri2;
   int which;
@@ -268,18 +266,11 @@ rd_word_delete1 (jtl, hjtl, serial)
 
 
 int
-inspect_rd (dic_no, serial, yomi, jd)
-     int dic_no, serial;
-     w_char *yomi;
-     struct jdata *jd;
+inspect_rd (int dic_no, int serial, w_char *yomi, struct jdata *jd)
 {
   struct JT *jtl;
   struct HJT *hjtl;
   struct rind2 *p;
-  /*
-     int k;
-     int len;
-   */
 
   jtl = (struct JT *) (files[dic_table[dic_no].body].area);
   if (dic_table[dic_no].hindo >= 0)
@@ -322,14 +313,9 @@ inspect_rd (dic_no, serial, yomi, jd)
 }
 
 static void
-rd_make_space (tary, key, jtl, end, which)
-     register struct JT *jtl;
-     register struct rind1 *tary;
-     register int key;
-     int end;
-     int which;
+rd_make_space (struct rind1 *tary, int key, struct JT *jtl, int end, int which)
 {
-  register struct rind1 *p, *p1, *pend;
+  struct rind1 *p, *p1, *pend;
 
   pend = tary + key;
   for (p = tary + end - 1, p1 = tary + end; p >= pend; p--, p1--)
@@ -342,13 +328,9 @@ rd_make_space (tary, key, jtl, end, which)
 }
 
 static void
-rd_remove_space (tary, key, jtl, newkey, which)
-     register struct JT *jtl;
-     register struct rind1 *tary;
-     register int key, newkey;
-     int which;
+rd_remove_space (struct rind1 *tary, int key, struct JT *jtl, int newkey, int which)
 {
-  register struct rind1 *p, *p1, *pend;
+  struct rind1 *p, *p1, *pend;
 
   pend = tary + jtl->maxri1[which];
   for (p = tary + key + 1, p1 = tary + key; p < pend; p++, p1++)
@@ -361,3 +343,4 @@ rd_remove_space (tary, key, jtl, newkey, which)
     }
   jtl->maxri1[which]--;
 }
+

@@ -1,5 +1,5 @@
 /*
- *  $Id: jishoop.c,v 1.5 2001-06-18 09:09:42 ura Exp $
+ *  $Id: jishoop.c,v 1.6 2003-06-07 02:23:58 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -303,19 +303,23 @@ word_add1 (jtl, pyomi, hinsi, kanji, comment)
 
   Sreverse (yomi, pyomi);
 
-  if (jtl->bufsize_hontai <= jtl->maxhontai + sizeof (struct uind2) + Strlen (yomi) && ud_realloc_hontai (jtl) == -1)
+  if ((jtl->bufsize_hontai <= jtl->maxhontai + sizeof (struct uind2) + Strlen (yomi))
+      && (ud_realloc_hontai (jtl) == NULL))
     {
       return (-1);
     }
-  if (jtl->bufsize_kanji <= jtl->maxkanji + (Strlen (kanji) + Strlen (comment) + Strlen (yomi) + 3) * sizeof (w_char) + 1 && ud_realloc_kanji (jtl) == -1)
+  if ((jtl->bufsize_kanji <= jtl->maxkanji + (Strlen (kanji) + Strlen (comment) + Strlen (yomi) + 3) * sizeof (w_char) + 1)
+      && (ud_realloc_kanji (jtl) == NULL))
     {
       return (-1);
     }
-  if (jtl->bufsize_serial <= jtl->maxserial + 4 && ud_realloc_serial (jtl) == -1)
+  if (jtl->bufsize_serial <= jtl->maxserial + 4
+     && ud_realloc_serial (jtl) == NULL)
     {
       return (-1);
     }
-  if (jtl->bufsize_table <= jtl->maxtable + sizeof (struct uind1) && ud_realloc_table (jtl) == -1)
+  if (jtl->bufsize_table <= jtl->maxtable + sizeof (struct uind1)
+     && ud_realloc_table (jtl) == NULL)
     {
       return (-1);
     }
@@ -552,7 +556,7 @@ found_it:
       if (jtl->bufsize_hontai <= jtl->maxhontai + sizeof (struct uind2) + Strlen (yomi))
         {
           tmp = (char *) p - (char *) jtl->hontai;
-          if (ud_realloc_hontai (jtl) == -1)
+          if (ud_realloc_hontai (jtl) == NULL)
             {
               return (-1);
             }
@@ -643,7 +647,7 @@ found_it:
     {
       if (jtl->bufsize_kanji <= jtl->maxkanji + (Strlen (kanji) + Strlen (comment) + Strlen (yomi1) + 4) * 2)
         {
-          if (ud_realloc_kanji (jtl) == -1)
+          if (ud_realloc_kanji (jtl) == NULL)
             {
               return (-1);
             }
@@ -662,7 +666,8 @@ found_it:
 #endif /* CONVERT_by_STROKE || CONVERT_with_SiSheng */
           /* We need to spend one serial_no to ensure that the entry
              before this and after this are not connected */
-          if (jtl->bufsize_serial <= jtl->maxserial + 4 && ud_realloc_serial (jtl) == -1)
+          if (jtl->bufsize_serial <= jtl->maxserial + 4
+	     && ud_realloc_serial (jtl) == NULL)
             {
               return (-1);
             }
@@ -681,7 +686,8 @@ found_it:
   if (p->kosuu == 1)
     {
       Get_kanji (p->kanjipter + jtl->kanji, yomi, Strlen (yomi), kanji, NULL, NULL);
-      if (jtl->bufsize_kanji <= jtl->maxkanji + (Strlen (kanji) + Strlen (comment)) * sizeof (w_char) + 4 && ud_realloc_kanji (jtl) == -1)
+      if ((jtl->bufsize_kanji <= jtl->maxkanji + (Strlen (kanji) + Strlen (comment)) * sizeof (w_char) + 4)
+	  && (ud_realloc_kanji (jtl) == NULL))
         {
           return (-1);
         }
@@ -700,7 +706,7 @@ found_it:
       len = c - (p->kanjipter + jtl->kanji);
       while (jtl->bufsize_kanji <= jtl->maxkanji + (Strlen (kanji) + Strlen (comment)) * sizeof (w_char) + 4 + len)
         {
-          if (ud_realloc_kanji (jtl) == -1)
+          if (ud_realloc_kanji (jtl) == NULL)
             {
               return (-1);
             }
@@ -756,7 +762,7 @@ hindo_file_size_justify (wfp, whfp)
         {
           while (hjtp->bufsize_serial <= jtp->maxserial)
             {
-              if (hindo_file_realloc (hjtp) == -1)
+              if (hindo_file_realloc (hjtp) == NULL)
                 return (-1);
             }
           error1 ("Dic file size is bigger than that of Hindo file!");

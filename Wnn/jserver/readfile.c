@@ -6,7 +6,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -28,7 +28,7 @@
 /*
   (Updatable, Stable) dictionary read routine.
 */
-static char rcs_id[] = "$Id: readfile.c,v 1.8 2002-09-01 17:13:11 hiroo Exp $";
+static char rcs_id[] = "$Id: readfile.c,v 1.9 2003-06-07 02:23:58 hiroo Exp $";
 
 #if defined(HAVE_CONFIG_H)
 #include <config.h>
@@ -327,142 +327,195 @@ error:
 
 /*
  * user_jisho_realloc: ユーザー辞書に語を登録し過ぎて一杯になった時reallocする
+ *   return value: success:SUCCESS (non zero), failure:NULL
  */
 int
-ud_realloc_hontai (struct JT *jt1)
+ud_realloc_hontai (struct JT *jt)
 {
-  int new_bufsize;
+  size_t new_bufsize;
+  UCHAR *tp;
 
   log_debug ("hontai realloc occured.");
-  new_bufsize = jt1->maxhontai + MAXHONTAI;
-  if ((jt1->hontai = (UCHAR *) realloc ((char *) jt1->hontai, new_bufsize)) == NULL)
+  new_bufsize = jt->maxhontai + MAXHONTAI;
+  if ((tp = (UCHAR *) realloc (jt->hontai, new_bufsize)) == NULL)
     {
       wnn_errorno = WNN_MALLOC_ERR;
       log_err ("could not make the jisho area bigger.");
-      return (-1);
+      return (NULL);
     }
-  jt1->bufsize_hontai = new_bufsize;
-  return (0);
+  jt->bufsize_hontai = new_bufsize;
+  jt->hontai = tp;
+  return (SUCCESS);
 }
 
 int
-ud_realloc_kanji (struct JT *jt1)          /* Also for rd */
+ud_realloc_kanji (struct JT *jt)          /* Also for rd */
 {
-  int new_bufsize;
+  size_t new_bufsize;
+  UCHAR *tp;
 
   log_debug ("kanji realloc occured.");
-  new_bufsize = jt1->maxkanji + MAXKANJI;
-  if ((jt1->kanji = (UCHAR *) realloc ((char *) jt1->kanji, new_bufsize)) == NULL)
+  new_bufsize = jt->maxkanji + MAXKANJI;
+  if ((tp = (UCHAR *) realloc (jt->kanji, new_bufsize)) == NULL)
     {
       wnn_errorno = WNN_MALLOC_ERR;
       log_err ("could not make the jisho area bigger.");
-      return (-1);
+      return (NULL);
     }
-  jt1->bufsize_kanji = new_bufsize;
-  return (0);
+  jt->bufsize_kanji = new_bufsize;
+  jt->kanji = tp;
+  return (SUCCESS);
 }
 
 int
-ud_realloc_serial (struct JT *jt1)         /* Also for rd */
+ud_realloc_serial (struct JT *jt)         /* Also for rd */
 {
-  int new_bufsize;
+  size_t new_bufsize;
+  UCHAR *tp_hindo;
+  unsigned short *tp_hinsi;
+#ifdef  CONVERT_with_SiSheng
+  unsigned short *tp_sisheng;
+#endif
+  struct rind2 *tp_ri2;
 
   log_debug ("serial realloc occured.");
-  new_bufsize = jt1->maxserial + MAXSERIAL;
-  jt1->hindo = (UCHAR *) realloc ((char *) jt1->hindo,
-				  new_bufsize * sizeof (*jt1->hindo));
-  jt1->hinsi = (unsigned short *) realloc ((char *) jt1->hinsi,
-					   new_bufsize * sizeof (*jt1->hinsi));
+  new_bufsize = jt->maxserial + MAXSERIAL;
+
+  tp_hindo = (UCHAR *) realloc (jt->hindo, new_bufsize * sizeof (*jt->hindo));
+  tp_hinsi = (unsigned short *) realloc (jt->hinsi, new_bufsize * sizeof (*jt->hinsi));
+
 #ifdef  CONVERT_with_SiSheng
-  jt1->sisheng = (unsigned short *) realloc ((char *) jt1->sisheng,
-					     new_bufsize * sizeof (*jt1->sisheng));
+  tp_sisheng = (unsigned short *) realloc (jt->sisheng,
+					   new_bufsize * sizeof (*jt->sisheng));
 #endif /* CONVERT_with_SiSheng */
-  if (jt1->hindo == NULL || jt1->hinsi == NULL
+
+  if (tp_hindo == NULL || tp_hinsi == NULL
 #ifdef  CONVERT_with_SiSheng
-      || jt1->sisheng == NULL
+     || tp_sisheng == NULL
 #endif /* CONVERT_with_SiSheng */
     )
     {
+      free (tp_hindo);
+      free (tp_hinsi);
+#ifdef  CONVERT_with_SiSheng
+      free (tp_sisheng);
+#endif /* CONVERT_with_SiSheng */
+
       wnn_errorno = WNN_MALLOC_ERR;
       log_err ("could notmake the jisho area bigger.");
-      return (-1);
+      return (NULL);
     }
-  jt1->bufsize_serial = new_bufsize;
+  jt->bufsize_serial = new_bufsize;
+  jt->hindo = tp_hindo;
+  jt->hinsi = tp_hinsi;
+#ifdef  CONVERT_with_SiSheng
+  jt->sisheng = tp_sisheng;
+#endif /* CONVERT_with_SiSheng */
+
+
 #if defined(CONVERT_by_STROKE) || defined(CONVERT_with_SiSheng)
-  if ((jt1->syurui & 0xff) == WNN_REV_DICT)
+  if ((jt->syurui & 0xff) == WNN_REV_DICT)
 #else
-  if (jt1->syurui == WNN_REV_DICT)
+  if (jt->syurui == WNN_REV_DICT)
 #endif /* CONVERT_by_STROKE || CONVERT_with_SiSheng */
     {
-      if ((jt1->ri2 = (struct rind2 *) realloc ((char *) jt1->ri2, new_bufsize * sizeof (struct rind2))) == NULL)
+      tp_ri2 = (struct rind2 *) realloc (jt->ri2,
+					 new_bufsize * sizeof (struct rind2));
+      if (tp_ri2 == NULL)
         {
           wnn_errorno = WNN_MALLOC_ERR;
           log_err ("could not make the jisho area bigger.");
-          return (-1);
+          return (NULL);
         }
+      jt->ri2 = tp_ri2;
     }
-  return (1);
+
+  return (SUCCESS);
 }
 
 int
-ud_realloc_table (struct JT *jt1)
+ud_realloc_table (struct JT *jt)
 {
-  int new_bufsize;              
+  size_t new_bufsize;              
+  struct uind1 *tp;
 
   log_debug ("table realloc occured.");
-  new_bufsize = jt1->maxtable + MAXTABLE;
-  if ((jt1->table = (struct uind1 *) realloc ((char *) jt1->table, new_bufsize * sizeof (struct uind1))) == NULL)
+  new_bufsize = jt->maxtable + MAXTABLE;
+  tp = (struct uind1 *) realloc (jt->table, new_bufsize * sizeof (struct uind1));
+  if (tp == NULL)
     {
       wnn_errorno = WNN_MALLOC_ERR;
       log_err ("could not make the jisho area bigger.");
-      return (-1);
+      return (NULL);
     }
-  jt1->bufsize_table = new_bufsize;
-  return (1);
+  jt->bufsize_table = new_bufsize;
+  jt->table = tp;
+  return (SUCCESS);
 }
 
 int
-rd_realloc_ri1 (struct JT *jt1, int which)
+rd_realloc_ri1 (struct JT *jt, int which)
 {
+  size_t new_bufsize;
+  struct rind1 *tp;
+
   log_debug ("ri1 reallocation occured.");
-  if ((jt1->ri1[which] = (struct rind1 *) realloc ((char *) jt1->ri1[which], (jt1->bufsize_ri1[which] = jt1->maxri1[which] + MAXTABLE) * sizeof (struct rind1))) == NULL)
+  new_bufsize = jt->maxri1[which] + MAXTABLE;
+  tp = (struct rind1 *) realloc (jt->ri1[which],
+				 new_bufsize * sizeof (struct rind1));
+  if (tp == NULL)
     {
       wnn_errorno = WNN_MALLOC_ERR;
       log_err ("could not make the jisho area bigger.");
-      return (-1);
+      return (NULL);
     }
-  return (1);
+  jt->bufsize_ri1[which] = new_bufsize;
+  jt->ri1[which] = tp;
+  return (SUCCESS);
 }
 
 
 int
-hindo_file_realloc (struct HJT *hjt1)
+hindo_file_realloc (struct HJT *hjt)
 {
+  size_t new_bufsize;
+  UCHAR *tp;
+
   log_debug ("hindo file reallocation occured.");
-  if ((hjt1->hindo = (UCHAR *) realloc ((char *) hjt1->hindo, (hjt1->bufsize_serial = hjt1->maxserial + MAXSERIAL) * sizeof (*hjt1->hindo))) == NULL)
+  new_bufsize = hjt->maxserial + MAXSERIAL;
+  tp = (UCHAR *) realloc (hjt->hindo, new_bufsize * sizeof (*hjt->hindo));
+  if (tp == NULL)
     {
       wnn_errorno = WNN_MALLOC_ERR;
       log_err ("could not make the hindo file area bigger.");
-      return (-1);
+      return (NULL);
     }
-  return (1);
+  hjt->bufsize_serial = new_bufsize;
+  hjt->hindo = tp;
+  return (SUCCESS);
 }
 
 #ifdef CONVERT_by_STROKE
 int
 rd_realloc_bind (struct JT *jt)
 {
-  jt->bind = (struct b_node *) realloc ((char *) jt->bind, (jt->bufsize_bnode + MAXBIND) * sizeof (struct b_node));
-  if (jt->bind == NULL)
+  size_t new_bufsize;
+  struct b_node *tp;
+
+  log_debug ("jt->bind reallocation occured.");
+  new_bufsize = jt->bufsize_bnode + MAXBIND;
+  tp = (struct b_node *) realloc (jt->bind, new_bufsize * sizeof (struct b_node));
+  if (tp == NULL)
     {
       wnn_errorno = WNN_MALLOC_ERR;
       log_err ("could not make the jisho area bigger.");
-      return (-1);
+      return (NULL);
     }
-  jt->bufsize_bnode = jt->bufsize_bnode + MAXBIND;
-  return (1);
+  jt->bufsize_bnode = new_bufsize;
+  jt->bind = tp;
+  return (SUCCESS);
 }
-#endif
+#endif /* CONVERT_by_STROKE */
 
 static struct JT *
 copy_dict (struct JT *jt1)
@@ -988,28 +1041,40 @@ file_comment_set (struct wnn_file *wf, w_char *com)
 {
   struct JT *jt;
   struct HJT *hjt;
+  size_t new_size;
+  w_char *tp;
 
   switch (wf->file_type)
     {
     case WNN_FT_DICT_FILE:
       jt = (struct JT *) wf->area;
-      jt->maxcomment = Strlen (com) + 1;
-      jt->comment = (w_char *) realloc ((char *) jt->comment, jt->maxcomment * sizeof (w_char));
+      new_size = Strlen (com) + 1;
+      if ((tp = (w_char *) realloc (jt->comment, jt->maxcomment * sizeof (w_char))) == NULL)
+	{
+	  return (NULL);
+	}
+      jt->maxcomment = new_size;
+      jt->comment = tp;
       Strcpy (jt->comment, com);
       jt->dirty = 1;
       break;
     case WNN_FT_HINDO_FILE:
       hjt = (struct HJT *) wf->area;
-      hjt->maxcomment = Strlen (com) + 1;
-      hjt->comment = (w_char *) realloc ((char *) hjt->comment, hjt->maxcomment * sizeof (w_char));
+      new_size = Strlen (com) + 1;
+      if ((tp = (w_char *) realloc (hjt->comment, new_size * sizeof (w_char))) == NULL)
+	{
+	  return (NULL);
+	}
+      hjt->maxcomment = new_size;
+      hjt->comment = tp;
       Strcpy (hjt->comment, com);
       hjt->hdirty = 1;
       break;
     case WNN_FT_FUZOKUGO_FILE:
       wnn_errorno = NOT_SUPPORTED_OPERATION;
-      return (-1);
+      return (NULL);
     }
-  return (0);
+  return (SUCCESS);
 }
 
 int

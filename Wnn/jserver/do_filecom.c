@@ -1,5 +1,5 @@
 /*
- *  $Id: do_filecom.c,v 1.12 2003-05-18 14:34:01 h-abe Exp $
+ *  $Id: do_filecom.c,v 1.13 2003-06-07 02:23:58 hiroo Exp $
  */
 
 /*
@@ -77,20 +77,21 @@ static int  find_file_by_uniq (struct wnn_file_uniq *);
 static int  new_fid_in_env (int, int);
 static int  x_file_already_read (int, int);
 
-void
+int
 file_init (void)
 {
   int i;
   files = (struct wnn_file *)calloc(MAX_FILES, sizeof(struct wnn_file));
   if ( files == NULL )
     {
-      fprintf (stderr, "Malloc Faild\n");
-      return (-1);
+      log_err ("file_init: malloc faild.");
+      return (NULL);
     }
   for (i = 0; i < MAX_FILES; i++)
     {
       files[i].ref_count = -1;
     }
+  return (SUCCESS);
 }
 
 /*
@@ -491,7 +492,6 @@ js_file_comment_set (void)
 {
   int fid, envi;
   w_char comment[WNN_COMMENT_LEN];
-  int ret;
   int dic_no;
 
   envi = get4_cur ();           /* env_id */
@@ -518,8 +518,7 @@ js_file_comment_set (void)
       wnn_errorno = WNN_RDONLY;
       goto ERR_RET;
     }
-  ret = file_comment_set (&files[fid], comment);
-  if (ret == -1)
+  if (file_comment_set (&files[fid], comment) == NULL)
     {
       goto ERR_RET;
     }
