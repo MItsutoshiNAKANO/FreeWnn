@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.27 2002-06-09 11:08:40 h-abe Exp $
+dnl   $Id: configure.in,v 1.28 2002-06-15 10:19:27 hiroo Exp $
 dnl
 
 dnl
@@ -265,11 +265,9 @@ case $host in
     CDEBUGFLAGS="-O2 -fno-strength-reduce"
     ;;
 *-*-freebsd*|*-*-netbsd*|*-*-openbsd*)
-    CCOPTIONS="-DCSRG_BASED"
     CDEBUGFLAGS="-O2 -fno-strength-reduce"
     ;;
 *-*-bsdi*)
-    CCOPTIONS="-DCSRG_BASED"
     CDEBUGFLAGS="-O2 -fno-strength-reduce"
     ;;
 *-*-sunos*)
@@ -325,12 +323,9 @@ if test $debug = true; then
     if test $GCC = yes; then
       CDEBUGFLAGS="-g2 -Wall -fstack-check $CDEBUGFLAGS"
     fi
-fi
-
-if test ${debug} = true; then
-     INSTPGMFLAGS=
+    INSTPGMFLAGS=
 else
-     INSTPGMFLAGS="-s"
+    INSTPGMFLAGS="-s"
 fi
 AC_SUBST(INSTPGMFLAGS)
 
@@ -374,10 +369,11 @@ dnl
 AC_PATH_X
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS(fcntl.h sgtty.h termio.h unistd.h)
-AC_CHECK_HEADERS(sys/file.h sys/ioctl.h sys/time.h sys/types.h sys/param.h)
-AC_CHECK_HEADERS(malloc.h strings.h memory.h)
-AC_CHECK_HEADERS(syslog.h)
+AC_CHECK_HEADERS(fcntl.h sgtty.h syslog.h unistd.h \
+	sys/file.h sys/ioctl.h sys/time.h sys/types.h sys/param.h \
+	malloc.h strings.h memory.h \
+	curses.h ncurses.h term.h termio.h \
+)
 dnl If you don't use ansidecl.h, use this (and modify Wnn/jserver/error.c)
 dnl AC_CHECK_HEADERS(stdarg.h varargs.h, break)
 
@@ -392,12 +388,15 @@ dnl
 dnl socklen_t は sys/socket.h や bits/socket.h で定義されているので、
 dnl AC_CHECK_TYPE では検出できない
 dnl
-AC_MSG_CHECKING(for socklen_t)
-AC_EGREP_CPP(socklen_t, [#include <sys/socket.h>], AC_MSG_RESULT(yes), 
-[ 
-AC_DEFINE(socklen_t, int)
-AC_MSG_RESULT(no)
-])
+dnl AC_MSG_CHECKING(for socklen_t)
+dnl AC_EGREP_CPP(socklen_t, [#include <sys/socket.h>], AC_MSG_RESULT(yes), 
+dnl [ 
+dnl AC_DEFINE(socklen_t, int)
+dnl AC_MSG_RESULT(no)
+dnl ])
+AC_CHECK_TYPES(socklen_t,,
+	AC_DEFINE(socklen_t, int),
+	[INCLUDES = sys/socket.h])
 
 dnl
 dnl Checks for symbol
@@ -415,25 +414,30 @@ dnl
 dnl Checks for library functions.
 dnl
 AC_PROG_GCC_TRADITIONAL
-AC_FUNC_MEMCMP
+
+dnl idea borrowed from EB Library http://www.sra.co.jp/people/m-kasahr/eb/
 AC_TYPE_SIGNAL
-AC_FUNC_WAIT3
-AC_CHECK_FUNCS(perror)
-AC_CHECK_FUNCS(drand48 strtol)
-AC_CHECK_FUNCS(fchmod)
-AC_CHECK_FUNC(setpgrp)
+if test "$ac_cv_type_signal" = void; then
+  AC_DEFINE(RETSIGTYPE_VOID, 1, [Define if the signal function returns void.])
+fi
+
+AC_FUNC_MEMCMP
+AC_CHECK_FUNCS(wait3 setpgrp)
 AC_FUNC_SETPGRP
-AC_CHECK_FUNCS(gethostname select)
-AC_CHECK_FUNCS(socket closesocket setsockopt send recv)
-AC_CHECK_FUNCS(syslog vsyslog setenv)
+dnl FreeWnn do not use the 3rd parameter of wait3().
+dnl AC_FUNC_WAIT3
+
+AC_CHECK_FUNCS(drand48 fchmod \
+	gethostname select socket closesocket setsockopt send recv \
+	getrlimit syslog vsyslog setenv snprintf)
 dnl for bcopy/index -> memcpy/strchr conversion (preparation):
-AC_CHECK_FUNCS(bcopy bzero bcmp)
-dnl AC_CHECK_FUNCS(strchr memcpy)
+AC_CHECK_FUNCS(bcopy bzero bcmp index rindex \
+	memcpy memmove memset strchr strrchr)
 
 dnl Check fallback functions for jserver (should use AC_REPLACE_FUNCS?)
 JS_SUPPORTOBJS=
 AC_CHECK_FUNCS(mkdir vasprintf, ,
-[JS_SUPPORTOBJS="$JS_SUPPORTOBJS ${ac_func}.o"])
+[JS_SUPPORTOBJS="${JS_SUPPORTOBJS} ${ac_func}.o"])
 AC_SUBST(JS_SUPPORTOBJS)
 
 
@@ -448,30 +452,58 @@ for dir in Contrib Contrib/dic Contrib/dic/gerodic; do
   fi
 done
 
-# Wnn / kWnn part is not available yet ...
-if test "x$cWnn" = "xcWnn"; then
-makefiles_cwnn="cWnn/Makefile cWnn/cdic/Makefile cWnn/conv/Makefile cWnn/etc/Makefile \
-cWnn/cd/Makefile cWnn/cd/rk/Makefile cWnn/cd/rk_p/Makefile cWnn/cd/rk_z/Makefile \
-cWnn/td/Makefile cWnn/td/rk/Makefile cWnn/td/rk_z/Makefile cWnn/td/rk_p/Makefile \
-cWnn/include/Makefile cWnn/jlib/Makefile cWnn/jserver/Makefile cWnn/jutil/Makefile \
-cWnn/man/Makefile cWnn/man/1.intro/Makefile cWnn/man/2.env/Makefile \
-cWnn/man/4.cmd/Makefile cWnn/man/6.jutil/Makefile \
-cWnn/tdic/Makefile cWnn/romkan/Makefile cWnn/uum/Makefile"
+dnl
+dnl Generate Makefiles
+dnl
+
+dnl Generic
+
+makefiles_generic="makerule.mk Makefile"
+
+dnl Japanese
+
+if test "x${Wnn}" = "xWnn"; then
+  makefiles_wnn="Wnn/Makefile Wnn/conv/Makefile Wnn/include/Makefile \
+	Wnn/jd/Makefile Wnn/jd/rk/Makefile Wnn/jd/rk.vi/Makefile \
+	Wnn/jlib/Makefile Wnn/jlib.V3/Makefile Wnn/jserver/Makefile \
+	Wnn/jutil/Makefile Wnn/ld/Makefile Wnn/ld/rk/Makefile \
+	Wnn/romkan/Makefile Wnn/uum/Makefile \
+	Wnn/man/Makefile Wnn/man/2.env/Makefile Wnn/man/3.libwnn/Makefile \
+	Wnn/man/4.cmd/Makefile Wnn/man/6.jutil/Makefile \
+	Wnn/man/2.env/dic/Makefile Wnn/man/2.env/wnn/Makefile \
+	Wnn/man/3.libwnn/jl_lib/Makefile Wnn/man/3.libwnn/js_lib/Makefile \
+	Wnn/man/3.libwnn/misc_lib/Makefile Wnn/man/3.libwnn/rk_lib/Makefile"
+  makefiles_wnn_dic="Contrib/dic/gerodic/Makefile Wnn/pubdicplus/Makefile \
+	Wnn/wnncons/Makefile Wnn/wnncons/dic/Makefile"
 fi
 
-AC_OUTPUT(makerule.mk Makefile Contrib/dic/gerodic/Makefile \
-Wnn/Makefile Wnn/conv/Makefile Wnn/include/Makefile Wnn/jutil/Makefile \
-Wnn/jd/Makefile Wnn/jd/rk/Makefile Wnn/jd/rk.vi/Makefile \
-Wnn/jlib/Makefile Wnn/jlib.V3/Makefile Wnn/jserver/Makefile \
-Wnn/ld/Makefile Wnn/ld/rk/Makefile Wnn/man/Makefile \
-Wnn/man/2.env/Makefile Wnn/man/3.libwnn/Makefile Wnn/man/4.cmd/Makefile Wnn/man/6.jutil/Makefile \
-Wnn/man/2.env/dic/Makefile Wnn/man/2.env/wnn/Makefile \
-Wnn/man/3.libwnn/jl_lib/Makefile Wnn/man/3.libwnn/js_lib/Makefile \
-Wnn/man/3.libwnn/misc_lib/Makefile Wnn/man/3.libwnn/rk_lib/Makefile \
-Wnn/pubdicplus/Makefile Wnn/romkan/Makefile Wnn/uum/Makefile \
-Wnn/wnncons/Makefile Wnn/wnncons/dic/Makefile \
-$makefiles_cwnn \
-kWnn/Makefile kWnn/conv/Makefile kWnn/etc/Makefile kWnn/include/Makefile \
-kWnn/jlib/Makefile kWnn/jutil/Makefile kWnn/jserver/Makefile \
-kWnn/kd/Makefile kWnn/kd/rk/Makefile kWnn/kdic/Makefile \
-kWnn/romkan/Makefile kWnn/uum/Makefile)
+dnl Chinese and Taiwanese
+
+if test "x$cWnn" = "xcWnn"; then
+  makefiles_cwnn="cWnn/Makefile cWnn/conv/Makefile cWnn/etc/Makefile \
+	cWnn/cd/Makefile cWnn/cd/rk/Makefile \
+	cWnn/cd/rk_p/Makefile cWnn/cd/rk_z/Makefile \
+	cWnn/td/Makefile cWnn/td/rk/Makefile \
+	cWnn/td/rk_z/Makefile cWnn/td/rk_p/Makefile \
+	cWnn/include/Makefile cWnn/jlib/Makefile \
+	cWnn/jserver/Makefile cWnn/jutil/Makefile \
+	cWnn/man/Makefile cWnn/man/1.intro/Makefile cWnn/man/2.env/Makefile \
+	cWnn/man/4.cmd/Makefile cWnn/man/6.jutil/Makefile \
+	cWnn/romkan/Makefile cWnn/uum/Makefile"
+  makefiles_cwnn_dic="cWnn/cdic/Makefile cWnn/tdic/Makefile"
+fi
+
+dnl Korean
+
+if test "x$kWnn" = "xkWnn"; then
+  makefiles_kwnn="kWnn/Makefile kWnn/conv/Makefile kWnn/etc/Makefile \
+	kWnn/include/Makefile kWnn/jlib/Makefile kWnn/jutil/Makefile \
+	kWnn/jserver/Makefile kWnn/kd/Makefile kWnn/kd/rk/Makefile \
+	kWnn/romkan/Makefile kWnn/uum/Makefile"
+  makefiles_kwnn_dic="kWnn/kdic/Makefile"
+fi
+
+AC_OUTPUT(${makefiles_generic} \
+	${makefiles_wnn} ${makefiles_wnn_dic} \
+	${makefiles_cwnn} ${makefiles_cwnn_dic} \
+	${makefiles_kwnn} ${makefiles_kwnn_dic})

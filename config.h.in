@@ -1,13 +1,13 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
-/* $Id: config.h.in,v 1.13 2002-05-12 01:01:46 hiroo Exp $ */
+/* $Id: config.h.in,v 1.14 2002-06-15 10:19:27 hiroo Exp $ */
+
+/* Define `socklen_t' to int if <sys/socket.h> does not define. */
+#undef socklen_t
 
 /* Define to `long' if <sys/types.h> does not define.  */
 #undef time_t
 
-/* Define to 'socklen_t' if <sys/socket.h> does not define. */
-#undef socklen_t
-
-/* Define to 'RAND_MAX' if <stdlib.h> does not define. */
+/* Define to `RAND_MAX' if <stdlib.h> does not define. */
 #undef HAVE_RAND_MAX
 
 /*
@@ -15,6 +15,9 @@
  * which is the traditional feature.
  */
 #undef WNN_ALLOW_UNSAFE_PATH
+
+/* Define if the signal function returns void. */
+#undef RETSIGTYPE_VOID
 
 /* Define to 1 if you have the `bcmp' function. */
 #undef HAVE_BCMP
@@ -27,6 +30,9 @@
 
 /* Define to 1 if you have the `closesocket' function. */
 #undef HAVE_CLOSESOCKET
+
+/* Define to 1 if you have the <curses.h> header file. */
+#undef HAVE_CURSES_H
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
@@ -43,8 +49,17 @@
 /* Define to 1 if you have the `gethostname' function. */
 #undef HAVE_GETHOSTNAME
 
+/* Define to 1 if you have the `getrlimit' function. */
+#undef HAVE_GETRLIMIT
+
+/* Define to 1 if you have the `index' function. */
+#undef HAVE_INDEX
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the `bind' library (-lbind). */
+#undef HAVE_LIBBIND
 
 /* Define to 1 if you have the `crypt' library (-lcrypt). */
 #undef HAVE_LIBCRYPT
@@ -58,17 +73,29 @@
 /* Define to 1 if you have the <malloc.h> header file. */
 #undef HAVE_MALLOC_H
 
+/* Define to 1 if you have the `memcpy' function. */
+#undef HAVE_MEMCPY
+
+/* Define to 1 if you have the `memmove' function. */
+#undef HAVE_MEMMOVE
+
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the `memset' function. */
+#undef HAVE_MEMSET
 
 /* Define to 1 if you have the `mkdir' function. */
 #undef HAVE_MKDIR
 
-/* Define to 1 if you have the `perror' function. */
-#undef HAVE_PERROR
+/* Define to 1 if you have the <ncurses.h> header file. */
+#undef HAVE_NCURSES_H
 
 /* Define to 1 if you have the `recv' function. */
 #undef HAVE_RECV
+
+/* Define to 1 if you have the `rindex' function. */
+#undef HAVE_RINDEX
 
 /* Define to 1 if you have the `select' function. */
 #undef HAVE_SELECT
@@ -79,14 +106,23 @@
 /* Define to 1 if you have the `setenv' function. */
 #undef HAVE_SETENV
 
+/* Define to 1 if you have the `setpgrp' function. */
+#undef HAVE_SETPGRP
+
 /* Define to 1 if you have the `setsockopt' function. */
 #undef HAVE_SETSOCKOPT
 
 /* Define to 1 if you have the <sgtty.h> header file. */
 #undef HAVE_SGTTY_H
 
+/* Define to 1 if you have the `snprintf' function. */
+#undef HAVE_SNPRINTF
+
 /* Define to 1 if you have the `socket' function. */
 #undef HAVE_SOCKET
+
+/* Define to 1 if the system has the type `socklen_t'. */
+#undef HAVE_SOCKLEN_T
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
@@ -94,14 +130,17 @@
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
 
+/* Define to 1 if you have the `strchr' function. */
+#undef HAVE_STRCHR
+
 /* Define to 1 if you have the <strings.h> header file. */
 #undef HAVE_STRINGS_H
 
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
 
-/* Define to 1 if you have the `strtol' function. */
-#undef HAVE_STRTOL
+/* Define to 1 if you have the `strrchr' function. */
+#undef HAVE_STRRCHR
 
 /* Define to 1 if you have the `syslog' function. */
 #undef HAVE_SYSLOG
@@ -133,6 +172,9 @@
 /* Define to 1 if you have the <termio.h> header file. */
 #undef HAVE_TERMIO_H
 
+/* Define to 1 if you have the <term.h> header file. */
+#undef HAVE_TERM_H
+
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
@@ -142,8 +184,7 @@
 /* Define to 1 if you have the `vsyslog' function. */
 #undef HAVE_VSYSLOG
 
-/* Define to 1 if you have the `wait3' system call. Deprecated, you should no
-   longer depend upon `wait3'. */
+/* Define to 1 if you have the `wait3' function. */
 #undef HAVE_WAIT3
 
 /* Define to the address where bug reports for this package should be sent. */
@@ -163,6 +204,9 @@
 
 /* Define as the return type of signal handlers (`int' or `void'). */
 #undef RETSIGTYPE
+
+/* Define if the signal function returns void. */
+#undef RETSIGTYPE_VOID
 
 /* Define to 1 if the `setpgrp' function takes no argument. */
 #undef SETPGRP_VOID
