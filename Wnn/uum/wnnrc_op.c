@@ -1,5 +1,5 @@
 /*
- *  $Id: wnnrc_op.c,v 1.8 2002-05-12 22:51:17 hiroo Exp $
+ *  $Id: wnnrc_op.c,v 1.9 2002-06-15 13:11:44 hiroo Exp $
  */
 
 /*
@@ -57,6 +57,7 @@
 #include "rk_spclval.h"
 #include "sdefine.h"
 #include "sheader.h"
+#include "wnn_os.h"
 
 extern int conv_keyin ();
 extern int keyin2 ();
@@ -155,13 +156,8 @@ expand_expr (s)
         return (-1);
 
       s1 = s;
-#ifdef BSD42
-      if (NULL != (p = index (++s1, '/')))
-        {
-#else
       if (NULL != (p = strchr (++s1, '/')))
         {
-#endif
           strcpy (tmp, p);
           *p = '\0';
         }
