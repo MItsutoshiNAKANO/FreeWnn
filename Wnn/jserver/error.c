@@ -1,5 +1,5 @@
 /*
- *  $Id: error.c,v 1.9 2002-03-09 16:50:31 aono Exp $
+ *  $Id: error.c,v 1.10 2002-05-01 20:40:31 hiroo Exp $
  */
 
 /*
@@ -37,16 +37,15 @@
 #include <time.h>
 #include <errno.h>
 #include <signal.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#  include <stdarg.h>
+#endif
+#if HAVE_SYSLOG_H
+#  include <syslog.h>
+#endif
 #include "commonhd.h"
 #include "de_header.h"
-/* #include <pwd.h> */	/* Not used for now */
-#include <syslog.h>
-#ifdef STDC_HEADERS
-#include <stdlib.h>
-#include <stdarg.h>
-#endif
-
-extern int errno;
 
 /* static void exit_hand (); */		/* Not used for now */
 static void vwrite_log (const char *, va_list);
@@ -190,7 +189,7 @@ log_err(const char *fmt, ...)
   } else {
 #ifdef HAVE_VSYSLOG
     vsyslog(LOG_ERR, fmt, ap);
-#else
+#elif HAVE_SYSLOG
     char *tmpstr = NULL;
 
     vasprintf(&tmpstr, fmt, ap);
@@ -200,7 +199,7 @@ log_err(const char *fmt, ...)
     } else {
       syslog(LOG_ERR, "(Memory allocation failed. Cannot log messages.)");
     }
-#endif
+#endif /* HAVE_VSYSLOG */
   }
   va_end(ap);
 }

@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.13 2002-03-31 11:30:21 h-abe Exp $
+#   $Id: Makefile.in,v 1.14 2002-05-01 20:40:33 hiroo Exp $
 #
 
 #
@@ -86,7 +86,7 @@ all:: $(HDRS) $(SRC0) $(SRC1) kserver
 
 kserver: $(OBJS)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) @LIBS@ @JS_SUPPORTLIBS@
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) @LIBS@
 
 clean::
 	$(RM) kserver

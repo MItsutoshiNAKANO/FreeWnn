@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.13 2002-03-31 11:30:21 h-abe Exp $
+#   $Id: Makefile.in,v 1.14 2002-05-01 20:40:31 hiroo Exp $
 #
 
 #
@@ -83,7 +83,7 @@ all:: jserver
 
 jserver: $(OBJS)
 	$(RM) $@
-	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) @LIBS@ @JS_SUPPORTLIBS@
+	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) @LIBS@
 
 clean::
 	$(RM) jserver
