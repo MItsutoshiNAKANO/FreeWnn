@@ -1,5 +1,5 @@
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.1.1.2 2000-01-16 05:11:04 ura Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.2 2000-01-16 06:37:19 ura Exp $";
 #endif /* lint */
 
 /*
@@ -52,7 +52,7 @@ static char *rcs_id = "$Id: jhlp.c,v 1.1.1.2 2000-01-16 05:11:04 ura Exp $";
 #include "commonhd.h"
 #include "sdefine.h"
 #include "sheader.h"
-#include "config.h"
+#include "wnn_config.h"
 
 #include <sys/types.h>
 #include <sys/ioctl.h>

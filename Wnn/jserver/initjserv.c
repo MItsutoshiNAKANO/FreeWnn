@@ -1,5 +1,5 @@
 /*
- * $Id: initjserv.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: initjserv.c,v 1.3 2000-01-16 06:37:15 ura Exp $
  */
 
 /*
@@ -43,7 +43,7 @@
 #include "commonhd.h"
 #include "de_header.h"
 #include "wnn_malloc.h"
-#include "config.h"
+#include "wnn_config.h"
 #include "kaiseki.h"
 
 struct wnn_param default_para = {
@@ -70,9 +70,6 @@ char	*s;
 	char	tmp[EXPAND_PATH_LENGTH];
 	register char	*p, *s1;
 	int	noerr, expandsuc;
-#if defined(SYSVR2) && !defined(AIXV3)
-        extern  char    *strchr();
-#endif /* defined(SYSVR2) && !defined(AIXV3) */
 
     if(*s != '@') {
 	strcpy(tmp, s);

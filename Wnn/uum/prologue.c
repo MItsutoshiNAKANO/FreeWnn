@@ -1,5 +1,5 @@
 /*
- * $Id: prologue.c,v 1.1.1.1 2000-01-16 05:07:51 ura Exp $
+ * $Id: prologue.c,v 1.2 2000-01-16 06:37:19 ura Exp $
  */
 
 /*
@@ -48,7 +48,7 @@
 #include <pwd.h>
 #include "jllib.h"
 #include "commonhd.h"
-#include "config.h"
+#include "wnn_config.h"
 #include "buffer.h"
 #include "rk_spclval.h"
 #include "sdefine.h"
