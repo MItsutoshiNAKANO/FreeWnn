@@ -1,5 +1,5 @@
 /*
- *  $Id: jl.c,v 1.8 2002-03-07 17:35:25 hiroo Exp $
+ *  $Id: jl.c,v 1.9 2002-03-23 21:13:59 hiroo Exp $
  */
 
 /*
@@ -37,31 +37,32 @@
 #include <config.h>
 #endif
 
-#include "commonhd.h"
-#include "wnn_config.h"
 #include <stdio.h>
-#include <stdlib.h>
+#include <ctype.h>
+#include <time.h>
+#if STDC_HEADERS
+# include <stdlib.h>
+# include <string.h>
+#elif HAVE_STRINGS_H
+# include <strings.h>
+#endif /* STDC_HEADERS */
 #include <sys/types.h>
-#include <unistd.h>
-#ifdef SYSVR2
-#   include <string.h>
-#endif
-#ifdef BSD42
-#   include <strings.h>
-#endif
 #include <sys/file.h>
 #include <sys/stat.h>
-#include <ctype.h>
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif
 #include <pwd.h>
-#include <time.h>
 
+#include "commonhd.h"
+#include "wnn_config.h"
 #include "wnnerror.h"
 #include "jd_sock.h"
 #include "jslib.h"
 #include "jllib.h"
-
 #include "msg.h"
 #include "wnn_string.h"
+
 extern struct msg_cat *wnn_msg_cat;
 
 

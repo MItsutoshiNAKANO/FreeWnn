@@ -1,5 +1,5 @@
 /*
- *  $Id: b_index.c,v 1.4 2002-03-08 18:07:35 hiroo Exp $
+ *  $Id: b_index.c,v 1.5 2002-03-23 21:13:59 hiroo Exp $
  */
 
 /*
@@ -31,8 +31,15 @@
 
 /**  cWnn  Version 1.1   **/
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #include <stdio.h>
-#include <stdlib.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#endif
+
 #include "commonhd.h"
 #include "de_header.h"
 #include "jdata.h"

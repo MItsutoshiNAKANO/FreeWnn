@@ -1,5 +1,5 @@
 /*
- *  $Id: jikouho_d.c,v 1.4 2002-03-08 17:58:01 hiroo Exp $
+ *  $Id: jikouho_d.c,v 1.5 2002-03-23 21:13:59 hiroo Exp $
  */
 
 /*
@@ -32,13 +32,19 @@
 /************************************************
  *      大文節次候補取りだし                    *
  ************************************************/
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #include        <stdio.h>
-#include	<stdlib.h>
 #include        <ctype.h>
+#if STDC_HEADERS
+#  include	<stdlib.h>
+#endif
+
 #include        "commonhd.h"
 #include        "de_header.h"
 #include        "jdata.h"
-
 #include        "fzk.h"
 #include        "kaiseki.h"
 #include "wnn_malloc.h"

@@ -1,5 +1,5 @@
 /*
- *  $Id: dispatch.c,v 1.8 2002-03-09 16:50:31 aono Exp $
+ *  $Id: dispatch.c,v 1.9 2002-03-23 21:13:59 hiroo Exp $
  */
 
 /*
@@ -38,7 +38,9 @@
 #endif
 
 #include <stdio.h>
-#include <stdlib.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#endif
 #include <sys/types.h>
 
 #include "commonhd.h"

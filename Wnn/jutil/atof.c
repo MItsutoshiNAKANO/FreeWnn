@@ -1,5 +1,5 @@
 /*
- *  $Id: atof.c,v 1.5 2002-03-07 17:11:45 hiroo Exp $
+ *  $Id: atof.c,v 1.6 2002-03-23 21:13:59 hiroo Exp $
  */
 
 /*
@@ -36,7 +36,7 @@
   */
 
 #ifndef lint
-static char *rcs_id = "$Id: atof.c,v 1.5 2002-03-07 17:11:45 hiroo Exp $";
+static char *rcs_id = "$Id: atof.c,v 1.6 2002-03-23 21:13:59 hiroo Exp $";
 #endif /* lint */
 
 /*
@@ -108,11 +108,18 @@ static char *rcs_id = "$Id: atof.c,v 1.5 2002-03-07 17:11:45 hiroo Exp $";
 
 */
 
-
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#endif
+#if HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
+
 #include "commonhd.h"
 #include "hinsi.h"
 #include "jslib.h"

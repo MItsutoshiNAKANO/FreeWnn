@@ -1,5 +1,5 @@
 /*
- *  $Id: ujisf.c,v 1.4 2002-03-07 17:11:45 hiroo Exp $
+ *  $Id: ujisf.c,v 1.5 2002-03-23 21:13:59 hiroo Exp $
  */
 
 /*
@@ -33,10 +33,17 @@
  * Ujis format <--> internal data.
  */
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 int wnnerror;
 
 #include <stdio.h>
-#include <stdlib.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#endif
+
 #include "commonhd.h"
 #include "jslib.h"
 #include "jh.h"

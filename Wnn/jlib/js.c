@@ -1,5 +1,5 @@
 /*
- *  $Id: js.c,v 1.9 2002-03-07 17:35:25 hiroo Exp $
+ *  $Id: js.c,v 1.10 2002-03-23 21:13:59 hiroo Exp $
  */
 
 /*
@@ -56,29 +56,30 @@ extern  Variables
 #endif
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <ctype.h>
+#include <errno.h>
+#include <signal.h>
+#if STDC_HEADERS
+# include <stdlib.h>
+#endif
 #ifdef UX386
 #include <X11/Xos.h>
 #else
 #include <fcntl.h>
-#endif
-#include <pwd.h>
-#ifndef UX386
 #include <sys/types.h>
 #endif
+#include <pwd.h>
 #include <sys/stat.h>
-#include <errno.h>
-extern int errno;
-#include <signal.h>
-#include <unistd.h>
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif
+
 #include "jd_sock.h"
 #include "commonhd.h"
 #include "demcom.h"
 #include "wnn_config.h"
 
 #include "wnnerror.h"
-/*#include "commonhd.h"*/
 #include "jslib.h"
 #include "jh.h"
 

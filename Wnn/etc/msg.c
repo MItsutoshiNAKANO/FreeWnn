@@ -1,5 +1,5 @@
 /*
- *  $Id: msg.c,v 1.8 2002-03-08 19:57:40 hiroo Exp $
+ *  $Id: msg.c,v 1.9 2002-03-23 21:13:58 hiroo Exp $
  */
 
 /*
@@ -46,9 +46,15 @@
         format of message file
             <message id>\t<message>
 */
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
 #include <stdio.h>
-#include <stdlib.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#endif
+
 #include "commonhd.h"
 #include "wnn_os.h"
 #include "msg.h"

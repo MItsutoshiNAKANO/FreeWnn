@@ -1,5 +1,5 @@
 /*
- *  $Id: dtoa.c,v 1.6 2002-03-07 17:11:45 hiroo Exp $
+ *  $Id: dtoa.c,v 1.7 2002-03-23 21:13:59 hiroo Exp $
  */
 
 /*
@@ -34,13 +34,24 @@
   */
 
 #ifndef lint
-static char *rcs_id = "$Id: dtoa.c,v 1.6 2002-03-07 17:11:45 hiroo Exp $";
+static char *rcs_id = "$Id: dtoa.c,v 1.7 2002-03-23 21:13:59 hiroo Exp $";
 #endif /* lint */
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#  include <string.h>
+#elif HAVE_STRINGS_H
+#  include <strings.h>
+#endif /* STDC_HEADERS */
+#if HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
+
 #include "commonhd.h"
 #include "wnn_config.h"
 #include "jslib.h"

@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_os.h,v 1.7 2002-03-08 20:07:11 hiroo Exp $
+ *  $Id: wnn_os.h,v 1.8 2002-03-23 21:13:58 hiroo Exp $
  */
 
 /*
@@ -61,10 +61,6 @@
 
 #include <sys/types.h>
 #include <sys/file.h>
-
-#ifdef BSD42
-#include <strings.h>
-#endif
 
 #ifdef TERMINFO
 #include <curses.h>

@@ -1,5 +1,5 @@
 /*
- *  $Id: xutoj.c,v 1.5 2002-03-08 19:50:17 hiroo Exp $
+ *  $Id: xutoj.c,v 1.6 2002-03-23 21:13:58 hiroo Exp $
  */
 
 /*
@@ -29,9 +29,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #define NEED_CR
 
-#include <stdlib.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#endif
+
 #include "commonhd.h"
 #include "wnn_config.h"
 #include "wnn_os.h"

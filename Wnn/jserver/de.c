@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.17 2002-03-08 17:57:58 hiroo Exp $
+ *  $Id: de.c,v 1.18 2002-03-23 21:13:59 hiroo Exp $
  */
 
 /*
@@ -33,27 +33,29 @@
         Jserver         (Nihongo Daemon)
 */
 #if defined(HAVE_CONFIG_H)
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include <stdio.h>
-#include <stdlib.h>
+#include <ctype.h>
+#include <errno.h>
 #include <signal.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#endif
+#include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <unistd.h>
+#if HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
+
 #include "commonhd.h"
 #include "wnn_config.h"
 #include "jd_sock.h"
 #include "demcom.h"
 #include "wnn_malloc.h"
 #include "wnn_os.h"
-
-#include <ctype.h>
-#include <errno.h>
-extern int errno;               /* Pure BSD */
-
-#include <sys/ioctl.h>
 
 #if defined(HAVE_SYS_PARAM_H)
 #include <sys/param.h>

@@ -1,5 +1,5 @@
 /*
- *  $Id: atorev.c,v 1.4 2002-03-07 17:11:45 hiroo Exp $
+ *  $Id: atorev.c,v 1.5 2002-03-23 21:13:59 hiroo Exp $
  */
 
 /*
@@ -30,12 +30,19 @@
  */
 
 /*
-UJIS 形式を、逆変換可能形式に変換するプログラム。
-*/
+ * UJIS 形式を、逆変換可能形式に変換するプログラム。
+ */
+
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <ctype.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#endif
+
 #include "commonhd.h"
 #include "jslib.h"
 #include "jh.h"
