@@ -1,5 +1,5 @@
 /*
- *  $Id: get_kaiarea.c,v 1.5 2003-05-11 18:41:49 hiroo Exp $
+ *  $Id: get_kaiarea.c,v 1.6 2003-06-04 14:12:12 hiroo Exp $
  */
 
 /*
@@ -45,7 +45,9 @@
 #include "commonhd.h"
 #include "de_header.h"
 #include "jdata.h"
+#define GLOBAL_VALUE_DEFINE
 #include "kaiseki.h"
+#undef  GLOBAL_VALUE_DEFINE
 
 /*
  * get_kaiseki_area: take memory areas for analysing.
