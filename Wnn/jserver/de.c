@@ -1,5 +1,5 @@
 /*
- * "$Id: de.c,v 1.3 2000-01-16 06:37:15 ura Exp $"
+ * "$Id: de.c,v 1.4 2000-01-16 07:27:11 ura Exp $"
  */
 
 /*
@@ -80,6 +80,7 @@ extern int errno;		/* Pure BSD */
 #include "msg.h"
 
 #ifdef BSD42
+#undef NOFILE
 #define NOFILE getdtablesize() 
 #endif
 
@@ -482,9 +483,9 @@ demon_init()	/* initialize Demon */
 	    exit(1);
 	}
 #ifdef SRAND48
-	srand48(time((long *)0));
+	srand48(time(NULL));
 #else
-	srand((int)time((long *)0));
+	srand((int)time(NULL);
 #endif
 	clientp = 0;	/* V3.0 */
 	cur_clp = 0;	/* V3.0 */

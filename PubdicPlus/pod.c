@@ -21,7 +21,7 @@
  */
 
 #ifndef lint
-static char rcsid[] = "$Id: pod.c,v 1.1 2000-01-16 07:06:08 ura Exp $";
+static char rcsid[] = "$Id: pod.c,v 1.2 2000-01-16 07:27:11 ura Exp $";
 #endif
 
 #include <stdio.h>
@@ -51,7 +51,7 @@ static int merge_kind, wnn_type_output, canna_type_output, sj3_type_output;
 static int list_kinds;
 static int copy_frequency, extract_kana = 0;
 static long specific_kind;
-static FILE *in1 = stdin, *in2 = stdin;
+static FILE *in1, *in2;
 static char *common_out, *old_out, *new_out, *hinshi_table, *bunrui;
 static char *description_table;
 static int selhinshi = 0;
@@ -1377,6 +1377,7 @@ char *argv[];
   setlocale(LC_ALL, "");
 #endif
 
+  in1 = in2 = stdin;
   (void)internkind(kihonh); /* 基本辞書用。1L として登録 */
   parseargs(argc, argv);
   storepd(in1);
