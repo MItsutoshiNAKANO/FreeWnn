@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.20 2002-03-31 06:26:52 hiroo Exp $
+ *  $Id: de.c,v 1.21 2002-04-02 09:09:55 aono Exp $
  */
 
 /*
@@ -53,6 +53,9 @@
 #include <sys/stat.h>
 #if HAVE_UNISTD_H
 #  include <unistd.h>
+#endif
+#ifdef HAVE_FCNTL_H
+#  include <fcntl.h>
 #endif
 
 #include "commonhd.h"
