@@ -1,5 +1,5 @@
 /*
- *  $Id: de_header.h,v 1.19 2003-06-07 02:22:23 hiroo Exp $
+ *  $Id: de_header.h,v 1.20 2004-12-29 17:45:32 aonoto Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2003
+ * Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2003, 2004
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -541,11 +541,7 @@ extern char *make_tmp_file ();
 extern void move_tmp_to_org ();
 extern int output_file_header ();
 extern int input_file_header ();
-#ifdef BDIC_WRITE_CHECK
-extern int output_file_uniq ();
-#else
-extern void output_file_uniq ();
-#endif
+extern int output_file_uniq (struct wnn_file_uniq* funiq, FILE* ofpter);
 extern int check_inode ();
 extern int change_file_uniq ();
 extern int f_uniq_cmp ();
