@@ -1,8 +1,4 @@
 /*
- *  $Id: initjserv.c,v 1.14 2002-08-12 16:25:46 hiroo Exp $
- */
-
-/*
  * FreeWnn is a network-extensible Kana-to-Kanji conversion system.
  * This file is part of FreeWnn.
  * 
@@ -28,6 +24,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
+static char rcs_id[] = "$Id: initjserv.c,v 1.15 2002-09-01 16:16:49 hiroo Exp $";
 
 #if defined(HAVE_CONFIG_H)
 #include <config.h>
@@ -157,7 +155,6 @@ read_default (void)
   char *word;
   int i, num, *v[17];
 
-  log_debug ("sep: \"%s\"", sep);
   strcpy (jserver_dir, JSERVER_DIR);
 
   if ((fp = fopen (jserverrcfile, "r")) == NULL)
@@ -245,17 +242,17 @@ read_default (void)
         }
       else if (strcmp (code, "def_param") == 0)
         {
-	  word = strtok (data, " \t"); /* discard first word "def_param" */
+	  word = strtok (data, sep); /* discard first word "def_param" */
 	  for (i = 0; (i <= 16); i++) {
-	    word = strtok (NULL, " \t");
+	    word = strtok (NULL, sep);
 	    if (word == NULL)
 	      {
-		log_err ("%s has only %d parameters.", code, i);
+		log_err ("command %s has only %d parameters.", code, i);
 	        return (-1);
 	      }
 	    *v[i] = atoi (word); /* XXX: default to 0 if error */
 	  }
-	  log_debug ("command %s had %d parameters", code, i);
+	  log_debug ("command %s has %d parameters", code, i);
         }
 #ifndef CHINESE
       /* else if (strcmp (code, "set_giji_eisuu") == 0 && num >= 2) */
@@ -271,7 +268,7 @@ read_default (void)
 		}
               giji_eisuu[i] = expand_argument (word);
 	    }
-	  log_debug ("%s has %d parameters.", code, i);
+	  log_debug ("command %s has %d parameters.", code, i);
           for (; i < 20; i++)
             {
               giji_eisuu[i] = 0xffff;
