@@ -27,10 +27,12 @@ LOCAL_INSTFLAGS = $(INSTBINFLAGS) -o $(WNNOWNER)
 
         DEPLIBS = $(XWNMOJLIB)
 
+XAPPLOADDIR = $(LIBDIR)/app-defaults
+
 LOCAL_DEFINES = -DUSING_XJUTIL -DXML -DCALLBACKS -DSPOT 		 -DXJPLIB -DXJPLIB_DIRECT $(XWNMODEF)
 
         DEFINES = $(WNNDEFINES) $(ALLLANGDEF) -DTCPCONN -DUNIXCONN $(LOCAL_DEFINES)
-LOCAL_LIBRARIES = $(XWNMOJLIB) $(XMULIB) $(XTOOLLIB) $(XLIB)
+LOCAL_LIBRARIES = $(XWNMOJLIB) -lXmu -L/usr/X11R6/lib -lXt -lX11 -lXt -lSM -lICE
    XJUTILBINDIR = -DXJUTILBINDIR=\"$(BINDIR)\"
 #   NOTFORKFLAGS = -DNOTFORK
 # XJUTILNOTFORKFLAGS = -DNOTFORK_XJUTIL
@@ -80,14 +82,14 @@ all:: $(PROGRAMS)
 
 xwnmo: $(OBJS) $(DEPLIBS)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) $(LDLIBS) $(SYSLIBS) $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) @LIBS@ $(SYSLIBS)
 
 clean::
 	$(RM) xwnmo
 
 killxwnmo: $(KILLXWNMOOBJ)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(KILLXWNMOOBJ)  $(LDLIBS) $(XLIB) $(SYSLIBS) $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(KILLXWNMOOBJ) @LIBS@ $(XLIB) $(SYSLIBS)
 
 clean::
 	$(RM) killxwnmo
@@ -184,7 +186,7 @@ install:: killxwnmo
 install:: Xwnmo.ad
 	@if [ -d $(DESTDIR)$(XAPPLOADDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(XAPPLOADDIR)); fi
-	$(INSTALL) $(INSTALLFLAGS) $(INSTAPPFLAGS) Xwnmo.ad $(DESTDIR)$(XAPPLOADDIR)/Xwnmo
+	$(INSTALL) $(INSTALLFLAGS) $(INSTDATFLAGS) Xwnmo.ad $(DESTDIR)$(XAPPLOADDIR)/Xwnmo
 
 install.man:: xwnmo.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
@@ -248,10 +250,6 @@ lint1:
 	$(LINT) $(LINTFLAGS) $(FILE) $(LINTLIBS)
 
 depend:: .depend
-
-.depend::
-	$(RM) $@
-	$(DEPEND) -f- $(DEPENDFLAGS) -- $(ALLDEFINES) $(DEPEND_DEFINES) -- $(SRCS) > $@
 
 clean::
 	$(RM) $(LINKS)

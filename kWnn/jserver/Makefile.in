@@ -77,7 +77,7 @@ all:: $(HDRS) $(SRC0) $(SRC1) kserver
 
 kserver: $(OBJS)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS)  $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS)
 
 clean::
 	$(RM) kserver
@@ -586,9 +586,6 @@ $(OBJ14) : $(SRC14)
 
 depend:: .depend
 
-.depend::
-	$(RM) $@
-	$(DEPEND) -f- $(DEPENDFLAGS) -- $(ALLDEFINES) $(DEPEND_DEFINES) -- $(SRCS) > $@
 
 clean::
 	$(RM) $(HDRS) $(SRC0) $(SRC1)

@@ -89,7 +89,7 @@ all:: xjutil
 
 xjutil: $(OBJS) $(DEPLIBS)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) $(LDLIBS) $(SYSLIBS) $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) @LIBS@ $(SYSLIBS)
 
 clean::
 	$(RM) xjutil
@@ -175,10 +175,6 @@ $(ETC_OBJ2) : $(ETC_SRC2)
 	$(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
 
 depend:: .depend
-
-.depend::
-	$(RM) $@
-	$(DEPEND) -f- $(DEPENDFLAGS) -- $(ALLDEFINES) $(DEPEND_DEFINES) -- $(SRCS) > $@
 
 clean::
 	$(RM) $(LINKS)

@@ -100,63 +100,63 @@ all:: $(PROGRAMS)
 
 katod: $(OBJATOD)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOD)  $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOD)
 
 clean::
 	$(RM) katod
 
 katof: $(OBJATOF)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOF)  $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOF)
 
 clean::
 	$(RM) katof
 
 kwnntouch: $(OBJTOUCH)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJTOUCH)  $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJTOUCH)
 
 clean::
 	$(RM) kwnntouch
 
 kdicsort: $(OBJSORT)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJSORT)  $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJSORT)
 
 clean::
 	$(RM) kdicsort
 
 kdtoa: $(OBJDTOA)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJDTOA)  $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJDTOA)
 
 clean::
 	$(RM) kdtoa
 
 kwnnstat: $(OBJSTAT) $(KWNNJLIB)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJSTAT) $(KWNNJLIB) $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJSTAT) $(KWNNJLIB)
 
 clean::
 	$(RM) kwnnstat
 
 kwnnkill: $(OBJKILL) $(KWNNJLIB)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJKILL) $(KWNNJLIB) $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJKILL) $(KWNNJLIB)
 
 clean::
 	$(RM) kwnnkill
 
 kwddel: $(OBJWDDEL) $(KWNNJLIB)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDDEL) $(KWNNJLIB) $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDDEL) $(KWNNJLIB)
 
 clean::
 	$(RM) kwddel
 
 kwdreg: $(OBJWDREG) $(KWNNJLIB)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDREG) $(KWNNJLIB) $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDREG) $(KWNNJLIB)
 
 clean::
 	$(RM) kwdreg
@@ -351,10 +351,6 @@ $(OBJ11) : $(SRC11)
 	$(CC) -c $(CFLAGS)  $(KWNNETCSRC)/`basename $@ .o`.c
 
 depend:: .depend
-
-.depend::
-	$(RM) $@
-	$(DEPEND) -f- $(DEPENDFLAGS) -- $(ALLDEFINES) $(DEPEND_DEFINES) -- $(SRCS) > $@
 
 clean::
 	$(RM) $(LINKS)

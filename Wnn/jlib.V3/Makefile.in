@@ -26,7 +26,6 @@ include @top_srcdir@/makerule.mk
 
          CC = @CC@
   CCOPTIONS = @CCOPTIONS@
-STD_DEFINES = $(PROJECT_DEFINES)
 CDEBUGFLAGS = @CDEBUGFLAGS@
 
 INSTALL      = @INSTALL@
@@ -108,6 +107,3 @@ $(OBJ4) : $(SRC4)
 
 depend:: .depend
 
-.depend::
-	$(RM) $@
-	$(DEPEND) -f- $(DEPENDFLAGS) -- $(ALLDEFINES) $(DEPEND_DEFINES) -- $(SRCS) > $@

@@ -249,11 +249,14 @@ instlib:: install
 install::  $(HEADERS)
 	@if [ -d $(DESTDIR)$(KWNNINCDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(KWNNINCDIR)); fi
-	@for flag in ${MAKEFLAGS} ''; do \
-	case "$$flag" in *=*) ;; *[i]*) set +e;; esac; done; \
-	for i in  $(HEADERS); do \
-	(set -x; $(INSTALL) $(INSTALLFLAGS) $(INSTDATFLAGS) $$i $(DESTDIR)$(KWNNINCDIR)); \
+	@cont=0; \
+	for flag in ${MAKEFLAGS} ''; do \
+	case "$$flag" in *=*) ;; *[ik]*) cont=1;; esac; done; \
+	for i in  $(HEADERS) ; do \
+	(set -x; $(INSTALL) $(INSTALLFLAGS) $(INSTDATFLAGS) $$i $(DESTDIR)$(KWNNINCDIR)) \
+	|| if [ $$cont -eq 0 ]; then exit 1; fi; \
 	done
+
 
 depend::
 

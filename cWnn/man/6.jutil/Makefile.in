@@ -75,3 +75,11 @@ install.man:: cwdreg.man
 	$(INSTALL) -c $(INSTMANFLAGS) cwdreg.man \
  $(DESTDIR)$(MANDIR)/cwdreg.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/cwdreg.$(MANSUFFIX)
+
+install.man:: cwnntouch.man
+	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
+	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
+	$(RM) $(DESTDIR)$(MANDIR)/cwnntouch.$(MANSUFFIX)*
+	$(INSTALL) -c $(INSTMANFLAGS) cwnntouch.man \
+ $(DESTDIR)$(MANDIR)/cwnntouch.$(MANSUFFIX)
+	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/cwnntouch.$(MANSUFFIX)

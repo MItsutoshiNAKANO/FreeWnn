@@ -1,3 +1,40 @@
+Thu Sep 16 03:40:33 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* 開発版 1.1.1-a006 として内部リリース
+
+Thu Sep 16 02:05:58 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* makerule.mk.in: いらない変数を削った。
+
+        * 〜/Makefile.in: 不要なライブラリを多数リンクしていたので、そ
+	れを止めさせた。
+
+Thu Sep 16 01:56:04 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/include/Makefile.in: config.h -> wnn_config.h のシンボリック
+	リンクで $DESTDIR を考慮するように修正([freewnn:00121] 前原さ
+	んのパッチ)。上書きインストールする際にあらかじめシンボリック
+	リンクを rm する必要があったので修正。
+
+	* cWnn/man/6.jutil/Makefile.in: wnntouch.man のターゲットがなかっ
+	たので追加。([freewnn:00121] 前原さんのパッチ)
+
+	* make install.man でマニュアルがインストールされるようにした。
+	([freewnn:00121] 前原さんのパッチ)
+
+	* makerule.mk.in: MANPATH が /usr/X11R6/man に決めうちになっている
+	のを修正(→ @mandir@ にした)。([freewnn:00121] 前原さんのパッチ)
+
+	* makerule.mk.in: 定数 COMPRESSMANCMD が未定義のためマニュアルの
+	インストールの際にエラーが出る。とりあえず ':' に定義しておいた。
+	
+
+Thu Sep 16 01:48:36 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* 時々付属語ファイル関連でエラーが出ることがある([freewnn:00077] 
+	元木さんからの報告)のを修正。
+	[freewnn:00100] 片山さんのパッチ
+
 Mon Sep 13 03:37:15 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
 
 	* パッチ patch-1.1.1-a005 として内部リリース

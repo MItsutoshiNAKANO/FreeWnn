@@ -41,9 +41,9 @@ install::  $(HEADERS)
 	@for flag in ${MAKEFLAGS} ''; do \
 	case "$$flag" in *=*) ;; *[i]*) set +e;; esac; done; \
 	for i in  $(HEADERS); do \
-	(set -x; $(INSTALL) $(INSTALLFLAGS) $(INSTDATFLAGS) $$i $(DESTDIR)$(JWNNINCDIR)); \
+	(set -x; $(INSTALL) $(INSTALLFLAGS) $$i $(DESTDIR)$(JWNNINCDIR)); \
 	done
-	(cd $(JWNNINCDIR); @LN_S@ wnn_config.h $(JWNNINCDIR)/config.h)
+	(cd $(DESTDIR)$(JWNNINCDIR); $(RM) config.h; @LN_S@ wnn_config.h config.h)
 
 depend::
 

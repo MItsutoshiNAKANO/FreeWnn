@@ -26,7 +26,6 @@ include @top_srcdir@/makerule.mk
 
          CC = @CC@
   CCOPTIONS = @CCOPTIONS@
-STD_DEFINES = $(PROJECT_DEFINES)
 CDEBUGFLAGS = @CDEBUGFLAGS@
 
 LIB_MT_DEFINES = LibraryMTDefines
@@ -148,10 +147,6 @@ $(LOCAL_RKOBJS) : $(LOCAL_RKSRCS)
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; 	cd $(XWNMOROMKANMSRC); echo "making all in $(XWNMOROMKANMSRC)"; 	$(MAKE) 'CDEBUGFLAGS=$(CDEBUGFLAGS)' $(MFLAGS)
 
 depend:: .depend
-
-.depend::
-	$(RM) $@
-	$(DEPEND) -f- $(DEPENDFLAGS) -- $(ALLDEFINES) $(DEPEND_DEFINES) -- $(SRCS) > $@
 
 clean::
 	$(RM) $(SRC1)

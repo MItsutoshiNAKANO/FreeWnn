@@ -26,7 +26,6 @@ include @top_srcdir@/makerule.mk
 
          CC = @CC@
   CCOPTIONS = @CCOPTIONS@
-STD_DEFINES = $(PROJECT_DEFINES)
 CDEBUGFLAGS = @CDEBUGFLAGS@
 
 LIB_MT_DEFINES = LibraryMTDefines
@@ -167,9 +166,6 @@ clean::
 
 depend:: .depend
 
-.depend::
-	$(RM) $@
-	$(DEPEND) -f- $(DEPENDFLAGS) -- $(ALLDEFINES) $(DEPEND_DEFINES) -- $(SRCS) > $@
 
 clean::
 	$(RM) $(HDRS) $(SRCS)

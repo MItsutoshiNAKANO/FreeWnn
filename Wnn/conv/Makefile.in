@@ -24,15 +24,14 @@
 
 include @top_srcdir@/makerule.mk
 
-         CC = @CC@
-  CCOPTIONS = @CCOPTIONS@
-STD_DEFINES = $(PROJECT_DEFINES)
+CC = @CC@
+CCOPTIONS = @CCOPTIONS@
 CDEBUGFLAGS = @CDEBUGFLAGS@
 
 LIB_MT_DEFINES = LibraryMTDefines
 
-       INCLUDES = -I$(WNNINCLUDESRC) -I$(TOP)
-        DEFINES = $(WNNDEFINES) -DWNNDEFAULT $(WNNLANGDEF) 		  -DSUPPORT_TWODIGIT_FUNCTIONS
+INCLUDES = -I$(WNNINCLUDESRC) -I$(TOP)
+DEFINES = $(WNNDEFINES) -DWNNDEFAULT $(WNNLANGDEF) -DSUPPORT_TWODIGIT_FUNCTIONS
 
 SRCS= cvt_key.c 	cvt_read.c
 
@@ -68,10 +67,6 @@ lint1:
 
 depend:: .depend
 
-.depend::
-	$(RM) $@
-	$(DEPEND) -f- $(DEPENDFLAGS) -- $(ALLDEFINES) $(DEPEND_DEFINES) -- $(SRCS) > $@
-
 # ----------------------------------------------------------------------
 # common rules for all Makefiles - do not edit
 
@@ -83,12 +78,6 @@ emptyrule::
 
 clean::
 	$(RM) *.CKP *.ln *.BAK *.bak *.o core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut *.core "#"*
-
-Makefile::
-	-@if [ -f Makefile ]; then set -x; \
-	$(RM) Makefile.bak; $(MV) Makefile Makefile.bak; \
-	else exit 0; fi
-	$(IMAKE_CMD) -DTOPDIR=$(TOP) -DCURDIR=$(CURRENT_DIR)
 
 tags::
 	$(TAGS) -w *.[ch]

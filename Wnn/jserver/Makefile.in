@@ -74,7 +74,7 @@ all:: jserver
 
 jserver: $(OBJS)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS)  $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS)
 
 clean::
 	$(RM) jserver

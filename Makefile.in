@@ -81,11 +81,6 @@ emptyrule::
 clean::
 	$(RM) *.CKP *.ln *.BAK *.bak *.o core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut *.core "#"*
 
-Makefile::
-	-@if [ -f Makefile ]; then set -x; \
-	$(RM) Makefile.bak; $(MV) Makefile Makefile.bak; \
-	else exit 0; fi
-	$(IMAKE_CMD) -DTOPDIR=$(TOP) -DCURDIR=$(CURRENT_DIR)
 
 tags::
 	$(TAGS) -w *.[ch]
@@ -144,72 +139,6 @@ tags::
 	echo "tagging" "in $(CURRENT_DIR)/$$i..."; \
 	(cd $$i && $(MAKE) $(MFLAGS) $(PARALLELMFLAGS) \
 	TAGS='$(TAGS)' tags); \
-	done
-
-$(ONESUBDIR)/Makefile:
-	@for flag in ${MAKEFLAGS} ''; do \
-	case "$$flag" in *=*) ;; *[n]*) executeit="no";; esac; done; \
-	cd $(ONESUBDIR) && \
-	if [ "$$executeit" != "no" ]; then \
-	$(IMAKE) -DUseInstalled -I$(IMAKEPREFIX)$(IMIRULESRC) -I$(IRULESRC) $(IMAKE_DEFINES) -DTOPDIR=$(IMAKETOP) -DCURDIR=$(ONECURDIR)$(ONESUBDIR); \
-	fi;
-
-Makefiles::
-	-@for flag in ${MAKEFLAGS} ''; do \
-	case "$$flag" in *=*) ;; *[ik]*) set +e;; esac; done; \
-	for flag in ${MAKEFLAGS} ''; do \
-	case "$$flag" in *=*) ;; *[n]*) executeit="no";; esac; done; \
-	for i in $(SUBDIRS) ;\
-	do \
-	case "$(CURRENT_DIR)" in \
-	.) curdir= ;; \
-	*) curdir=$(CURRENT_DIR)/ ;; \
-	esac; \
-	echo "making Makefiles in $$curdir$$i..."; \
-	itmp=`echo $$i | sed -e 's;^\./;;g' -e 's;/\./;/;g'`; \
-	curtmp="$(CURRENT_DIR)" \
-	toptmp=""; \
-	case "$$itmp" in \
-	../?*) \
-	while echo "$$itmp" | grep '^\.\./' > /dev/null;\
-	do \
-	toptmp="/`basename $$curtmp`$$toptmp"; \
-	curtmp="`dirname $$curtmp`"; \
-	itmp="`echo $$itmp | sed 's;\.\./;;'`"; \
-	done \
-	;; \
-	esac; \
-	case "$$itmp" in \
-	*/?*/?*/?*/?*)	newtop=../../../../..;; \
-	*/?*/?*/?*)	newtop=../../../..;; \
-	*/?*/?*)	newtop=../../..;; \
-	*/?*)		newtop=../..;; \
-	*)		newtop=..;; \
-	esac; \
-	newtop="$$newtop$$toptmp"; \
-	case "$(TOP)" in \
-	/?*) imaketop=$(TOP) \
-	imakeprefix= ;; \
-	.) imaketop=$$newtop \
-	imakeprefix=$$newtop/ ;; \
-	*) imaketop=$$newtop/$(TOP) \
-	imakeprefix=$$newtop/ ;; \
-	esac; \
-	$(RM) $$i/Makefile.bak; \
-	if [ -f $$i/Makefile ]; then \
-	echo "	$(MV) Makefile Makefile.bak"; \
-	if [ "$$executeit" != "no" ]; then \
-	$(MV) $$i/Makefile $$i/Makefile.bak; \
-	fi; \
-	fi; \
-	$(MAKE) $(MFLAGS) $(MAKE_OPTS) ONESUBDIR=$$i ONECURDIR=$$curdir IMAKETOP=$$imaketop IMAKEPREFIX=$$imakeprefix $$i/Makefile; \
-	if [ -d $$i ] ; then \
-	cd $$i; \
-	$(MAKE) $(MFLAGS) Makefiles; \
-	cd $$newtop; \
-	else \
-	exit 1; \
-	fi; \
 	done
 
 includes::

@@ -26,7 +26,6 @@ include @top_srcdir@/makerule.mk
 
          CC = @CC@
   CCOPTIONS = @CCOPTIONS@
-STD_DEFINES = $(PROJECT_DEFINES)
 CDEBUGFLAGS = @CDEBUGFLAGS@
 
 LIB_MT_DEFINES = LibraryMTDefines
@@ -99,10 +98,6 @@ llib-lconvkey.ln: $(SRCS) $(EXTRALIBRARYDEPS)
 	$(LINT) $(LINTLIBFLAG)convkey $(LINTFLAGS) $(SRCS)
 
 depend:: .depend
-
-.depend::
-	$(RM) $@
-	$(DEPEND) -f- $(DEPENDFLAGS) -- $(ALLDEFINES) $(DEPEND_DEFINES) -- $(SRCS) > $@
 
 lint:
 	$(LINT) $(LINTFLAGS) $(SRCS) $(LINTLIBS)

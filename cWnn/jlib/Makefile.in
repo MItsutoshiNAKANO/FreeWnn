@@ -26,7 +26,6 @@ include @top_srcdir@/makerule.mk
 
          CC = @CC@
   CCOPTIONS = @CCOPTIONS@
-STD_DEFINES = $(PROJECT_DEFINES)
 CDEBUGFLAGS = @CDEBUGFLAGS@
 
 LIB_MT_DEFINES = LibraryMTDefines
@@ -158,7 +157,7 @@ lint1:
 
 kankana: kankana.o
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) kankana.o $(CWNNJLIB) $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) kankana.o $(CWNNJLIB)
 
 clean::
 	$(RM) kankana
@@ -206,10 +205,6 @@ $(LOCAL_RKOBJS) : $(LOCAL_RKSRCS)
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; 	cd $(CWNNROMKANSRC); echo "making all in $(CWNNROMKANSRC)"; 	$(MAKE) 'CDEBUGFLAGS=$(CDEBUGFLAGS)' $(MFLAGS)
 
 depend:: .depend
-
-.depend::
-	$(RM) $@
-	$(DEPEND) -f- $(DEPENDFLAGS) -- $(ALLDEFINES) $(DEPEND_DEFINES) -- $(SRCS) > $@
 
 clean::
 	$(RM) $(LINKS)

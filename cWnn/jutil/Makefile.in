@@ -103,63 +103,63 @@ all:: $(PROGRAMS)
 
 catod: $(OBJATOD)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOD)  $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOD)
 
 clean::
 	$(RM) catod
 
 catof: $(OBJATOF)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOF)  $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOF)
 
 clean::
 	$(RM) catof
 
 cwnntouch: $(OBJTOUCH)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJTOUCH)  $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJTOUCH)
 
 clean::
 	$(RM) cwnntouch
 
 cdicsort: $(OBJSORT)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJSORT)  $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJSORT)
 
 clean::
 	$(RM) cdicsort
 
 cdtoa: $(OBJDTOA)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJDTOA)  $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJDTOA)
 
 clean::
 	$(RM) cdtoa
 
 cwnnstat: $(OBJSTAT) $(CWNNJLIB)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJSTAT) $(CWNNJLIB) $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJSTAT) $(CWNNJLIB)
 
 clean::
 	$(RM) cwnnstat
 
 cwnnkill: $(OBJKILL) $(CWNNJLIB)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJKILL) $(CWNNJLIB) $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJKILL) $(CWNNJLIB)
 
 clean::
 	$(RM) cwnnkill
 
 cwddel: $(OBJWDDEL) $(CWNNJLIB)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDDEL) $(CWNNJLIB) $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDDEL) $(CWNNJLIB)
 
 clean::
 	$(RM) cwddel
 
 cwdreg: $(OBJWDREG) $(CWNNJLIB)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDREG) $(CWNNJLIB) $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDREG) $(CWNNJLIB)
 
 clean::
 	$(RM) cwdreg
@@ -357,10 +357,6 @@ $(YINCODEOBJS) : $(YINCODESRCS)
 	$(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
 
 depend:: .depend
-
-.depend::
-	$(RM) $@
-	$(DEPEND) -f- $(DEPENDFLAGS) -- $(ALLDEFINES) $(DEPEND_DEFINES) -- $(SRCS) > $@
 
 clean::
 	$(RM) $(LINKS)

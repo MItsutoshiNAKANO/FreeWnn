@@ -53,7 +53,7 @@ all:: uum
 
 uum: $(OBJS) $(LOCAL_LIBRARIES)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) $(LDLIBS) $(WNNTERM_LIB) $(EXTRA_LOAD_FLAGS)
+	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) $(WNNTERM_LIB)
 
 clean::
 	$(RM) uum
@@ -78,8 +78,4 @@ $(OBJ5) : $(SRC5)
 	$(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
 
 depend:: .depend
-
-.depend::
-	$(RM) $@
-	$(DEPEND) -f- $(DEPENDFLAGS) -- $(ALLDEFINES) $(DEPEND_DEFINES) -- $(SRCS) > $@
 
