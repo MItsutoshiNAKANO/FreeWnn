@@ -1,5 +1,5 @@
 /*
- *  $Id: atod.c,v 1.12 2004-07-19 18:24:26 hiroo Exp $
+ *  $Id: atod.c,v 1.13 2004-08-12 09:03:19 aono Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ UJIS 形式を、辞書登録可能形式, 及び固定形式辞書に変換するプログラム。
 */
 
 #ifndef lint
-static char *rcs_id = "$Id: atod.c,v 1.12 2004-07-19 18:24:26 hiroo Exp $";
+static char *rcs_id = "$Id: atod.c,v 1.13 2004-08-12 09:03:19 aono Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -183,7 +183,8 @@ init (int argc, char **argv)
       usage ();
       exit (1);
     }
-  strlcpy (outfile, argv[1], LINE_SIZE);
+  strncpy (outfile, argv[1], LINE_SIZE-1);
+  outfile[LINE_SIZE-1] = '\0';
   if (wnn_loadhinsi (hinsi_file_name) != 0)
     {
       fprintf (stderr, "Can't Open hinsi_file.\n");
