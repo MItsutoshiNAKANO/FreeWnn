@@ -1,5 +1,5 @@
 dnl
-dnl $Id: configure.in,v 1.3 2000-01-16 05:48:51 ura Exp $
+dnl $Id: configure.in,v 1.4 2000-01-16 06:01:38 ura Exp $
 dnl
 
 dnl FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -54,7 +54,7 @@ case $hosttype in
         CPP=/lib/cpp
     fi
     ;;
-"FreeBSD")
+"FreeBSD"|"NetBSD"|"OpenBSD")
     CCOPTIONS="-DCSRG_BASED"
     CDEBUGFLAGS="-O2 -fno-strength-reduce"
     if test -x /usr/libexec/cpp; then
@@ -89,6 +89,24 @@ case $hosttype in
       fi
       if test -x /usr/ccs/lib/cpp; then
           CPP=/usr/ccs/lib/cpp
+      fi
+      ;;
+    *)
+      { echo "configure: error: "This system is not supported."" 1>&2; exit 1; }
+      ;;
+    esac
+    ;;
+"HP-UX")
+    if test $CC = gcc; then
+        CDEBUGFLAGS=-O2
+        CCOPTIONS="-Dhpux -DSYSV"
+    else
+        CCOPTIONS="-Ae -Dhpux -DSYSV"
+    fi
+    case `uname -r` in
+    A.09.*)
+      if test -x /lib/cpp; then
+          CPP=/lib/cpp
       fi
       ;;
     *)

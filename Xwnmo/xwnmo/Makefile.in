@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.3 2000-01-16 05:49:02 ura Exp $
+# $Id: Makefile.in,v 1.4 2000-01-16 06:01:50 ura Exp $
 #
 
 # FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -459,7 +459,7 @@ LINTFONT = $(LINTLIBDIR)/llib-lfont.ln
 
           IMTOP = $(TOP)
 
-         PREFIX = /usr/local
+         PREFIX = @prefix@
       WNNWNNDIR = ${PREFIX}/lib/wnn
       WNNBINDIR = ${PREFIX}/bin
       WNNINCDIR = $(INCROOT)

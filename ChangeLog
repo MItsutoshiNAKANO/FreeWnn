@@ -1,3 +1,20 @@
+Wed Aug 11 01:42:28 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* パッチ patch-1.1.1-a003 として内部リリース
+
+Wed Aug 11 01:00:59 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* OpenBSD/i386, HP-UX 9.X 対応
+	([freewnn:00045] 濱嶋さん提供のパッチ)
+
+Wed Aug 11 00:43:11 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* --prefix=dir を有効にする。(今までは /usr/local で決めうちだった)
+	([freewnn:00036] 永江さん提供のパッチ)
+
+	* configure, configure.in: NetBSD 対応
+	([freewnn:00036] 永江さん提供のパッチ)
+	
 Mon Jul 28 22:27:44 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
 
 	* パッチ patch-1.1.1-a002 として内部リリース
