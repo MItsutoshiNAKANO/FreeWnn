@@ -28,7 +28,7 @@
 /*
         Jserver         (Nihongo Daemon)
 */
-static char rcs_id[] = "$Id: de.c,v 1.34 2003-06-20 16:10:23 aono Exp $";
+static char rcs_id[] = "$Id: de.c,v 1.35 2003-11-20 10:31:59 aono Exp $";
 
 #if defined(HAVE_CONFIG_H)
 #  include <config.h>
@@ -453,7 +453,9 @@ new_client (void)               /* NewClient */
       FD_CLR (accept_blk[UNIX_ACPT].sd, ready_socks);
       no_of_ready_socks--;
       sd = socket_accept_un ();
+#ifdef  HAVE_LIBWRAP
       is_internet_socket = 0;
+#endif
     }
   else
 #endif
@@ -463,7 +465,9 @@ new_client (void)               /* NewClient */
       FD_CLR (accept_blk[INET6_ACPT].sd, ready_socks);
       no_of_ready_socks--;
       sd = socket_accept_in (accept_blk[INET6_ACPT].sd);
+#ifdef  HAVE_LIBWRAP
       is_internet_socket = 1;
+#endif
     }
   else
 #endif
@@ -472,7 +476,9 @@ new_client (void)               /* NewClient */
       FD_CLR (accept_blk[INET_ACPT].sd, ready_socks);
       no_of_ready_socks--;
       sd = socket_accept_in (accept_blk[INET_ACPT].sd);
+#ifdef  HAVE_LIBWRAP
       is_internet_socket = 1;
+#endif
     }
   else
     {
