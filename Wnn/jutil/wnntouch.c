@@ -1,5 +1,5 @@
 /*
- *  $Id: wnntouch.c,v 1.5 2002-03-07 17:11:45 hiroo Exp $
+ *  $Id: wnntouch.c,v 1.6 2002-03-29 15:12:40 hiroo Exp $
  */
 
 /*
@@ -34,11 +34,17 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: wnntouch.c,v 1.5 2002-03-07 17:11:45 hiroo Exp $";
+static char *rcs_id = "$Id: wnntouch.c,v 1.6 2002-03-29 15:12:40 hiroo Exp $";
 #endif /* lint */
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #include <stdio.h>
-#include <unistd.h>
+#if HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
 #include "jslib.h"
 #include "commonhd.h"
 

@@ -1,5 +1,5 @@
 /*
- *  $Id: do_filecom.c,v 1.7 2002-03-08 17:58:00 hiroo Exp $
+ *  $Id: do_filecom.c,v 1.8 2002-03-29 15:12:40 hiroo Exp $
  */
 
 /*
@@ -37,10 +37,12 @@
 #include <config.h>
 #endif
 
+#include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <stdio.h>
-#include <unistd.h>
+#if HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
 
 #include "demcom.h"
 #include "commonhd.h"
