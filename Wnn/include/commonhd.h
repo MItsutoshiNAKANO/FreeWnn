@@ -1,5 +1,5 @@
 /*
- *  $Id: commonhd.h,v 1.7 2001-09-16 11:45:22 hiroo Exp $
+ *  $Id: commonhd.h,v 1.8 2002-03-31 11:22:49 h-abe Exp $
  */
 
 /*
@@ -36,7 +36,7 @@
  * Common header 
  ****************/
 #include <stdio.h>
-#if defined(linux)|| defined(BEOS)
+#ifdef linux
 #include <unistd.h>
 #endif
 #define JSERVER_VERSION 0x4200  /* minor version */
