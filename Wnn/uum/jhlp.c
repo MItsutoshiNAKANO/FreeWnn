@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.5 2001-06-18 09:10:00 ura Exp $
+ *  $Id: jhlp.c,v 1.6 2001-09-16 11:42:58 hiroo Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.5 2001-06-18 09:10:00 ura Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.6 2001-09-16 11:42:58 hiroo Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -47,6 +47,13 @@ static char *rcs_id = "$Id: jhlp.c,v 1.5 2001-06-18 09:10:00 ura Exp $";
 
 #include <sys/types.h>
 #include <sys/ioctl.h>
+
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
+#else
+  extern int dup _P((int));
+#endif
+
 #ifndef SYSVR2
 #include <fcntl.h>
 #endif /* !SYSVR2 */
@@ -135,7 +142,7 @@ static intfntype terminate_handler ();
 static void do_end (), open_pty (), open_ttyp (), do_main (), exec_cmd (), parse_options (), setsize (), get_rubout (), usage (), change_size (), default_usage ();
 
 /** еседеє */
-void
+int
 main (argc, argv)
      int argc;
      char **argv;
@@ -156,7 +163,8 @@ main (argc, argv)
   strcpy (username, getpwuid (getuid ())->pw_name);
   if ((name = getenv (WNN_USERNAME_ENV)) != NULL)
     {
-      strcpy (username, name);
+      strncpy(username, name, PATHNAMELEN-1);
+      username[PATHNAMELEN-1] = '\0';
     }
   for (i = 1; i < argc;)
     {
@@ -164,7 +172,8 @@ main (argc, argv)
         {
           if (i >= argc || argv[i][0] == '-')
             default_usage ();
-          strcpy (lang_dir, argv[i++]);
+          strncpy(lang_dir, argv[i++], LANGDIRLEN-1);
+          lang_dir[LANGDIRLEN-1] = '\0';
           for (; i < argc; i++)
             {
               argv[i - 2] = argv[i];
@@ -238,8 +247,9 @@ main (argc, argv)
         }
       if (name = getenv (server_env))
         {
-          strcpy (def_servername, name);
-          strcpy (def_reverse_servername, name);
+          strncpy(def_servername, name, PATHNAMELEN-1);
+          def_servername[PATHNAMELEN-1] = '\0';
+          strcpy(def_reverse_servername, def_servername);
         }
     }
 
@@ -540,7 +550,8 @@ do_X_opt ()
 static int
 do_k_opt ()
 {
-  strcpy (uumkey_name_in_uumrc, optarg);
+  strncpy(uumkey_name_in_uumrc, optarg, PATHNAMELEN-1);
+  uumkey_name_in_uumrc[PATHNAMELEN-1] = '\0';
   if (*uumkey_name_in_uumrc == '\0')
     {
       return -1;
@@ -552,7 +563,8 @@ do_k_opt ()
 static int
 do_c_opt ()
 {
-  strcpy (convkey_name_in_uumrc, optarg);
+  strncpy(convkey_name_in_uumrc, optarg, PATHNAMELEN-1);
+  convkey_name_in_uumrc[PATHNAMELEN-1] = '\0';
   if (*convkey_name_in_uumrc == '\0')
     {
       return -1;
@@ -564,7 +576,8 @@ do_c_opt ()
 static int
 do_r_opt ()
 {
-  strcpy (rkfile_name_in_uumrc, optarg);
+  strncpy(rkfile_name_in_uumrc, optarg, PATHNAMELEN-1);
+  rkfile_name_in_uumrc[PATHNAMELEN-1] = '\0';
   if (*rkfile_name_in_uumrc == '\0')
     {
       return -1;
@@ -583,8 +596,9 @@ do_l_opt ()
 static int
 do_D_opt ()
 {
-  strcpy (def_servername, optarg);
-  strcpy (def_reverse_servername, optarg);
+  strncpy(def_servername, optarg, PATHNAMELEN-1);
+  def_servername[PATHNAMELEN-1] = '\0';
+  strcpy(def_reverse_servername, def_servername);
   if (*def_servername == '\0')
     {
       return -1;
@@ -595,7 +609,8 @@ do_D_opt ()
 static int
 do_n_opt ()
 {
-  strcpy (username, optarg);
+  strncpy(username, optarg, PATHNAMELEN-1);
+  username[PATHNAMELEN-1] = '\0';
   if (*username == '\0')
     {
       return -1;
@@ -639,7 +654,10 @@ parse_options (argc, argv)
 #ifdef  SYSVR2
 #define index   strchr
 #endif /* SYSVR2 */
+
+#if !defined(linux)
   extern char *index ();
+#endif
 
   strcpy (ostr, default_getoptstr);
   strcat (ostr, lang_db->getoptstr);
@@ -862,7 +880,8 @@ chld_handler ()
 #ifdef SIGCONT
           kill (pid, SIGCONT);
 #ifndef SYSVR2
-          pid = getpgrp (pid);
+          /* pid = getpgrp (pid); */
+          pid = getpgrp ();
           killpg (pid, SIGCONT);
 #else
 #if defined(uniosu)

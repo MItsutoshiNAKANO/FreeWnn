@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.9 2001-08-14 13:43:21 hiroo Exp $
+#   $Id: Makefile.in,v 1.10 2001-09-16 11:42:58 hiroo Exp $
 #
 
 #
@@ -38,7 +38,7 @@ LOCAL_INSTFLAGS = $(INSTUIDFLAGS) -o $(UUMOWNER)
        UUMOWNER = root
        INCLUDES = -I$(WNNINCLUDESRC) -I$(WNNROMKANSRC) -I$(TOP)
         DEFINES = $(SIGNAL_DEFINES) $(WNNDEFINES) $(WNNLANGDEF)
-LOCAL_LIBRARIES = $(WNNJLIB) $(WNNCONVLIB)
+LOCAL_LIBRARIES = $(WNNJLIB) $(WNNCONVLIB) @LIBS@
 
 SRC1= epilogue.c header.c kensaku.c kuten.c jis_in.c       prologue.c touroku.c jikouho.c jutil.c w_string.c       printf.c termio.c hinsi.c termcap.c       ttyfdslot.c setutmp.c redraw.c history.c key_bind.c       screen.c basic_op.c uif.c cursor.c jhlp.c       select_ele.c inspect.c wnnrc_op.c functions.c
 
@@ -61,7 +61,7 @@ all:: uum
 
 uum: $(OBJS) $(LOCAL_LIBRARIES)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) $(WNNTERM_LIB)
+	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) $(WNNTERM_LIB)
 
 clean::
 	$(RM) uum
@@ -71,7 +71,7 @@ instclient:: install
 install:: uum
 	@if [ -d $(DESTDIR)$(JWNNBINDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(JWNNBINDIR)); fi
-	$(INSTALL) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) uum $(DESTDIR)$(JWNNBINDIR)/uum
+	$(LIBTOOL) $(INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) uum $(DESTDIR)$(JWNNBINDIR)/uum
 
 $(OBJ2) : $(SRC2)
 	$(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c

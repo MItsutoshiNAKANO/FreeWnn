@@ -1,5 +1,5 @@
 /*
- *  $Id: header.c,v 1.4 2001-06-14 18:16:07 ura Exp $
+ *  $Id: header.c,v 1.5 2001-09-16 11:42:58 hiroo Exp $
  */
 
 /*
@@ -88,7 +88,7 @@ int kill_buffer_offset = 0;
 
 int touroku_comment = 0;        /* Comment for Words in Word_add */
 
-char lang_dir[32] = { '\0' };
+char lang_dir[LANGDIRLEN] = { '\0' };
 
 char uumkey_name_in_uumrc[PATHNAMELEN] = { '\0' };
 char convkey_name_in_uumrc[PATHNAMELEN] = { '\0' };

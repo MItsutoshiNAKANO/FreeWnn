@@ -1,5 +1,5 @@
 /*
- *  $Id: sheader.h,v 1.3 2001-06-14 18:16:08 ura Exp $
+ *  $Id: sheader.h,v 1.4 2001-09-16 11:42:58 hiroo Exp $
  */
 
 /*
@@ -140,6 +140,7 @@ extern int send_ascii_char;     /* flag that if send ascii characters when the b
 extern int excellent_delete;
 extern int convkey_on;
 
+#define LANGDIRLEN 32
 extern char lang_dir[];
 
 extern char uumkey_name_in_uumrc[];
@@ -196,47 +197,47 @@ extern int (*default_code_trans[]) ();
 #include "rk_fundecl.h"
 #include "wnn_string.h"
 
-extern void b_s_off_raw ();
-extern void b_s_on_raw ();
-extern int backward ();
-extern int buffer_in ();
-extern int change_ascii_to_int ();
-extern int change_mode ();
-extern void change_to_empty_mode ();
-extern void change_to_insert_mode ();
-extern void chartowchar ();
+extern void b_s_off_raw P_((void));
+extern void b_s_on_raw P_((void));
+extern int backward P_((void));
+extern int buffer_in P_((void));
+extern int change_ascii_to_int P_((char*, int*));
+/* extern int change_mode (); */ /* not used? then remove it. */
+extern void change_to_empty_mode P_((void));
+extern void change_to_insert_mode P_((void));
+/* extern void chartowchar (); */ /* not used? then remove it. */
 extern void clr_end_screen ();
 extern void clr_line ();
 extern void clr_line_all ();
-extern int connect_jserver ();
+extern int connect_jserver P_((int));
 extern int convert_getterm ();
 extern int convert_key_setup ();
-extern int cur_ichi ();
-extern void cursor_invisible_raw ();
-extern void cursor_normal_raw ();
-extern int dai_end ();
-extern int dai_top ();
-extern int dic_nickname ();
-extern int disconnect_jserver ();
-extern int disp_mode ();
-extern void display_henkan_off_mode ();
-extern int dup ();
-extern int empty_modep ();
-extern int endttyent ();
-extern void epilogue ();
-extern void epilogue_no_close ();
-extern void err ();
-extern void errorkeyin ();
-extern int eu_columlen ();
-extern int expand_argument ();
-extern int expand_expr ();
-extern void fill ();
-extern int find_dic_by_no ();
-extern int find_end_of_tango ();
-extern int find_entry ();
-extern void flushw_buf ();
-extern int forward_char ();
-extern int backward_char ();
+extern int cur_ichi P_((int, int));
+extern void cursor_invisible_raw P_((void));
+extern void cursor_normal_raw P_((void));
+extern int dai_end P_((struct wnn_buf *, int));
+extern int dai_top P_((struct wnn_buf *, int));
+extern int dic_nickname P_((int, char*));
+extern int disconnect_jserver P_((void));
+extern int disp_mode P_((void));
+extern void display_henkan_off_mode P_((void));
+/* extern int dup (); */ /* it's from unistd.h */
+extern int empty_modep P_((void));
+/* extern int endttyent (); */ /* 4.3BSD libc functions in ttyent.h */
+extern void epilogue P_((void));
+extern void epilogue_no_close P_((void));
+extern void err P_((char *));
+extern void errorkeyin P_((void));
+extern int eu_columlen P_((unsigned char *));
+extern int expand_argument P_((char *));
+extern int expand_expr P_((char *));
+extern void fill P_((char *, int));
+extern int find_dic_by_no P_((int));
+extern int find_end_of_tango P_((int));
+extern int find_entry P_((char *));
+extern void flushw_buf P_((void));
+extern int forward_char P_((void));
+extern int backward_char P_((void));
 extern int getTermData ();
 extern void get_end_of_history ();
 extern void getfname ();
