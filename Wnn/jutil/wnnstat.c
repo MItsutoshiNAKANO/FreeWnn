@@ -1,5 +1,5 @@
 #ifndef lint
-static char *rcs_id = "$Id: wnnstat.c,v 1.2 2000-01-16 05:48:53 ura Exp $";
+static char *rcs_id = "$Id: wnnstat.c,v 1.3 2000-01-16 06:37:15 ura Exp $";
 #endif /* lint */
 
 /*
@@ -49,7 +49,7 @@ static char *rcs_id = "$Id: wnnstat.c,v 1.2 2000-01-16 05:48:53 ura Exp $";
 #include "jllib.h"
 #include "jd_sock.h"
 #include "commonhd.h"
-#include "config.h"
+#include "wnn_config.h"
 #include "wnn_os.h"
 #include "msg.h"
 

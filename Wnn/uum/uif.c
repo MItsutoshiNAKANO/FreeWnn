@@ -1,5 +1,5 @@
 /*
- * $Id: uif.c,v 1.2 2000-01-16 05:35:37 ura Exp $
+ * $Id: uif.c,v 1.3 2000-01-16 06:37:19 ura Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ buffer_inを用いているので、そちらの方も参照して下さい。
 
 #include <stdio.h>
 #include "commonhd.h"
-#include "config.h"
+#include "wnn_config.h"
 #include "jllib.h"
 #include "sdefine.h"
 #include "sheader.h"

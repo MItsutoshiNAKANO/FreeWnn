@@ -1,5 +1,5 @@
 /*
- * $Id: jl.c,v 1.2 2000-01-16 05:35:34 ura Exp $
+ * $Id: jl.c,v 1.3 2000-01-16 06:37:14 ura Exp $
  */
 
 /*
@@ -43,7 +43,7 @@
 */
 
 #include "commonhd.h"
-#include "config.h"
+#include "wnn_config.h"
 #include <stdio.h>
 #include <sys/types.h>
 #ifdef SYSVR2

@@ -1,5 +1,5 @@
 /*
- * $Id: initjserv.c,v 1.2 2000-01-16 05:35:34 ura Exp $
+ * $Id: initjserv.c,v 1.3 2000-01-16 06:37:15 ura Exp $
  */
 
 /*
@@ -43,7 +43,7 @@
 #include "commonhd.h"
 #include "de_header.h"
 #include "wnn_malloc.h"
-#include "config.h"
+#include "wnn_config.h"
 #include "kaiseki.h"
 
 struct wnn_param default_para = {
