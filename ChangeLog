@@ -1,3 +1,49 @@
+Fri, 20 Jun 2003 16:10:24 Tomoki Aono <aono at cc.osaka-kyoiku.ac.jp>
+	* Wnn/jserver/de.c:
+	  libwrap 対応を修正して、許可されていない host からの接続のみ拒否
+	するようにした。以前のコードでは、libwrap 対応が有効だと全ての client
+	が拒否されていたと思われる。
+          ユーザーを recv() するコードを追加した。
+	  TIME_WITH_SYS_TIME の誤植を修正した。
+
+Wed, 18 Jun 2003 11:10:46 Tomoki Aono <aono at cc.osaka-kyoiku.ac.jp>
+	* Wnn/jserver/de.c:
+	  libwrap 対応部分に socketclose() を追加した。
+	  ログの問題対応: イベント種別を正しく記録するため、c_c=NULL を
+	追加した。
+
+Tue, 10 Jun 2003 10:39:09 Tomoki Aono <aono at cc.osaka-kyoiku.ac.jp>
+	* configure.in:
+	  socklen_t のチェックにおける AC_CHECK_TYPES の使い方を修正した。
+	  *BSD とその他一部のシステムに特化した部分を削除した。
+	  --disable-debug が指定されていても、CDEBUGFLAGS を使うようにした。
+
+Sun,  8 Jun 2003 03:09:52 Hiroo Ono <hiroo at oikumene.gcd.org>
+	* configure.in:
+	  utmpx.h をチェックするようにした。
+	  time_t チェックがうまく動いていないので外した。
+	  uum のために、 getgpid, getgprp をチェックするようにした。
+	  libwrap 対応追加 ([freewnn:0032] 元木氏による)。
+	* Wnn/include/wnn_os.h:
+	  FD_SET 関連のマクロをこのファイルに移動した。
+	* Wnn/jserver/de.c:
+	  autoconf の TIME_WITH_SYS_TIME マクロを使うようにした。
+	  FD_SET 関連のマクロを wnn_os.h に移動した。
+	  libwrap 対応追加 ([freewnn:0032] 元木氏による)。
+	* Wnn/jserver/error.c:
+	  autoconf の TIME_WITH_SYS_TIME マクロを使うようにした。
+
+Sat,  7 Jun 2003 13:04:33 Hiroo Ono <hiroo at oikumene.gcd.org>
+	* configure.in:  utmp.h をチェックするようにした。 
+	* Wnn/include/wnn_os.h:
+	  Wnn/etc 以下にある関数の一部のプロトタイプを追加した。
+	* Wnn/jserver/de.c:
+	  file_init() が malloc の結果を返すように変更した。
+	* Wnn/jserver/de_header.h, get_kaiarea.c, jbiki.c:
+	  スタイル修正。
+	* Wnn/jserver/readfile.c, b_index.c, do_filecom.c, jishoop.c, rd_jishoop.c:     
+	  *_realloc の偏執狂的なチェックを行なう変更に伴って修正。
+
 Wed,  4 Jun 2003 14:12:13 Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Wnn/jserver/get_kaiaria.c:
 	  グローバル変数の定義を kai_area.c からこちらに移した。

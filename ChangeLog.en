@@ -1,3 +1,48 @@
+Fri, 20 Jun 2003 16:10:24 Tomoki Aono <aono at cc.osaka-kyoiku.ac.jp>
+	* Wnn/jserver/de.c:
+	  Correct libwrap support code to properly deny disallowed hosts.
+	 Previously, it seem to have denied all clients if compiled with
+	 libwrap support.
+	  Added code to recv() users.
+	  Fixed typo of TIME_WITH_SYS_TIME.
+
+Wed, 18 Jun 2003 11:10:46 Tomoki Aono <aono at cc.osaka-kyoiku.ac.jp>
+	* Wnn/jserver/de.c:
+	  Added socketclose() to libwrap section.
+	  Logging issue: Add c_c=NULL to correctly record event category.
+
+Tue, 10 Jun 2003 10:39:09 Tomoki Aono <aono at cc.osaka-kyoiku.ac.jp>
+	* configure.in:
+	  Fixed the usage of AC_CHECK_TYPES in socklen_t check.
+	  Removed *BSD and some other system specific sections.
+	  Respect CDEBUGFLAGS even if --disable-debug.
+
+Sun,  8 Jun 2003 03:09:52 Hiroo Ono <hiroo at oikumene.gcd.org>
+	* configure.in:
+	  Check utmpx.h.
+	  Comment out time_t check. It does not work well.
+	  Add getgpid, getgprp check for uum.
+	  Add libwrapsupport ([freewnn:0032] by S. Motoki).
+	* Wnn/include/wnn_os.h:
+	  Move FD_SET and related macro to this file.
+	* Wnn/jserver/de.c:
+	  Use TIME_WITH_SYS_TIME macro by autoconf.
+	  Move FD_SET and related macro to wnn_os.h.
+	  Add libwrapsupport ([freewnn:0032] by S. Motoki).
+	* Wnn/jserver/error.c:
+	  Use TIME_WITH_SYS_TIME macro by autoconf.
+
+Sat,  7 Jun 2003 13:04:33 Hiroo Ono <hiroo at oikumene.gcd.org>
+	* configure.in:  check utmp.h.
+	* Wnn/include/wnn_os.h:
+	  add some prototype of functions in Wnn/etc.
+	* Wnn/jserver/de.c:
+	  file_init() now returns malloc status.
+	* Wnn/jserver/de_header.h, get_kaiarea.c, jbiki.c:
+	  style fix.
+	* Wnn/jserver/readfile.c, b_index.c, do_filecom.c, jishoop.c, rd_jishoop.c:
+	  Change according to *_realloc. Paranoiac treatment of realloc.
+
 Wed,  4 Jun 2003 14:12:13 Hiroo Ono <hiroo at oikumene.gcd.org>
 	* Wnn/jserver/get_kaiaria.c:
 	  Global variable definitions are moved from kai_area.c to this file.
