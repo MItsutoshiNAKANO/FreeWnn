@@ -1,5 +1,5 @@
 /*
- * $Id: xutoj.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: xutoj.c,v 1.1.1.2 2000-01-16 05:10:49 ura Exp $
  */
 
 /*
@@ -30,8 +30,10 @@
  * Commentary:
  *
  * Change log:
+ *	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+ *		英数字指示のエスケープシーケンスを ESC ( B（ASCII）にする。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 20,Mar.1999
  *
  * Code:
  *
@@ -706,7 +708,9 @@ int new_mode;
  switch(*mode){
 	case ZENKAKU_JIS :
 	case ZENKAKU_JIS_HOJYO :
-		putj('\033'); putj('('); putj('J');break;
+		/* designate ISO-8859-1 rather than JIS X 0201 */
+		/* putj('\033'); putj('('); putj('J');break; */
+		putj('\033'); putj('('); putj('B');break;
 #ifdef	JIS7
 	case HANKAKU_JIS :
 		putj(HANKAKU_JIS_OUT);break;
@@ -1664,7 +1668,9 @@ int new_mode;
      case CNS11643_2:
 	putcns('\033'); putcns('$'); putcns('*'); putcns('1'); break;
      case ASCII:
-	putcns('\033'); putcns('('); putcns('J'); break;
+	/* designate ISO-8859-1 rather than JIS X 0201 */
+	/* putcns('\033'); putcns('('); putcns('J'); break; */
+	putcns('\033'); putcns('('); putcns('B'); break;
     }
 }
 

@@ -1,5 +1,5 @@
 /*
- * "$Id: de.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $"
+ * "$Id: de.c,v 1.1.1.2 2000-01-16 05:10:52 ura Exp $"
  */
 
 /*
@@ -30,8 +30,14 @@
  * Commentary:
  *
  * Change log:
+ *	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+ *		error1 の引数訂正（stderr が余分）。
+ *		関数 puts_n_cur(p,n) の追加。
+ *	'99/04/06	Hidekazu Kuroki - 黒木 秀和(hidekazu@cs.titech.ac.jp)
+ *		#include <sys/param.h> の追加。
+ *		stderr を /dev/null にする。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 06,Apr.1999
  *
  * Code:
  *
@@ -55,6 +61,9 @@ extern int errno;		/* Pure BSD */
 
 #include <sys/ioctl.h>
 
+#if (defined(__unix__) || defined(unix)) && !defined(USG)
+#include <sys/param.h>
+#endif
 #ifdef SYSVR2
 #include <sys/param.h>
 #ifndef SIGCHLD
@@ -254,7 +263,16 @@ char **argv;
 	fclose(stdin);
 	fclose(stdout);
 	if(!noisy){
+#if !(defined(BSD) && (BSD >= 199306)) /* !4.4BSD-Lite by Taoka */
 	    fclose(stderr);
+#else /* 4.4BSD-Lite */
+	    int fd = open("/dev/null", O_WRONLY);
+	    if (fd < 0) {
+		xerror("Cannot open /dev/null\n");
+	    }
+	    dup2(fd, 2);
+	    close(fd);
+#endif /* 4.4BSD-Lite */
 	}
 
 #if defined(hpux) || defined(SOLARIS)
@@ -428,7 +446,7 @@ del_client()
 	bcopy(&client[cur_clp], &client[clientp - 1], sizeof(CLINET));
 #endif /* !IBM */
 	clientp--;
-	error1(stderr,"Delete Client: cur_clp = %d\n", cur_clp);
+	error1("Delete Client: cur_clp = %d\n", cur_clp);
 }
 
 
@@ -638,6 +656,17 @@ char *p;
 {
     register int c;
     while(c= *p++) putc_cur(c);
+    putc_cur(0);
+}
+
+/**	**/
+void
+puts_n_cur(p,n)
+char *p;
+int n;
+{
+    register int c;
+    while((c = *p++) && --n >= 0) putc_cur(c);
     putc_cur(0);
 }
 

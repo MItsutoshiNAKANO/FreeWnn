@@ -1,5 +1,5 @@
 /*
- * $Id: screen.c,v 1.1.1.1 2000-01-16 05:07:57 ura Exp $
+ * $Id: screen.c,v 1.1.1.2 2000-01-16 05:11:10 ura Exp $
  */
 
 /*
@@ -31,8 +31,10 @@
  * Commentary:
  *
  * Change log:
+ *	'99/04/19	TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
+ *		index() の宣言をコメントアウト。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 19,Apr.1999
  *
  * Code:
  *
@@ -321,7 +323,7 @@ char *
 get_rk_modes()
 {
     char        *p;
-    extern char *index();
+/*    extern char *index();*/
 
     strcpy(rk_modes, (NULL == (p = romkan_dispmode()) ? "[   ]" : p));
     if ((p = (char*)index(rk_modes, ':')) != NULL && *(p + 1)) {

@@ -1,5 +1,5 @@
 /*
- * $Id: init_w.c,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: init_w.c,v 1.1.1.2 2000-01-16 05:11:09 ura Exp $
  */
 
 /*
@@ -28,8 +28,10 @@
  * Commentary:
  *
  * Change log:
+ *	'99/04/19       TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
+ *		index() の宣言をコメントアウト。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 19,Apr.1999
  *
  * Code:
  *
@@ -78,7 +80,7 @@ env_state()
     char *p;
     char ret = '\0';
 #ifndef SYSVR2
-    extern char *index();
+/*    extern char *index(); */
 #else
     extern char *strchr();
 #endif

@@ -1,5 +1,5 @@
 XCOMM
-XCOMM $Id: Imakefile,v 1.1.1.1 2000-01-16 05:07:50 ura Exp $
+XCOMM $Id: Imakefile,v 1.1.1.2 2000-01-16 05:11:04 ura Exp $
 XCOMM
 
 XCOMM FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -29,8 +29,11 @@ XCOMM
 XCOMM Commentary:
 XCOMM
 XCOMM Change log:
+XCOMM	'99/04/06	Hidekazu Kuroki - 黒木 秀和(hidekazu@cs.titech.ac.jp)
+XCOMM		#if の条件式の訂正。
+XCOMM		for 文の変数名の訂正。$(FZKDATA) を二重に wnntouch する。
 XCOMM
-XCOMM Last modified date: 8,Feb.1999
+XCOMM Last modified date: 06,Apr.1999
 XCOMM
 #ifndef WnnInstallDicForcibly
 #define WnnInstallDicForcibly	NO
@@ -127,11 +130,17 @@ LinkSourceFile(tankan.u,$(PUBDICSRC))
 instserver:: install
 
 WnnMakeDirectories(install,$(JWNNDICDIR))
-#if WnnInstallDicForcibly
+/*
+ * Bugfix.
+ * Because "NO" is same to "YES"!!
+ * And some additional bugfix.
+ * Patched by Hidekazu Kuroki(hidekazu@cs.titech.ac.jp)		1996/8/20
+ */
+#if (WnnInstallDicForcibly == YES)
 InstallMultiple($(DIC),$(JWNNPUBDICDIR))
 
 install::
-	@for i in $(DICS); \
+	@for i in $(DIC); \
 	do \
 		$(WNNTOUCH) $(DESTDIR)$(JWNNPUBDICDIR)/$$i ;\
 	done
@@ -139,7 +148,20 @@ install::
 #else
 WnnInstallDicMultiple($(DIC),$(JWNNPUBDICDIR))
 #endif
+
+#if (WnnInstallDicForcibly == YES)
 InstallMultiple($(FZKDATA),$(JWNNPUBDICDIR))
+
+install::
+	@for i in $(FZKDATA); \
+	do \
+		$(WNNTOUCH) $(DESTDIR)$(JWNNPUBDICDIR)/$$i ;\
+	done
+
+#else
+WnnInstallDicMultiple($(FZKDATA),$(JWNNPUBDICDIR))
+#endif
+
 InstallMultiple($(FZK_SRC),$(JWNNFZKSRCDIR))
 
 depend::

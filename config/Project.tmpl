@@ -1,5 +1,5 @@
 XCOMM
-XCOMM $Id: Project.tmpl,v 1.21.2.1 1999/02/08 05:46:49 yamasita Exp $
+XCOMM $Id: Project.tmpl,v 1.21.2.4 1999/05/06 04:33:42 nakanisi Exp $
 XCOMM
 
 XCOMM FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -29,8 +29,21 @@ XCOMM
 XCOMM Commentary:
 XCOMM
 XCOMM Change log:
-XCOMM
-XCOMM Last modified date: 8,Feb.1999
+XCOMM	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+XCOMM		for 文の変数名の訂正。dirs というディレクトリーをソースディレクトリーに作ってしまう。
+XCOMM	'99/04/02	浅見 <asami@freebsd.org>
+XCOMM		SYS_LIBRARIES の追加。
+XCOMM		INSTINCFLAGS、INSTDATFLAGS、INSTAPPFLAGS の追加。
+XCOMM	'99/04/19	TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
+
+XCOMM		XFree86 対応。
+XCOMM		jlib.V3 をデフォールトで make するようにする。
+XCOMM		インストールディレクトリを変更可能にする
+XCOMM	'99/04/19	Hidekazu Kuroki - 黒木 秀和(hidekazu@cs.titech.ac.jp)
+XCOMM		XFree86 対応のため、変数名を変更（imakeprefix → IMAKEPREFIX）。
+XCOMM		
+XCOMM		
+XCOMM Last modified date: 02,Apr.1999
 XCOMM
 XCOMM -----------------------------------------------------------------------
 XCOMM X Window System Build Parameters and Rules
@@ -420,6 +433,8 @@ XCOMM $XConsortium: Project.tmpl,v 1.242 94/04/13 14:58:40 rws Exp $
 XCOMM -----------------------------------------------------------------------
 XCOMM X Window System make variables; these need to be coordinated with rules
 
+    SYS_LIBRARIES = -lcrypt		/* For FreeBSD */
+
 /*
  * This list must be reflected in the DIRS_TO_BUILD list in the top-level
  * Makefile.
@@ -444,6 +459,9 @@ XCOMM X Window System make variables; these need to be coordinated with rules
       XAPPLOADDIR = XAppLoadDir		/* application default resource dir */
        FONTCFLAGS = FontCompilerFlags
 
+     INSTINCFLAGS = InstIncFlags -c     /* XXX - dirty hack by */
+     INSTDATFLAGS = InstDatFlags -c     /* XXX -  Satoshi */
+     INSTBINFLAGS = InstBinFlags -c     /* XXX -   Asami */
      INSTAPPFLAGS = $(INSTDATFLAGS)	/* XXX - this should go away - XXX */
 
 #ifdef UseInstalled
@@ -496,6 +514,7 @@ XCOMM X Window System make variables; these need to be coordinated with rules
 #define ProfileLibX11		NO	/* profiled X library */
 #endif
           XLIBSRC = $(LIBSRC)/X11
+#ifndef XFree86Version
 #if SharedLibX11
 #ifndef SharedX11Rev
 #define SharedX11Rev 6.0
@@ -508,6 +527,16 @@ SharedLibReferences(XONLY,X11,$(XLIBSRC),SOXLIBREV,SharedX11Rev)
 #else
 #if BuildXKBlib
 UnsharedLibReferences(XONLY,X11kb,$(XLIBSRC))
+#else
+UnsharedLibReferences(XONLY,X11,$(XLIBSRC))
+#endif
+#endif
+#else
+#if SharedLibX11
+#ifndef SharedX11Rev
+#define SharedX11Rev 6.0
+#endif
+SharedLibReferences(XONLY,X11,$(XLIBSRC),SOXLIBREV,SharedX11Rev)
 #else
 UnsharedLibReferences(XONLY,X11,$(XLIBSRC))
 #endif
@@ -1134,7 +1163,7 @@ obj : depends							@@\
 #define WnnMakeDirectories(step,dir)					@@\
 step::									@@\
 	@case '${MFLAGS}' in *[i]*) set +e;; esac;			@@\
-	DirFailPrefix@for i in dirs; do if [ -d $(DESTDIR)$$i ]; then \	@@\
+	DirFailPrefix@for i in dir; do if [ -d $(DESTDIR)$$i ]; then \	@@\
 		set +x; else (set -x; $(MKDIRHIER) $(DESTDIR)$$i; \	@@\
 		chown $(WNNOWNER) $(DESTDIR)$$i); fi \			@@\
 	done
@@ -1148,10 +1177,16 @@ src:  dir/dest								@@\
 #undef ImakeSubCmdHelper
 #endif 
 
+/*
+ * Change a variavle's name from "$imakeprefix" to "$(IMAKEPREFIX)".
+ * Because it caused a error on XFree86 3.1.2S and 3.1.2E.
+ * The Imake rule of XFree86 3.1.2S and 3.1.2E FreeBSD was changed.
+ * Patched by Hidekazu Kuroki(hidekazu@cs.titech.ac.jp)		1996/8/20
+ */
 #ifdef UseInstalled
-#define ImakeSubCmdHelper $(IMAKE) -DUseInstalled -I$$imakeprefix$(IMIRULESRC) -I$(IRULESRC) $(IMAKE_DEFINES)
+#define ImakeSubCmdHelper $(IMAKE) -DUseInstalled -I$(IMAKEPREFIX)$(IMIRULESRC) -I$(IRULESRC) $(IMAKE_DEFINES)
 #else
-#define ImakeSubCmdHelper $$imakeprefix$(IMAKE) -I$$imakeprefix$(IMIRULESRC) -I$$imakeprefix$(IRULESRC) $(IMAKE_DEFINES)
+#define ImakeSubCmdHelper $(IMAKEPREFIX)$(IMAKE) -I$(IMAKEPREFIX)$(IMIRULESRC) -I$(IMAKEPREFIX)$(IRULESRC) $(IMAKE_DEFINES)
 #endif
 
 #define WnnInstallDicMultiple(list,dest)				@@\
@@ -1200,7 +1235,7 @@ install:: list								@@\
 #define BuildWnnMan	YES
 #endif
 #ifndef BuildJlibV3
-#define BuildJlibV3	NO
+#define BuildJlibV3	YES
 #endif
 #if BuildPubdic || BuildWnnConsDic
 #define BuildWnnDicUtilForCompile	YES
@@ -1267,8 +1302,9 @@ install:: list								@@\
 #else
           IMTOP = $(CONTRIBSRC)/programs/Xsi
 #endif
-      WNNWNNDIR = /usr/local/lib/wnn
-      WNNBINDIR = /usr/local/bin
+         PREFIX = /usr/local
+      WNNWNNDIR = ${PREFIX}/lib/wnn
+      WNNBINDIR = ${PREFIX}/bin
       WNNINCDIR = $(INCROOT)
       WNNLIBDIR = $(USRLIBDIR)
     WNNTERM_LIB = termLibrary

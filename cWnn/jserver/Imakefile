@@ -1,5 +1,5 @@
 XCOMM
-XCOMM $Id: Imakefile,v 1.1.1.1 2000-01-16 05:08:03 ura Exp $
+XCOMM $Id: Imakefile,v 1.1.1.2 2000-01-16 05:11:17 ura Exp $
 XCOMM
 
 XCOMM FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -29,8 +29,10 @@ XCOMM
 XCOMM Commentary:
 XCOMM
 XCOMM Change log:
+XCOMM	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+XCOMM		link 元のディレクトリー名を変更。
 XCOMM
-XCOMM Last modified date: 8,Feb.1999
+XCOMM Last modified date: 20,Mar.1999
 XCOMM
 XCOMM FORKDEF = -DNOTFORK
 XCOMM       Jserver usually fork and remove association with controll
@@ -177,7 +179,7 @@ InstallProgramWithFlags(tserver,$(CWNNBINDIR),$(LOCAL_INSTFLAGS))
 includes:: $(HDRS) $(SRC0) $(SRC1) $(TSRCS)
 
 LinkDiffNameFile($(TSRC0),$(SRC0),.)
-LinkDiffNameFile($(TSRCGETHINSI),$(SRCGETHINSI),$(CWNNETCSRC))
+LinkDiffNameFile($(TSRCGETHINSI),$(SRCGETHINSI),.)
 
 LinkSourceFile(ddefine.h,$(WNNJSERVERSRC))
 LinkSourceFile(de_header.h,$(WNNJSERVERSRC))

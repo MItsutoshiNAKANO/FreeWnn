@@ -1,5 +1,5 @@
 XCOMM
-XCOMM $Id: Imakefile,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+XCOMM $Id: Imakefile,v 1.1.1.2 2000-01-16 05:10:52 ura Exp $
 XCOMM
 
 XCOMM FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -29,8 +29,11 @@ XCOMM
 XCOMM Commentary:
 XCOMM
 XCOMM Change log:
+XCOMM	'99/04/19	TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
+XCOMM		xutoj.o をアーカイブに追加。
+XCOMM		インストールファイルを Wnn/jlib/jlib.h から Wnn/jlib.V3/jlib.h へ変更。
 XCOMM
-XCOMM Last modified date: 8,Feb.1999
+XCOMM Last modified date: 19,Apr.1999
 XCOMM
 #define DoNormalLib YES
 
@@ -48,8 +51,10 @@ SRC2= $(WNNETCSRC)/gethinsi.c
 OBJ2= gethinsi.o
 SRC3= $(WNNETCSRC)/sstrings.c
 OBJ3= sstrings.o
-SRCS= $(SRC1) $(SRC2) $(SRC3)
-OBJS= $(OBJ1) $(OBJ2) $(OBJ3)
+SRC4= $(WNNETCSRC)/xutoj.c
+OBJ4= xutoj.o
+SRCS= $(SRC1) $(SRC2) $(SRC3) $(SRC4)
+OBJS= $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4)
 
 LibraryObjectRule()
 
@@ -62,7 +67,7 @@ libjd.a: $(OBJS) $(WNNJLIB)
 
 LintLibraryTarget(jd,$(SRCS))
 InstallLibrary(jd,$(WNNLIBDIR))
-InstallNonExecFile($(WNNINCLUDESRC)/jlib.h,$(JWNNINCDIR))
+InstallNonExecFile(jlib.h,$(JWNNINCDIR))
 
 #if DebugLibJd
 DebuggedLibraryTarget(jd,$(OBJS))
@@ -73,4 +78,5 @@ NamedMakeSubdirs($(WNNJLIB),$(WNNJLIBSRC))
 
 WnnSpecialObjectRule($(OBJ2),$(SRC2),$(WNNETCSRC),)
 WnnSpecialObjectRule($(OBJ3),$(SRC3),$(WNNETCSRC),)
+WnnSpecialObjectRule($(OBJ4),$(SRC4),$(WNNETCSRC),)
 DependTarget()

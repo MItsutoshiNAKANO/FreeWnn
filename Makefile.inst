@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.inst,v 1.1.2.1 1999/02/08 02:09:56 yamasita Exp $
+# $Id: Makefile.inst,v 1.1.2.3 1999/04/16 01:20:16 nakanisi Exp $
 #
 
 # FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -29,8 +29,10 @@
 # Commentary:
 #
 # Change log:
+#	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+#		コマンドの訂正（case → echo）及びエラー終了するように変更。
 #
-# Last modified date: 8,Feb.1999
+# Last modified date: 20,Mar.1999
 #
 
 # If TOP dir is not "/usr/X11R6", set TOP.
@@ -49,7 +51,8 @@
       IMAKE_CMD = $(IMAKE) -DUseInstalled -I$(IMIRULESRC) -I$(CONFIGSRC)
 
 all:
-	@case "Use make World instead"
+	@echo "Use make World instead"
+	@false
 
 World::
 	@echo ""

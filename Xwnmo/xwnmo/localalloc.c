@@ -1,5 +1,5 @@
 /*
- * $Id: localalloc.c,v 1.1.1.1 2000-01-16 05:07:56 ura Exp $
+ * $Id: localalloc.c,v 1.1.1.2 2000-01-16 05:11:10 ura Exp $
  */
 
 /*
@@ -28,8 +28,10 @@
  * Commentary:
  *
  * Change log:
+ *	'99/04/01	本間　亮 <honma@nasu-net.or.jp>
+ *		size を sizeof(char *) の整数倍に切り上げる。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 20,Mar.1999
  *
  * Code:
  *
@@ -114,6 +116,7 @@ unsigned size;
 {
     char *ptr;
     if (size == 0) return(NULL);
+    size += (sizeof(char *)-(size%sizeof(char *)));
     if ((ptr = malloc(size)) == NULL) {
 #ifdef ALLOC_DEBUG
 	print_out1("alloc failed with size = %d", size);
@@ -136,6 +139,7 @@ char *ptr;
 unsigned size;
 {
     if (size == 0) return(ptr);
+    size += (sizeof(char *)-(size%sizeof(char *)));
     if (ptr == NULL) return(Malloc(size));
 #ifdef ALLOC_DEBUG
     unregister_debug(ptr);
@@ -155,6 +159,7 @@ unsigned num, size;
 {
     char *ptr;
     if (size == 0) return(NULL);
+    size += (sizeof(char *)-(size%sizeof(char *)));
     if ((ptr = calloc(num, size)) == NULL) {
 	return(NULL);
     }

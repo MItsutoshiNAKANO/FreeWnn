@@ -1,7 +1,7 @@
 ###
-### $Id: libwnn.msg,v 1.1.2.1 1999/02/08 02:58:21 yamasita Exp $
+### $Id: libwnn.msg,v 1.1.2.3 1999/04/01 05:23:41 nakanisi Exp $
 ###
-
+#
 ### FreeWnn is a network-extensible Kana-to-Kanji conversion system.
 ### This file is part of FreeWnn.
 ### 
@@ -29,10 +29,14 @@
 ### Commentary:
 ###
 ### Change log:
+###	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+###		.msg ファイルに空行があると、msg_open で死ぬ。FreeWnn で enbug :-)
+###		句点を追加。
+###		行末の空白を削除。
 ###
-### Last modified date: 8,Feb.1999
+### Last modified date: 20,Mar.1999
 ###
-
+#
 ###	massage file for libwnn.a
 ### wnnerrmsg.c
 #0	no_error 0
@@ -59,7 +63,7 @@
 #21	no_error 21
 #22	no_error 22
 #23	no_error 23
-24	付属語ファイルの内容が正しくありません
+24	付属語ファイルの内容が正しくありません。
 25	疑似品詞番号が異常ですhinsi.dataが正しくありません。
 26	未定義の品詞が前端品詞として定義されています。
 27	付属語ファイルが読み込まれていません。
@@ -70,7 +74,7 @@
 32	付属語解析領域が不足しています。
 #33	no_error 33
 34	次候補領域が不足しています。
-35	候補が 1 つも作れませんでした 
+35	候補が 1 つも作れませんでした。
 #36	no_error 36
 #37	no_error 37
 #38	no_error 38
@@ -130,8 +134,8 @@
 92	クライアントの読み込んだファイルではありません。
 93	これ以上ファイルを読み込むことができません。
 94	パスワードが間違っています。
-95	ファイルが読み込まれています。 
-96	ファイルが削除できません。 
+95	ファイルが読み込まれています。
+96	ファイルが削除できません。
 97	ファイルが作成出来ません。
 98	Ｗｎｎのファイルでありません。
 99	ファイルのI-nodeとFILE_UNIQを一致させる事ができません。

@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.1.2.2 1999/02/08 01:44:35 yamasita Exp $
+# $Id: Makefile,v 1.1.2.4 1999/04/19 05:51:56 nakanisi Exp $
 #
 
 # FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -26,16 +26,19 @@
 # Commentary:
 #
 # Change log:
+#	'99/04/19	TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
+#		インストールディレクトリを変更可能にする
 #
-# Last modified date: 8,Feb.1999
+# Last modified date: 19,Apr.1999
 #
 
 # Makefile for gerodic 1.00
 #
 #	Jun. 26th '93 Wnn Consortium
 
-WNNBINDIR=/usr/local/bin/Wnn4
-WNNWNNDIR=/usr/local/lib/wnn
+PREFIX = /usr/local
+WNNBINDIR=${PREFIX}/bin/Wnn4
+WNNWNNDIR=${PREFIX}/lib/wnn
 
 WNNOWNER=wnn
 

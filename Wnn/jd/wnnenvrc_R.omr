@@ -1,5 +1,5 @@
 ;
-; $Id: wnnenvrc_R.omr,v 1.4.2.1 1999/02/08 02:58:27 yamasita Exp $
+; $Id: wnnenvrc_R.omr,v 1.4.2.4 1999/04/02 10:46:33 nakanisi Exp $
 ;
 
 ; FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -29,8 +29,10 @@
 ; Commentary:
 ;
 ; Change log:
+;	'99/04/02       よしだともこ <tomo@tomo.gr.jp>
+;		パラメーターを変更
 ;
-; Last modified date: 8,Feb.1999
+; Last modified date: 02,Apr.1999
 ;
 
 confirm1
@@ -51,4 +53,6 @@ setdic usr/@USR/ud		-			5 0 0 - - 1
 ;setdic wnncons/tankan3.dic	-			1 1 1 - - 1
 
 ;;       N nsho hindo len jiri flag jisho sbn dbn_len sbn_cnt suuji kana eisuu kigou toji_kakko fuzokogo kaikakko
-setparam 2 10   2     45  1    80   5     1   50      -20     400   -10  100   -100  200        0        200
+;setparam 2 10   2     45  1    80   5     1   50      -20     400   -10  100   -100  200        0        200
+; New Parameter
+setparam 2 10   2     45  100  200  5     1   40      -100    200   -100 200   80    200        200      200

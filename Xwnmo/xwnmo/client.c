@@ -1,5 +1,5 @@
 /*
- * $Id: client.c,v 1.1.1.1 2000-01-16 05:07:55 ura Exp $
+ * $Id: client.c,v 1.1.1.2 2000-01-16 05:11:12 ura Exp $
  */
 
 /*
@@ -28,8 +28,10 @@
  * Commentary:
  *
  * Change log:
+ *	'99/04/19	TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
+ *		index() の宣言をコメントアウト。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 19,Apr.1999
  *
  * Code:
  *
@@ -55,7 +57,7 @@ env_state()
 {
     char *p;
     char ret = '\0';
-    extern char *index();
+/*    extern char *index();*/
 
     if ((p = romkan_dispmode()) == NULL) return(ret);
     if ((p = (char*)index(p, ':')) == NULL) return(ret);

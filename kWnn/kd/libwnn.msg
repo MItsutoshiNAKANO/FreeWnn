@@ -1,7 +1,7 @@
 ###
-### $Id: libwnn.msg,v 1.1.2.1 1999/02/08 05:42:12 yamasita Exp $
+### $Id: libwnn.msg,v 1.1.2.3 1999/04/01 05:57:12 nakanisi Exp $
 ###
-
+#
 ### FreeWnn is a network-extensible Kana-to-Kanji conversion system.
 ### This file is part of FreeWnn.
 ### 
@@ -28,11 +28,13 @@
 ###
 ### Commentary:
 ###
-### Change log:
+### Change log:(in Japanese)
+###	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+###		.msg ファイルに空行があると、msg_open で死ぬ。FreeWnn で enbug :-)
 ###
-### Last modified date: 8,Feb.1999
+### Last modified date: 20,Mar.1999
 ###
-
+#
 ###	massage file for libwnn.a
 ### wnnerrmsg.c
 #0	no_error 0

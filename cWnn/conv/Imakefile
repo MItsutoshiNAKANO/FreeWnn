@@ -1,5 +1,5 @@
 XCOMM
-XCOMM $Id: Imakefile,v 1.1.1.1 2000-01-16 05:08:03 ura Exp $
+XCOMM $Id: Imakefile,v 1.1.1.2 2000-01-16 05:11:16 ura Exp $
 XCOMM
 
 XCOMM FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -29,15 +29,18 @@ XCOMM
 XCOMM Commentary:
 XCOMM
 XCOMM Change log:
+XCOMM	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+XCOMM		kterm 等の「F10〜 のファンクションキーがある端末（エミュレーター）」
+XCOMM		で、uum のファンクションキー定義を有効にする。
 XCOMM
-XCOMM Last modified date: 8,Feb.1999
+XCOMM Last modified date: 20,Mar.1999
 XCOMM
 #define DoNormalLib YES
 
 #include <Library.tmpl>
 
        INCLUDES = -I$(CWNNINCLUDESRC) -I$(TOP)
-        DEFINES = $(CWNNDEFINES) -DWNNDEFAULT
+        DEFINES = $(CWNNDEFINES) -DWNNDEFAULT -DSUPPORT_TWODIGIT_FUNCTIONS
 
 LINKS = cvt_head.h cvt_key.c cvt_read.c
 

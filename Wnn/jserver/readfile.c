@@ -1,5 +1,5 @@
 /*
- * $Id: readfile.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: readfile.c,v 1.1.1.2 2000-01-16 05:10:53 ura Exp $
  */
 
 /*
@@ -30,8 +30,12 @@
  * Commentary:
  *
  * Change log:
+ *	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+ *		辞書のバイトスワップを行なうタイミングの変更。
+ *		メモリーの解放忘れ。
+ *		ポインターの初期化忘れ。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 20,Mar.1999
  *
  * Code:
  *
@@ -114,9 +118,6 @@ struct wnn_file *wf;
     case  WNN_FT_DICT_FILE:
 	wf->area = (char *)readdict(fp);
 	if(wf->area == NULL) goto ERROR_RET;
-	if(little_endian()){
-	    revdic((struct JT *)wf->area, 0);
-	}
 	break;
     case WNN_FT_HINDO_FILE:
 	wf->area = (char *)readhindo(fp);
@@ -259,6 +260,9 @@ FILE *fp;
     if(jt1->maxhontai == 0 && 
        (jt1->syurui == WNN_UD_DICT || jt1->syurui == WNN_STATIC_DICT)){
 	jt1->maxhontai = 4;
+    }
+    if(little_endian()){
+	revdic(jt1, 0);
     }
     jt1->dirty = 0;
     jt1->hdirty = 0;
@@ -742,6 +746,9 @@ struct JT *jt;
 	free(jt->ri1[D_KANJI]);
 	free(jt->ri2);
 	free(jt->node);
+#ifdef	CONVERT_by_STROKE
+	free(jt->bind);
+#endif	/* CONVERT_by_STROKE */
 	free(jt);
     }
     return(0);
@@ -863,6 +870,10 @@ struct JT *jt1;
     jt1->ri1[D_YOMI] = (struct rind1 *)NULL;
     jt1->ri1[D_KANJI] = (struct rind1 *)NULL;
     jt1->ri2 = (struct rind2 *)NULL;
+    jt1->node = (struct wnn_hinsi_node *)NULL;
+#ifdef	CONVERT_by_STROKE
+    jt1->bind = (struct b_node *)NULL;
+#endif	/* CONVERT_by_STROKE */
     if(((jt1->hindo = (UCHAR *)malloc(jt1->bufsize_serial)) == NULL) ||
        ((jt1->hinsi = (unsigned short *)(malloc(jt1->bufsize_serial * sizeof(short)))) == NULL) ||
 #ifdef	CONVERT_with_SiSheng

@@ -1,5 +1,5 @@
 /*
- * $Id: kensaku.c,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: kensaku.c,v 1.1.1.2 2000-01-16 05:11:08 ura Exp $
  */
 
 /*
@@ -31,8 +31,10 @@
  * Commentary:
  *
  * Change log:
+ *	'99/04/19	TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
+ *		qsort() の宣言をコメントアウト。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 19,Apr.1999
  *
  * Code:
  *
@@ -114,7 +116,7 @@ int flag, tbl;
     static char message4[2048];
     int ret;
     char *table_t[6];
-    extern int qsort();
+/*    extern int qsort();*/
 
     if (get_env() == -1) return(NULL);
 

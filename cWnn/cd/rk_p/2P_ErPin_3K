@@ -1,5 +1,5 @@
 ;
-; $Id: 2P_ErPin_3K,v 1.1.2.1 1999/02/08 05:21:32 yamasita Exp $
+; $Id: 2P_ErPin_3K,v 1.1.2.3 1999/04/01 05:39:04 nakanisi Exp $
 ;
 
 ; FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -28,18 +28,26 @@
 ;
 ; Commentary:
 ;
-; Change log:
+; Change log:(in Japanese)
+;	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+;		無効な音節 Wao を削除。
+;		有効な音節 Be を追加。
+;		有効な音節 Den を追加。
+;		有効な音節 Lo を削除（Luo とキーが衝突するため）。
+;		有効な音節 Chua を追加。
+;		有効な音節 Eng を追加。
+;		有効な音節 Hm を追加。
 ;
-; Last modified date: 8,Feb.1999
+; Last modified date: 20,Mar.1999
 ;
 
 (defvar A  	(list B C I D F G H   K L M N P     S U T W   Y Z V))
 (defvar AI  	(list B C I D   G H   K L M N P     S U T W     Z V))
 (defvar AN  	(list B C I D F G H   K L M N P   R S U T W   Y Z V)) ;ANG
-(defvar AO  	(list B C I D   G H   K L M N P   R S U T W   Y Z V))
-(defvar E  	(list B C I D   G H   K L M N     R S U T     Y Z V))
+(defvar AO  	(list B C I D   G H   K L M N P   R S U T     Y Z V))
+(defvar E  	(list   C I D   G H   K L M N     R S U T     Y Z V))
 (defvar EI  	(list B C   D   G H   K L M N P       U T W     Z V))
-(defvar EN  	(list B C I   F G H   K   M N P   R S U   W     Z V))
+(defvar EN  	(list B C I D F G H   K   M N P   R S U   W     Z V))
 (defvar ENG  	(list B C I D F G H   K L M N P   R S U T W     Z V))
 (defvar I  	(list B C I D       J   L M N P Q R S U T   X Y Z V))
 (defvar IA  	(list       D       J   L       Q           X      ))
@@ -50,12 +58,12 @@
 (defvar ING  	(list B     D       J   L M N P Q       T   X Y    ))
 (defvar IONG  	(list               J           Q           X      ))
 (defvar IU	(list       D       J   L M N   Q           X      ))
-(defvar O  	(list B       F         L M   P           W   Y    ))
+(defvar O  	(list B       F           M   P           W   Y    ))
 (defvar ONG  	(list   C I D   G H   K L   N     R S   T     Y Z V))
 (defvar OU	(list   C I D F G H   K L M N P   R S U T     Y Z V))
 (defvar U  	(list B C I D F G H J K L M N P Q R S U T W X Y Z V))
 (defvar V  	(list                   L   N                      ))
-(defvar UA  	(list           G H   K           R   U           V))
+(defvar UA  	(list     I     G H   K           R   U           V))
 (defvar UAI  	(list     I     G H   K               U           V))
 (defvar UAN	(list   C I D   G H J K L   N   Q R S U T  X Y Z  V))
 (defvar UANG  	(list     I     G H   K               U           V))
@@ -276,11 +284,11 @@ OR(SS1)	･nﾀ
 OR(SS2)	ｦnﾀ
 OR(SS3)	ｧnﾀ
 OR(SS4)	ｨnﾀ
-;OT	engﾀ
-;OT(SS1)	･ngﾀ
-;OT(SS2)	ｦngﾀ
-;OT(SS3)	ｧngﾀ
-;OT(SS4)	ｨngﾀ
+OT	engﾀ
+OT(SS1)	･ngﾀ
+OT(SS2)	ｦngﾀ
+OT(SS3)	ｧngﾀ
+OT(SS4)	ｨngﾀ
 ER	erﾀ
 ER(SS1)	･rﾀ
 ER(SS2)	ｦrﾀ
@@ -302,7 +310,7 @@ OQ(SS2)	ｮuﾀ
 OQ(SS3)	ｯuﾀ
 OQ(SS4)	ｰuﾀ
 ;;;;		-----------Special PinYin-------------
-;HM	Hmﾀ
+HM	Hmﾀ
 HN	Hngﾀ
 NG' '	Ngﾀ
 OM	Mﾀ

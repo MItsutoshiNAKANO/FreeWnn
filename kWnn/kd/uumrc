@@ -1,5 +1,5 @@
 ;
-; $Id: uumrc,v 1.1.2.1 1999/02/08 05:42:14 yamasita Exp $
+; $Id: uumrc,v 1.1.2.3 1999/04/19 06:20:56 nakanisi Exp $
 ;
 
 ; FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -29,8 +29,10 @@
 ; Commentary:
 ;
 ; Change log:
+;	'99/04/19	TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
+;		システム辞書のパスの訂正。
 ;
-; Last modified date: 8,Feb.1999
+; Last modified date: 19,Apr.1999
 ;
 
 ;;
@@ -40,7 +42,7 @@
 setconvenv	@LIBDIR/@LANG/wnnenvrc
 setkankanaenv	@LIBDIR/@LANG/wnnenvrc_R
 
-setjishopath    @LIBDIR/@LANG/dic/pubdic/
+setjishopath    @LIBDIR/@LANG/dic/sys/
 sethindopath    @LIBDIR/@LANG/dic/usr/@USR/
 
 setuumkey	@LIBDIR/@LANG/uumkey

@@ -1,5 +1,5 @@
 /*
- * $Id: fzk.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: fzk.c,v 1.1.1.2 2000-01-16 05:10:52 ura Exp $
  */
 
 /*
@@ -30,8 +30,10 @@
  * Commentary:
  *
  * Change log:
+ *	Akitoshi MORISHIMA <ohm@rcac.tdi.co.jp>
+ *		MkLinux が共有ライブラリ化した時に顕在化したバグ修正
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 22,Mar.1999
  *
  * Code:
  *
@@ -113,8 +115,6 @@ register	FILE	*fp;
 
 	fzk_tbl = fzk_ld(fp);
 	if (fzk_tbl != NULL) {
-		if (fp != NULL)
-			fclose(fp);
 #ifndef NO_FZK
 		link_job(fzk_tbl->fzklength, fzk_tbl);
 #endif

@@ -1,5 +1,5 @@
 ;
-; $Id: ximconf,v 1.4.2.1 1999/02/08 05:52:00 yamasita Exp $
+; $Id: ximconf,v 1.4.2.3 1999/04/01 05:29:49 nakanisi Exp $
 ;
 
 ; FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -29,8 +29,10 @@
 ; Commentary:
 ;
 ; Change log:
+;	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+;		ja_JP が先頭に表示されるように順番を入れ換え。
 ;
-; Last modified date: 8,Feb.1999
+; Last modified date: 20,Mar.1999
 ;
 
 ; The configulation file for Xwnmo
@@ -40,18 +42,18 @@
 ;  setdefaultlocale	<deafult locale of Root-Mode>
 ;  setworldlocale	<locale of world environment>
 ;
-ja|ja_JP.eucJP|ja_JP.ujis|ja_JP.mscode|ja_JP.SJIS|ja_JP.jis8|ja_JP.jis7|ja_JP.pjis \
-		ja_JP	ja_JP.eucJP	2,1,2	True	Normal
-zh_CN.eucCN|zh_CN.ugb	\
-		zh_CN	zh_CN.eucCN	2,1,2	True	Yincoding
-zh_TW.eucTW|zh_TW.ucns|zh_TW.big5 \
-		zh_TW	zh_TW.eucTW	2,1,2	True	Yincoding
-ko_KR.eucKR|ko_KR.euc	\
-		ko_KR	ko_KR.eucKR	2	False	Normal
+;C		C	C		1	False	Normal
+ru_SU.8859-5	ru_SU	ru_SU.8859-5	1	False	Normal
 lt_LN.bit8|lt_LN.bit7 \
 		lt_LN	lt_LN.bit8	1	False	Normal
-ru_SU.8859-5	ru_SU	ru_SU.8859-5	1	False	Normal
-C		C	C		1	False	Normal
+ko_KR.eucKR|ko_KR.euc	\
+		ko_KR	ko_KR.euc	2	True	Normal
+zh_TW.eucTW|zh_TW.ucns|zh_TW.big5 \
+		zh_TW	zh_TW.ucns	2,1,2	True	Yincoding
+zh_CN.eucCN|zh_CN.ugb	\
+		zh_CN	zh_CN.ugb	2,1,2	True	Yincoding
+ja|ja_JP.eucJP|ja_JP.ujis|ja_JP.mscode|ja_JP.SJIS|ja_JP.jis8|ja_JP.jis7|ja_JP.pjis \
+		ja_JP	ja_JP.ujis	2,1,2	True	Normal
 
-setdefaultlocale	ja_JP.eucJP
+setdefaultlocale	ja_JP.ujis
 setworldlocale	wr_WR.ct

@@ -1,5 +1,5 @@
 /*
- * $Id: dispatch.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: dispatch.c,v 1.1.1.2 2000-01-16 05:10:52 ura Exp $
  */
 
 /*
@@ -30,8 +30,10 @@
  * Commentary:
  *
  * Change log:
+ *	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+ *		デバッグ情報が正しく表示されない（K&R C と ANSI C の非互換）。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 20,Mar.1999
  *
  * Code:
  *
@@ -60,7 +62,11 @@ do_command()
  wnn_errorno = 0;
  command = get4_cur();	/* get command */
 
+#if defined(__STDC__)
+#define CASE(X) case (X): error1(#X "(%d): cur_clp = %d\n", command, cur_clp);
+#else
 #define CASE(X) case (X): error1("X(%d): cur_clp = %d\n", command, cur_clp);
+#endif
 
  switch(command){
 	CASE(JS_VERSION)

@@ -1,7 +1,6 @@
 #
-# $Id: uum.msg,v 1.1.2.1 1999/02/08 03:18:12 yamasita Exp $
+# $Id: uum.msg,v 1.1.2.3 1999/04/01 05:27:01 nakanisi Exp $
 #
-
 ### FreeWnn is a network-extensible Kana-to-Kanji conversion system.
 ### This file is part of FreeWnn.
 ### 
@@ -29,10 +28,12 @@
 ### Commentary:
 ###
 ### Change log:
+###	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+###		.msg ファイルに空行があると、msg_open で死ぬ。FreeWnn で enbug :-)
 ###
-### Last modified date: 8,Feb.1999
+### Last modified date: 20,Mar.1999
 ###
-
+#
 ###	massage file for uum
 ### jhlp.c
 1	\rｕｕｍ(かな漢字変換フロントエンドプロセッサ)\r\n

@@ -1,5 +1,5 @@
 /*
- * $Id: jlib.h,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: jlib.h,v 1.1.1.2 2000-01-16 05:10:52 ura Exp $
  */
 
 /*
@@ -30,8 +30,11 @@
  * Commentary:
  *
  * Change log:
+ *	'99/04/19	TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
+ *		#include <setjmp.h> の削除。
+ *		#define wchar_t の追加。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 19,Apr.1999
  *
  * Code:
  *
@@ -41,12 +44,14 @@
 /*
 	Nihongo	Henkan	Library Header File
 */
-/*
 #include <setjmp.h>
-*/
-
 
 #define	w_char	unsigned short
+#ifndef WCHAR_T
+#define wchar_t	w_char
+#define wchar	w_char
+#define WCHAR_T
+#endif 
 
 #define JLIB
 

@@ -1,5 +1,5 @@
 /*
- * $Id: jutil.c,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: jutil.c,v 1.1.1.2 2000-01-16 05:11:08 ura Exp $
  */
 
 /*
@@ -31,8 +31,10 @@
  * Commentary:
  *
  * Change log:
+ *	'99/04/19	TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
+ *		srandom() の宣言をコメントアウト。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 19,Apr.1999
  *
  * Code:
  *
@@ -624,7 +626,7 @@ int  (*error_handler)(), (*message_handler)();
     extern int srand();
     extern long rand();
 #else
-    extern int srandom();
+/*    extern int srandom(); */
     extern long random();
 #endif
     extern long time();

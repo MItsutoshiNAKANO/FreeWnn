@@ -1,7 +1,6 @@
 #
-# $Id: wnnstat.msg,v 1.1.2.1 1999/02/08 05:21:11 yamasita Exp $
+# $Id: wnnstat.msg,v 1.1.2.3 1999/04/01 05:43:19 nakanisi Exp $
 #
-
 ### FreeWnn is a network-extensible Kana-to-Kanji conversion system.
 ### This file is part of FreeWnn.
 ### 
@@ -28,11 +27,12 @@
 ###
 ### Commentary:
 ###
-### Change log:
+### Change log:(in Japanese)
+###	'99/03/20	室怀△ＰＦＵ <kate@pfu.co.jp>
+###		.msg ファイルに鄂乖があると、msg_open で秽ぬ。FreeWnn で enbug :-)
 ###
-### Last modified date: 8,Feb.1999
+### Last modified date: 20,Mar.1999
 ###
-
 1	Env No.\t环境名\t参照数\t文法\t词典数(词典No.)\t\t文件\n
 2	Env No.\t环境名\t参照数\n
 3	用户名:ｈｏｓｔ名\t(接口No.)\t环境号码\n

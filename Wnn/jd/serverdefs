@@ -1,5 +1,5 @@
 ;
-; $Id: serverdefs,v 1.4.2.1 1999/02/08 02:58:22 yamasita Exp $
+; $Id: serverdefs,v 1.4.2.3 1999/04/01 05:23:41 nakanisi Exp $
 ;
 
 ; FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -29,8 +29,10 @@
 ; Commentary:
 ;
 ; Change log:
+;	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+;		taiwanese（zh_TW の alias）と kserver の定義を追加。
 ;
-; Last modified date: 8,Feb.1999
+; Last modified date: 20,Mar.1999
 ;
 
 ;lang_name	machine_name	unix_domain_socket_name	service_name	port_num
@@ -40,3 +42,6 @@ nihongo		jserver		/tmp/jd_sockV4		wnn4		22273
 zh_CN		cserver		/tmp/cd_sockV4		wnn4_Cn		22289
 zhongwen	cserver		/tmp/cd_sockV4		wnn4_Cn		22289
 zh_TW		tserver		/tmp/td_sockV4		wnn4_Tw		22321
+taiwanese	tserver		/tmp/td_sockV4		wnn4_Tw		22321
+ko_KR		kserver		/tmp/kd_sockV4		wnn4_Kr		22305
+korean		kserver		/tmp/kd_sockV4		wnn4_Kr		22305

@@ -1,5 +1,5 @@
 XCOMM
-XCOMM $Id: Imakefile,v 1.1.1.1 2000-01-16 05:07:43 ura Exp $
+XCOMM $Id: Imakefile,v 1.1.1.2 2000-01-16 05:10:44 ura Exp $
 XCOMM
 
 XCOMM FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -29,14 +29,16 @@ XCOMM
 XCOMM Commentary:
 XCOMM
 XCOMM Change log:
+XCOMM	'99/04/19	TAOKA Satoshi - ÅÄ²¬ ÃÒ»Ö<taoka@infonets.hiroshima-u.ac.jp>
+XCOMM		Wnn ¤Î make ¾ò·ï¤ÎÊÑ¹¹¡£
 XCOMM
-XCOMM Last modified date: 8,Feb.1999
+XCOMM Last modified date: 19,Apr.1999
 XCOMM
 
 #define IHaveSubdirs
 #define PassCDebugFlags 'CDEBUGFLAGS=$(CDEBUGFLAGS)'
 
-#if BuildWnn || BuildXwnmo
+#if BuildWnn
 WNNDIR = Wnn
 #endif
 #if BuildCWnn
