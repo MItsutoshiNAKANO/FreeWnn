@@ -1,5 +1,5 @@
 /*
- *  $Id: de_header.h,v 1.17 2003-05-11 18:35:54 hiroo Exp $
+ *  $Id: de_header.h,v 1.18 2003-05-18 14:34:01 h-abe Exp $
  */
 
 /*
@@ -192,7 +192,7 @@ GLOBAL struct cnv_env *c_env;
 /* GLOBAL struct cnv_env *s_env[]; */
 GLOBAL int max_sticky_env GLOBAL_VAL(ST_MAX);
 
-GLOBAL struct wnn_file files[MAX_FILES];
+GLOBAL struct wnn_file *files;
 GLOBAL struct wnn_dic dic_table[MAX_DIC];
 
 GLOBAL int wnn_errorno GLOBAL_VAL(0);

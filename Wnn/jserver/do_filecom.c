@@ -1,5 +1,5 @@
 /*
- *  $Id: do_filecom.c,v 1.11 2003-05-11 18:27:42 hiroo Exp $
+ *  $Id: do_filecom.c,v 1.12 2003-05-18 14:34:01 h-abe Exp $
  */
 
 /*
@@ -38,6 +38,17 @@
 #endif
 
 #include <stdio.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#  include <string.h>
+#else
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
+#  endif
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif
+#endif /* STDC_HEADERS */
 #include <sys/types.h>
 #include <sys/stat.h>
 #if STDC_HEADERS
@@ -70,6 +81,12 @@ void
 file_init (void)
 {
   int i;
+  files = (struct wnn_file *)calloc(MAX_FILES, sizeof(struct wnn_file));
+  if ( files == NULL )
+    {
+      fprintf (stderr, "Malloc Faild\n");
+      return (-1);
+    }
   for (i = 0; i < MAX_FILES; i++)
     {
       files[i].ref_count = -1;
