@@ -1,5 +1,5 @@
 /*
- *  $Id: yincoding.c,v 1.5 2002-03-21 06:56:38 hiroo Exp $
+ *  $Id: yincoding.c,v 1.6 2002-03-24 01:19:11 hiroo Exp $
  */
 
 /*
@@ -220,11 +220,17 @@ is_zhuyin (sheng_raw, yun_raw)
      register int yun_raw;
 {
 
-  if ((sheng_raw >= 0) && (sheng_raw < ZY_NUM_SHENGMU) && (yun_raw >= 0) && (yun_raw < ZY_NUM_YUNMU) && ((zhuyin_tbl[sheng_raw * ZY_NUM_YUNMU + yun_raw] & 0x8000) == 0x8000))
-    if (sheng_raw == EMPTY_SHENG_RAW)
-      return (0);
-    else
-      return (1);
+  if ((sheng_raw >= 0)
+       && (sheng_raw < ZY_NUM_SHENGMU)
+       && (yun_raw >= 0)
+       && (yun_raw < ZY_NUM_YUNMU)
+       && ((zhuyin_tbl[sheng_raw * ZY_NUM_YUNMU + yun_raw] & 0x8000) == 0x8000))
+    {
+      if (sheng_raw == EMPTY_SHENG_RAW)
+        return (0);
+      else
+        return (1);
+    }
   return (-1);
 }
 
