@@ -1,8 +1,4 @@
 /*
- *  $Id: b_index.c,v 1.6 2002-05-12 22:51:16 hiroo Exp $
- */
-
-/*
  * FreeWnn is a network-extensible Kana-to-Kanji conversion system.
  * This file is part of FreeWnn.
  * 
@@ -28,8 +24,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
-/**  cWnn  Version 1.1   **/
+static char rcs_id[] = "$Id: b_index.c,v 1.7 2002-08-16 17:30:27 hiroo Exp $";
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -49,16 +44,22 @@
 #include "jdata.h"
 
 #ifdef CONVERT_by_STROKE
-/*******  Create B_dic index    *********************************************/
-static int delete_b_node (), creat_b_node (), bnode_alloc (), bnode_free ();
+/*******  Create B_dic index  *************************************/
+static int delete_b_node (struct JT *jt, w_char *yomi, int level, int p_node);
+static int creat_b_node (struct JT *jt, w_char *yomi, int level, int p_node);
+static int bnode_alloc (struct JT *jt);
+static int bnode_free (struct JT *jt, int k);
 
 static int free_bnode = -1;     /* Initially no free b_node */
 static int b_cnt;               /* Current member of b_node in b_nodes area */
                                 /* Note,  b_cnt < jt->bufsize_bnode */
 
+/*----------------------------------------------------------------+
+  SYNOPSYS: Create b_index for b_dic.
+  RETURN VALUE: success: b_cnt (current b_node); failure: -1
+ +----------------------------------------------------------------*/
 int
-create_b_index (jt)             /* Create B_index for B_dic     */
-     struct JT *jt;
+create_b_index (struct JT *jt)
 {
   int i;
   int serial;
@@ -72,7 +73,7 @@ create_b_index (jt)             /* Create B_index for B_dic     */
    */
   if (jt->bind == NULL)
     {
-      error1 ("Error in creating head of b_index \n");
+      log_err ("error in creating head of b_index.");
       return (-1);
     }
   /* Set the first one be a  dummy b_node */
@@ -95,12 +96,12 @@ create_b_index (jt)             /* Create B_index for B_dic     */
   return (b_cnt);
 }
 
-/******************** For each character in a tuple creat the b_node *******/
+/*----------------------------------------------------------------+
+  SYNOPSYS: Create a b_node for each character in a tuple.
+  RETURN VALUE:	success: 0;  failure: -1
+ +----------------------------------------------------------------*/
 int
-b_index_add (jt, yomi, serial)
-     struct JT *jt;
-     w_char *yomi;
-     int serial;
+b_index_add (struct JT *jt, w_char *yomi, int serial)
 {
   int k;
   int p_node;                   /* Current b_node in No.  */
@@ -110,7 +111,7 @@ b_index_add (jt, yomi, serial)
     {
       if ((p_node = creat_b_node (jt, yomi, k, p_node)) == -1)
         {
-          error1 ("Error in creating b_index\n");
+          log_err ("error in creating b_index.");
           return (-1);
         }
     }
@@ -118,22 +119,24 @@ b_index_add (jt, yomi, serial)
   return (0);
 }
 
+/*----------------------------------------------------------------+
+  SYNOPSYS:
+ +----------------------------------------------------------------*/
 void
-b_index_delete (jt, serial)
-     struct JT *jt;
-     int serial;
+b_index_delete (struct JT *jt, int serial)
 {
   w_char *yomi;
   yomi = KANJI_str (jt->ri2[serial].kanjipter + jt->kanji, 0);
   delete_b_node (jt, yomi, 0, 0);
 }
 
+/*----------------------------------------------------------------+
+  SYNOPSYS:
+  RETURN VALUE:	0  Having no son
+ 		1  Having some sons
+ +----------------------------------------------------------------*/
 static int
-delete_b_node (jt, yomi, level, p_node) /* return:   0   Having no son     */
-     struct JT *jt;             /*           1   Having some sons  */
-     w_char *yomi;
-     int level;
-     int p_node;
+delete_b_node (struct JT *jt, w_char *yomi, int level, int p_node)
 {
   int tmp_node;
   int buf_node1, buf_node2;
@@ -165,7 +168,7 @@ delete_b_node (jt, yomi, level, p_node) /* return:   0   Having no son     */
   if (yo_kanji == NULL || yomi[level] != yo_kanji[level])
     {
       /* Error case */
-      error1 ("Error on b_index \n");
+      log_err ("error on b_index.");
       return (-1);
     }
 
@@ -194,14 +197,18 @@ delete_b_node (jt, yomi, level, p_node) /* return:   0   Having no son     */
     }
 }
 
-/*** Create a son of the perient node p_node, when it does not exist *******/
-
+/*----------------------------------------------------------------+
+  SYNOPSIS: Create a son of the parent node p_node, when it does
+ 	 not exist.
+  PARAMETERS:	jt: Header of the current dic.
+		yomi: Cureent character in this level.
+		level: Level number.
+		p_node: cureent b_node.
+  RETERN VALUE:	new or existent node number whether created or existed.
+		failure: -1
+ +----------------------------------------------------------------*/
 static int
-creat_b_node (jt, yomi, level, p_node)
-     struct JT *jt;             /* Header of current dic */
-     w_char *yomi;              /* Cureent character in this level */
-     int level;                 /* level No     */
-     int p_node;                /* cureent b_node */
+creat_b_node (struct JT *jt, w_char *yomi, int level, int p_node)
 {
   int new_node;
   int buf_node1, buf_node2;
@@ -236,7 +243,7 @@ creat_b_node (jt, yomi, level, p_node)
         {
           if ((new_node = bnode_alloc (jt)) == -1)
             {
-              error1 ("Error on Re-alloc area of Bindex\n");
+              log_err ("error in reallocing area of b_index.");
               return (-1);
             }
           jt->bind[p_node].pter_son = new_node;
@@ -288,13 +295,15 @@ creat_b_node (jt, yomi, level, p_node)
 }
 
 
-/* bnode_alloc(jt) gets a b_node from free_bnode list if it exists. Otherwise
-   it gets the b_node sequently from b_cnt++.  When b_cnt is greater than 
-   bufsize of b_node. rallocation is will be performed                          */
-
+/*----------------------------------------------------------------+
+  SYNOPSYS: Get a b_node from free_bnode list if there is any.
+	Otherwise get a b_node sequencially by doing b_cnt++.
+	When b_cnt is greater than bufsize of b_node, rallocation
+	will be performed.
+  RETERN VALUE:	
+ +----------------------------------------------------------------*/
 static int
-bnode_alloc (jt)
-     struct JT *jt;
+bnode_alloc (struct JT *jt)
 {
   int i;
 
@@ -310,16 +319,15 @@ bnode_alloc (jt)
   return (jt->bufsize_bnode = b_cnt);   /* Not re-alloc */
 }
 
-/************************************************************************/
-                                         /* Free a b_node[k] from jt    */
+/*----------------------------------------------------------------+
+  SYNOPSIS: Free b_node[k] from jt.
+ +----------------------------------------------------------------*/
 static int
-bnode_free (jt, k)
-     struct JT *jt;
-     int k;
+bnode_free (struct JT *jt, int k)
 {
   if (k <= 0 || k > jt->max_bnode)
     {
-      error1 ("Error in free_bnode\n");
+      log_err ("error: bnode_free()");
       return (-1);
     }
   jt->bind[k].pter = -1;        /* Initial this node   */
