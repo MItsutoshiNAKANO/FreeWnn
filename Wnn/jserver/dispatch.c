@@ -1,5 +1,5 @@
 /*
- *  $Id: dispatch.c,v 1.7 2002-03-08 17:57:59 hiroo Exp $
+ *  $Id: dispatch.c,v 1.8 2002-03-09 16:50:31 aono Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2001, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -56,9 +56,9 @@ do_command ()
   command = get4_cur ();        /* get command */
 
 #if defined(__STDC__)
-#define CASE(X) case (X): error1(#X "(%d): cur_clp = %d\n", command, cur_clp);
+#define CASE(X) case (X): log_debug(#X "(%d): cur_clp = %d", command, cur_clp);
 #else
-#define CASE(X) case (X): error1("X(%d): cur_clp = %d\n", command, cur_clp);
+#define CASE(X) case (X): log_debug("X(%d): cur_clp = %d", command, cur_clp);
 #endif
 
   switch (command)

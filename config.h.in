@@ -69,6 +69,12 @@
 /* Define if you have the strtol function.  */
 #undef HAVE_STRTOL
 
+/* Define if you have the vasprintf function.  */
+#undef HAVE_VASPRINTF
+
+/* Define if you have the vsyslog function.  */
+#undef HAVE_VSYSLOG
+
 /* Define if you have the <dlfcn.h> header file.  */
 #undef HAVE_DLFCN_H
 

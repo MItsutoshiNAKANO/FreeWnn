@@ -1,5 +1,5 @@
 /*
- *  $Id: gethinsi.c,v 1.4 2001-06-14 18:15:55 ura Exp $
+ *  $Id: gethinsi.c,v 1.5 2002-03-09 16:50:31 aono Exp $
  */
 
 /*
@@ -81,7 +81,9 @@
 extern int wnn_errorno;
 
 #ifdef JSERVER
-extern void error1 ();
+/* must be #include "de_header.h" ? */
+extern void log_debug ();
+#define error1 log_debug
 #endif
 
 /*

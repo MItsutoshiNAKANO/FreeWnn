@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.7 2001-08-14 13:43:22 hiroo Exp $
+#   $Id: Makefile.in,v 1.8 2002-03-09 16:50:31 aono Exp $
 #
 
 #
@@ -36,7 +36,7 @@ INSTALL      = @INSTALL@ $(INSTALLFLAGS)
 
 LINKS = commonhd.h wnn_config.h copyright.h demcom.h hinsi_file.h jd_sock.h  \
         jdata.h jh.h jlib.h jllib.h jslib.h msg.h rk_spclval.h wnn_malloc.h  \
-        wnn_string.h wnnerror.h cplib.h wnn_os.h hinsi.h
+        wnn_string.h wnnerror.h cplib.h wnn_os.h hinsi.h ansidecl.h
 
 HEADERS = \
         jllib.h            \
@@ -259,6 +259,17 @@ depend:: hinsi.h
 
 clean::
 	$(RM) hinsi.h
+
+ansidecl.h:  $(WNNINCLUDESRC)/ansidecl.h
+	$(RM) $@
+	$(LN) $? $@
+
+includes:: ansidecl.h
+
+depend:: ansidecl.h
+
+# 'clean' entry is not added because last 
+# 'clean' entry (action = '$(RM) $(LINKS)') does same thing. (aono)
 
 instlib:: install
 

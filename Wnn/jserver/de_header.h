@@ -1,5 +1,5 @@
 /*
- *  $Id: de_header.h,v 1.9 2002-03-08 17:57:59 hiroo Exp $
+ *  $Id: de_header.h,v 1.10 2002-03-09 16:50:31 aono Exp $
  */
 
 /*
@@ -329,11 +329,16 @@ extern void get_knj_com ();
 /* do_hinsi_s.c */
 extern void js_hindo_set ();
 /* error.c */
+#if 0				/* not used for now */
 extern void error_exit1 ();
 extern void error_exit ();
-extern void error1 ();
+#endif
+extern void log_err (const char *, ...);
+extern void log_debug (const char *, ...);
 extern intfntype signal_hand ();
 extern intfntype terminate_hand ();
+/* error1() - For compatiblity */
+#define error1 log_debug
 extern void out ();
 #ifdef DEBUG
 #ifdef  putwchar
