@@ -1,5 +1,5 @@
 /*
- * $Id: final.c,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: final.c,v 1.2 2001-06-14 18:16:11 ura Exp $
  */
 
 /*
@@ -40,66 +40,60 @@
  */
 
 /*
- *      Author: Shoji kamada	 OMRON Corporation
- *			 	 kamada@ari.ncl.omron.co.jp
+ *      Author: Shoji kamada     OMRON Corporation
+ *                               kamada@ari.ncl.omron.co.jp
  *
- *		Takashi Inoue    OMRON Corporation
+ *              Takashi Inoue    OMRON Corporation
  *                               takashi@ari.ncl.omron.co.jp
  */
 
 #include "exvalue.h"
 #include "func.h"
 
-void	dtictoex(ic, im) 	/* DesTroy IC TO EXit */
-XIM	im;
-XIC	ic;
+void
+dtictoex (ic, im)               /* DesTroy IC TO EXit */
+     XIM im;
+     XIC ic;
 {
-    dticonly(ic);
-    fcictoex(im);
+  dticonly (ic);
+  fcictoex (im);
 }
 
-void	dticonly(ic)		/* DesTroy IC ONLY */
-XIC	ic;
+void
+dticonly (ic)                   /* DesTroy IC ONLY */
+     XIC ic;
 {
-    destic(ic);
+  destic (ic);
 }
 
-void	dtictofc(ic)		/* DesTroy IC TO File Close of ic */
-XIC	ic;
+void
+dtictofc (ic)                   /* DesTroy IC TO File Close of ic */
+     XIC ic;
 {
-    dticonly(ic);
-    fclic();
+  dticonly (ic);
+  fclic ();
 }
 
-void	fcictoex(im)		/* log File Close of IC TO EXit */
-XIM	im;
+void
+fcictoex (im)                   /* log File Close of IC TO EXit */
+     XIM im;
 {
-    fclic();
-    climtoex(im);
+  fclic ();
+  climtoex (im);
 }
 
-void	climtoex(im)		/* CLose IM TO EXit */
-XIM	im;
+void
+climtoex (im)                   /* CLose IM TO EXit */
+     XIM im;
 {
-    closeim(im);
-    fcimtoex();
+  closeim (im);
+  fcimtoex ();
 }
 
-void	fcimtoex()			/* log File Close IM TO EXit */
+void
+fcimtoex ()                     /* log File Close IM TO EXit */
 {
-    fclim();
-    freexres();
-    freemwin();
+  fclim ();
+  freexres ();
+  freemwin ();
 }
-
-
-
-
-
-
-
-
-
-
-
-

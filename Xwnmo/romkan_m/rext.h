@@ -1,5 +1,5 @@
 /*
- * $Id: rext.h,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: rext.h,v 1.2 2001-06-14 18:16:09 ura Exp $
  */
 
 
@@ -39,80 +39,80 @@
 /*
  * rk_main.c
  */
-extern char *chrcat();
-extern letter *ltrgrow();
-extern int ltrlen();
-extern char *strend();
-extern int ltrcmp();
-extern letter *ltr1cut();
-extern int ltrstrcmp();
-extern void BUGreport();
+extern char *chrcat ();
+extern letter *ltrgrow ();
+extern int ltrlen ();
+extern char *strend ();
+extern int ltrcmp ();
+extern letter *ltr1cut ();
+extern int ltrstrcmp ();
+extern void BUGreport ();
 
 /*
  * rk_alloc.c
  */
-extern void malloc_for_modetable_struct();
-extern void free_for_modetable_struct();
-extern void check_and_realloc_for_modetable_struct();
-extern void malloc_for_modesw();
-extern void free_for_modesw();
-extern void check_and_realloc_for_modesw();
-extern void malloc_for_modebuf();
-extern void free_for_modebuf();
-extern void malloc_for_modenaibu();
-extern void realloc_for_modenaibu();
-extern void free_for_modenaibu();
-extern void malloc_for_hyo();
-extern void free_for_hyo();
-extern void malloc_for_usehyo();
-extern void free_for_usehyo();
-extern void malloc_for_hyo_area();
-extern void free_for_hyo_area();
-extern void malloc_for_hensuudef();
-extern void free_for_hensuudef();
-extern void check_and_realloc_for_hensuudef();
-extern void malloc_for_hensuu();
-extern void free_for_hensuu();
-extern void check_and_realloc_for_hensuu();
-extern void malloc_for_henmatch();
-extern void free_for_henmatch();
-extern void malloc_for_hyobuf();
-extern void free_for_hyobuf();
-extern void check_and_realloc_for_hyobuf();
-extern void malloc_for_heniki();
-extern void free_for_heniki();
-extern void check_and_realloc_for_heniki();
+extern void malloc_for_modetable_struct ();
+extern void free_for_modetable_struct ();
+extern void check_and_realloc_for_modetable_struct ();
+extern void malloc_for_modesw ();
+extern void free_for_modesw ();
+extern void check_and_realloc_for_modesw ();
+extern void malloc_for_modebuf ();
+extern void free_for_modebuf ();
+extern void malloc_for_modenaibu ();
+extern void realloc_for_modenaibu ();
+extern void free_for_modenaibu ();
+extern void malloc_for_hyo ();
+extern void free_for_hyo ();
+extern void malloc_for_usehyo ();
+extern void free_for_usehyo ();
+extern void malloc_for_hyo_area ();
+extern void free_for_hyo_area ();
+extern void malloc_for_hensuudef ();
+extern void free_for_hensuudef ();
+extern void check_and_realloc_for_hensuudef ();
+extern void malloc_for_hensuu ();
+extern void free_for_hensuu ();
+extern void check_and_realloc_for_hensuu ();
+extern void malloc_for_henmatch ();
+extern void free_for_henmatch ();
+extern void malloc_for_hyobuf ();
+extern void free_for_hyobuf ();
+extern void check_and_realloc_for_hyobuf ();
+extern void malloc_for_heniki ();
+extern void free_for_heniki ();
+extern void check_and_realloc_for_heniki ();
 
 /*
  * rk_bltinfn.c
  */
-extern letter to_zenalpha();
-extern void to_hankata();
-extern letter to_zenhira();
-extern letter to_zenkata();
-void handakuadd();
-void dakuadd();
-void to_digit();
+extern letter to_zenalpha ();
+extern void to_hankata ();
+extern letter to_zenhira ();
+extern letter to_zenkata ();
+void handakuadd ();
+void dakuadd ();
+void to_digit ();
 
 /*
  * rk_modread.c
  */
-int readmode();
-int readfnm();
-void choosehyo();
-int filnamchk();
+int readmode ();
+int readfnm ();
+void choosehyo ();
+int filnamchk ();
 
 /*
  * rk_read.c
  */
-extern void readdata();
-extern void ltr1tostr();
-extern letter  get1ltr();
-extern letter  unget1ltr();
-extern int int_get1ltr();
-extern int int_unget1ltr();
-extern letter getfrom_dblq();
-extern int getfrom_lptr();
-extern void de_bcksla();
-extern int ltov();
-extern letter vtol();
+extern void readdata ();
+extern void ltr1tostr ();
+extern letter get1ltr ();
+extern letter unget1ltr ();
+extern int int_get1ltr ();
+extern int int_unget1ltr ();
+extern letter getfrom_dblq ();
+extern int getfrom_lptr ();
+extern void de_bcksla ();
+extern int ltov ();
+extern letter vtol ();

@@ -1,5 +1,5 @@
 /*
- *  $Id: rk_header.h,v 1.2 2001-06-14 17:55:49 ura Exp $
+ *  $Id: rk_header.h,v 1.3 2001-06-14 18:16:05 ura Exp $
  */
 
 /*
@@ -30,29 +30,29 @@
  */
 
 /***********************************************************************
-			rk_header.h
-						88. 5.20  訂 補
+                        rk_header.h
+                                                88. 5.20  訂 補
 
-	rk_main.c rk_read.c rk_modread.c rk_bltinfn.cの共通ヘッダ。
-	中で取っている配列の大きさなどを定義。
+        rk_main.c rk_read.c rk_modread.c rk_bltinfn.cの共通ヘッダ。
+        中で取っている配列の大きさなどを定義。
 ***********************************************************************/
-/*	Version 3.0
+/*      Version 3.0
  */
-/*	make時に必要なdefine
+/*      make時に必要なdefine
 
-	BSD42		BSDにてstrings.hを使用（string.hを使う場合は不要）
-	SYSVR2		System Vにて定義域の制限されたtoupper・tolowerを使用
-			（なくても動く）
-	MVUX		ECLIPSE MVでの運転時にdefine  IKISが自動defineされる
+        BSD42           BSDにてstrings.hを使用（string.hを使う場合は不要）
+        SYSVR2          System Vにて定義域の制限されたtoupper・tolowerを使用
+                        （なくても動く）
+        MVUX            ECLIPSE MVでの運転時にdefine  IKISが自動defineされる
 
-	RKMODPATH="文字列"
-			その文字列をモード定義表のサーチパスの環境変数の
-			名前にする
-	WNNDEFAULT	「@LIBDIR」で標準設定表のあるディレクトリを表せる
-			ようにする	
-	IKIS		半角仮名の１バイト目を0xA8（デフォルトは0x8E）にする
+        RKMODPATH="文字列"
+                        その文字列をモード定義表のサーチパスの環境変数の
+                        名前にする
+        WNNDEFAULT      「@LIBDIR」で標準設定表のあるディレクトリを表せる
+                        ようにする      
+        IKIS            半角仮名の１バイト目を0xA8（デフォルトは0x8E）にする
 
-	この他 デバッグ時は必要に応じて KDSP、CHMDSPをdefine
+        この他 デバッグ時は必要に応じて KDSP、CHMDSPをdefine
 */
 
 #ifdef MVUX
@@ -69,55 +69,55 @@
 #endif
 #include "rk_macros.h"
 
-#define ESCCHR	'\033'
-#define BASEMX	(26 + 10)
+#define ESCCHR  '\033'
+#define BASEMX  (26 + 10)
 
-#define REALFN	200 /* 表のフルネームの最大長 */
+#define REALFN  200             /* 表のフルネームの最大長 */
 
 #ifdef KOREAN
-#define LINALL  30000 /* 対応表全部の行数合計 */
-#define SIZALL  300000 /* 対応表の内部表現の最大サイズ*/
+#define LINALL  30000           /* 対応表全部の行数合計 */
+#define SIZALL  300000          /* 対応表の内部表現の最大サイズ */
 #else
-#define LINALL	2000 /* 対応表全部の行数合計 */
-#define SIZALL	20000 /* 対応表の内部表現の最大サイズ・
-			表一つの変数の変域長の合計としても使ってる */
+#define LINALL  2000            /* 対応表全部の行数合計 */
+#define SIZALL  20000           /* 対応表の内部表現の最大サイズ・
+                                   表一つの変数の変域長の合計としても使ってる */
 #endif
 
-#define LINSIZ	1000 /* 対応表の一行の最大サイズ */
-#define TRMSIZ	500 /* 対応表の一項目の最大サイズ・
-			モード名の最長としても使ってる */
-#define KBFSIZ	100 /* 本処理バッファのサイズ */
-#define DSPLIN	256 /* デバッグ用 */
-#define OUTSIZ	200 /* 出力バッファのサイズ */
-#define RSLMAX	20 /* 関数の値として返る文字列の最長 */
+#define LINSIZ  1000            /* 対応表の一行の最大サイズ */
+#define TRMSIZ  500             /* 対応表の一項目の最大サイズ・
+                                   モード名の最長としても使ってる */
+#define KBFSIZ  100             /* 本処理バッファのサイズ */
+#define DSPLIN  256             /* デバッグ用 */
+#define OUTSIZ  200             /* 出力バッファのサイズ */
+#define RSLMAX  20              /* 関数の値として返る文字列の最長 */
 
-#define VARMAX	50 /* 表一個の変数個数 */
-#define VARTOT	2000 /* 全表の変数個数計 */
-#define VARLEN	500 /* 変数名の長さの計 */
+#define VARMAX  50              /* 表一個の変数個数 */
+#define VARTOT  2000            /* 全表の変数個数計 */
+#define VARLEN  500             /* 変数名の長さの計 */
 
-#define FILNST	20
+#define FILNST  20
 
-	/* rk_modread.cで使うdefine */
+        /* rk_modread.cで使うdefine */
 
-#define HYOMAX	40 /* 変換対応表の最大個数 */
-#define HYOMEI	500 /* 表名の文字数計 */
-#define PTHMAX	30 /* サーチパスの最大個数 */
-#define PTHMEI	800 /* サーチパス名の文字数計 */
-#define MODMAX	50 /* モードの種類数 */
-#define MODMEI	300 /* モードの全文字数 */
-#define DMDMAX	40 /* モード表示の種類数 */
-#define DMDCHR	250 /* モード表示の全文字数 */
-#define MDHMAX	2500 /* モード表の最大サイズ */
+#define HYOMAX  40              /* 変換対応表の最大個数 */
+#define HYOMEI  500             /* 表名の文字数計 */
+#define PTHMAX  30              /* サーチパスの最大個数 */
+#define PTHMEI  800             /* サーチパス名の文字数計 */
+#define MODMAX  50              /* モードの種類数 */
+#define MODMEI  300             /* モードの全文字数 */
+#define DMDMAX  40              /* モード表示の種類数 */
+#define DMDCHR  250             /* モード表示の全文字数 */
+#define MDHMAX  2500            /* モード表の最大サイズ */
   /* モード表の最初のlistscanの時は、エラーを考慮して、リスト1個のbufferに
-	表のサイズ分取っておく。*/
-#define MDT1LN	200 /* モード設定リスト1個の最大長 */
-#define NAIBMX	400 /* モード定義表の内部表現の最大サイズ */
-			/* Change KURI 200 --> 400 */
+     表のサイズ分取っておく。 */
+#define MDT1LN  200             /* モード設定リスト1個の最大長 */
+#define NAIBMX  400             /* モード定義表の内部表現の最大サイズ */
+                        /* Change KURI 200 --> 400 */
 
-#define ARGMAX	2 /* 条件判断関数の引数の最大個数 */
+#define ARGMAX  2               /* 条件判断関数の引数の最大個数 */
 
  /* ディレクトリ名の区切りのdefine（UNIX用）。UNIX以外の環境で使うには
-    これと、fixednamep()も変更の必要がある（readmode()のgetenv関係も勿論）。*/
+    これと、fixednamep()も変更の必要がある（readmode()のgetenv関係も勿論）。 */
 #define KUGIRI '/'
 
  /* エラー処理用 */

@@ -1,5 +1,5 @@
 /*
- * $Id: rk_fundecl.h,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: rk_fundecl.h,v 1.2 2001-06-14 18:16:09 ura Exp $
  */
 
 /*
@@ -36,17 +36,17 @@
  * Code:
  *
  */
-/*	Version 3.0
+/*      Version 3.0
  */
-extern	letter	*ltrcpy(), *ltrncpy(), *ltrcat();
-extern	int	ltrlen(), ltrcmp(), ltrncmp();
+extern letter *ltrcpy (), *ltrncpy (), *ltrcat ();
+extern int ltrlen (), ltrcmp (), ltrncmp ();
 
-extern	int	romkan_init(), romkan_init2();
-extern	letter	romkan_getc(), *romkan_henkan(), romkan_next();
-extern	letter	romkan_ungetc(), romkan_unnext();
-extern	void	romkan_clear();
-extern	char	*romkan_dispmode(), *romkan_offmode();
-extern	char	rk_errstat; /* これは関数ではなく変数 */
+extern int romkan_init (), romkan_init2 ();
+extern letter romkan_getc (), *romkan_henkan (), romkan_next ();
+extern letter romkan_ungetc (), romkan_unnext ();
+extern void romkan_clear ();
+extern char *romkan_dispmode (), *romkan_offmode ();
+extern char rk_errstat;         /* これは関数ではなく変数 */
 
-extern RomkanTable	*romkan_table_init();
-extern void	rk_close();
+extern RomkanTable *romkan_table_init ();
+extern void rk_close ();

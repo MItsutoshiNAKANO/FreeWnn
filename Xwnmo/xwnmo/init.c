@@ -1,5 +1,5 @@
 /*
- * $Id: init.c,v 1.1.1.1 2000-01-16 05:07:56 ura Exp $
+ * $Id: init.c,v 1.2 2001-06-14 18:16:16 ura Exp $
  */
 
 /*
@@ -41,205 +41,225 @@
 #include "ext.h"
 
 static void
-default_flag_set()
+default_flag_set ()
 {
-    cursor_colum = 0;
-    cursor_reverse = 0;
-    cursor_underline = 0;
-    cursor_invisible = 1;
-    cursor_bold = 0;
-    quote_flag = 0;
-    send_ascii_char = 0;
-    send_ascii_stack = 0;
-    send_ascii_char_quote = 0;
-    c_c->command_func_stack[0] = NULL;
-    c_c->func_stack_count = -1;
-    c_c->buffer_ignored = 0;
+  cursor_colum = 0;
+  cursor_reverse = 0;
+  cursor_underline = 0;
+  cursor_invisible = 1;
+  cursor_bold = 0;
+  quote_flag = 0;
+  send_ascii_char = 0;
+  send_ascii_stack = 0;
+  send_ascii_char_quote = 0;
+  c_c->command_func_stack[0] = NULL;
+  c_c->func_stack_count = -1;
+  c_c->buffer_ignored = 0;
 }
 
 static int
-copy_env(wc)
-register WnnClientRec *wc;
+copy_env (wc)
+     register WnnClientRec *wc;
 {
-    WnnEnv *p;
+  WnnEnv *p;
 
-    for (p = wc->normal_env; p; p = p->next) {
-	if (get_new_env(c_c, NULL, 0) < 0 ||
-	    (p->host_name && !(servername = alloc_and_copy(p->host_name))))
-	    goto ERROR_RET;
-	envrcname = p->envrc_name;
-	strcpy(env_name, p->env_name_str);
+  for (p = wc->normal_env; p; p = p->next)
+    {
+      if (get_new_env (c_c, NULL, 0) < 0 || (p->host_name && !(servername = alloc_and_copy (p->host_name))))
+        goto ERROR_RET;
+      envrcname = p->envrc_name;
+      strcpy (env_name, p->env_name_str);
     }
-    for (p = wc->reverse_env; p; p = p->next) {
-	if (get_new_env(c_c, NULL, 1) < 0 ||
-	    (p->host_name &&
-	      !(reverse_servername = alloc_and_copy(p->host_name))))
-	    goto ERROR_RET;
-	reverse_envrcname = p->envrc_name;
-	strcpy(reverse_env_name, p->env_name_str);
+  for (p = wc->reverse_env; p; p = p->next)
+    {
+      if (get_new_env (c_c, NULL, 1) < 0 || (p->host_name && !(reverse_servername = alloc_and_copy (p->host_name))))
+        goto ERROR_RET;
+      reverse_envrcname = p->envrc_name;
+      strcpy (reverse_env_name, p->env_name_str);
     }
 
-    send_ascii_char = send_ascii_char_def;
+  send_ascii_char = send_ascii_char_def;
 
-    c_c->m_table = wc->m_table;
-    c_c->m_table->re_count++;
-    return(0);
+  c_c->m_table = wc->m_table;
+  c_c->m_table->re_count++;
+  return (0);
 ERROR_RET:
-    free_env(c_c->normal_env);
-    free_env(c_c->reverse_env);
-    return(-1);
+  free_env (c_c->normal_env);
+  free_env (c_c->reverse_env);
+  return (-1);
 }
 
 static void
-add_wnnclientlist(cl)
-register WnnClientRec *cl;
+add_wnnclientlist (cl)
+     register WnnClientRec *cl;
 {
-    cl->next = wnnclient_list;
-    wnnclient_list = cl;
+  cl->next = wnnclient_list;
+  wnnclient_list = cl;
 }
 
 static void
-remove_wnnclientlist(cl)
-register WnnClientRec *cl;
+remove_wnnclientlist (cl)
+     register WnnClientRec *cl;
 {
-    register WnnClientList p, *prev;
-    for (prev = &wnnclient_list; p = *prev; prev = &p->next) {
-	if (p == cl) {
-	    *prev = p->next;
-	    break;
-	}
+  register WnnClientList p, *prev;
+  for (prev = &wnnclient_list; p = *prev; prev = &p->next)
+    {
+      if (p == cl)
+        {
+          *prev = p->next;
+          break;
+        }
     }
 }
 
 void
-add_ximclientlist(cl)
-register XIMClientRec *cl;
+add_ximclientlist (cl)
+     register XIMClientRec *cl;
 {
-    cl->next = ximclient_list;
-    ximclient_list = cl;
+  cl->next = ximclient_list;
+  ximclient_list = cl;
 }
 
 void
-remove_ximclientlist(cl)
-register XIMClientRec *cl;
+remove_ximclientlist (cl)
+     register XIMClientRec *cl;
 {
-    register XIMClientList p, *prev;
-    for (prev = &ximclient_list; p = *prev; prev = &p->next) {
-	if (p == cl) {
-	    *prev = p->next;
-	    break;
-	}
+  register XIMClientList p, *prev;
+  for (prev = &ximclient_list; p = *prev; prev = &p->next)
+    {
+      if (p == cl)
+        {
+          *prev = p->next;
+          break;
+        }
     }
 }
 
 void
-add_inputlist(xi)
-register XIMInputRec *xi;
+add_inputlist (xi)
+     register XIMInputRec *xi;
 {
-    xi->next = input_list;
-    input_list = xi;
+  xi->next = input_list;
+  input_list = xi;
 }
 
 void
-remove_inputlist(xi)
-register XIMInputRec *xi;
+remove_inputlist (xi)
+     register XIMInputRec *xi;
 {
-    register XIMInputList p, *prev;
-    for (prev = &input_list; p = *prev; prev = &p->next) {
-	if (p == xi) {
-	    *prev = p->next;
-	    break;
-	}
+  register XIMInputList p, *prev;
+  for (prev = &input_list; p = *prev; prev = &p->next)
+    {
+      if (p == xi)
+        {
+          *prev = p->next;
+          break;
+        }
     }
 }
 
 static WnnClientRec *
-find_same_lang(lang)
-char *lang;
+find_same_lang (lang)
+     char *lang;
 {
-    register XIMClientRec *p;
-    register XIMLangRec *xl;
-    register int i;
-    for (p = ximclient_list; p != NULL; p = p->next) {
-	for (i = 0; i < p->lang_num; i++) {
-	  xl = p->xl[i];
-	  if (xl->w_c && xl->w_c->m_table) {
-	    if(!strcmp(xl->lang_db->lang, lang) && xl->w_c != NULL) {
-		return((WnnClientRec *)xl->w_c);
-	    }
-	  }
-	}
+  register XIMClientRec *p;
+  register XIMLangRec *xl;
+  register int i;
+  for (p = ximclient_list; p != NULL; p = p->next)
+    {
+      for (i = 0; i < p->lang_num; i++)
+        {
+          xl = p->xl[i];
+          if (xl->w_c && xl->w_c->m_table)
+            {
+              if (!strcmp (xl->lang_db->lang, lang) && xl->w_c != NULL)
+                {
+                  return ((WnnClientRec *) xl->w_c);
+                }
+            }
+        }
     }
-    return((WnnClientRec *)NULL);
+  return ((WnnClientRec *) NULL);
 }
 
 int
-allocate_wnn(uname)
-char *uname;
+allocate_wnn (uname)
+     char *uname;
 {
-    int len = 0;
-    register char *p;
-    extern void bzero();
+  int len = 0;
+  register char *p;
+  extern void bzero ();
 
-    if (uname && *uname) len = strlen(uname) + 1;
-    if (!(p = Malloc(sizeof(WnnClientRec) + sizeof(ClientBuf) + len))) {
-	malloc_error("allocation of data for wnn");
-	return(-1);
+  if (uname && *uname)
+    len = strlen (uname) + 1;
+  if (!(p = Malloc (sizeof (WnnClientRec) + sizeof (ClientBuf) + len)))
+    {
+      malloc_error ("allocation of data for wnn");
+      return (-1);
     }
-    c_c = (WnnClientList)p;
-    bzero((char *)c_c, sizeof(WnnClientRec));
-    p += sizeof(WnnClientRec);
-    c_b = (ClientBuf *)p;
-    bzero((char *)c_b, sizeof(ClientBuf));
-    if (uname && *uname) {
-	p += sizeof(ClientBuf);
-	c_c->user_name = (char *)p;
-	strcpy(c_c->user_name, uname);
+  c_c = (WnnClientList) p;
+  bzero ((char *) c_c, sizeof (WnnClientRec));
+  p += sizeof (WnnClientRec);
+  c_b = (ClientBuf *) p;
+  bzero ((char *) c_b, sizeof (ClientBuf));
+  if (uname && *uname)
+    {
+      p += sizeof (ClientBuf);
+      c_c->user_name = (char *) p;
+      strcpy (c_c->user_name, uname);
     }
-    add_wnnclientlist(c_c);
-    default_flag_set();
-    return(0);
+  add_wnnclientlist (c_c);
+  default_flag_set ();
+  return (0);
 }
 
 void
-free_wnn()
+free_wnn ()
 {
-    remove_wnnclientlist(c_c);
-    Free((char *)c_c);
+  remove_wnnclientlist (c_c);
+  Free ((char *) c_c);
 }
 
 int
-initialize_wnn(xl, root)
-XIMLangRec *xl;
-int root;
+initialize_wnn (xl, root)
+     XIMLangRec *xl;
+     int root;
 {
-    WnnClientRec *p;
+  WnnClientRec *p;
 
-    if ((p = find_same_lang(xl->lang_db->lang)) != NULL) {
-	if (copy_env(p) < 0) return(-1);
-    } else {
-	if (uumrc_get_entries(xl->lang_db, 0, root) == -1) {
-	    return(-1);
-	}
-	if (init_key_table(xl->lang_db->lang) == -1) {
-	    del_client(c_c, 4);
-	    return(-1);
-	}
+  if ((p = find_same_lang (xl->lang_db->lang)) != NULL)
+    {
+      if (copy_env (p) < 0)
+        return (-1);
     }
-    henkan_off_flag = henkan_off_def;
-    maxlength = maxchg * 2;
-    if (allocate_areas() == -1) {
-	del_client(c_c, 3);
-	return(-1);
+  else
+    {
+      if (uumrc_get_entries (xl->lang_db, 0, root) == -1)
+        {
+          return (-1);
+        }
+      if (init_key_table (xl->lang_db->lang) == -1)
+        {
+          del_client (c_c, 4);
+          return (-1);
+        }
     }
-    if (init_history() == -1) {
-	del_client(c_c, 2);
-	return(-1);
+  henkan_off_flag = henkan_off_def;
+  maxlength = maxchg * 2;
+  if (allocate_areas () == -1)
+    {
+      del_client (c_c, 3);
+      return (-1);
     }
-    if(open_romkan(xl->lang_db) == -1) {
-	del_client(c_c, 1);
-	return(-1);
+  if (init_history () == -1)
+    {
+      del_client (c_c, 2);
+      return (-1);
     }
-    return(0);
+  if (open_romkan (xl->lang_db) == -1)
+    {
+      del_client (c_c, 1);
+      return (-1);
+    }
+  return (0);
 }
-

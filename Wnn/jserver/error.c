@@ -1,5 +1,5 @@
 /*
- *  $Id: error.c,v 1.4 2001-06-14 17:55:36 ura Exp $
+ *  $Id: error.c,v 1.5 2001-06-14 18:16:01 ura Exp $
  */
 
 /*
@@ -41,159 +41,161 @@
 
 extern int errno;
 
-static void my_error(), exit_hand();
-void error1();
+static void my_error (), exit_hand ();
+void error1 ();
 
 void
-error_exit1(x , y1 , y2 , y3 , y4 , y5)
-char *x;
-int y1 , y2 , y3 , y4 , y5;
+error_exit1 (x, y1, y2, y3, y4, y5)
+     char *x;
+     int y1, y2, y3, y4, y5;
 {
   char buf[512];
 
-  strcpy(buf , "Fatal error. Exiting...\n");
-  strcat(buf , x);
-  error1(buf , y1, y2 , y3 , y4 , y5);
-  exit_hand();
+  strcpy (buf, "Fatal error. Exiting...\n");
+  strcat (buf, x);
+  error1 (buf, y1, y2, y3, y4, y5);
+  exit_hand ();
 }
-  
+
 void
-error_exit(x)
-char *x;
+error_exit (x)
+     char *x;
 {
   char buf[512];
 
-  strcpy(buf , "Fatal error. Exiting...\n");
-  strcat(buf , x);
-  my_error(buf);
-  exit_hand();
+  strcpy (buf, "Fatal error. Exiting...\n");
+  strcat (buf, x);
+  my_error (buf);
+  exit_hand ();
 }
 
 
 static void
-my_error(x)
-register char *x;
+my_error (x)
+     register char *x;
 {
   time_t obakenoQ;
 /*  struct passed *getpwiuid();  */
 
-  if(!noisy)return;
-  obakenoQ = time(NULL);
-  if(c_c){
+  if (!noisy)
+    return;
+  obakenoQ = time (NULL);
+  if (c_c)
+    {
 #ifdef SYSVR2
-      fprintf(stderr , "client %s :	%s	%s	 errno =%d\n\n" ,
-/*	      getpwuid(c_c->uid)->pw_name, */
-	      c_c->user_name,  /* V3.0 */
-	      asctime(localtime(&obakenoQ)),
-	      x , errno);
+      fprintf (stderr, "client %s :     %s      %s       errno =%d\n\n",
+/*            getpwuid(c_c->uid)->pw_name, */
+               c_c->user_name,  /* V3.0 */
+               asctime (localtime (&obakenoQ)), x, errno);
 #endif
 #ifdef BSD42
-      fprintf(stderr , "client %s :	%s	%s	 \n\n" ,
-/*	      getpwuid(c_c->uid)->pw_name,  */
-	      c_c->user_name,  /* V3.0 */
-	      asctime(localtime(&obakenoQ)),
-	      x );
+      fprintf (stderr, "client %s :     %s      %s       \n\n",
+/*            getpwuid(c_c->uid)->pw_name,  */
+               c_c->user_name,  /* V3.0 */
+               asctime (localtime (&obakenoQ)), x);
 #endif
-  }else{
+    }
+  else
+    {
 #ifdef SYSVR2
-      fprintf(stderr , "	%s	%s	 errno =%d\n\n" ,
-	      asctime(localtime(&obakenoQ)),
-	      x , errno);
+      fprintf (stderr, "        %s      %s       errno =%d\n\n", asctime (localtime (&obakenoQ)), x, errno);
 
 #endif
 #ifdef BSD42
-      fprintf(stderr , "	%s	%s	 \n\n" ,
-	      asctime(localtime(&obakenoQ)),
-	      x );
+      fprintf (stderr, "        %s      %s       \n\n", asctime (localtime (&obakenoQ)), x);
 #endif
-  }
-  fflush(stderr);
-  errno = 0;	/* Reset error number for next calling */
+    }
+  fflush (stderr);
+  errno = 0;                    /* Reset error number for next calling */
 }
 
 void
-error1(x , y1 , y2 , y3 , y4 , y5)
-register char *x;
-int y1 , y2 , y3 , y4 , y5;
+error1 (x, y1, y2, y3, y4, y5)
+     register char *x;
+     int y1, y2, y3, y4, y5;
 {
   char buf[512];
 
-  strcpy(buf , cmd_name);	/* strcpy(buf , "jserver:"); */
-  strcat(buf, ":");
-  strcat(buf , x);
-  sprintf(buf , x , y1 , y2 , y3 , y4 , y5);
-  my_error(buf);
+  strcpy (buf, cmd_name);       /* strcpy(buf , "jserver:"); */
+  strcat (buf, ":");
+  strcat (buf, x);
+  sprintf (buf, x, y1, y2, y3, y4, y5);
+  my_error (buf);
 }
-  
+
 
 void
-signal_hand(x)
-int x;
+signal_hand (x)
+     int x;
 {
-  error1("signal catched signal_no = %d" , x);
+  error1 ("signal catched signal_no = %d", x);
 #ifdef SYSVR2
-  signal(x , signal_hand);
+  signal (x, signal_hand);
 #endif
 }
 
 void
-terminate_hand()
+terminate_hand ()
 {
-  demon_fin();
-  exit(0);
+  demon_fin ();
+  exit (0);
 }
 
 static void
-exit_hand()
+exit_hand ()
 {
-  demon_fin();
-  exit(250);
+  demon_fin ();
+  exit (250);
 }
 
 void
-out(x , y1 , y2 , y3 , y4 , y5, y6, y7, y8, y9, y10, y11, y12)
-char *x;
-int y1 , y2 , y3 , y4 , y5,  y6, y7, y8, y9, y10, y11, y12;
+out (x, y1, y2, y3, y4, y5, y6, y7, y8, y9, y10, y11, y12)
+     char *x;
+     int y1, y2, y3, y4, y5, y6, y7, y8, y9, y10, y11, y12;
 {
-  if(!noisy)return;
-  fprintf(stderr, x, y1 , y2 , y3 , y4 , y5,  y6, y7, y8, y9, y10, y11, y12);
-  fflush(stderr);
+  if (!noisy)
+    return;
+  fprintf (stderr, x, y1, y2, y3, y4, y5, y6, y7, y8, y9, y10, y11, y12);
+  fflush (stderr);
 }
 
 
 
-#ifdef	DEBUG
+#ifdef  DEBUG
 /*
-	debug print
+        debug print
 */
 
-#ifdef	putwchar
-#undef	putwchar
+#ifdef  putwchar
+#undef  putwchar
 #endif
 void
-putwchar(x)
-unsigned short x;
+putwchar (x)
+     unsigned short x;
 {
-    if(!noisy)return;
-    putc( x >> 8, stderr);
-    putc( x, stderr);
-    /*
-    putchar( x >> 8);
-    putchar( x );
-    */
-	fflush(stdout);
+  if (!noisy)
+    return;
+  putc (x >> 8, stderr);
+  putc (x, stderr);
+  /*
+     putchar( x >> 8);
+     putchar( x );
+   */
+  fflush (stdout);
 }
 
 void
-wsputs(buf)
-short *buf;
+wsputs (buf)
+     short *buf;
 {
-    if(!noisy)return;
+  if (!noisy)
+    return;
 
-    for(; ; ) {
-	if (*buf == 0)
-	    return;
-	putwchar(*buf++);
+  for (;;)
+    {
+      if (*buf == 0)
+        return;
+      putwchar (*buf++);
     }
 }
-#endif	/* DEBUG */
+#endif /* DEBUG */

@@ -1,5 +1,5 @@
 /*
- *  $Id: epilogue.c,v 1.2 2001-06-14 17:55:50 ura Exp $
+ *  $Id: epilogue.c,v 1.3 2001-06-14 18:16:06 ura Exp $
  */
 
 /*
@@ -40,22 +40,23 @@
 #include "sheader.h"
 
 void
-epilogue_no_close()
+epilogue_no_close ()
 {
-  throw_col(0);
-  clr_line();
-  if (keypad_fun) set_keypad_off();
-  set_scroll_region(0 , crow + conv_lines - 1);
-  kk_restore_cursor();
-  flush();
+  throw_col (0);
+  clr_line ();
+  if (keypad_fun)
+    set_keypad_off ();
+  set_scroll_region (0, crow + conv_lines - 1);
+  kk_restore_cursor ();
+  flush ();
 #ifdef TERMINFO
-    closeTermData();
+  closeTermData ();
 #endif
 }
 
 void
-epilogue()
+epilogue ()
 {
-    disconnect_jserver();
-    epilogue_no_close();
+  disconnect_jserver ();
+  epilogue_no_close ();
 }

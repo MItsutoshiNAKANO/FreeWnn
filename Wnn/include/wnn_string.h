@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_string.h,v 1.2 2001-06-14 17:55:32 ura Exp $
+ *  $Id: wnn_string.h,v 1.3 2001-06-14 18:15:57 ura Exp $
  */
 
 /*
@@ -32,25 +32,25 @@
 #ifndef _WNN_STRING_
 #define _WNN_STRING_
 
-extern int wnn_sStrcpy();
-extern int wnn_Sstrcpy();
-extern void wnn_Sreverse();
-extern char * wnn_Stos();
-extern char *wnn_sStrncpy();
-extern w_char *wnn_Strcat();
-extern w_char *wnn_Strncat();
-extern int wnn_Strcmp();
-extern int wnn_Substr();
-extern int wnn_Strncmp();
-extern w_char *wnn_Strncpy();
-extern int wnn_Strlen();
-extern w_char *wnn_Strcpy();
-extern void wnn_delete_w_ss2();
-extern int wnn_byte_count();
+extern int wnn_sStrcpy ();
+extern int wnn_Sstrcpy ();
+extern void wnn_Sreverse ();
+extern char *wnn_Stos ();
+extern char *wnn_sStrncpy ();
+extern w_char *wnn_Strcat ();
+extern w_char *wnn_Strncat ();
+extern int wnn_Strcmp ();
+extern int wnn_Substr ();
+extern int wnn_Strncmp ();
+extern w_char *wnn_Strncpy ();
+extern int wnn_Strlen ();
+extern w_char *wnn_Strcpy ();
+extern void wnn_delete_w_ss2 ();
+extern int wnn_byte_count ();
 #ifndef JS
-extern int check_pwd();
+extern int check_pwd ();
 #endif
 #ifdef CHINESE
-extern int wnn_Sstrcat();
+extern int wnn_Sstrcat ();
 #endif
 #endif

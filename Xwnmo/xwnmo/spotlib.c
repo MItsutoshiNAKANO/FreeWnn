@@ -1,5 +1,5 @@
 /*
- * $Id: spotlib.c,v 1.1.1.1 2000-01-16 05:07:57 ura Exp $
+ * $Id: spotlib.c,v 1.2 2001-06-14 18:16:17 ura Exp $
  */
 
 /*
@@ -41,26 +41,27 @@
 #include "SpotProto.h"
 
 void
-_XipChangeSpot(ic, x, y)
-    XIC ic;
-    short x, y;
+_XipChangeSpot (ic, x, y)
+     XIC ic;
+     short x, y;
 {
-    XipIM im = ipIMofIC((XipIC)ic);
-    ximChangeSpotReq	req;
-    ximEventReply	reply;
+  XipIM im = ipIMofIC ((XipIC) ic);
+  ximChangeSpotReq req;
+  ximEventReply reply;
 
-    if (im->fd < 0) {
-	return;
+  if (im->fd < 0)
+    {
+      return;
     }
-    req.reqType = XIM_ChangeSpot;
-    req.length = sz_ximChangeSpotReq;
-    req.xic = ((XipIC)ic)->icid;
-    req.spot_x = x;
-    req.spot_y = y;
-    if ((_XipWriteToIM(im, (char *)&req, sz_ximChangeSpotReq) >= 0) &&
-	(_XipFlushToIM(im) >= 0)) {
-	reply.state = 0;
-	_XipReadFromIM(im, (char *)&reply, sz_ximEventReply);
+  req.reqType = XIM_ChangeSpot;
+  req.length = sz_ximChangeSpotReq;
+  req.xic = ((XipIC) ic)->icid;
+  req.spot_x = x;
+  req.spot_y = y;
+  if ((_XipWriteToIM (im, (char *) &req, sz_ximChangeSpotReq) >= 0) && (_XipFlushToIM (im) >= 0))
+    {
+      reply.state = 0;
+      _XipReadFromIM (im, (char *) &reply, sz_ximEventReply);
     }
-    return;
+  return;
 }

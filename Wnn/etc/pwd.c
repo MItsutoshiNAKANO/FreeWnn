@@ -1,5 +1,5 @@
 /*
- *  $Id: pwd.c,v 1.2 2001-06-14 17:55:30 ura Exp $
+ *  $Id: pwd.c,v 1.3 2001-06-14 18:15:55 ura Exp $
  */
 
 /*
@@ -39,45 +39,52 @@
 #include "wnn_os.h"
 #endif
 
-extern char *crypt();
+extern char *crypt ();
 
 #ifdef JS
 static
 #endif
-void
-new_pwd(src, encd)
-char *src, *encd;
+  void
+new_pwd (src, encd)
+     char *src, *encd;
 {
-    int i, x,c;
-    char xx[3];
-    char *cr;
+  int i, x, c;
+  char xx[3];
+  char *cr;
 
-    if(encd == NULL)encd = src;
-    if(strcmp(src, "") == 0){ bzero(encd, WNN_PASSWD_LEN);return;}
-    x = time(NULL);
-    xx[0] = x & 0x3f;
-    xx[1] = (x & 0x3f00) >> 8;
-    xx[2] = '\0';  /* for MD5 (that requires terminator) */
-    for (i = 0; i < 2; i++) {
-	c = xx[i] + '.';
-	if (c > '9')
-	    c += 7;
-	if (c > 'Z')
-	    c += 6;
-	xx[i] = c;
+  if (encd == NULL)
+    encd = src;
+  if (strcmp (src, "") == 0)
+    {
+      bzero (encd, WNN_PASSWD_LEN);
+      return;
     }
-    cr = crypt(src, xx);
-    bzero(encd, WNN_PASSWD_LEN);
-    strncpy(encd, cr, WNN_PASSWD_LEN);
+  x = time (NULL);
+  xx[0] = x & 0x3f;
+  xx[1] = (x & 0x3f00) >> 8;
+  xx[2] = '\0';                 /* for MD5 (that requires terminator) */
+  for (i = 0; i < 2; i++)
+    {
+      c = xx[i] + '.';
+      if (c > '9')
+        c += 7;
+      if (c > 'Z')
+        c += 6;
+      xx[i] = c;
+    }
+  cr = crypt (src, xx);
+  bzero (encd, WNN_PASSWD_LEN);
+  strncpy (encd, cr, WNN_PASSWD_LEN);
 }
 
 #ifdef JS
 static
 #endif
-int
-check_pwd(src, encd)
-char *src, *encd;
+  int
+check_pwd (src, encd)
+     char *src, *encd;
 {
-    if(strcmp(encd, "") == 0) return(1);  /* No passwd */
-    return(!strncmp(encd, crypt(src, encd),WNN_PASSWD_LEN));
+  if (strcmp (encd, "") == 0)
+    return (1);                 /* No passwd */
+  return (!strncmp (encd, crypt (src, encd), WNN_PASSWD_LEN));
 }

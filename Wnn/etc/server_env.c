@@ -1,5 +1,5 @@
 /*
- *  $Id: server_env.c,v 1.3 2001-06-14 17:55:31 ura Exp $
+ *  $Id: server_env.c,v 1.4 2001-06-14 18:15:55 ura Exp $
  */
 
 /*
@@ -34,31 +34,36 @@
 #include "wnn_config.h"
 #include "wnn_os.h"
 
-typedef struct _server_env_struct {
-    char *lang;
-    char *env;
-} server_env_struct;
+typedef struct _server_env_struct
+{
+  char *lang;
+  char *env;
+}
+server_env_struct;
 
 static server_env_struct server_env[] = {
-    {WNN_J_LANG, WNN_JSERVER_ENV},
-    {WNN_C_LANG, WNN_CSERVER_ENV},
-    {WNN_K_LANG, WNN_KSERVER_ENV},
-    {WNN_T_LANG, WNN_TSERVER_ENV},
-    {NULL, NULL}
+  {WNN_J_LANG, WNN_JSERVER_ENV},
+  {WNN_C_LANG, WNN_CSERVER_ENV},
+  {WNN_K_LANG, WNN_KSERVER_ENV},
+  {WNN_T_LANG, WNN_TSERVER_ENV},
+  {NULL, NULL}
 };
 
 char *
-get_server_env(lang)
-register char *lang;
+get_server_env (lang)
+     register char *lang;
 {
-    register server_env_struct *p;
+  register server_env_struct *p;
 
-    if (!lang || !*lang) return(NULL);
+  if (!lang || !*lang)
+    return (NULL);
 
-    for (p = server_env; p->lang; p++) {
-	if (!strncmp(lang, p->lang, strlen(lang))) {
-	    return(p->env);
-	}
+  for (p = server_env; p->lang; p++)
+    {
+      if (!strncmp (lang, p->lang, strlen (lang)))
+        {
+          return (p->env);
+        }
     }
-    return(NULL);
+  return (NULL);
 }

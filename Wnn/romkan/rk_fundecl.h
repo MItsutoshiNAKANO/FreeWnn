@@ -1,5 +1,5 @@
 /*
- *  $Id: rk_fundecl.h,v 1.2 2001-06-14 17:55:49 ura Exp $
+ *  $Id: rk_fundecl.h,v 1.3 2001-06-14 18:16:05 ura Exp $
  */
 
 /*
@@ -30,20 +30,20 @@
  */
 
 /***********************************************************************
-			rk_fundecl.h
-						87.10. 9  開 業
+                        rk_fundecl.h
+                                                87.10. 9  開 業
 
-	ライブラリ関数の型宣言集。ユーザに開放されるinclude
-	ファイルは、これとrk_macros.h、及びrk_spclval.h。
+        ライブラリ関数の型宣言集。ユーザに開放されるinclude
+        ファイルは、これとrk_macros.h、及びrk_spclval.h。
 ***********************************************************************/
-/*	Version 3.0
+/*      Version 3.0
  */
-extern	letter	*ltrncpy();
-extern	int	ltrcmp(), ltrncmp();
+extern letter *ltrncpy ();
+extern int ltrcmp (), ltrncmp ();
 
-extern	int	romkan_init(), romkan_init2(), romkan_init3();
-extern	letter	romkan_getc(), *romkan_henkan(), romkan_next();
-extern	letter	romkan_ungetc(), romkan_unnext();
-extern	void	romkan_clear();
-extern	char	*romkan_dispmode();
-extern	char	rk_errstat; /* これは関数ではなく変数 */
+extern int romkan_init (), romkan_init2 (), romkan_init3 ();
+extern letter romkan_getc (), *romkan_henkan (), romkan_next ();
+extern letter romkan_ungetc (), romkan_unnext ();
+extern void romkan_clear ();
+extern char *romkan_dispmode ();
+extern char rk_errstat;         /* これは関数ではなく変数 */

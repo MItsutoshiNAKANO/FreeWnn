@@ -1,5 +1,5 @@
 /*
- * $Id: do_xjplib.h,v 1.1.1.1 2000-01-16 05:07:55 ura Exp $
+ * $Id: do_xjplib.h,v 1.2 2001-06-14 18:16:15 ura Exp $
  */
 
 /*
@@ -43,41 +43,45 @@
 #include "proto.h"
 #include "ext.h"
 
-#ifdef	XJPLIB
-typedef struct _XJpClientRec {
-    long		dispmode;
+#ifdef  XJPLIB
+typedef struct _XJpClientRec
+{
+  long dispmode;
 
 
-    unsigned char c_data[128];
-    Window		w;
-    unsigned long	mask;
-    long		p_width, p_height;
-    long		x, y;
-    long		width, height;
-    unsigned long	fg, bg;
-    long		bp;
-    long		status_x, status_y;
-    XIMClientRec	*xim_client;
-#ifdef	XJPLIB_DIRECT
-    int			direct_fd;
-#endif	/* XJPLIB_DIRECT */
-    int			ref_count;
-    char		escape[4][4];
-    struct _XJpClientRec	*next;
-} XJpClientRec;
+  unsigned char c_data[128];
+  Window w;
+  unsigned long mask;
+  long p_width, p_height;
+  long x, y;
+  long width, height;
+  unsigned long fg, bg;
+  long bp;
+  long status_x, status_y;
+  XIMClientRec *xim_client;
+#ifdef  XJPLIB_DIRECT
+  int direct_fd;
+#endif                          /* XJPLIB_DIRECT */
+  int ref_count;
+  char escape[4][4];
+  struct _XJpClientRec *next;
+}
+XJpClientRec;
 
-typedef struct _XJpInputRec {
-    Window		w;
-    XJpClientRec	*pclient;
-    int			save_event;
-    XKeyEvent		ev;
-    struct _XJpInputRec	*next;
-} XJpInputRec;
+typedef struct _XJpInputRec
+{
+  Window w;
+  XJpClientRec *pclient;
+  int save_event;
+  XKeyEvent ev;
+  struct _XJpInputRec *next;
+}
+XJpInputRec;
 
-#define XJPLIB_PORT_IN	(0x9494)
-#define UNIX_PATH	"/tmp/xwnmo.V2"
-#define UNIX_ACPT	0
-#define INET_ACPT	1
+#define XJPLIB_PORT_IN  (0x9494)
+#define UNIX_PATH       "/tmp/xwnmo.V2"
+#define UNIX_ACPT       0
+#define INET_ACPT       1
 
 #define XJP_OPEN        1
 #define XJP_CLOSE       2
@@ -108,30 +112,30 @@ typedef struct _XJpInputRec {
 #define         XJP_FONTS       0x00000200L
 #define         XJP_STATUS      0x00000400L
 
-#define XJP_F_FRONTEND_END 		0
-#define XJP_F_FRONTEND_ERR_END		1
-#define XJP_F_JSERVER_DISCONNECT	2
+#define XJP_F_FRONTEND_END              0
+#define XJP_F_FRONTEND_ERR_END          1
+#define XJP_F_JSERVER_DISCONNECT        2
 
-#define XJP_F_OPEN_BAD_WID		3
-#define XJP_F_OPEN_BAD_SZ		4
-#define XJP_F_OPEN_BAD_FN		5
-#define XJP_F_OPEN_BAD_DM		6
-#define XJP_F_OPEN_NOT_WIN		7
-#define XJP_F_OPEN_NOT_SUPPORT		8
+#define XJP_F_OPEN_BAD_WID              3
+#define XJP_F_OPEN_BAD_SZ               4
+#define XJP_F_OPEN_BAD_FN               5
+#define XJP_F_OPEN_BAD_DM               6
+#define XJP_F_OPEN_NOT_WIN              7
+#define XJP_F_OPEN_NOT_SUPPORT          8
 
-#define XJP_F_CLOSE_BAD_CL		9
+#define XJP_F_CLOSE_BAD_CL              9
 
-#define XJP_F_BEGIN_BAD_CL		10
-#define XJP_F_BEGIN_BAD_WID		11
+#define XJP_F_BEGIN_BAD_CL              10
+#define XJP_F_BEGIN_BAD_WID             11
 
-#define XJP_F_END_BAD_CL		12
-#define XJP_F_END_BAD_WID		13
+#define XJP_F_END_BAD_CL                12
+#define XJP_F_END_BAD_WID               13
 
-#define XJP_F_VISIBLE_BAD_CL		14
+#define XJP_F_VISIBLE_BAD_CL            14
 
-#define XJP_F_INVISIBLE_BAD_CL		15
+#define XJP_F_INVISIBLE_BAD_CL          15
 
-#define XJP_F_CHANGE_BAD_CL		16
-#define XJP_F_CHANGE_BAD_SZ		17
-#define XJP_F_CHANGE_NOT_WIN		18
+#define XJP_F_CHANGE_BAD_CL             16
+#define XJP_F_CHANGE_BAD_SZ             17
+#define XJP_F_CHANGE_NOT_WIN            18
 #endif

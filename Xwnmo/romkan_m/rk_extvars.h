@@ -1,5 +1,5 @@
 /*
- * $Id: rk_extvars.h,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: rk_extvars.h,v 1.2 2001-06-14 18:16:09 ura Exp $
  */
 
 /*
@@ -37,129 +37,144 @@
  *
  */
 /***********************************************************************
-			rk_extvars.h
-						87.11.12  訂 補
+                        rk_extvars.h
+                                                87.11.12  訂 補
 
-	二つ以上のファイルにまたがって使われる変数のextern宣言。
-	本体はrk_vars.cで定義。
+        二つ以上のファイルにまたがって使われる変数のextern宣言。
+        本体はrk_vars.cで定義。
 ***********************************************************************/
-/*	Version 3.1	88/06/13	H.HASHIMOTO
+/*      Version 3.1     88/06/13        H.HASHIMOTO
  */
-#ifndef	MULTI
-extern	char	rk_errstat;
+#ifndef MULTI
+extern char rk_errstat;
 
-extern	int	flags;
-extern	jmp_buf	env0;
+extern int flags;
+extern jmp_buf env0;
 
-extern	char	*dspmod[][2];
+extern char *dspmod[][2];
 
-struct	modetable {
-	int	max;
-	int	count;
-	char	**point;
-	int	size;
-	char	*org;
-	char	*next;
+struct modetable
+{
+  int max;
+  int count;
+  char **point;
+  int size;
+  char *org;
+  char *next;
 };
 
-extern	struct	modetable	rk_defmode;
-extern	struct	modetable	rk_dspmode;
-extern	struct	modetable	rk_taiouhyo;
-extern	struct	modetable	rk_path;
+extern struct modetable rk_defmode;
+extern struct modetable rk_dspmode;
+extern struct modetable rk_taiouhyo;
+extern struct modetable rk_path;
 
-struct	modeswtable {
-	int	max;
-	int	count;
-	int	*point;
+struct modeswtable
+{
+  int max;
+  int count;
+  int *point;
 };
-extern	struct	modeswtable	rk_modesw;
+extern struct modeswtable rk_modesw;
 
-struct	modenaibutable {
-	int	size;
-	int	*org;
-	int	*next;
+struct modenaibutable
+{
+  int size;
+  int *org;
+  int *next;
 };
-extern	struct	modenaibutable	rk_modenaibu;
+extern struct modenaibutable rk_modenaibu;
 
-struct	modebuftable {
-	int	size;
-	char	*org;
+struct modebuftable
+{
+  int size;
+  char *org;
 };
-extern	struct	modebuftable	rk_modebuf;
+extern struct modebuftable rk_modebuf;
 
-struct	dat {
-	letter	*code[3];
-};
-
-struct	hyo {
-	int		hyoshu;
-	struct	dat	*data;
-	letter		**hensudef;
-	int		size;
-	letter		*memory;
+struct dat
+{
+  letter *code[3];
 };
 
-struct	hyotable {
-	int		size;
-	struct	hyo	*point;
-};
-extern	struct	hyotable	rk_hyo;
-
-struct	usehyotable {
-	int	size;
-	int	*usemaehyo;
-	int	*usehyo;
-	int	*useatohyo;
-};
-extern	struct	usehyotable	rk_usehyo;
-
-struct	hyobuftable {
-	int	size;
-	char	*org;
-	char	*next;
-};
-extern	struct	hyobuftable	rk_hyobuf;
-
-struct	henikitable {
-	int	size;
-	letter	*org;
-	letter	*next;
-};
-extern	struct	henikitable	rk_heniki;
-
-struct  hensuset {
-	unsigned	regdflg : 1;	/* 既登録の変数を表す */
-	unsigned	curlinflg : 1;	/* 現在行に既出の変数を表す */
-	letter		*name;
-	letter		*range;
+struct hyo
+{
+  int hyoshu;
+  struct dat *data;
+  letter **hensudef;
+  int size;
+  letter *memory;
 };
 
-struct	hensuutable {
-	int	max;
-	int	count;
-	struct	hensuset *point;
-	int	size;
-	letter	*org;
-	letter	*next;
+struct hyotable
+{
+  int size;
+  struct hyo *point;
 };
-extern	struct	hensuutable	rk_hensuu;
+extern struct hyotable rk_hyo;
 
-struct	hensuudeftable {
-	int	max;
-	int	count;
-	letter	**point;
+struct usehyotable
+{
+  int size;
+  int *usemaehyo;
+  int *usehyo;
+  int *useatohyo;
 };
-extern	struct hensuudeftable	rk_hensuudef;
+extern struct usehyotable rk_usehyo;
 
-struct	matchpair {
-	int	hennum;
-	letter	ltrmch;
+struct hyobuftable
+{
+  int size;
+  char *org;
+  char *next;
 };
-struct	matchtable {
-	int	size;
-	struct	matchpair *point;
-};
-extern struct	matchtable	rk_henmatch;
-#endif	/* MULTI */
+extern struct hyobuftable rk_hyobuf;
 
-extern	letter *lptr;
+struct henikitable
+{
+  int size;
+  letter *org;
+  letter *next;
+};
+extern struct henikitable rk_heniki;
+
+struct hensuset
+{
+  unsigned regdflg:1;           /* 既登録の変数を表す */
+  unsigned curlinflg:1;         /* 現在行に既出の変数を表す */
+  letter *name;
+  letter *range;
+};
+
+struct hensuutable
+{
+  int max;
+  int count;
+  struct hensuset *point;
+  int size;
+  letter *org;
+  letter *next;
+};
+extern struct hensuutable rk_hensuu;
+
+struct hensuudeftable
+{
+  int max;
+  int count;
+  letter **point;
+};
+extern struct hensuudeftable rk_hensuudef;
+
+struct matchpair
+{
+  int hennum;
+  letter ltrmch;
+};
+struct matchtable
+{
+  int size;
+  struct matchpair *point;
+};
+extern struct matchtable rk_henmatch;
+#endif /* MULTI */
+
+extern letter *lptr;

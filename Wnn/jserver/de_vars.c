@@ -1,5 +1,5 @@
 /*
- *  $Id: de_vars.c,v 1.2 2001-06-14 17:55:35 ura Exp $
+ *  $Id: de_vars.c,v 1.3 2001-06-14 18:16:00 ura Exp $
  */
 
 /*
@@ -33,20 +33,20 @@
 #include "de_header.h"
 
 /*
-	external global variables of demon
+        external global variables of demon
 */
 
-char	SER_VERSION[]	= _SERVER_VERSION;
+char SER_VERSION[] = _SERVER_VERSION;
 
 int max_client = CL_MAX;
-CLIENT *client;	/* ask about Mr. Takeoka */
-/*CLIENT client[CL_MAX];*/	/* ask about Mr. Takeoka */
-CLIENT *c_c = 0 ;		/* this means current client */ 
+CLIENT *client;                 /* ask about Mr. Takeoka */
+/*CLIENT client[CL_MAX];*//* ask about Mr. Takeoka */
+CLIENT *c_c = 0;                /* this means current client */
 int cur_client;
 int clientp;
 
 int max_sticky_env = ST_MAX;
-struct cnv_env *c_env;	/* current env	*/
+struct cnv_env *c_env;          /* current env  */
 
 int wnn_errorno = 0;
 int noisy;

@@ -1,5 +1,5 @@
 /*
- *  $Id: kai_area.c,v 1.2 2001-06-14 17:55:36 ura Exp $
+ *  $Id: kai_area.c,v 1.3 2001-06-14 18:16:02 ura Exp $
  */
 
 /*
@@ -36,14 +36,14 @@
 #include "commonhd.h"
 #include "ddefine.h"
 
-w_char	*bun;	/* D */
+w_char *bun;                    /* D */
 
-w_char giji_eisuu[20];	/* 擬似「英数」の定義 */
+w_char giji_eisuu[20];          /* 擬似「英数」の定義 */
 
-int	maxchg;
-int	initjmt;	/* I think initjmt is the length of jmt_ */
+int maxchg;
+int initjmt;                    /* I think initjmt is the length of jmt_ */
 
-int	*maxj;	/* maxj is counts to entries in jmt_ */
+int *maxj;                      /* maxj is counts to entries in jmt_ */
 
 /* jmt_ptr is used in jmt0.c only.
    but it must be changed by clients.
@@ -51,27 +51,27 @@ int	*maxj;	/* maxj is counts to entries in jmt_ */
    */
 
 /* j_e_p is used to hold the current point to which jmtw_ is used */
-struct	jdata	*j_e_p;
-struct	jdata	**jmt_;
-struct	jdata	*jmtw_;
-struct	jdata	**jmt_end;
-struct	jdata	*jmtw_end;
-struct	jdata	**jmt_ptr;
-struct	jdata	***jmtp;
+struct jdata *j_e_p;
+struct jdata **jmt_;
+struct jdata *jmtw_;
+struct jdata **jmt_end;
+struct jdata *jmtw_end;
+struct jdata **jmt_ptr;
+struct jdata ***jmtp;
 
-struct	FT	*ft;
+struct FT *ft;
 
-#ifdef	nodef
+#ifdef  nodef
 /********************************
- *	疑似自立語の品詞	*
+ *      疑似自立語の品詞        *
  ********************************/
-int	sentou_no;	/* 「先頭」文節先頭に成れるもの */
-int	suuji_no;	/* 「数字」数詞相当 */
-int	katakanago_no;	/* 「カナ」外来語など 名詞相当 */
-int	eisuu_no;	/* 「英数」*/
-int	kigou_no;	/* 「記号」 */
-int	toji_kakko_no;	/* 「閉括弧」 */
-int	fuzokugo_no;	/* 付属語だけ */
-int	kai_kakko_no;	/* 「開括弧」*/
-int	giji_no;	/* 疑似 */
-#endif	/* nodef */
+int sentou_no;                  /* 「先頭」文節先頭に成れるもの */
+int suuji_no;                   /* 「数字」数詞相当 */
+int katakanago_no;              /* 「カナ」外来語など 名詞相当 */
+int eisuu_no;                   /* 「英数」 */
+int kigou_no;                   /* 「記号」 */
+int toji_kakko_no;              /* 「閉括弧」 */
+int fuzokugo_no;                /* 付属語だけ */
+int kai_kakko_no;               /* 「開括弧」 */
+int giji_no;                    /* 疑似 */
+#endif /* nodef */

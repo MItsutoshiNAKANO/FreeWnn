@@ -1,5 +1,5 @@
 /*
- *  $Id: jd_sock.h,v 1.2 2001-06-14 17:55:31 ura Exp $
+ *  $Id: jd_sock.h,v 1.3 2001-06-14 18:15:57 ura Exp $
  */
 
 /*
@@ -29,20 +29,20 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/*	jd_sock.h
-	jslib header file
+/*      jd_sock.h
+        jslib header file
 */
 
 #ifdef UX386
-#undef	AF_UNIX
+#undef  AF_UNIX
 #include <X11/Xos.h>
 #else
 #include <sys/types.h>
 #endif /* UX386 */
 #include <sys/socket.h>
-#ifdef	AF_UNIX
+#ifdef  AF_UNIX
 #include <sys/un.h>
-#endif	/* AF_UNIX */
+#endif /* AF_UNIX */
 
 #ifdef UX386
 #include <net/in.h>
@@ -50,10 +50,10 @@
 #include <netinet/in.h>
 #endif /* UX386 */
 
-#if	defined(uniosu) || defined(UX386)
-#include <net/netdb.h>	/* SX */
+#if     defined(uniosu) || defined(UX386)
+#include <net/netdb.h>          /* SX */
 #else
-#include <netdb.h>	/* SUN or BSD SYSV*/
+#include <netdb.h>              /* SUN or BSD SYSV */
 #endif /*uniosu */
 
 #ifdef TAIWANESE
@@ -62,49 +62,48 @@
 #endif
 #endif
 
-#define	ERROR	-1
+#define ERROR   -1
 
-#ifdef	JAPANESE	/* Japanese */
-# define WNN_PORT_IN	(0x5701)
-static char *sockname = "/tmp/jd_sockV4";	/* for jserver */
-# define LANG_NAME	"ja_JP"
-# define SERVERNAME	"wnn4"
-# define MESSAGE_FILE	"jserver.msg"
-#else	/* JAPANESE */
+#ifdef  JAPANESE                /* Japanese */
+# define WNN_PORT_IN    (0x5701)
+static char *sockname = "/tmp/jd_sockV4";       /* for jserver */
+# define LANG_NAME      "ja_JP"
+# define SERVERNAME     "wnn4"
+# define MESSAGE_FILE   "jserver.msg"
+#else /* JAPANESE */
 
-#ifdef	CHINESE
-#ifdef	TAIWANESE		/* Traditional Chinese */
-# define WNN_PORT_IN	(0x5731)
-static char *sockname = "/tmp/td_sockV4";	/* for tserver */
-# define LANG_NAME	"zh_TW"
-# define SERVERNAME	"wnn4_Tw"
-# define MESSAGE_FILE	"tserver.msg"
-#else	/* TAIWANESE */		/* Simplified Chinese */
-# define WNN_PORT_IN	(0x5711)
-static char *sockname = "/tmp/cd_sockV4";	/* for cserver */
-# define LANG_NAME	"zh_CN"
-# define SERVERNAME	"wnn4_Cn"
-# define MESSAGE_FILE	"cserver.msg"
-#endif	/* TAIWANESE */
-#else	/* CHINESE */
+#ifdef  CHINESE
+#ifdef  TAIWANESE               /* Traditional Chinese */
+# define WNN_PORT_IN    (0x5731)
+static char *sockname = "/tmp/td_sockV4";       /* for tserver */
+# define LANG_NAME      "zh_TW"
+# define SERVERNAME     "wnn4_Tw"
+# define MESSAGE_FILE   "tserver.msg"
+#else   /* TAIWANESE */ /* Simplified Chinese */
+# define WNN_PORT_IN    (0x5711)
+static char *sockname = "/tmp/cd_sockV4";       /* for cserver */
+# define LANG_NAME      "zh_CN"
+# define SERVERNAME     "wnn4_Cn"
+# define MESSAGE_FILE   "cserver.msg"
+#endif /* TAIWANESE */
+#else /* CHINESE */
 
-#ifdef	KOREAN			/* Korean *//* not yet */
-# define WNN_PORT_IN	(0x5721)
-static char *sockname = "/tmp/kd_sockV4";	/* for kserver */
-# define LANG_NAME	"ko_KR"
-# define SERVERNAME	"wnn4_Kr"
-# define MESSAGE_FILE	"kserver.msg"
-#else	/* KOREAN */
+#ifdef  KOREAN                  /* Korean */    /* not yet */
+# define WNN_PORT_IN    (0x5721)
+static char *sockname = "/tmp/kd_sockV4";       /* for kserver */
+# define LANG_NAME      "ko_KR"
+# define SERVERNAME     "wnn4_Kr"
+# define MESSAGE_FILE   "kserver.msg"
+#else /* KOREAN */
 
-# define WNN_PORT_IN	(0x5701)
-static char *sockname = "/tmp/jd_sockV4";	/* for jserver */
-# define LANG_NAME	"ja_JP"
-# define SERVERNAME	"wnn4"
-# define MESSAGE_FILE	"jserver.msg"
-#endif	/* KOREAN */
-#endif	/* CHINESE */
-#endif	/* JAPANESE */
+# define WNN_PORT_IN    (0x5701)
+static char *sockname = "/tmp/jd_sockV4";       /* for jserver */
+# define LANG_NAME      "ja_JP"
+# define SERVERNAME     "wnn4"
+# define MESSAGE_FILE   "jserver.msg"
+#endif /* KOREAN */
+#endif /* CHINESE */
+#endif /* JAPANESE */
 
-#define	S_BUF_SIZ	1024	/* NEVER change this */
-#define	R_BUF_SIZ	1024	/* NEVER change this */
-
+#define S_BUF_SIZ       1024    /* NEVER change this */
+#define R_BUF_SIZ       1024    /* NEVER change this */

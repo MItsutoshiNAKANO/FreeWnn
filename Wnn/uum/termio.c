@@ -1,5 +1,5 @@
 /*
- *  $Id: termio.c,v 1.2 2001-06-14 17:55:51 ura Exp $
+ *  $Id: termio.c,v 1.3 2001-06-14 18:16:08 ura Exp $
  */
 
 /*
@@ -40,224 +40,233 @@
 #ifdef putchar
 #undef putchar
 #endif
-extern int putchar();
+extern int putchar ();
 
 extern char Term_Name[];
-extern char    *Term_UnderScoreStart;
-extern char    *Term_UnderScoreEnd;
-extern char	*Term_ClrScreen;
-extern char 	*Term_ClrEofLine;
-extern char 	*Term_ThrowCursor;
-extern char 	*Term_StandOutStart;
-extern char 	*Term_StandOutEnd;
-extern char 	*Term_BoldOutStart;
-extern char 	*Term_BoldOutEnd;
-static int	bold_mode_fun = 0;
+extern char *Term_UnderScoreStart;
+extern char *Term_UnderScoreEnd;
+extern char *Term_ClrScreen;
+extern char *Term_ClrEofLine;
+extern char *Term_ThrowCursor;
+extern char *Term_StandOutStart;
+extern char *Term_StandOutEnd;
+extern char *Term_BoldOutStart;
+extern char *Term_BoldOutEnd;
+static int bold_mode_fun = 0;
 
 int
-openTermData()
+openTermData ()
 {
-    char *cp, *getenv(), *get_kbd_env();
-    int status;
-    int k;
-    char lcode[10];
-    char termchar[20];
+  char *cp, *getenv (), *get_kbd_env ();
+  int status;
+  int k;
+  char lcode[10];
+  char termchar[20];
 
-	/* for convert_key --- added by Nide 10/3 */
-    if (NULL == (cp = get_kbd_env()) ||
-        0 != convert_getterm(cp, (0 != verbose_option))){
-	fprintf(stderr, "Cannot get keyboard information.\n");
-	return(-1); 
+  /* for convert_key --- added by Nide 10/3 */
+  if (NULL == (cp = get_kbd_env ()) || 0 != convert_getterm (cp, (0 != verbose_option)))
+    {
+      fprintf (stderr, "Cannot get keyboard information.\n");
+      return (-1);
     }
 
-    if ((cp = getenv("TERM")) == NULL){
-        fprintf(stderr, "Cannot get terminal name.");
-        return(-1);
+  if ((cp = getenv ("TERM")) == NULL)
+    {
+      fprintf (stderr, "Cannot get terminal name.");
+      return (-1);
     }
-    strcpy(Term_Name, cp);
+  strcpy (Term_Name, cp);
 
-    if ((strlen(Term_Name) > 2) && (strcmp(Term_Name + (strlen(Term_Name) - 2),"-j") == 0)) {
-	fprintf(stderr, MSG_GET(4));
-	/*
-	fprintf(stderr,"Uum:ｕｕｍからｕｕｍはおこせません。\n");
-	*/
-	return(-1);
+  if ((strlen (Term_Name) > 2) && (strcmp (Term_Name + (strlen (Term_Name) - 2), "-j") == 0))
+    {
+      fprintf (stderr, MSG_GET (4));
+      /*
+         fprintf(stderr,"Uum:ｕｕｍからｕｕｍはおこせません。\n");
+       */
+      return (-1);
     }
-    setupterm(0,1,&status);
-    reset_shell_mode();
-    if (status != 1){
-        return(-1);
+  setupterm (0, 1, &status);
+  reset_shell_mode ();
+  if (status != 1)
+    {
+      return (-1);
     }
 #if defined(uniosu)
-    if(jterm < 2) {	/* kanji terminal */
-        fprintf(stderr, "Not kanji terminal. Goodbye !\n");
-        return(-1);
+  if (jterm < 2)
+    {                           /* kanji terminal */
+      fprintf (stderr, "Not kanji terminal. Goodbye !\n");
+      return (-1);
     }
 #endif /* defined(uniosu) */
-    if(save_cursor == (char *)NULL || *save_cursor == NULL ||
-       restore_cursor == (char *)NULL || *restore_cursor == NULL ||
-       change_scroll_region == (char *)NULL || *change_scroll_region == NULL) {
-         fprintf(stderr, "Your terminal is not strong enough. Goodbye !\n");
-         return(-1);
+  if (save_cursor == (char *) NULL || *save_cursor == NULL || restore_cursor == (char *) NULL || *restore_cursor == NULL || change_scroll_region == (char *) NULL || *change_scroll_region == NULL)
+    {
+      fprintf (stderr, "Your terminal is not strong enough. Goodbye !\n");
+      return (-1);
     }
-    termchar[0] = 0;
-    strcat(termchar,cp);
-    strcat(termchar,"-j");
-    setenv("TERM", termchar);
+  termchar[0] = 0;
+  strcat (termchar, cp);
+  strcat (termchar, "-j");
+  setenv ("TERM", termchar);
 
-    sprintf(lcode,"%d", lines - conv_lines);
-    setenv("LINES", lcode);
+  sprintf (lcode, "%d", lines - conv_lines);
+  setenv ("LINES", lcode);
 
-    if(cursor_normal && cursor_invisible){
-	cursor_invisible_fun = 1;
-    }else{
-	cursor_invisible_fun = 0;
+  if (cursor_normal && cursor_invisible)
+    {
+      cursor_invisible_fun = 1;
     }
-    if (keypad_xmit && *keypad_xmit && keypad_local && *keypad_local) {
-	keypad_fun = 1;
-    } else {
-	keypad_fun = 0;
+  else
+    {
+      cursor_invisible_fun = 0;
     }
-    Term_UnderScoreEnd = exit_underline_mode;
-    Term_UnderScoreStart = enter_underline_mode;
-    Term_StandOutEnd = exit_standout_mode;
-    Term_StandOutStart = enter_standout_mode;
-    if (enter_bold_mode && exit_attribute_mode)
-	bold_mode_fun = 1;
-    else
-	bold_mode_fun = 0;
+  if (keypad_xmit && *keypad_xmit && keypad_local && *keypad_local)
+    {
+      keypad_fun = 1;
+    }
+  else
+    {
+      keypad_fun = 0;
+    }
+  Term_UnderScoreEnd = exit_underline_mode;
+  Term_UnderScoreStart = enter_underline_mode;
+  Term_StandOutEnd = exit_standout_mode;
+  Term_StandOutStart = enter_standout_mode;
+  if (enter_bold_mode && exit_attribute_mode)
+    bold_mode_fun = 1;
+  else
+    bold_mode_fun = 0;
 
-    Term_BoldOutStart = enter_bold_mode;
-    Term_BoldOutEnd = exit_attribute_mode;
-    return(0);
+  Term_BoldOutStart = enter_bold_mode;
+  Term_BoldOutEnd = exit_attribute_mode;
+  return (0);
 }
 
 
 void
-closeTermData()
+closeTermData ()
 {
-    resetterm();
-    reset_shell_mode();
+  resetterm ();
+  reset_shell_mode ();
 }
 
 void
-set_keypad_on()
+set_keypad_on ()
 {
-    tputs(keypad_xmit, 1, putchar);
+  tputs (keypad_xmit, 1, putchar);
 }
 
 void
-set_keypad_off()
+set_keypad_off ()
 {
-    tputs(keypad_local, 1, putchar);
+  tputs (keypad_local, 1, putchar);
 }
 
 void
-set_scroll_region(start, end)
-int start, end;
+set_scroll_region (start, end)
+     int start, end;
 {
-    tputs(tparm(change_scroll_region, start, end), 1 , putchar);
+  tputs (tparm (change_scroll_region, start, end), 1, putchar);
 }
 
 void
-clr_end_screen()
+clr_end_screen ()
 {
-    tputs(clr_eos ,1,putchar);
+  tputs (clr_eos, 1, putchar);
 }
 
 
 void
-clr_screen()
+clr_screen ()
 {
-    tputs(clear_screen, lines, putchar);
-    Term_ClrScreen = clear_screen;
+  tputs (clear_screen, lines, putchar);
+  Term_ClrScreen = clear_screen;
 }
 
 void
-clr_line1()
+clr_line1 ()
 {
-    tputs(clr_eol, 1, putchar);
-    Term_ClrEofLine = clr_eol;
+  tputs (clr_eol, 1, putchar);
+  Term_ClrEofLine = clr_eol;
 }
 
 void
-throw_cur_raw(col,row)
-int col, row;
+throw_cur_raw (col, row)
+     int col, row;
 {
-    tputs(tparm(cursor_address, row, col), 1, putchar);
+  tputs (tparm (cursor_address, row, col), 1, putchar);
 }
 
 void
-h_r_on_raw()
+h_r_on_raw ()
 {
-    tputs(enter_standout_mode, 1, putchar);
+  tputs (enter_standout_mode, 1, putchar);
 }
 
 void
-h_r_off_raw()
+h_r_off_raw ()
 {
-    tputs(exit_standout_mode, 1, putchar);
+  tputs (exit_standout_mode, 1, putchar);
 }
 
 void
-u_s_on_raw()
+u_s_on_raw ()
 {
-    tputs(enter_underline_mode, 1, putchar);
+  tputs (enter_underline_mode, 1, putchar);
 }
 
 void
-u_s_off_raw()
+u_s_off_raw ()
 {
-    tputs(exit_underline_mode, 1, putchar);
+  tputs (exit_underline_mode, 1, putchar);
 }
 
 void
-b_s_on_raw()
+b_s_on_raw ()
 {
-    if (bold_mode_fun)
-	tputs(enter_bold_mode, 1, putchar);
-    else
-	tputs(enter_underline_mode, 1, putchar);
+  if (bold_mode_fun)
+    tputs (enter_bold_mode, 1, putchar);
+  else
+    tputs (enter_underline_mode, 1, putchar);
 }
 
 void
-b_s_off_raw()
+b_s_off_raw ()
 {
-    if (bold_mode_fun)
-	tputs(exit_attribute_mode, 1, putchar);
-    else
-	tputs(exit_underline_mode, 1, putchar);
+  if (bold_mode_fun)
+    tputs (exit_attribute_mode, 1, putchar);
+  else
+    tputs (exit_underline_mode, 1, putchar);
 }
 
 void
-ring_bell()
+ring_bell ()
 {
-    tputs(bell, 1, putchar);
-    flush();
+  tputs (bell, 1, putchar);
+  flush ();
 }
 
 void
-save_cursor_raw()
+save_cursor_raw ()
 {
-  tputs(save_cursor, 1, putchar);
+  tputs (save_cursor, 1, putchar);
 }
 
 void
-restore_cursor_raw()
+restore_cursor_raw ()
 {
-    tputs(restore_cursor, 1, putchar);
+  tputs (restore_cursor, 1, putchar);
 }
 
 void
-cursor_invisible_raw()
+cursor_invisible_raw ()
 {
-  tputs(cursor_invisible , 1 ,putchar);
-}
- 
-void
-cursor_normal_raw()
-{
-  tputs(cursor_normal , 1 , putchar);
+  tputs (cursor_invisible, 1, putchar);
 }
 
-#endif                          /* TERMINFO */
+void
+cursor_normal_raw ()
+{
+  tputs (cursor_normal, 1, putchar);
+}
+
+#endif /* TERMINFO */

@@ -1,5 +1,5 @@
 /*
- *  $Id: do_hindo_s.c,v 1.4 2001-06-14 17:55:36 ura Exp $
+ *  $Id: do_hindo_s.c,v 1.5 2001-06-14 18:16:01 ura Exp $
  */
 
 /*
@@ -38,62 +38,80 @@
 #include "de_header.h"
 
 #ifdef HAVE_DRAND48
-#include <stdlib.h>         /* drand48() */
+#include <stdlib.h>             /* drand48() */
 #endif
-    
-static int hindo_set();
+
+static int hindo_set ();
 
 void
-js_hindo_set()
+js_hindo_set ()
 {
-    int env_id,dic,entry,ima,hindo,x;
-    int err = 0;
-    if((env_id=envhandle()) == -1) err = -1;
-    dic=get4_cur();
-    entry=get4_cur();
-    ima=get4_cur();
-    hindo=get4_cur();
-    if(err == -1){ error_ret(); return;}
-    if(dic == -1){
-	giji_hindoup(entry);
-	put4_cur(0);
-	putc_purge();
-	return;
+  int env_id, dic, entry, ima, hindo, x;
+  int err = 0;
+  if ((env_id = envhandle ()) == -1)
+    err = -1;
+  dic = get4_cur ();
+  entry = get4_cur ();
+  ima = get4_cur ();
+  hindo = get4_cur ();
+  if (err == -1)
+    {
+      error_ret ();
+      return;
     }
-    if(find_dic_in_env(env_id,dic) == -1){ /* no such dic */
-	wnn_errorno=WNN_DICT_NOT_USED; error_ret();
-	return;
+  if (dic == -1)
+    {
+      giji_hindoup (entry);
+      put4_cur (0);
+      putc_purge ();
+      return;
     }
-    if(dic_table[dic].hindo_rw){
-	wnn_errorno = WNN_RDONLY_HINDO;error_ret();
-	return;
+  if (find_dic_in_env (env_id, dic) == -1)
+    {                           /* no such dic */
+      wnn_errorno = WNN_DICT_NOT_USED;
+      error_ret ();
+      return;
     }
-    switch(ima){
+  if (dic_table[dic].hindo_rw)
+    {
+      wnn_errorno = WNN_RDONLY_HINDO;
+      error_ret ();
+      return;
+    }
+  switch (ima)
+    {
     case WNN_HINDO_NOP:
     case WNN_IMA_ON:
     case WNN_IMA_OFF:
-	break;
+      break;
     default:
-	error_ret();
-	return;
+      error_ret ();
+      return;
     }
-    if (entry < 0) {
-	error_ret();
-	return;
+  if (entry < 0)
+    {
+      error_ret ();
+      return;
     }
-    x=hindo_set(dic,entry,ima,hindo);
-    if(x== -1){ error_ret();}
-    else{ put4_cur(x); }
-    putc_purge();
-    return;
+  x = hindo_set (dic, entry, ima, hindo);
+  if (x == -1)
+    {
+      error_ret ();
+    }
+  else
+    {
+      put4_cur (x);
+    }
+  putc_purge ();
+  return;
 }
 
 static int
-hindo_set(dic_no,entry,imaop,hinop)
-int dic_no;
-int entry;
-int imaop;
-int hinop;
+hindo_set (dic_no, entry, imaop, hinop)
+     int dic_no;
+     int entry;
+     int imaop;
+     int hinop;
 {
 #ifdef HAVE_DRAND48
 #define RAND()  drand48()
@@ -103,49 +121,51 @@ int hinop;
 #endif
 #define RAND()  ((double)rand() / (double)RAND_MAX)
 #endif
-    UCHAR *hst;
-    int ima, hindo;
+  UCHAR *hst;
+  int ima, hindo;
 
-    if(dic_table[dic_no].hindo == -1){
-	hst = ((struct JT *)(files[dic_table[dic_no].body].area))->hindo;
-	((struct JT *)(files[dic_table[dic_no].body].area))->hdirty = 1;
-	((struct JT *)(files[dic_table[dic_no].body].area))->dirty = 1;
-    }else{
-	hst = ((struct HJT *)(files[dic_table[dic_no].hindo].area))->hindo;
-	((struct HJT *)(files[dic_table[dic_no].hindo].area))->hdirty = 1;
+  if (dic_table[dic_no].hindo == -1)
+    {
+      hst = ((struct JT *) (files[dic_table[dic_no].body].area))->hindo;
+      ((struct JT *) (files[dic_table[dic_no].body].area))->hdirty = 1;
+      ((struct JT *) (files[dic_table[dic_no].body].area))->dirty = 1;
     }
-    ima = hst[entry] & 0x80;
-    hindo = hst[entry] & 0x7f;
-    switch(imaop){
+  else
+    {
+      hst = ((struct HJT *) (files[dic_table[dic_no].hindo].area))->hindo;
+      ((struct HJT *) (files[dic_table[dic_no].hindo].area))->hdirty = 1;
+    }
+  ima = hst[entry] & 0x80;
+  hindo = hst[entry] & 0x7f;
+  switch (imaop)
+    {
     case WNN_HINDO_NOP:
-	break;
+      break;
     case WNN_IMA_ON:
-	ima = 0x80;
-	break;
+      ima = 0x80;
+      break;
     case WNN_IMA_OFF:
-	ima = 0x0;
-	break;
+      ima = 0x0;
+      break;
     }
-    switch(hinop){
+  switch (hinop)
+    {
     case WNN_HINDO_NOP:
-	break;
+      break;
     case WNN_HINDO_INC:
-      if((hindo&0x7e) != 0x7e && ( RAND() < (double)1 / ((hindo >> 2) + 1)))
-	  hindo++;
-	break;
+      if ((hindo & 0x7e) != 0x7e && (RAND () < (double) 1 / ((hindo >> 2) + 1)))
+        hindo++;
+      break;
     case WNN_HINDO_DECL:
-      if(hindo > 0 && hindo <= 126 &&
-	 ( RAND() < (double)1 / ((hindo >> 2) + 1)))
-	  hindo--;
-	break;
+      if (hindo > 0 && hindo <= 126 && (RAND () < (double) 1 / ((hindo >> 2) + 1)))
+        hindo--;
+      break;
     case WNN_ENTRY_NO_USE:
-	hindo = 0x7f;
-	break;
+      hindo = 0x7f;
+      break;
     default:
-	hindo = asshuku(hinop);
+      hindo = asshuku (hinop);
     }
-    hst[entry] = hindo | ima;
-    return(0);
+  hst[entry] = hindo | ima;
+  return (0);
 }
-
-    

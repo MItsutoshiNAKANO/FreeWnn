@@ -1,5 +1,5 @@
 /*
- *  $Id: get_kaiarea.c,v 1.2 2001-06-14 17:55:36 ura Exp $
+ *  $Id: get_kaiarea.c,v 1.3 2001-06-14 18:16:01 ura Exp $
  */
 
 /*
@@ -37,68 +37,70 @@
 #include "wnn_malloc.h"
 
 int
-get_kaiseki_area(kana_len)
-int kana_len ;
+get_kaiseki_area (kana_len)
+     int kana_len;
 {
-	char *c;
-	char *area_pter;
+  char *c;
+  char *area_pter;
 
-	int maxj_len = (kana_len * sizeof(int) + 7) & 0xfffffff8;
-	int jmtp_len = (kana_len * sizeof(struct jdata **) + 7) & 0xfffffff8;
-	int jmt_len  = (SIZE_JISHOTABLE * sizeof(struct jdata *) + 7) & 0xfffffff8;
-	int jmtw_len = (SIZE_JISHOHEAP * sizeof(struct jdata) + 7) & 0xfffffff8;
+  int maxj_len = (kana_len * sizeof (int) + 7) & 0xfffffff8;
+  int jmtp_len = (kana_len * sizeof (struct jdata **) + 7) & 0xfffffff8;
+  int jmt_len = (SIZE_JISHOTABLE * sizeof (struct jdata *) + 7) & 0xfffffff8;
+  int jmtw_len = (SIZE_JISHOHEAP * sizeof (struct jdata) + 7) & 0xfffffff8;
 
-	int bun_len = ((kana_len + 1) * sizeof(w_char) + 7) & 0xfffffff8;
+  int bun_len = ((kana_len + 1) * sizeof (w_char) + 7) & 0xfffffff8;
 
-	if((area_pter = 
-		malloc(bun_len + jmtw_len + jmt_len + jmtp_len + maxj_len)) == NULL){
-		wnn_errorno = WNN_MALLOC_INITIALIZE;
-		error1("malloc in get_kaiseki_area");
-		return(-1);
-	}
+  if ((area_pter = malloc (bun_len + jmtw_len + jmt_len + jmtp_len + maxj_len)) == NULL)
+    {
+      wnn_errorno = WNN_MALLOC_INITIALIZE;
+      error1 ("malloc in get_kaiseki_area");
+      return (-1);
+    }
 
-	maxj = (int *)area_pter; 
-	area_pter += maxj_len;
-	for(c = (char *)maxj;c < area_pter ; ){
-		*(c++) = 0;
-	}
+  maxj = (int *) area_pter;
+  area_pter += maxj_len;
+  for (c = (char *) maxj; c < area_pter;)
+    {
+      *(c++) = 0;
+    }
 
-	jmtp = (struct jdata ***)area_pter; 
-	area_pter += jmtp_len;
-	for(c = (char *)jmtp ;c < area_pter ; ){
-		*(c++) = 0;
-	}
+  jmtp = (struct jdata ***) area_pter;
+  area_pter += jmtp_len;
+  for (c = (char *) jmtp; c < area_pter;)
+    {
+      *(c++) = 0;
+    }
 
-	jmt_ = (struct jdata **)area_pter;
-	area_pter += jmt_len;
-	jmtw_ = (struct jdata *)area_pter;
-	area_pter += jmtw_len;
-	jmt_end = jmt_ + SIZE_JISHOTABLE;
-	jmt_ptr = jmt_end;	/* H.T. To initialize all in jmt_init */
-	jmtw_end = jmtw_ + SIZE_JISHOHEAP;
+  jmt_ = (struct jdata **) area_pter;
+  area_pter += jmt_len;
+  jmtw_ = (struct jdata *) area_pter;
+  area_pter += jmtw_len;
+  jmt_end = jmt_ + SIZE_JISHOTABLE;
+  jmt_ptr = jmt_end;            /* H.T. To initialize all in jmt_init */
+  jmtw_end = jmtw_ + SIZE_JISHOHEAP;
 
-	bun = (w_char *)area_pter;
-	area_pter += bun_len;
+  bun = (w_char *) area_pter;
+  area_pter += bun_len;
 
-	maxchg = kana_len;
-	initjmt = maxchg - 1;
-	bun[maxchg] = NULL;
+  maxchg = kana_len;
+  initjmt = maxchg - 1;
+  bun[maxchg] = NULL;
 
-	return(0);
+  return (0);
 }
 
 
 /* サーバーが起きた時に呼ぶ
-	解析ワークエリアをクリアする
-	変換がエラーリターンした時にも呼んでね。*/
+        解析ワークエリアをクリアする
+        変換がエラーリターンした時にも呼んでね。*/
 
 void
-init_work_areas()
+init_work_areas ()
 {
-	init_ichbnp();
-	init_bzd();
-	init_sbn();
-	init_jktdbn();
-	init_jktsbn();
-	init_jktsone();
+  init_ichbnp ();
+  init_bzd ();
+  init_sbn ();
+  init_jktdbn ();
+  init_jktsbn ();
+  init_jktsone ();
 }

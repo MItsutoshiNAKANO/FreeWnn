@@ -1,5 +1,5 @@
 /*
- *  $Id: mknode1.c,v 1.2 2001-06-14 17:55:36 ura Exp $
+ *  $Id: mknode1.c,v 1.3 2001-06-14 18:16:03 ura Exp $
  */
 
 /*
@@ -34,69 +34,66 @@
 #include "kaiseki.h"
 #include "wnn_malloc.h"
 
-static void lnk_sbn();
+static void lnk_sbn ();
 
-static struct SYO_BNSETSU	*free_sbn_top = NULL;
-static struct free_list		*free_list_sbn = NULL;
+static struct SYO_BNSETSU *free_sbn_top = NULL;
+static struct free_list *free_list_sbn = NULL;
 /************************************************/
 /* initialize link struct SYO_BNSETSU           */
 /************************************************/
 int
-init_sbn()
+init_sbn ()
 {
-	free_area(free_list_sbn);
-	if (get_area(FIRST_SBN_KOSUU, sizeof(struct SYO_BNSETSU),
-		&free_list_sbn) < 0)
-	    return (-1);
-	lnk_sbn(free_list_sbn);
-	return (0);
+  free_area (free_list_sbn);
+  if (get_area (FIRST_SBN_KOSUU, sizeof (struct SYO_BNSETSU), &free_list_sbn) < 0)
+    return (-1);
+  lnk_sbn (free_list_sbn);
+  return (0);
 }
 
 int
-get_area(kosuu, size, list)
-register int	kosuu;
-register int	size;
-struct  free_list **list;
+get_area (kosuu, size, list)
+     register int kosuu;
+     register int size;
+     struct free_list **list;
 {
-	register struct free_list *area;
+  register struct free_list *area;
 
-	if ((area = (struct free_list *)
-	    malloc(size * kosuu  + sizeof(struct free_list))
-	    ) == NULL) {
-		wnn_errorno = WNN_MALLOC_INITIALIZE;
-		error1("Cannot Malloc in get_area.\n");
-		return (-1);
-	}
-	area->lnk = *list;
-	area->num = kosuu;
-	*list = area;
-	return (0);
+  if ((area = (struct free_list *) malloc (size * kosuu + sizeof (struct free_list))) == NULL)
+    {
+      wnn_errorno = WNN_MALLOC_INITIALIZE;
+      error1 ("Cannot Malloc in get_area.\n");
+      return (-1);
+    }
+  area->lnk = *list;
+  area->num = kosuu;
+  *list = area;
+  return (0);
 }
 
 void
-free_area(list)
-register struct  free_list *list;
+free_area (list)
+     register struct free_list *list;
 {
-	if (list == 0)
-		return;
-	free_area(list->lnk);
-	free(list);
+  if (list == 0)
+    return;
+  free_area (list->lnk);
+  free (list);
 }
 
 /* free_sbn が 0 でない時に呼んだらあかんよ */
 static void
-lnk_sbn(list)
-struct	free_list *list;
+lnk_sbn (list)
+     struct free_list *list;
 {
-	register int	n;
-	register struct SYO_BNSETSU *wk_ptr;
+  register int n;
+  register struct SYO_BNSETSU *wk_ptr;
 
-	free_sbn_top = wk_ptr =
-	    (struct SYO_BNSETSU *)((char *)list + sizeof(struct free_list));
+  free_sbn_top = wk_ptr = (struct SYO_BNSETSU *) ((char *) list + sizeof (struct free_list));
 
-	for (n = list->num - 1; n > 0; wk_ptr++, n--) 
-		wk_ptr->lnk_br = wk_ptr + 1;
-	wk_ptr->lnk_br = 0;
+  for (n = list->num - 1; n > 0; wk_ptr++, n--)
+    wk_ptr->lnk_br = wk_ptr + 1;
+  wk_ptr->lnk_br = 0;
 }
 
 
@@ -104,53 +101,59 @@ struct	free_list *list;
 /* struct SYO_BNSETSU & ICHBNP & KANGO free エリア作成 */
 /*******************************************************/
 void
-freesbn(sbn)			/* struct SYO_BNSETSU を free_area へリンク */
-register struct SYO_BNSETSU *sbn;	/* クリアするノードのポインタ */
+freesbn (sbn)                   /* struct SYO_BNSETSU を free_area へリンク */
+     register struct SYO_BNSETSU *sbn;  /* クリアするノードのポインタ */
 {
-	if (sbn == 0)
-		return;
-	sbn->reference--;
-	if (sbn->reference <= 0) {
-		sbn->lnk_br = free_sbn_top;
-		free_sbn_top = sbn;
-	}
+  if (sbn == 0)
+    return;
+  sbn->reference--;
+  if (sbn->reference <= 0)
+    {
+      sbn->lnk_br = free_sbn_top;
+      free_sbn_top = sbn;
+    }
 }
 
 void
-clr_sbn_node(sbn)
-register struct	SYO_BNSETSU	*sbn;
+clr_sbn_node (sbn)
+     register struct SYO_BNSETSU *sbn;
 {
-	if (sbn == 0)
-		return;
-	if ((sbn->reference) <= 1) {
-		freesbn(sbn);
-		clr_sbn_node(sbn->parent);
-	} else {
-		sbn->reference--;
-	}
+  if (sbn == 0)
+    return;
+  if ((sbn->reference) <= 1)
+    {
+      freesbn (sbn);
+      clr_sbn_node (sbn->parent);
+    }
+  else
+    {
+      sbn->reference--;
+    }
 }
+
 /******************************************/
-/* SYO_BNSETSU area の獲得		  */
+/* SYO_BNSETSU area の獲得                */
 /******************************************/
 struct SYO_BNSETSU *
-getsbnsp()
+getsbnsp ()
 {
-	register struct	SYO_BNSETSU	*rtnptr;
+  register struct SYO_BNSETSU *rtnptr;
 
-	if (free_sbn_top == 0) {
-	    if (get_area(SBN_KOSUU, sizeof(struct SYO_BNSETSU), &free_list_sbn) < 0)
-		    return ((struct SYO_BNSETSU *)-1);
-	    lnk_sbn(free_list_sbn);
-	}
+  if (free_sbn_top == 0)
+    {
+      if (get_area (SBN_KOSUU, sizeof (struct SYO_BNSETSU), &free_list_sbn) < 0)
+        return ((struct SYO_BNSETSU *) -1);
+      lnk_sbn (free_list_sbn);
+    }
 
-	rtnptr = free_sbn_top;
-	free_sbn_top = free_sbn_top->lnk_br;
-	rtnptr->lnk_br = 0;
-	rtnptr->parent = 0;
-	rtnptr->son_v = 0;
-	rtnptr->reference = 0;
-	rtnptr->jentptr = 0;
-	rtnptr->status = 0;
-	rtnptr->status_bkwd = 0;
-	return(rtnptr);
+  rtnptr = free_sbn_top;
+  free_sbn_top = free_sbn_top->lnk_br;
+  rtnptr->lnk_br = 0;
+  rtnptr->parent = 0;
+  rtnptr->son_v = 0;
+  rtnptr->reference = 0;
+  rtnptr->jentptr = 0;
+  rtnptr->status = 0;
+  rtnptr->status_bkwd = 0;
+  return (rtnptr);
 }

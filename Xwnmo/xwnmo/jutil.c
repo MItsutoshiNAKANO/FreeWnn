@@ -1,5 +1,5 @@
 /*
- * $Id: jutil.c,v 1.1.1.1 2000-01-16 05:07:56 ura Exp $
+ * $Id: jutil.c,v 1.2 2001-06-14 18:16:16 ura Exp $
  */
 
 /*
@@ -37,7 +37,7 @@
  * Code:
  *
  */
-/*	Version 4.0
+/*      Version 4.0
  */
 /* jisho utility routine for otasuke (user interface) process */
 
@@ -48,137 +48,146 @@
 #include "sheader.h"
 #include "ext.h"
 
-typedef struct _msg_fun {
+typedef struct _msg_fun
+{
   char *msg;
-  int (*fun)();
-} msg_fun;
+  int (*fun) ();
+}
+msg_fun;
 
-static msg_fun message1[] = { 
-#ifdef	USING_XJUTIL
+static msg_fun message1[] = {
+#ifdef  USING_XJUTIL
   {"", jishoadd},
-  {"",select_one_dict9},
+  {"", select_one_dict9},
   {"", touroku},
   {"", kensaku},
-  {"",paramchg},
-#endif	/* USING_XJUTIL */
-  {"",dicsv}
-#ifdef	USING_XJUTIL
-  ,{"",dicinfoout},
+  {"", paramchg},
+#endif /* USING_XJUTIL */
+  {"", dicsv}
+#ifdef  USING_XJUTIL
+  , {"", dicinfoout},
   {"", fuzoku_set}
-#endif	/* USING_XJUTIL */
+#endif /* USING_XJUTIL */
 };
 
 int
-jutil(in)
-int in;
+jutil (in)
+     int in;
 {
-    static int last = 3;
-    static int c, ret;
-    static int k;
-    static char *buf[sizeof(message1) / sizeof(msg_fun)];
-    static WnnClientRec *c_c_sv = 0;
-    static jutil_step = 0;
-    static char *lang;
+  static int last = 3;
+  static int c, ret;
+  static int k;
+  static char *buf[sizeof (message1) / sizeof (msg_fun)];
+  static WnnClientRec *c_c_sv = 0;
+  static jutil_step = 0;
+  static char *lang;
 
-    if (c_c_sv != 0 && c_c != c_c_sv) {
-	ring_bell();
-	return (0);
+  if (c_c_sv != 0 && c_c != c_c_sv)
+    {
+      ring_bell ();
+      return (0);
     }
-    if (jutil_step == 0) {
-	c_c_sv = c_c;
-	lang = cur_lang->lang;
-#ifdef	USING_XJUTIL
-	for(k = 0 ; k <( sizeof(message1) / sizeof(msg_fun));k++){
-	    buf[k] = msg_get(cd, 43+k, default_message[43+k], lang);
-	}
-#else	/* USING_XJUTIL */
-	buf[0] = msg_get(cd, 48, default_message[48], lang);
-#endif	/* USING_XJUTIL */
-	jutil_step++;
+  if (jutil_step == 0)
+    {
+      c_c_sv = c_c;
+      lang = cur_lang->lang;
+#ifdef  USING_XJUTIL
+      for (k = 0; k < (sizeof (message1) / sizeof (msg_fun)); k++)
+        {
+          buf[k] = msg_get (cd, 43 + k, default_message[43 + k], lang);
+        }
+#else /* USING_XJUTIL */
+      buf[0] = msg_get (cd, 48, default_message[48], lang);
+#endif /* USING_XJUTIL */
+      jutil_step++;
     }
-    if (jutil_step == 1) {
-	c = xw_select_one_element(buf, sizeof(message1)/sizeof(msg_fun),
-				  last,
-				  msg_get(cd, 20, default_message[20], lang),
-				  SENTAKU,main_table[4], in);
-	if(c == BUFFER_IN_CONT) {
-	    return(BUFFER_IN_CONT);
-	}
-	if(c == -1 || c == -3) {
-	    c_c_sv = 0;
-	    jutil_step = 0;
-	    return(0);
-	}
-	jutil_step++;
-	last = c;
+  if (jutil_step == 1)
+    {
+      c = xw_select_one_element (buf, sizeof (message1) / sizeof (msg_fun), last, msg_get (cd, 20, default_message[20], lang), SENTAKU, main_table[4], in);
+      if (c == BUFFER_IN_CONT)
+        {
+          return (BUFFER_IN_CONT);
+        }
+      if (c == -1 || c == -3)
+        {
+          c_c_sv = 0;
+          jutil_step = 0;
+          return (0);
+        }
+      jutil_step++;
+      last = c;
     }
-    if (jutil_step == 2) {
-	ret = (*message1[c].fun)();
-	if (ret == BUFFER_IN_CONT) {
-	return(BUFFER_IN_CONT);
-	}
+  if (jutil_step == 2)
+    {
+      ret = (*message1[c].fun) ();
+      if (ret == BUFFER_IN_CONT)
+        {
+          return (BUFFER_IN_CONT);
+        }
     }
-    c_c_sv = 0;
-    jutil_step = 0;
-    return(0);
+  c_c_sv = 0;
+  jutil_step = 0;
+  return (0);
 }
 
-#ifdef	USING_XJUTIL
+#ifdef  USING_XJUTIL
 int
-paramchg()
+paramchg ()
 {
-    xw_paramchg();
-    return(0);
+  xw_paramchg ();
+  return (0);
 }
-#endif	/* USING_XJUTIL */
+#endif /* USING_XJUTIL */
 
 int
-dicsv()
+dicsv ()
 {
-    if(jl_dic_save_all(bun_data_) == -1){
-    	errorkeyin();
+  if (jl_dic_save_all (bun_data_) == -1)
+    {
+      errorkeyin ();
     }
-    else {
-	print_msg_getc("%s",msg_get(cd, 0, default_message[0], cur_lang));
+  else
+    {
+      print_msg_getc ("%s", msg_get (cd, 0, default_message[0], cur_lang));
     }
-    return(0);
+  return (0);
 }
 
 
-#ifdef	USING_XJUTIL
+#ifdef  USING_XJUTIL
 int
-dicinfoout()
+dicinfoout ()
 {
-    xw_dicinfoout();
-    return(0);
-}
-
-int
-select_one_dict9()
-{
-    xw_select_one_dict9();
-    return(0);
+  xw_dicinfoout ();
+  return (0);
 }
 
 int
-fuzoku_set()
+select_one_dict9 ()
 {
-    xw_fuzoku_set();
-    return(0);
+  xw_select_one_dict9 ();
+  return (0);
 }
 
 int
-jishoadd()
+fuzoku_set ()
 {
-    xw_jishoadd();
-    return(0);
+  xw_fuzoku_set ();
+  return (0);
 }
 
 int
-kensaku()
+jishoadd ()
 {
-    xw_kensaku();
-    return(0);
+  xw_jishoadd ();
+  return (0);
 }
 
-#endif	/* USING_XJUTIL */
+int
+kensaku ()
+{
+  xw_kensaku ();
+  return (0);
+}
+
+#endif /* USING_XJUTIL */

@@ -1,5 +1,5 @@
 /*
- *  $Id: cvtcode.h,v 1.2 2001-06-14 17:55:50 ura Exp $
+ *  $Id: cvtcode.h,v 1.3 2001-06-14 18:16:06 ura Exp $
  */
 
 /*
@@ -29,14 +29,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#define ctolc(c)	((short)(unsigned char)(c)) /* chat to long_char */
-						   /* where char is ascii */
-#define lctoc(c)	((unsigned char)(c))	/* lonag_char to char */
-						   /* where char is ascii */
+#define ctolc(c)        ((short)(unsigned char)(c))     /* chat to long_char */
+                                                   /* where char is ascii */
+#define lctoc(c)        ((unsigned char)(c))    /* lonag_char to char */
+                                                   /* where char is ascii */
 
-#define SS2_CODE	(0x8e)
-#define SS3_CODE	(0x8f)
+#define SS2_CODE        (0x8e)
+#define SS3_CODE        (0x8f)
 
-extern long_char *strtoStr();	/* string to long string */
-extern unsigned char *Strtostr();	/* long string to string */
-extern int Charlen();		/* kanji code char length */
+extern long_char *strtoStr ();  /* string to long string */
+extern unsigned char *Strtostr ();      /* long string to string */
+extern int Charlen ();          /* kanji code char length */

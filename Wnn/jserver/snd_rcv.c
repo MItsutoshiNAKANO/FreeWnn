@@ -1,5 +1,5 @@
 /*
- *  $Id: snd_rcv.c,v 1.2 2001-06-14 17:55:37 ura Exp $
+ *  $Id: snd_rcv.c,v 1.3 2001-06-14 18:16:03 ura Exp $
  */
 
 /*
@@ -35,85 +35,102 @@
 static int fmode;
  /* JS_FILE_SEND (server receives) */
 int
-fopen_read_cur(fn)
-char *fn;
+fopen_read_cur (fn)
+     char *fn;
 {
-	fmode = 'r';
-	return 1;
+  fmode = 'r';
+  return 1;
 }
 
 /* JS_FILE_RECEIVE (server sends) */
 int
-fopen_write_cur(fn)
-char *fn;
+fopen_write_cur (fn)
+     char *fn;
 {
-	fmode = 'w';
+  fmode = 'w';
 /*
-	puts_cur(fn);putc_purge();
-	if(get4_cur()== -1) return NULL;
-	else return 1;
+        puts_cur(fn);putc_purge();
+        if(get4_cur()== -1) return NULL;
+        else return 1;
 */
-	return 1;
+  return 1;
 }
 
 /* JS_FILE_SEND (server recieves) */
 int
-fread_cur(p, size, nitems)
-char *p;
-register int size,nitems;
+fread_cur (p, size, nitems)
+     char *p;
+     register int size, nitems;
 {
- register int i,j,xx;
- for(i=0;i<nitems;i++){
-     for(j=0;j<size;j++){
-	*p++ = xx =  xgetc_cur();
-	if(xx== -1) return i;
+  register int i, j, xx;
+  for (i = 0; i < nitems; i++)
+    {
+      for (j = 0; j < size; j++)
+        {
+          *p++ = xx = xgetc_cur ();
+          if (xx == -1)
+            return i;
+        }
     }
- }
- return nitems;
+  return nitems;
 }
 
 static int store = -1;
 
 int
-xgetc_cur()
-{register int x;
- if(store != -1){ x = store; store = -1; return(x);}
- if((x= getc_cur()) != 0xFF) return x;
- if(getc_cur() == 0xFF) return -1; /* EOF */
- return 0xFF;
+xgetc_cur ()
+{
+  register int x;
+  if (store != -1)
+    {
+      x = store;
+      store = -1;
+      return (x);
+    }
+  if ((x = getc_cur ()) != 0xFF)
+    return x;
+  if (getc_cur () == 0xFF)
+    return -1;                  /* EOF */
+  return 0xFF;
 }
 
 void
-xungetc_cur(x)			/* H.T. */
-int x;
+xungetc_cur (x)                 /* H.T. */
+     int x;
 {
-    store = x;
+  store = x;
 }
 
 /* JS_FILE_SRECEIVE (server sends) */
 void
-fwrite_cur(p, size, nitems)
-unsigned char *p;
-int size, nitems;
-{register int i,x;
- x= size*nitems;
- for(i=0;i<x;i++){
-	xputc_cur(*p++);
- }
+fwrite_cur (p, size, nitems)
+     unsigned char *p;
+     int size, nitems;
+{
+  register int i, x;
+  x = size * nitems;
+  for (i = 0; i < x; i++)
+    {
+      xputc_cur (*p++);
+    }
 }
 
 void
-xputc_cur(x)
-unsigned char x;/* H.T. */
+xputc_cur (x)
+     unsigned char x;           /* H.T. */
 {
- putc_cur(x);
- if(x==0xFF){ putc_cur(0x00); }
+  putc_cur (x);
+  if (x == 0xFF)
+    {
+      putc_cur (0x00);
+    }
 }
 
 void
-fclose_cur()
+fclose_cur ()
 {
- if(fmode!='w') return;
- putc_cur(0xFF);
- putc_cur(0xFF); /* EOF */
+  if (fmode != 'w')
+    return;
+  putc_cur (0xFF);
+  putc_cur (0xFF);              /* EOF */
 }

@@ -1,5 +1,5 @@
 /*
- *  $Id: jllib.h,v 1.2 2001-06-14 17:55:31 ura Exp $
+ *  $Id: jllib.h,v 1.3 2001-06-14 18:15:57 ura Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 /*
-	Nihongo	Henkan	Library Header File
+        Nihongo Henkan  Library Header File
 */
 
 #ifndef JLLIB
@@ -49,58 +49,60 @@
 
 typedef struct wnn_jl_bun WNN_BUN;
 
-struct wnn_jl_bun {
-	int	jirilen;	/* 候補文節の自立語 */
-	int	dic_no;
-	int	entry;
-	int	kangovect;	/* 接続ベクトルテーブルへのポインタ */
-	int	hinsi;		/* 品詞 */
-	int	hindo  :16;		/* 頻度(仮想値) */
-	int	ref_cnt :4;		/* 文節リストに使われている */
-	/* BUG FIX signed --> unsigned */
-	unsigned int ima :1;		/* 今使ったよビット */
-	unsigned int hindo_updated :1;    /* この文節の頻度は更新されている */
-	unsigned int nobi_top :1;	/* 伸ばし縮みを行ったかを示す。*/
-	/* egg みたいに伸ばし縮みを繰り返し行う時に、途中に現れる候補の今
-	   使ったよ ビットを 落としてはならない。*/
-	unsigned int dai_top :1;	/* 大文節の先頭 */
-	unsigned int dai_end :1; /* 大文節のsaigo *//* 次候補 nomi */
-	unsigned int from_zenkouho :2;	/*次候補から選択された文節かどうか */
-	unsigned int bug :1;			/* BUG FIX とりあえず */
-	/* BUG FIX signed --> unsigned */
-	int 	hyoka;
-	int 	daihyoka;
-	short yomilen;
-	short kanjilen;
-	WNN_BUN *down; /* 今使ったよビットを落とす対象の文節 */
-	w_char   yomi[WNN_YOMI_SIZE];        /* 読み、漢字が入る。入り切らない時には
-				    次につなげる */
-	WNN_BUN *next;		/* 次のストラクトへのポインタ */
-	WNN_BUN *free_next;		/* 次のストラクトへのポインタ */
+struct wnn_jl_bun
+{
+  int jirilen;                  /* 候補文節の自立語 */
+  int dic_no;
+  int entry;
+  int kangovect;                /* 接続ベクトルテーブルへのポインタ */
+  int hinsi;                    /* 品詞 */
+  int hindo:16;                 /* 頻度(仮想値) */
+  int ref_cnt:4;                /* 文節リストに使われている */
+  /* BUG FIX signed --> unsigned */
+  unsigned int ima:1;           /* 今使ったよビット */
+  unsigned int hindo_updated:1; /* この文節の頻度は更新されている */
+  unsigned int nobi_top:1;      /* 伸ばし縮みを行ったかを示す。 */
+  /* egg みたいに伸ばし縮みを繰り返し行う時に、途中に現れる候補の今
+     使ったよ ビットを 落としてはならない。 */
+  unsigned int dai_top:1;       /* 大文節の先頭 */
+  unsigned int dai_end:1;       /* 大文節のsaigo *//* 次候補 nomi */
+  unsigned int from_zenkouho:2; /*次候補から選択された文節かどうか */
+  unsigned int bug:1;           /* BUG FIX とりあえず */
+  /* BUG FIX signed --> unsigned */
+  int hyoka;
+  int daihyoka;
+  short yomilen;
+  short kanjilen;
+  WNN_BUN *down;                /* 今使ったよビットを落とす対象の文節 */
+  w_char yomi[WNN_YOMI_SIZE];   /* 読み、漢字が入る。入り切らない時には
+                                   次につなげる */
+  WNN_BUN *next;                /* 次のストラクトへのポインタ */
+  WNN_BUN *free_next;           /* 次のストラクトへのポインタ */
 };
-    
 
-struct wnn_buf {
-    struct wnn_env *env;	/* 環境 */
-    int bun_suu;		/* 文節数 */
-    int zenkouho_suu;		/* 全候補の数 */
-    WNN_BUN **bun;		/* 文節へのポインタ */
-    WNN_BUN **down_bnst; /* 今使ったよビットを落とす対象の文節 */
 
-    WNN_BUN **zenkouho;		/* 全候補へのポインタ */
-    int *zenkouho_dai;		/* daibunsetsu zenkouho */
-    int zenkouho_dai_suu;	/* daibunsetsu zenkouho suu */
+struct wnn_buf
+{
+  struct wnn_env *env;          /* 環境 */
+  int bun_suu;                  /* 文節数 */
+  int zenkouho_suu;             /* 全候補の数 */
+  WNN_BUN **bun;                /* 文節へのポインタ */
+  WNN_BUN **down_bnst;          /* 今使ったよビットを落とす対象の文節 */
 
-    short c_zenkouho;		/* 全候補中、注目している候補 */
-    short zenkouho_daip;
-    int zenkouho_bun;		/* 全候補を取っている文節 */
-    int zenkouho_end_bun;	/* 全候補(dai)を取っている最後の文節 */
-    int zenkouho_endvect;	/* 全候補を取った endvect *//* ADD KURI */
+  WNN_BUN **zenkouho;           /* 全候補へのポインタ */
+  int *zenkouho_dai;            /* daibunsetsu zenkouho */
+  int zenkouho_dai_suu;         /* daibunsetsu zenkouho suu */
 
-    WNN_BUN *free_heap;
-    char *heap;		/* linked list of alloced area */
-    int msize_bun;
-    int msize_zenkouho;
+  short c_zenkouho;             /* 全候補中、注目している候補 */
+  short zenkouho_daip;
+  int zenkouho_bun;             /* 全候補を取っている文節 */
+  int zenkouho_end_bun;         /* 全候補(dai)を取っている最後の文節 */
+  int zenkouho_endvect;         /* 全候補を取った endvect *//* ADD KURI */
+
+  WNN_BUN *free_heap;
+  char *heap;                   /* linked list of alloced area */
+  int msize_bun;
+  int msize_zenkouho;
 };
 
 
@@ -154,29 +156,29 @@ struct wnn_buf {
 #define jl_jiri_len(buf, k) ((buf)->bun[k]->jirilen)
 
 #define jl_fuzoku_len(buf, k) \
-		(jl_yomi_len((buf), k, k+1) - jl_jiri_len((buf), k))
+                (jl_yomi_len((buf), k, k+1) - jl_jiri_len((buf), k))
 
 #define jl_jiri_kanji_len(buf, k) \
-		(jl_kanji_len((buf), k, k+1) - jl_fuzoku_len((buf), k))
+                (jl_kanji_len((buf), k, k+1) - jl_fuzoku_len((buf), k))
 
 /* Macros to create library functions from "_e" libraries */
 
-#define jl_env(buf) 	((buf)->env)
+#define jl_env(buf)     ((buf)->env)
 
 #define jl_dic_add(buf,dic_name,hindo_name,rev, prio,rw, hrw, pwd_dic, pwd_hindo, error_handler, message_handler)\
     jl_dic_add_e(jl_env(buf),dic_name,hindo_name,rev,prio,rw, hrw, pwd_dic,\
-		      pwd_hindo, error_handler, message_handler)
+                      pwd_hindo, error_handler, message_handler)
 
-#define jl_fuzokugo_set(buf, fname)  jl_fuzokugo_set_e(jl_env(buf), fname) 
+#define jl_fuzokugo_set(buf, fname)  jl_fuzokugo_set_e(jl_env(buf), fname)
 
-#define jl_fuzokugo_get(buf, fname)  jl_fuzokugo_get_e(jl_env(buf), fname) 
+#define jl_fuzokugo_get(buf, fname)  jl_fuzokugo_get_e(jl_env(buf), fname)
 
 
 #define jl_dic_save(buf,dic_no) jl_dic_save_e(jl_env(buf),dic_no)
 
-#define jl_dic_save_all(buf)	jl_dic_save_all_e(jl_env(buf))
+#define jl_dic_save_all(buf)    jl_dic_save_all_e(jl_env(buf))
 
-#define jl_dic_list(buf, dip)	jl_dic_list_e(jl_env(buf), dip)
+#define jl_dic_list(buf, dip)   jl_dic_list_e(jl_env(buf), dip)
 
 #define jl_word_search(buf,dic_no, yomi, jdp) \
     jl_word_search_e(jl_env(buf),dic_no, yomi, jdp)
@@ -224,80 +226,80 @@ struct wnn_buf {
 #define jl_hinsi_dicts(buf, no, area) \
     jl_hinsi_dicts_e(jl_env(buf), no, area)
 
-#ifdef nodef  /*当面の間、頻度ファイルのコメントはユーザに見せない。*/
-    #define jl_hindo_comment_set(buf, dic, comm) \
+#ifdef nodef                    /*当面の間、頻度ファイルのコメントはユーザに見せない。 */
+#define jl_hindo_comment_set(buf, dic, comm) \
         jl_hindo_comment_set_e((buf)->env, dic, comm)
 #endif
 
-#define jl_isconnect(buf)	jl_isconnect_e((buf)->env)
+#define jl_isconnect(buf)       jl_isconnect_e((buf)->env)
 
-#define jl_env_sticky(buf)	js_env_sticky((buf)->env)
-#define jl_env_sticky_e(env)	js_env_sticky(env)
-#define jl_env_un_sticky(buf)	js_env_un_sticky((buf)->env)
-#define jl_env_un_sticky_e(env)	js_env_un_sticky(env)
+#define jl_env_sticky(buf)      js_env_sticky((buf)->env)
+#define jl_env_sticky_e(env)    js_env_sticky(env)
+#define jl_env_un_sticky(buf)   js_env_un_sticky((buf)->env)
+#define jl_env_un_sticky_e(env) js_env_un_sticky(env)
 
 /* for select server by useing $LANG */
-#define	jl_open(env_n, server_n, wnnrc_n, error_handler, message_handler, timeout) \
+#define jl_open(env_n, server_n, wnnrc_n, error_handler, message_handler, timeout) \
     jl_open_lang(env_n, server_n, NULL, wnnrc_n, error_handler, message_handler, timeout)
 
-#define	jl_connect(env_n, server_n, wnnrc_n, error_handler, message_handler, timeout) \
+#define jl_connect(env_n, server_n, wnnrc_n, error_handler, message_handler, timeout) \
     jl_connect_lang(env_n, server_n, NULL, wnnrc_n, error_handler, message_handler, timeout)
-#define	jl_get_lang(buf)	js_get_lang((buf)->env)
-#define	jl_set_lang(buf, lang)	js_set_lang((buf)->env, lang)
+#define jl_get_lang(buf)        js_get_lang((buf)->env)
+#define jl_set_lang(buf, lang)  js_set_lang((buf)->env, lang)
 
 /* extern function defines */
-extern struct wnn_buf *jl_open_lang();
-extern struct wnn_env *jl_connect_lang();
-extern struct wnn_env *jl_env_get();
-extern struct wnn_jdata *jl_word_info_e();
-extern w_char *jl_hinsi_name_e();
+extern struct wnn_buf *jl_open_lang ();
+extern struct wnn_env *jl_connect_lang ();
+extern struct wnn_env *jl_env_get ();
+extern struct wnn_jdata *jl_word_info_e ();
+extern w_char *jl_hinsi_name_e ();
 
-extern void jl_close();
-extern int jl_dic_add_e();
-extern int jl_dic_comment_set_e();
-extern int jl_dic_delete_e();
-extern int jl_dic_list_e();
-extern int jl_dic_save_all_e();
-extern int jl_dic_save_e();
-extern int jl_dic_use_e();
-extern void jl_disconnect();
-extern void jl_disconnect_if_server_dead();
-extern void jl_env_set();
-extern int jl_fuzokugo_get_e();
-extern int jl_fuzokugo_set_e();
-extern void jl_get_zenkouho_kanji();
-extern int jl_hinsi_dicts_e();
-extern int jl_hinsi_list_e();
-extern int jl_hinsi_number_e();
-extern int jl_isconnect_e();
-extern int jl_kanji_len();
-extern int jl_kill();
-extern int jl_nobi_conv();
-extern int jl_nobi_conv_e2();
-extern int jl_param_get_e();
-extern int jl_param_set_e();
-extern int jl_ren_conv();
-extern int jl_set_env_wnnrc();
-extern int jl_set_env_wnnrc1();
-extern int jl_set_jikouho();
-extern int jl_set_jikouho_dai();
-extern int jl_tan_conv();
-extern int jl_update_hindo();
-extern int jl_word_add_e();
-extern int jl_word_comment_set_e();
-extern int jl_word_delete_e();
-extern int jl_word_search_by_env_e();
-extern int jl_word_search_e();
-extern int jl_word_use_e();
-extern int jl_yomi_len();
-extern int jl_zenkouho();
-extern int jl_zenkouho_dai();
-extern int wnn_get_area();
+extern void jl_close ();
+extern int jl_dic_add_e ();
+extern int jl_dic_comment_set_e ();
+extern int jl_dic_delete_e ();
+extern int jl_dic_list_e ();
+extern int jl_dic_save_all_e ();
+extern int jl_dic_save_e ();
+extern int jl_dic_use_e ();
+extern void jl_disconnect ();
+extern void jl_disconnect_if_server_dead ();
+extern void jl_env_set ();
+extern int jl_fuzokugo_get_e ();
+extern int jl_fuzokugo_set_e ();
+extern void jl_get_zenkouho_kanji ();
+extern int jl_hinsi_dicts_e ();
+extern int jl_hinsi_list_e ();
+extern int jl_hinsi_number_e ();
+extern int jl_isconnect_e ();
+extern int jl_kanji_len ();
+extern int jl_kill ();
+extern int jl_nobi_conv ();
+extern int jl_nobi_conv_e2 ();
+extern int jl_param_get_e ();
+extern int jl_param_set_e ();
+extern int jl_ren_conv ();
+extern int jl_set_env_wnnrc ();
+extern int jl_set_env_wnnrc1 ();
+extern int jl_set_jikouho ();
+extern int jl_set_jikouho_dai ();
+extern int jl_tan_conv ();
+extern int jl_update_hindo ();
+extern int jl_word_add_e ();
+extern int jl_word_comment_set_e ();
+extern int jl_word_delete_e ();
+extern int jl_word_search_by_env_e ();
+extern int jl_word_search_e ();
+extern int jl_word_use_e ();
+extern int jl_yomi_len ();
+extern int jl_zenkouho ();
+extern int jl_zenkouho_dai ();
+extern int wnn_get_area ();
 
-extern char *wnn_perror();
-extern char *wnn_perror_lang();
+extern char *wnn_perror ();
+extern char *wnn_perror_lang ();
 
 #ifdef  CONVERT_by_STROKE
-extern void jl_get_zenkouho_yomi();
+extern void jl_get_zenkouho_yomi ();
 #endif
-#endif	/* JLLIB */
+#endif /* JLLIB */

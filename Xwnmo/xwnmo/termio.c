@@ -1,5 +1,5 @@
 /*
- * $Id: termio.c,v 1.1.1.1 2000-01-16 05:07:57 ura Exp $
+ * $Id: termio.c,v 1.2 2001-06-14 18:16:17 ura Exp $
  */
 
 /*
@@ -37,67 +37,88 @@
  * Code:
  *
  */
-/*	Version 4.0
+/*      Version 4.0
  */
 #include "commonhd.h"
 #include "sdefine.h"
-#ifdef	XJUTIL
+#ifdef  XJUTIL
 #include "xjutil.h"
 #include "sxheader.h"
 #include "xext.h"
-#else	/* XJUTIL */
+#else /* XJUTIL */
 #include "xim.h"
 #include "sheader.h"
 #include "ext.h"
-#endif	/* XJUTIL */
+#endif /* XJUTIL */
 
-#ifndef	XJUTIL
-#define	cur_text	(cur_p->cur_xl)
-#endif	/* XJUTIL */
-
-void
-clr_end_screen()
-{ JWMline_clear(cur_text->currentcol) ; }
+#ifndef XJUTIL
+#define cur_text        (cur_p->cur_xl)
+#endif /* XJUTIL */
 
 void
-throw_cur_raw(col)
-int	col; { JWcursor_move(col) ; }
-
-void
-h_r_on_raw()
-{ cur_text->r_flag = 1; }
-
-void
-h_r_off_raw()
-{ cur_text->r_flag = 0; }
-
-void
-u_s_on_raw()
-{ cur_text->u_line_flag = 1; }
-
-void
-u_s_off_raw()
-{ cur_text->u_line_flag = 0; }
-
-void
-b_s_on_raw()
-{ cur_text->b_flag = 1; }
-
-void
-b_s_off_raw()
-{ cur_text->b_flag = 0; }
-
-void
-ring_bell()
-{ XBell(dpy, 0); }
-
-void
-cursor_invisible_raw()
-{ JWcursor_invisible() ; }
-
-void
-cursor_normal_raw()
+clr_end_screen ()
 {
-	cur_text->u_line_flag = cur_text->r_flag = 0;
-	JWcursor_visible() ;
+  JWMline_clear (cur_text->currentcol);
+}
+
+void
+throw_cur_raw (col)
+     int col;
+{
+  JWcursor_move (col);
+}
+
+void
+h_r_on_raw ()
+{
+  cur_text->r_flag = 1;
+}
+
+void
+h_r_off_raw ()
+{
+  cur_text->r_flag = 0;
+}
+
+void
+u_s_on_raw ()
+{
+  cur_text->u_line_flag = 1;
+}
+
+void
+u_s_off_raw ()
+{
+  cur_text->u_line_flag = 0;
+}
+
+void
+b_s_on_raw ()
+{
+  cur_text->b_flag = 1;
+}
+
+void
+b_s_off_raw ()
+{
+  cur_text->b_flag = 0;
+}
+
+void
+ring_bell ()
+{
+  XBell (dpy, 0);
+}
+
+void
+cursor_invisible_raw ()
+{
+  JWcursor_invisible ();
+}
+
+void
+cursor_normal_raw ()
+{
+  cur_text->u_line_flag = cur_text->r_flag = 0;
+  JWcursor_visible ();
 }

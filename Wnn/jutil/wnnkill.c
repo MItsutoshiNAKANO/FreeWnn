@@ -1,5 +1,5 @@
 /*
- *  $Id: wnnkill.c,v 1.4 2001-06-14 17:55:37 ura Exp $
+ *  $Id: wnnkill.c,v 1.5 2001-06-14 18:16:04 ura Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: wnnkill.c,v 1.4 2001-06-14 17:55:37 ura Exp $";
+static char *rcs_id = "$Id: wnnkill.c,v 1.5 2001-06-14 18:16:04 ura Exp $";
 #endif /* lint */
 
 #include <stdio.h>
@@ -41,190 +41,213 @@ static char *rcs_id = "$Id: wnnkill.c,v 1.4 2001-06-14 17:55:37 ura Exp $";
 #include "wnn_config.h"
 #include "wnn_os.h"
 
-static void out();
+static void out ();
 
-WNN_JSERVER_ID	*js;
-struct wnn_ret_buf rb = {0, NULL};
+WNN_JSERVER_ID *js;
+struct wnn_ret_buf rb = { 0, NULL };
 
 #ifdef JAPANESE
 int ocode = TTY_KCODE;
 #endif
-#ifdef	CHINESE
-#ifdef	TAIWANESE
+#ifdef  CHINESE
+#ifdef  TAIWANESE
 int ocode = (TTY_TCODE + 6);
-#else	/* TAIWANESE */
+#else /* TAIWANESE */
 int ocode = (TTY_CCODE + 4);
-#endif	/* TAIWANESE */
-#endif	/* CHINESE */
+#endif /* TAIWANESE */
+#endif /* CHINESE */
 #ifdef KOREAN
 int ocode = TTY_HCODE;
 #endif
 
 int
-main(argc, argv)
-int argc;
-char **argv;
+main (argc, argv)
+     int argc;
+     char **argv;
 {
-    extern char *getenv();
-    int c;
-    char *serv;
-    int x;
-    static char lang[64] = { 0 };
-    extern int optind;
-    extern char *optarg;
+  extern char *getenv ();
+  int c;
+  char *serv;
+  int x;
+  static char lang[64] = { 0 };
+  extern int optind;
+  extern char *optarg;
 /*
     char *p;
 */
-    char *server_env = NULL;
-    char *prog = argv[0];
-    extern char *_wnn_get_machine_of_serv_defs(), *get_server_env();
+  char *server_env = NULL;
+  char *prog = argv[0];
+  extern char *_wnn_get_machine_of_serv_defs (), *get_server_env ();
 
 /*
     if ((p = getenv("LANG")) != NULL) {
-	strcpy(lang, p);
-	   lang[5] = '\0';
+        strcpy(lang, p);
+           lang[5] = '\0';
     } else {
-	lang[0] = '\0';
+        lang[0] = '\0';
     }
 
     if (*lang == '\0')
 */
-	strcpy(lang, WNN_DEFAULT_LANG);
+  strcpy (lang, WNN_DEFAULT_LANG);
 
 #ifdef JAPANESE
-    while ((c = getopt(argc,argv,"USJL:")) != EOF) {
+#  define OPTSTRING "USJL:"
 #endif
-#ifdef	CHINESE
-    while ((c = getopt(argc,argv,"USJBCL:")) != EOF) {
-#endif	/* CHINESE */
+#ifdef  CHINESE
+#  define OPTSTRING "USJBCL:"
+#endif /* CHINESE */
 #ifdef KOREAN
-    while ((c = getopt(argc,argv,"UL:")) != EOF) {
+#  define OPTSTRING "UL:"
 #endif
-	switch(c){
-	case 'U':
+
+  while ((c = getopt (argc, argv, OPTSTRING)) != EOF)
+    {
+      switch (c)
+        {
+        case 'U':
 #ifdef JAPANESE
-	    ocode = J_EUJIS;
+          ocode = J_EUJIS;
 #endif
 #ifdef CHINESE
-	    ocode = C_EUGB;
+          ocode = C_EUGB;
 #endif
 #ifdef KOREAN
-	    ocode = K_EUKSC;
+          ocode = K_EUKSC;
 #endif
-	    break;
+          break;
 #ifdef JAPANESE
-	case 'J':
-	    ocode = J_JIS;
-	    break;
-	case 'S':
-	    ocode = J_SJIS;
-	    break;
+        case 'J':
+          ocode = J_JIS;
+          break;
+        case 'S':
+          ocode = J_SJIS;
+          break;
 #endif
-#ifdef	CHINESE
-	case 'B':
-	    ocode = (C_BIG5 + 6);
-	    break;
-	case 'C':
-	    ocode = (C_ECNS11643 + 6);
-	    break;
-#endif	/* CHINESE */
-	case 'L':
-	    strcpy(lang, optarg);
-	    break;
-	default:
-	    break;
-	}
+#ifdef  CHINESE
+        case 'B':
+          ocode = (C_BIG5 + 6);
+          break;
+        case 'C':
+          ocode = (C_ECNS11643 + 6);
+          break;
+#endif /* CHINESE */
+        case 'L':
+          strcpy (lang, optarg);
+          break;
+        default:
+          break;
+        }
     }
-    if (optind) {
-	optind--;
-	argc -= optind;
-	argv += optind;
-    }
-
-    if ((server_env = get_server_env(lang)) == NULL) {
-	server_env = WNN_DEF_SERVER_ENV;
-    }
-    if(argc > 1){
-	serv = argv[1];
-    }else if(!(serv = getenv(server_env))){
-	serv = "";
+  if (optind)
+    {
+      optind--;
+      argc -= optind;
+      argv += optind;
     }
 
-    if (!*serv) {
-	if (serv = _wnn_get_machine_of_serv_defs(lang)) {
-	    if ((js = js_open_lang(serv, lang, WNN_TIMEOUT)) == NULL) {
-		serv = "";
-	    }
-	}
+  if ((server_env = get_server_env (lang)) == NULL)
+    {
+      server_env = WNN_DEF_SERVER_ENV;
     }
-    if(js == NULL && (js=js_open_lang(serv, lang, WNN_TIMEOUT)) == NULL){
-	out("%s:", prog);
-	if (serv && *serv) out(serv);
-	out("%s\n",wnn_perror_lang(lang)); 
-/*	fprintf(stderr, "Can't connect to jserver.\n"); */
-	exit(255);
+  if (argc > 1)
+    {
+      serv = argv[1];
     }
-    if((x = js_kill(js)) > 0){
-	if (x == 1) {
-	    out("%d User Exists.\n", x);
-	} else {
-	    out("%d Users Exist.\n", x);
-	}
-	out("%s Not Killed.\n", server_env);
-	exit(1);
-    }else if(x == 0){
-	out("%s Terminated\n", server_env);
-	exit(0);
-    }else{
-	out("%s Terminated\n", server_env);
-	exit(2);
+  else if (!(serv = getenv (server_env)))
+    {
+      serv = "";
     }
-    exit (0);
+
+  if (!*serv)
+    {
+      if (serv = _wnn_get_machine_of_serv_defs (lang))
+        {
+          if ((js = js_open_lang (serv, lang, WNN_TIMEOUT)) == NULL)
+            {
+              serv = "";
+            }
+        }
+    }
+  if (js == NULL && (js = js_open_lang (serv, lang, WNN_TIMEOUT)) == NULL)
+    {
+      out ("%s:", prog);
+      if (serv && *serv)
+        out (serv);
+      out ("%s\n", wnn_perror_lang (lang));
+/*      fprintf(stderr, "Can't connect to jserver.\n"); */
+      exit (255);
+    }
+  if ((x = js_kill (js)) > 0)
+    {
+      if (x == 1)
+        {
+          out ("%d User Exists.\n", x);
+        }
+      else
+        {
+          out ("%d Users Exist.\n", x);
+        }
+      out ("%s Not Killed.\n", server_env);
+      exit (1);
+    }
+  else if (x == 0)
+    {
+      out ("%s Terminated\n", server_env);
+      exit (0);
+    }
+  else
+    {
+      out ("%s Terminated\n", server_env);
+      exit (2);
+    }
+  exit (0);
 }
-	
+
 #ifdef JAPANESE
-extern	int eujis_to_jis8(), eujis_to_sjis();
+extern int eujis_to_jis8 (), eujis_to_sjis ();
 #endif
 #ifdef CHINESE
-extern int ecns_to_big5();
+extern int ecns_to_big5 ();
 #endif
 
 static void
-out(a1, a2, a3, a4, a5, a6, a7, a8)
-char *a1, *a2, *a3, *a4, *a5, *a6, *a7, *a8;
+out (a1, a2, a3, a4, a5, a6, a7, a8)
+     char *a1, *a2, *a3, *a4, *a5, *a6, *a7, *a8;
 {
-    int len;
-    char buf[1024];
-    char jbuf[1024];
-    sprintf(buf, a1, a2, a3, a4, a5, a6, a7, a8);
+  int len;
+  char buf[1024];
+  char jbuf[1024];
+  sprintf (buf, a1, a2, a3, a4, a5, a6, a7, a8);
 
-    len = strlen(buf);
-    switch(ocode){
+  len = strlen (buf);
+  switch (ocode)
+    {
 #ifdef JAPANESE
     case J_EUJIS:
 #endif
-#ifdef	CHINESE
+#ifdef  CHINESE
     case (C_EUGB + 4):
     case (C_ECNS11643 + 6):
-#endif	/* CHINESE */
+#endif /* CHINESE */
 #ifdef KOREAN
     case K_EUKSC:
 #endif
-	strncpy(jbuf, buf, len + 1);
-	break;
+      strncpy (jbuf, buf, len + 1);
+      break;
 #ifdef JAPANESE
     case J_JIS:
-	eujis_to_jis8(jbuf, buf, len + 1);
-	break;
+      eujis_to_jis8 (jbuf, buf, len + 1);
+      break;
     case J_SJIS:
-	eujis_to_sjis(jbuf, buf, len + 1);
-	break;
+      eujis_to_sjis (jbuf, buf, len + 1);
+      break;
 #endif
-#ifdef	CHINESE
+#ifdef  CHINESE
     case (C_BIG5 + 6):
-	ecns_to_big5(jbuf, buf, len + 1);
-	break;
-#endif	/* CHINESE */
+      ecns_to_big5 (jbuf, buf, len + 1);
+      break;
+#endif /* CHINESE */
     }
-    fprintf(stderr, "%s", jbuf);
+  fprintf (stderr, "%s", jbuf);
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: chkreset.c,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: chkreset.c,v 1.2 2001-06-14 18:16:11 ura Exp $
  */
 
 /*
@@ -51,33 +51,42 @@
 #include "exvalue.h"
 #include "func.h"
 
-FLAG	preset(ic, mode)		/* Preedit area RESET */
-XIC	ic;
-FLAG	mode;
+/* *INDENT-OFF* */
+FLAG
+preset (ic, mode)               /* Preedit area RESET */
+    XIC ic;
+    FLAG mode;
+/* *INDENT-ON* */
 {
-    if (mode == ONSP) {
-	prerrfunc();
-	return (COMP);
-    } else {
-	cls(prdisp);
-	if (strflag == MB) {
-	    prstatus("Test of XmbResetIC()...");
-	    XmbResetIC(ic);
-	} else if (strflag == WC) {
-	    prstatus("Test of XwcResetIC()...");
-	    XwcResetIC(ic);
-	}
-	prstatus("done.");
-	prprint("Check your own eyes if preedit area on the test window is clear.\n\n");
-	prprint("And re-input string.\n\n");
-	if (strflag == MB) {
-	    fprintf(icfp, "...XmbResetIC returned.\n\n");
-	} else if (strflag == WC) {
-	    fprintf(icfp, "...XwcResetIC returned.\n\n");
-	}
-	return (COMP);
+  if (mode == ONSP)
+    {
+      prerrfunc ();
+      return (COMP);
+    }
+  else
+    {
+      cls (prdisp);
+      if (strflag == MB)
+        {
+          prstatus ("Test of XmbResetIC()...");
+          XmbResetIC (ic);
+        }
+      else if (strflag == WC)
+        {
+          prstatus ("Test of XwcResetIC()...");
+          XwcResetIC (ic);
+        }
+      prstatus ("done.");
+      prprint ("Check your own eyes if preedit area on the test window is clear.\n\n");
+      prprint ("And re-input string.\n\n");
+      if (strflag == MB)
+        {
+          fprintf (icfp, "...XmbResetIC returned.\n\n");
+        }
+      else if (strflag == WC)
+        {
+          fprintf (icfp, "...XwcResetIC returned.\n\n");
+        }
+      return (COMP);
     }
 }
-
-
-

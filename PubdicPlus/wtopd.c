@@ -21,7 +21,7 @@
  */
 
 #ifndef lint
-static char rcsid[] = "$Id: wtopd.c,v 1.1 2000-01-16 07:06:09 ura Exp $";
+static char rcsid[] = "$Id: wtopd.c,v 1.2 2001-06-14 18:15:54 ura Exp $";
 #endif
 
 #include <stdio.h>
@@ -31,55 +31,63 @@ static char *program;
 #define READBUFSIZE 1024
 
 char *
-extstr(p, pp)
-char *p, **pp;
+extstr (p, pp)
+     char *p, **pp;
 {
   char *res;
 
-  while (*p == ' ' || *p == '\t') p++;
+  while (*p == ' ' || *p == '\t')
+    p++;
   res = p;
-  while (*p && *p != ' ' && *p != '\t' && *p != '\n') p++;
+  while (*p && *p != ' ' && *p != '\t' && *p != '\n')
+    p++;
   *p++ = '\0';
-  if (pp) *pp = p;
+  if (pp)
+    *pp = p;
   return res;
 }
 
 static void
-wtop(file)
-FILE *file;
+wtop (file)
+     FILE *file;
 {
   char readbuf[READBUFSIZE], *p, *yomi, *hinshi, *kouho, *hindo;
 
-  while (p = fgets(readbuf, sizeof(readbuf), file)) {
-    yomi = extstr(p, &p);
-    kouho = extstr(p, &p);
-    hinshi = extstr(p, &p);
-    hindo = extstr(p, &p);
+  while (p = fgets (readbuf, sizeof (readbuf), file))
+    {
+      yomi = extstr (p, &p);
+      kouho = extstr (p, &p);
+      hinshi = extstr (p, &p);
+      hindo = extstr (p, &p);
 
-    printf("%s %s %s %s\n", yomi, kouho, hinshi, hindo);
-  }
+      printf ("%s %s %s %s\n", yomi, kouho, hinshi, hindo);
+    }
 }
 
-main(argc, argv)
-int argc;
-char *argv[];
+main (argc, argv)
+     int argc;
+     char *argv[];
 {
   FILE *ins = stdin;
 
-  for (program = argv[0] + strlen(argv[0]) ; argv[0] < program ; program--) {
-    if (program[0] == '/') {
-      program++;
-      break;
+  for (program = argv[0] + strlen (argv[0]); argv[0] < program; program--)
+    {
+      if (program[0] == '/')
+        {
+          program++;
+          break;
+        }
     }
-  }
 
-  if (argc > 1) {
-    ins = fopen(argv[1], "r");
-    if (!ins) {
-      fprintf(stderr, "%s: can not open file \"%s\".\n", program, argv[1]);
+  if (argc > 1)
+    {
+      ins = fopen (argv[1], "r");
+      if (!ins)
+        {
+          fprintf (stderr, "%s: can not open file \"%s\".\n", program, argv[1]);
+        }
     }
-  }
-  wtop(ins);
-  fclose(ins);
-  exit(0);
+  wtop (ins);
+  fclose (ins);
+  exit (0);
 }

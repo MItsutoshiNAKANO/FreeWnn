@@ -1,5 +1,5 @@
 /*
- * $Id: hinsi.c,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: hinsi.c,v 1.2 2001-06-14 18:16:12 ura Exp $
  */
 
 /*
@@ -38,7 +38,7 @@
  *
  */
 
-/*	Version 4.0
+/*      Version 4.0
  */
 #include <stdio.h>
 #include "jslib.h"
@@ -48,7 +48,7 @@
 #include "sxheader.h"
 #include "xext.h"
 
-#define	ROOT "/"
+#define ROOT "/"
 
 #define MAXHINSI 256
 
@@ -59,121 +59,135 @@ int save_t_p;
 char *save_t[10];
 
 static w_char *
-default_bunpou_search(node, total)
-w_char *node, *total;
+default_bunpou_search (node, total)
+     w_char *node, *total;
 {
-    int cnt;
-    w_char **whbuf;
-    w_char *ret;
+  int cnt;
+  w_char **whbuf;
+  w_char *ret;
 
-    if(node == NULL) return(NULL);
-    if ((cnt = js_hinsi_list(cur_env, -1, node, &rb)) == -1)
-	if_dead_disconnect(cur_env, -1);
-    if(cnt == -1){
-	errorkeyin();
-	return(NULL);
+  if (node == NULL)
+    return (NULL);
+  if ((cnt = js_hinsi_list (cur_env, -1, node, &rb)) == -1)
+    if_dead_disconnect (cur_env, -1);
+  if (cnt == -1)
+    {
+      errorkeyin ();
+      return (NULL);
     }
-    whbuf = (w_char **)(rb.buf);
-    if(cnt == 0) return(node);
-    Strcpy(node, whbuf[0]);
-    Strcat(total, node);
-    ret = default_bunpou_search(node, total);
-    return(ret);
+  whbuf = (w_char **) (rb.buf);
+  if (cnt == 0)
+    return (node);
+  Strcpy (node, whbuf[0]);
+  Strcat (total, node);
+  ret = default_bunpou_search (node, total);
+  return (ret);
 }
 
 int
-get_default_hinsi(p)
-char *p;
+get_default_hinsi (p)
+     char *p;
 {
-    w_char *a;
-    w_char tmp[WNN_HINSI_NAME_LEN];
-    w_char total[WNN_HINSI_NAME_LEN];
-    register int x;
+  w_char *a;
+  w_char tmp[WNN_HINSI_NAME_LEN];
+  w_char total[WNN_HINSI_NAME_LEN];
+  register int x;
 
-    Sstrcpy(tmp, ROOT);
-    Sstrcpy(total, ROOT);
+  Sstrcpy (tmp, ROOT);
+  Sstrcpy (total, ROOT);
 
-    if((a = default_bunpou_search(tmp, total)) == NULL) {
-	return(-1);
+  if ((a = default_bunpou_search (tmp, total)) == NULL)
+    {
+      return (-1);
     }
-    if((x = js_hinsi_number(cur_env->js_id, a)) == -1)
-	if_dead_disconnect(cur_env, -1);
-    sStrcpy(p, total);
-    return(x);
+  if ((x = js_hinsi_number (cur_env->js_id, a)) == -1)
+    if_dead_disconnect (cur_env, -1);
+  sStrcpy (p, total);
+  return (x);
 }
 
 static w_char *
-bunpou_search(node, total)
-w_char *node, *total;
+bunpou_search (node, total)
+     w_char *node, *total;
 {
-    int cnt;
-    int k;
-    char *hbuf[MAXHINSI];
-    char buf[1024];		/* iikagen */
-    char *c;
-    w_char **whbuf;
-    w_char *ret;
+  int cnt;
+  int k;
+  char *hbuf[MAXHINSI];
+  char buf[1024];               /* iikagen */
+  char *c;
+  w_char **whbuf;
+  w_char *ret;
 
-    if(node == NULL) return(NULL);
-    if ((cnt = js_hinsi_list(cur_env, -1, node, &rb)) == -1)
-	if_dead_disconnect(cur_env, -1);
-    if(cnt == -1){
-	errorkeyin();
-	return(NULL);
+  if (node == NULL)
+    return (NULL);
+  if ((cnt = js_hinsi_list (cur_env, -1, node, &rb)) == -1)
+    if_dead_disconnect (cur_env, -1);
+  if (cnt == -1)
+    {
+      errorkeyin ();
+      return (NULL);
     }
-    whbuf = (w_char **)(rb.buf);
-    if(cnt == 0) return(node);
-    for(k = 0, c = buf ; k < cnt ; k++){
-	hbuf[k] = c;
-	sStrcpy(c, whbuf[k]);
-	c += strlen(c) + 1;
+  whbuf = (w_char **) (rb.buf);
+  if (cnt == 0)
+    return (node);
+  for (k = 0, c = buf; k < cnt; k++)
+    {
+      hbuf[k] = c;
+      sStrcpy (c, whbuf[k]);
+      c += strlen (c) + 1;
     }
-    hbuf[cnt] = msg_get(cd, 0, default_message[0], xjutil->lang);
- TOP:
-    k = xw_select_one_element_call(hbuf, cnt + 1, 0,bunpou_title);
-    if(k == -1 || k == -3)return(NULL);
-    if(strcmp(hbuf[k], hbuf[cnt]) == 0) {
-	JWMline_clear(save_k[--save_k_p]);
-	bunpou_title = save_t[--save_t_p];
-	return((w_char *)hbuf[cnt]);
+  hbuf[cnt] = msg_get (cd, 0, default_message[0], xjutil->lang);
+TOP:
+  k = xw_select_one_element_call (hbuf, cnt + 1, 0, bunpou_title);
+  if (k == -1 || k == -3)
+    return (NULL);
+  if (strcmp (hbuf[k], hbuf[cnt]) == 0)
+    {
+      JWMline_clear (save_k[--save_k_p]);
+      bunpou_title = save_t[--save_t_p];
+      return ((w_char *) hbuf[cnt]);
     }
-    Sstrcpy(node, hbuf[k]);
-    Strcat(total, node);
-    save_k[save_k_p++] = cur_text->currentcol;
-    xw_jutil_write_msg(hbuf[k]);
-    save_t[save_t_p++] = bunpou_title;
-    bunpou_title = hbuf[k];
-    ret = bunpou_search(node, total);
-    if(ret == NULL) return(NULL);
-    if(strcmp((char *)ret, hbuf[cnt]) == 0) goto TOP;
-    return(ret);
+  Sstrcpy (node, hbuf[k]);
+  Strcat (total, node);
+  save_k[save_k_p++] = cur_text->currentcol;
+  xw_jutil_write_msg (hbuf[k]);
+  save_t[save_t_p++] = bunpou_title;
+  bunpou_title = hbuf[k];
+  ret = bunpou_search (node, total);
+  if (ret == NULL)
+    return (NULL);
+  if (strcmp ((char *) ret, hbuf[cnt]) == 0)
+    goto TOP;
+  return (ret);
 }
 
 int
-hinsi_in(text)
-unsigned char *text;
+hinsi_in (text)
+     unsigned char *text;
 {
-    w_char *a;
-    register int x;
-    w_char tmp[WNN_HINSI_NAME_LEN];
-    w_char total[WNN_HINSI_NAME_LEN];
+  w_char *a;
+  register int x;
+  w_char tmp[WNN_HINSI_NAME_LEN];
+  w_char total[WNN_HINSI_NAME_LEN];
 
-    Sstrcpy(tmp, ROOT);
-    Sstrcpy(total, ROOT);
-    bunpou_title = msg_get(cd, 1, default_message[1], xjutil->lang);
-    save_k_p = 0;
-    save_t_p = 0;
-    save_t[0] = bunpou_title;
+  Sstrcpy (tmp, ROOT);
+  Sstrcpy (total, ROOT);
+  bunpou_title = msg_get (cd, 1, default_message[1], xjutil->lang);
+  save_k_p = 0;
+  save_t_p = 0;
+  save_t[0] = bunpou_title;
 
-    if((a = bunpou_search(tmp, total)) == NULL ||
-       strcmp((char *)a, msg_get(cd, 0, default_message[0], xjutil->lang))
-	== 0) {
-	return(-1);
+  if ((a = bunpou_search (tmp, total)) == NULL || strcmp ((char *) a, msg_get (cd, 0, default_message[0], xjutil->lang)) == 0)
+    {
+      return (-1);
     }
-    if((x = js_hinsi_number(cur_env->js_id, a)) == -1) {
-	if_dead_disconnect(cur_env, -1);
-    } else {
-	sStrcpy(text, total);
+  if ((x = js_hinsi_number (cur_env->js_id, a)) == -1)
+    {
+      if_dead_disconnect (cur_env, -1);
     }
-    return(x);
+  else
+    {
+      sStrcpy (text, total);
+    }
+  return (x);
 }

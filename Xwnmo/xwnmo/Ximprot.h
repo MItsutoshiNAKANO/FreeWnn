@@ -1,5 +1,5 @@
 /*
- * $Id: Ximprot.h,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: Ximprot.h,v 1.2 2001-06-14 18:16:14 ura Exp $
  */
 /*
  * FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -39,11 +39,13 @@
 #include <X11/Xproto.h>
 #include "XimProto.h"
 
-typedef struct {
-    CARD8       major_opcode;
-    CARD8       minor_opcode;
-    CARD16      length;
-    CARD8       *data;
-} XimRequestPacket;
+typedef struct
+{
+  CARD8 major_opcode;
+  CARD8 minor_opcode;
+  CARD16 length;
+  CARD8 *data;
+}
+XimRequestPacket;
 
 #endif /* _XIMPROT_H */

@@ -1,5 +1,5 @@
 /*
- *  $Id: sisheng.c,v 1.2 2001-06-14 17:55:37 ura Exp $
+ *  $Id: sisheng.c,v 1.3 2001-06-14 18:16:03 ura Exp $
  */
 
 /*
@@ -29,7 +29,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/**  cWnn  Version 1.1	 **/
+/**  cWnn  Version 1.1   **/
 
 #ifdef CHINESE
 
@@ -40,70 +40,78 @@
 
 #define isfuyuanyin(c)  ((c=='m')||(c=='n')||(c=='g'))
 #define isyuanyin(c)  \
-	((c=='a')||(c=='e')||(c=='i')||(c=='o')||(c=='u')||(c=='v'))
+        ((c=='a')||(c=='e')||(c=='i')||(c=='o')||(c=='u')||(c=='v'))
 
 /* yincod_flt_sisheng(): filter sisheng of Yincode strings */
 
-static int 
-yincod_flt_sisheng(yincod,si,siyincod)
-w_char *yincod;				/* Yincode without sisheng */
-char *si;				/* sisheng string */
-w_char *siyincod;			/* Yincode with sisheng */
+static int
+yincod_flt_sisheng (yincod, si, siyincod)
+     w_char *yincod;            /* Yincode without sisheng */
+     char *si;                  /* sisheng string */
+     w_char *siyincod;          /* Yincode with sisheng */
 {
   register int pan_count = 0;
-	for ( ; *siyincod; siyincod++ )  {
-		if ( _cwnn_isyincod_d(*siyincod) )  {
-			*si++ = (char)(_cwnn_sisheng(*siyincod) + 0x30);
-			*yincod++ = _cwnn_yincod_0(*siyincod);
-			} else {
-			*si++ = '5';
-			*yincod++ = *siyincod;
-			}
-			if (pan_count++ == 5)   *(si-1) = 0;
-		}
-	*yincod = 0;
-	*si = 0;
-	return(strlen(si));
+  for (; *siyincod; siyincod++)
+    {
+      if (_cwnn_isyincod_d (*siyincod))
+        {
+          *si++ = (char) (_cwnn_sisheng (*siyincod) + 0x30);
+          *yincod++ = _cwnn_yincod_0 (*siyincod);
+        }
+      else
+        {
+          *si++ = '5';
+          *yincod++ = *siyincod;
+        }
+      if (pan_count++ == 5)
+        *(si - 1) = 0;
+    }
+  *yincod = 0;
+  *si = 0;
+  return (strlen (si));
 }
 
-int get_sisheng(yomi,si,yomi_tmp)
-w_char  *yomi;
-w_char  *yomi_tmp;
-char    *si;
+int
+get_sisheng (yomi, si, yomi_tmp)
+     w_char *yomi;
+     w_char *yomi_tmp;
+     char *si;
 {
   int length;
 
-	length = yincod_flt_sisheng(yomi_tmp,si,yomi);
-        return(length);
+  length = yincod_flt_sisheng (yomi_tmp, si, yomi);
+  return (length);
 }
 
-w_char *biki_sisheng(yomi,si,yomi_tmp)
-w_char  *yomi;
-w_char  *yomi_tmp;
-char    *si;
+w_char *
+biki_sisheng (yomi, si, yomi_tmp)
+     w_char *yomi;
+     w_char *yomi_tmp;
+     char *si;
 {
   int length;
 
-	length = yincod_flt_sisheng(yomi_tmp,si,yomi);
-        return(yomi_tmp);
+  length = yincod_flt_sisheng (yomi_tmp, si, yomi);
+  return (yomi_tmp);
 }
 
-unsigned int diff_sisheng(si1, si2)    /* PAN deleted by pan shilei */
-int si1;
-int si2;
+unsigned int
+diff_sisheng (si1, si2)         /* PAN deleted by pan shilei */
+     int si1;
+     int si2;
 {
   register int length;
   register unsigned int reslt;
   char s1[7];
   char s2[7];
 
-	sprintf(s1,"%d",si1);
-	sprintf(s2,"%d",si2);
-	length = strlen(s1) - 1;
-	for (reslt = 1; length >= 0; length--)
-		if(s1[length] == s2[length])
-			reslt = reslt*(10 - length);
-        return(reslt);
+  sprintf (s1, "%d", si1);
+  sprintf (s2, "%d", si2);
+  length = strlen (s1) - 1;
+  for (reslt = 1; length >= 0; length--)
+    if (s1[length] == s2[length])
+      reslt = reslt * (10 - length);
+  return (reslt);
 }
 
 #endif /* CHINESE */

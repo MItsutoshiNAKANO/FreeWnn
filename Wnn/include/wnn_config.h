@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_config.h,v 1.2 2001-06-14 17:55:32 ura Exp $
+ *  $Id: wnn_config.h,v 1.3 2001-06-14 18:15:57 ura Exp $
  */
 
 /*
@@ -29,9 +29,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef	LIBDIR
-#define	LIBDIR		"/usr/local/lib/wnn"
-#endif	/* LIBDIR */
+#ifndef LIBDIR
+#define LIBDIR          "/usr/local/lib/wnn"
+#endif /* LIBDIR */
 
 #ifdef TAIWANESE
 #ifndef CHINESE
@@ -39,78 +39,78 @@
 #endif
 #endif
 
-#define WNN_USERNAME_ENV	"WNNUSER"
-#define WNN_JSERVER_ENV		"JSERVER"
-#define WNN_CSERVER_ENV		"CSERVER"
-#define WNN_KSERVER_ENV		"KSERVER"
-#define WNN_TSERVER_ENV		"TSERVER"
-#define WNN_J_LANG		"ja_JP"
-#define WNN_C_LANG		"zh_CN"
-#define WNN_K_LANG		"ko_KR"
-#define WNN_T_LANG		"zh_TW"
+#define WNN_USERNAME_ENV        "WNNUSER"
+#define WNN_JSERVER_ENV         "JSERVER"
+#define WNN_CSERVER_ENV         "CSERVER"
+#define WNN_KSERVER_ENV         "KSERVER"
+#define WNN_TSERVER_ENV         "TSERVER"
+#define WNN_J_LANG              "ja_JP"
+#define WNN_C_LANG              "zh_CN"
+#define WNN_K_LANG              "ko_KR"
+#define WNN_T_LANG              "zh_TW"
 #ifdef JAPANESE
-#define WNN_DEFAULT_LANG	WNN_J_LANG
-#define WNN_DEF_SERVER_ENV	WNN_JSERVER_ENV
+#define WNN_DEFAULT_LANG        WNN_J_LANG
+#define WNN_DEF_SERVER_ENV      WNN_JSERVER_ENV
 #else /* JAPANESE */
 #ifdef CHINESE
 #ifdef TAIWANESE
-#define WNN_DEFAULT_LANG	WNN_T_LANG
-#define WNN_DEF_SERVER_ENV	WNN_TSERVER_ENV
+#define WNN_DEFAULT_LANG        WNN_T_LANG
+#define WNN_DEF_SERVER_ENV      WNN_TSERVER_ENV
 #else /* TAIWANESE */
-#define WNN_DEFAULT_LANG	WNN_C_LANG
-#define WNN_DEF_SERVER_ENV	WNN_CSERVER_ENV
+#define WNN_DEFAULT_LANG        WNN_C_LANG
+#define WNN_DEF_SERVER_ENV      WNN_CSERVER_ENV
 #endif /* TAIWANESE */
 #else /* CHINESE */
 #ifdef KOREAN
-#define WNN_DEFAULT_LANG	WNN_K_LANG
-#define WNN_DEF_SERVER_ENV	WNN_KSERVER_ENV
+#define WNN_DEFAULT_LANG        WNN_K_LANG
+#define WNN_DEF_SERVER_ENV      WNN_KSERVER_ENV
 #else /* KOREAN */
-#define WNN_DEFAULT_LANG	WNN_J_LANG
-#define WNN_DEF_SERVER_ENV	WNN_JSERVER_ENV
+#define WNN_DEFAULT_LANG        WNN_J_LANG
+#define WNN_DEF_SERVER_ENV      WNN_JSERVER_ENV
 #endif /* KOREAN */
 #endif /* CHINESE */
 #endif /* JAPANESE */
-#define WNN_UUM_ENV  		"UUMRC"
-#define WNN_KEYBOARD_ENV	"KEYBOARD"
-#define WNN_COUNTDOWN_ENV	"UUM_COUNTDOWN"
+#define WNN_UUM_ENV             "UUMRC"
+#define WNN_KEYBOARD_ENV        "KEYBOARD"
+#define WNN_COUNTDOWN_ENV       "UUM_COUNTDOWN"
 
-#define PATHNAMELEN	256
+#define PATHNAMELEN     256
 
 /* for jserver */
-#ifndef	SERVER_INIT_FILE
+#ifndef SERVER_INIT_FILE
 # ifdef JAPANESE
-#  define SERVER_INIT_FILE	"/ja_JP/jserverrc"
+#  define SERVER_INIT_FILE      "/ja_JP/jserverrc"
 # else /* JAPANESE */
-# ifdef	CHINESE
-# ifdef	TAIWANESE
-#  define SERVER_INIT_FILE	"/zh_TW/tserverrc"
+# ifdef CHINESE
+# ifdef TAIWANESE
+#  define SERVER_INIT_FILE      "/zh_TW/tserverrc"
 # else /* TAIWANESE */
-#  define SERVER_INIT_FILE	"/zh_CN/cserverrc"
+#  define SERVER_INIT_FILE      "/zh_CN/cserverrc"
 # endif /* TAIWANESE */
 # else /* CHINESE */
 # ifdef KOREAN
-#  define SERVER_INIT_FILE	"/ko_KR/kserverrc"
+#  define SERVER_INIT_FILE      "/ko_KR/kserverrc"
 # else /* KOREAN */
-#  define SERVER_INIT_FILE	"/ja_JP/jserverrc"	/* Default */
+#  define SERVER_INIT_FILE      "/ja_JP/jserverrc"      /* Default */
 # endif /* KOREAN */
 # endif /* CHINESE */
 # endif /* JAPANESE */
 #endif
-#define JSERVER_DIR		"/tmp"
+#define JSERVER_DIR             "/tmp"
 
 /* for uum */
-#define RCFILE			"/uumrc"	/* LIBDIR/@LANG/RCFILE */
-#define USR_UUMRC		"/.uumrc"
-#define RKFILE			"/rk/mode"	/* LIBDIR/@LANG/RKFILE */
-#define CPFILE			"/uumkey"	/* LIBDIR/@LANG/CPFILE */
-#define MESSAGEFILE		"/message_file"
+#define RCFILE                  "/uumrc"        /* LIBDIR/@LANG/RCFILE */
+#define USR_UUMRC               "/.uumrc"
+#define RKFILE                  "/rk/mode"      /* LIBDIR/@LANG/RKFILE */
+#define CPFILE                  "/uumkey"       /* LIBDIR/@LANG/CPFILE */
+#define MESSAGEFILE             "/message_file"
 
-#define CONVERT_FILENAME	"/cvt_key_tbl"
+#define CONVERT_FILENAME        "/cvt_key_tbl"
 
-#define ENVRCFILE		"/wnnenvrc"
-#ifndef	HINSIDATA_FILE
-# define HINSIDATA_FILE		"/ja_JP/hinsi.data"
-#endif	/* HINSIDATA_FILE */
+#define ENVRCFILE               "/wnnenvrc"
+#ifndef HINSIDATA_FILE
+# define HINSIDATA_FILE         "/ja_JP/hinsi.data"
+#endif /* HINSIDATA_FILE */
 
 #define USR_DIC_DIR_VAR "@USR"
 
@@ -122,7 +122,7 @@
 
 #define FLOW_CONTROL 0
 
-#define C_LOCAL '!'		
+#define C_LOCAL '!'
 /* For Local File Name.
    Local File Name is send as "Hostname!Filename" when C_LOCAL is '!'.
    It is also used in jl_library to specify local file-name, that is,
@@ -140,7 +140,7 @@
 # ifdef uniosu
 #define TTY_KCODE J_EUJIS
 #define PTY_KCODE J_EUJIS
-# else	/* defined(MACH) || defined(uniosb) */
+# else /* defined(MACH) || defined(uniosb) */
 #define TTY_KCODE J_EUJIS
 #define PTY_KCODE J_EUJIS
 # endif
@@ -180,5 +180,5 @@
 #endif
  */
 
-#define	WNN_TIMEOUT	5	/* connect の際に５秒待つんだよ */
-#define	WNN_DISP_MODE_LEN	5	/* モード表示に必要なcolumn数 */
+#define WNN_TIMEOUT     5       /* connect の際に５秒待つんだよ */
+#define WNN_DISP_MODE_LEN       5       /* モード表示に必要なcolumn数 */

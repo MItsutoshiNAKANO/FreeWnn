@@ -1,5 +1,5 @@
 /*
- *  $Id: malloc.c,v 1.3 2001-06-14 17:55:36 ura Exp $
+ *  $Id: malloc.c,v 1.4 2001-06-14 18:16:02 ura Exp $
  */
 
 /*
@@ -31,71 +31,74 @@
 
 #include <stdio.h>
 #include "wnn_malloc.h"
-#undef	malloc
-#undef	realloc
-#undef	free
+#undef  malloc
+#undef  realloc
+#undef  free
 
 #ifdef hpux
-extern void *malloc(size_t);
-extern void free(void *);
-extern void *realloc(void *, size_t);
-extern void *calloc(size_t, size_t);
+extern void *malloc (size_t);
+extern void free (void *);
+extern void *realloc (void *, size_t);
+extern void *calloc (size_t, size_t);
 #else
-extern char *malloc();
-extern void free();
-extern char *realloc();
-extern char *calloc();
+extern char *malloc ();
+extern void free ();
+extern char *realloc ();
+extern char *calloc ();
 #endif /* hpux */
 
 #ifdef hpux
 void *
-malloc0(size)
-size_t size;
+malloc0 (size)
+     size_t size;
 #else
 char *
-malloc0(size)
-int size;
+malloc0 (size)
+     int size;
 #endif /* hpux */
 {
-    if(size == NULL){
-	size = 1;
+  if (size == NULL)
+    {
+      size = 1;
     }
-    size = (size + 7) & 0xfffffff8;
-    return(calloc(size,1));
+  size = (size + 7) & 0xfffffff8;
+  return (calloc (size, 1));
 }
 
 #ifdef hpux
 void
-free0(pter)
-void *pter;
+free0 (pter)
+     void *pter;
 #else
 void
-free0(pter)
-char *pter;
+free0 (pter)
+     char *pter;
 #endif /* hpux */
 {
-    if(pter == NULL) return;
-    free(pter);
+  if (pter == NULL)
     return;
+  free (pter);
+  return;
 }
 
 #ifdef hpux
 void *
-realloc0(pter,size)
-void *pter;
-size_t size;
+realloc0 (pter, size)
+     void *pter;
+     size_t size;
 #else
 char *
-realloc0(pter,size)
-char *pter;
-int size;
+realloc0 (pter, size)
+     char *pter;
+     int size;
 #endif /* hpux */
 {
-    if(size == NULL){
-	size = 1;
+  if (size == NULL)
+    {
+      size = 1;
     }
-    size = (size + 7) & 0xfffffff8;
-    if(pter == NULL)
-	return(malloc(size));
-    return(realloc(pter,size));
+  size = (size + 7) & 0xfffffff8;
+  if (pter == NULL)
+    return (malloc (size));
+  return (realloc (pter, size));
 }

@@ -1,5 +1,5 @@
 /*
- *  $Id: w_string.c,v 1.2 2001-06-14 17:55:37 ura Exp $
+ *  $Id: w_string.c,v 1.3 2001-06-14 18:16:03 ura Exp $
  */
 
 /*
@@ -33,95 +33,105 @@
 #include "commonhd.h"
 #include "wnn_string.h"
 
-void Sreverse(w1, w2)
-register w_char *w1, *w2;
+void
+Sreverse (w1, w2)
+     register w_char *w1, *w2;
 {
-    wnn_Sreverse(w1, w2);
+  wnn_Sreverse (w1, w2);
 }
 
-int Sstrcpy(w, c)
-register w_char *w;
-register unsigned char *c;
+int
+Sstrcpy (w, c)
+     register w_char *w;
+     register unsigned char *c;
 {
-    return(wnn_Sstrcpy(w, c));
+  return (wnn_Sstrcpy (w, c));
 }
 
-int Strcmp(w1, w2)
-register w_char *w1, *w2;
+int
+Strcmp (w1, w2)
+     register w_char *w1, *w2;
 {
-    return(wnn_Strcmp(w1, w2));
+  return (wnn_Strcmp (w1, w2));
 }
 
-int Substr(w1, w2)
-register w_char *w1, *w2;
+int
+Substr (w1, w2)
+     register w_char *w1, *w2;
 {
-    return(wnn_Substr(w1, w2));
+  return (wnn_Substr (w1, w2));
 }
 
-int Strncmp(w1, w2, n)
-register w_char *w1, *w2;
-register int n;
+int
+Strncmp (w1, w2, n)
+     register w_char *w1, *w2;
+     register int n;
 {
-    return(wnn_Strncmp(w1, w2, n));
+  return (wnn_Strncmp (w1, w2, n));
 }
 
-w_char * Strcpy(w1, w2)
-register w_char *w1, *w2;
+w_char *
+Strcpy (w1, w2)
+     register w_char *w1, *w2;
 {
-    return(wnn_Strcpy(w1, w2));
+  return (wnn_Strcpy (w1, w2));
 }
 
-w_char * Strncpy(w1, w2, n)
-register w_char *w1, *w2;
-register int n;
+w_char *
+Strncpy (w1, w2, n)
+     register w_char *w1, *w2;
+     register int n;
 {
-    return(wnn_Strncpy(w1, w2, 2));
+  return (wnn_Strncpy (w1, w2, 2));
 }
 
-int Strlen(w)
-register w_char *w;
+int
+Strlen (w)
+     register w_char *w;
 {
-    return(wnn_Strlen(w));
+  return (wnn_Strlen (w));
 }
 
 #ifdef nodef
 int
-wstrncmp(s1, s2, n)
-register w_char *s1, *s2;
-register int n;
+wstrncmp (s1, s2, n)
+     register w_char *s1, *s2;
+     register int n;
 {
-	for(; *s1 != 0 && *s2 !=0; ) {
-		if (*s1 != *s2)
-			return (w_char_cmp(*s1, *s2));
-		s1++;
-		s2++;
-		n--;
-		if ( n == 0)
-			return (0);
-	}
-	if (*s1 == 0 && *s2 == 0)
-		return (0);
-	if (*s1 == 0)
-		return (-1);
-	return (1);
+  for (; *s1 != 0 && *s2 != 0;)
+    {
+      if (*s1 != *s2)
+        return (w_char_cmp (*s1, *s2));
+      s1++;
+      s2++;
+      n--;
+      if (n == 0)
+        return (0);
+    }
+  if (*s1 == 0 && *s2 == 0)
+    return (0);
+  if (*s1 == 0)
+    return (-1);
+  return (1);
 }
 
-w_char_cmp(s1, s2)
-register w_char s1, s2;
+w_char_cmp (s1, s2)
+     register w_char s1, s2;
 {
-	if (s1 == s2)
-		return (0);
-	if (s1 == TOUTEN_NUM){
-		if(s2== KUTEN_NUM)
-			return(-1);
-		return(1);
-	}
-	if (s1 == KUTEN_NUM)
-		return(1);
-	if(s2 == TOUTEN_NUM || s2 == KUTEN_NUM)
-		return(-1);
-	if (s2 > s1)
-		return (-1);
-	return (1);
+  if (s1 == s2)
+    return (0);
+  if (s1 == TOUTEN_NUM)
+    {
+      if (s2 == KUTEN_NUM)
+        return (-1);
+      return (1);
+    }
+  if (s1 == KUTEN_NUM)
+    return (1);
+  if (s2 == TOUTEN_NUM || s2 == KUTEN_NUM)
+    return (-1);
+  if (s2 > s1)
+    return (-1);
+  return (1);
 }
 #endif

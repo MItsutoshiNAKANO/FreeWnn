@@ -1,5 +1,5 @@
 /*
- * $Id: sxheader.h,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: sxheader.h,v 1.2 2001-06-14 18:16:13 ura Exp $
  */
 
 /*
@@ -37,7 +37,7 @@
  * Code:
  *
  */
-/*	Version 4.0
+/*      Version 4.0
  */
 /**************************
  * header of standard i/o 
@@ -45,7 +45,7 @@
 
 #include "jslib.h"
 
-extern int	max_env;
+extern int max_env;
 extern WnnEnv *normal_env;
 extern WnnEnv *reverse_env;
 extern WnnEnv *cur_normal_env;
@@ -54,15 +54,15 @@ extern int save_env_id[32];
 extern int save_env_reverse_id[32];
 extern int env_is_reverse;
 
-extern w_char	*input_buffer;
+extern w_char *input_buffer;
 extern w_char *return_buf;
 
-extern int	cur_bnst_ ;		/* current bunsetsu pointer */
+extern int cur_bnst_;           /* current bunsetsu pointer */
 
 extern int rubout_code;
 
 extern char romkan_clear_tbl[TBL_CNT][TBL_SIZE];
-extern int (*main_table[TBL_CNT][TBL_SIZE])();	/* holding commands */
+extern int (*main_table[TBL_CNT][TBL_SIZE]) (); /* holding commands */
 extern char jishopath[];
 extern char hindopath[];
 extern char fuzokugopath[];
@@ -103,34 +103,34 @@ extern int dic_list_size;
 
 extern char *prgname;
 
-extern struct wnn_ret_buf	rb;
-extern struct wnn_ret_buf	dicrb;
-extern struct wnn_ret_buf	wordrb;
+extern struct wnn_ret_buf rb;
+extern struct wnn_ret_buf dicrb;
+extern struct wnn_ret_buf wordrb;
 
-extern Xjutil	*xjutil;
-extern XIMRootRec	*cur_root;
-extern JutilTextRec	*cur_text;
-extern Romkan	*cur_rk;
-extern RomkanTable	*cur_rk_table;
-extern BoxRec	*box_list;
+extern Xjutil *xjutil;
+extern XIMRootRec *cur_root;
+extern JutilTextRec *cur_text;
+extern Romkan *cur_rk;
+extern RomkanTable *cur_rk_table;
+extern BoxRec *box_list;
 
-extern XjutilFSList    font_set_list;
-extern XjutilFSRec     *cur_fs;
+extern XjutilFSList font_set_list;
+extern XjutilFSRec *cur_fs;
 
 
 extern char *default_message[];
 extern struct msg_cat *cd;
-extern BoxRec *create_box();
+extern BoxRec *create_box ();
 
-extern wchar		*wc_buf;
-extern unsigned char	*ct_buf;
-extern unsigned char	*c_buf;
-extern int		wc_buf_max;
-extern int		ct_buf_max;
-extern int		c_buf_max;
+extern wchar *wc_buf;
+extern unsigned char *ct_buf;
+extern unsigned char *c_buf;
+extern int wc_buf_max;
+extern int ct_buf_max;
+extern int c_buf_max;
 #ifndef X_WCHAR
-extern wchar_t		*wt_buf;
-extern int		wt_buf_max;
+extern wchar_t *wt_buf;
+extern int wt_buf_max;
 #endif /* !X_WCHAR */
 
 extern ConvCode cvt_key_tbl[];

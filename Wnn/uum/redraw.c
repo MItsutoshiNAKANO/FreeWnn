@@ -1,5 +1,5 @@
 /*
- *  $Id: redraw.c,v 1.2 2001-06-14 17:55:50 ura Exp $
+ *  $Id: redraw.c,v 1.3 2001-06-14 18:16:08 ura Exp $
  */
 
 /*
@@ -38,37 +38,44 @@
 #include "buffer.h"
 
 int
-reset_line()
-{     
+reset_line ()
+{
 #if defined(uniosu)
-  putchar(Ctrl('O')); /* おまじない。括弧の中はゼロでなくオー */
-#endif	/* defined(uniosu) */
-  if (empty_modep() == 0){
-      push_cursor();
-      set_scroll_region(0, crow - 1); 
-      kk_restore_cursor();
-      call_redraw_line(c_b->t_c_p, 1);
-      pop_cursor();
-  }
-  return(0);
+  putchar (Ctrl ('O'));         /* おまじない。括弧の中はゼロでなくオー */
+#endif /* defined(uniosu) */
+  if (empty_modep () == 0)
+    {
+      push_cursor ();
+      set_scroll_region (0, crow - 1);
+      kk_restore_cursor ();
+      call_redraw_line (c_b->t_c_p, 1);
+      pop_cursor ();
+    }
+  return (0);
 }
 
 int
-redraw_line()
+redraw_line ()
 {
-  throw_col(0);
-    /* 面倒でももう一回スクロール領域を切ろう。*/
-    disp_mode();
-    if(!empty_modep()){
-	if(not_redraw == 0){
-	  clr_line_all();
-	  (*t_print_l_func)();
-	}else{
-	    throw_c(0);
-	}
-    }else{
-	kk_restore_cursor();
+  throw_col (0);
+  /* 面倒でももう一回スクロール領域を切ろう。 */
+  disp_mode ();
+  if (!empty_modep ())
+    {
+      if (not_redraw == 0)
+        {
+          clr_line_all ();
+          (*t_print_l_func) ();
+        }
+      else
+        {
+          throw_c (0);
+        }
     }
-    flush();
-    return(0);
+  else
+    {
+      kk_restore_cursor ();
+    }
+  flush ();
+  return (0);
 }

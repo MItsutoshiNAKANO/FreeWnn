@@ -1,5 +1,5 @@
 /*
- *  $Id: wnntouch.c,v 1.3 2001-06-14 17:55:37 ura Exp $
+ *  $Id: wnntouch.c,v 1.4 2001-06-14 18:16:04 ura Exp $
  */
 
 /*
@@ -34,76 +34,84 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: wnntouch.c,v 1.3 2001-06-14 17:55:37 ura Exp $";
+static char *rcs_id = "$Id: wnntouch.c,v 1.4 2001-06-14 18:16:04 ura Exp $";
 #endif /* lint */
 
 #include <stdio.h>
 #include "jslib.h"
 #include "commonhd.h"
 
-extern int input_file_header(), check_inode(), change_file_uniq();
-static void usage();
+extern int input_file_header (), check_inode (), change_file_uniq ();
+static void usage ();
 
 char *com_name;
 struct wnn_file_head fh;
 
 static void
-parse_options(argc, argv)
-int argc;
-char **argv;
+parse_options (argc, argv)
+     int argc;
+     char **argv;
 {
-    int c;
-    extern int optind;
-    extern char *optarg;
+  int c;
+  extern int optind;
+  extern char *optarg;
 
-    while ((c = getopt(argc,argv,"")) != EOF) {
+  while ((c = getopt (argc, argv, "")) != EOF)
+    {
     }
-    if (optind) {
-	optind--;
-	argc -= optind;
-	argv += optind;
+  if (optind)
+    {
+      optind--;
+      argc -= optind;
+      argv += optind;
     }
-    if(argc < 2){
-	usage();
+  if (argc < 2)
+    {
+      usage ();
     }
 }
 
 static void
-usage()
+usage ()
 {
-  fprintf(stderr , "Usage: %s Wnn_file_name* \n",com_name);
-  exit(1);
+  fprintf (stderr, "Usage: %s Wnn_file_name* \n", com_name);
+  exit (1);
 }
 
 int
-main(argc, argv)
-int argc;
-char **argv;
+main (argc, argv)
+     int argc;
+     char **argv;
 {
-    FILE *ifpter;
-    int k;
+  FILE *ifpter;
+  int k;
 
-    com_name = argv[0];
-    parse_options(argc, argv);
+  com_name = argv[0];
+  parse_options (argc, argv);
 
-    for(k = 1 ; k < argc ; k++){
-	if((ifpter = fopen(argv[k] , "r")) == NULL){
-	    fprintf(stderr , "Can't open the input file %s.\n" , argv[k]);
-	    perror("");
-	    exit(1);
-	}
-	if(input_file_header(ifpter, &fh) == -1){
-	    fprintf(stderr, "%s %s: It's not a Wnn File.\n", com_name, argv[k]);
-	    exit(1);
-	}
-	if(check_inode(ifpter, &fh) == -1){
-	    if(change_file_uniq(&fh, argv[k]) == -1){
-		fprintf(stderr, "%s %s: Can't change file_uniq.\n", com_name, argv[k]);
-		perror("");
-		exit(1);
-	    }
-	}
-	fclose(ifpter);
+  for (k = 1; k < argc; k++)
+    {
+      if ((ifpter = fopen (argv[k], "r")) == NULL)
+        {
+          fprintf (stderr, "Can't open the input file %s.\n", argv[k]);
+          perror ("");
+          exit (1);
+        }
+      if (input_file_header (ifpter, &fh) == -1)
+        {
+          fprintf (stderr, "%s %s: It's not a Wnn File.\n", com_name, argv[k]);
+          exit (1);
+        }
+      if (check_inode (ifpter, &fh) == -1)
+        {
+          if (change_file_uniq (&fh, argv[k]) == -1)
+            {
+              fprintf (stderr, "%s %s: Can't change file_uniq.\n", com_name, argv[k]);
+              perror ("");
+              exit (1);
+            }
+        }
+      fclose (ifpter);
     }
-    exit(0);
+  exit (0);
 }

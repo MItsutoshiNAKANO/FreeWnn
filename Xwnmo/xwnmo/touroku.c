@@ -1,5 +1,5 @@
 /*
- * $Id: touroku.c,v 1.1.1.1 2000-01-16 05:07:57 ura Exp $
+ * $Id: touroku.c,v 1.2 2001-06-14 18:16:17 ura Exp $
  */
 
 /*
@@ -37,7 +37,7 @@
  * Code:
  *
  */
-/*	Version 4.0
+/*      Version 4.0
  */
 #include <stdio.h>
 #include "commonhd.h"
@@ -48,61 +48,68 @@
 #include "ext.h"
 
 static void
-make_touroku_buffer(bnst, cbup)
-int bnst;
-ClientBuf *cbup;
+make_touroku_buffer (bnst, cbup)
+     int bnst;
+     ClientBuf *cbup;
 {
-    int k , l;
-    w_char *bp;
-    w_char *buffer_end;
+  int k, l;
+  w_char *bp;
+  w_char *buffer_end;
 
-    buffer_end = c_b->buffer + c_b->buflen - 1;
-    bp = c_b->buffer;
-    for(k = bnst ; k < jl_bun_suu(bun_data_) ; k++){
-	if (k < maxbunsetsu) touroku_bnst[k] = bp - c_b->buffer;
-	l = jl_get_kanji(bun_data_, k, k+1, bp);
-	bp += l;
-	if (bp >= buffer_end) {
-	    k--;
-	    bp -= l;
-	    goto GOT_IT;
-	}
+  buffer_end = c_b->buffer + c_b->buflen - 1;
+  bp = c_b->buffer;
+  for (k = bnst; k < jl_bun_suu (bun_data_); k++)
+    {
+      if (k < maxbunsetsu)
+        touroku_bnst[k] = bp - c_b->buffer;
+      l = jl_get_kanji (bun_data_, k, k + 1, bp);
+      bp += l;
+      if (bp >= buffer_end)
+        {
+          k--;
+          bp -= l;
+          goto GOT_IT;
+        }
     }
-    if (cbup->maxlen == 0) {
-	get_end_of_history(bp);
-    } else {
-	Strncpy(bp, cbup->buffer + bunsetsu[jl_bun_suu(bun_data_)],
-		cbup->maxlen - bunsetsu[jl_bun_suu(bun_data_)]);
-	*(bp + cbup->maxlen - bunsetsu[jl_bun_suu(bun_data_)]) = 0;
+  if (cbup->maxlen == 0)
+    {
+      get_end_of_history (bp);
+    }
+  else
+    {
+      Strncpy (bp, cbup->buffer + bunsetsu[jl_bun_suu (bun_data_)], cbup->maxlen - bunsetsu[jl_bun_suu (bun_data_)]);
+      *(bp + cbup->maxlen - bunsetsu[jl_bun_suu (bun_data_)]) = 0;
     }
 
 GOT_IT:
-    if(k < maxbunsetsu){
-	touroku_bnst[k++] = bp - c_b->buffer;
-	touroku_bnst_cnt = k;
-    }else{
-	touroku_bnst[maxbunsetsu - 1] = bp - c_b->buffer;
-	touroku_bnst_cnt = maxbunsetsu;
+  if (k < maxbunsetsu)
+    {
+      touroku_bnst[k++] = bp - c_b->buffer;
+      touroku_bnst_cnt = k;
+    }
+  else
+    {
+      touroku_bnst[maxbunsetsu - 1] = bp - c_b->buffer;
+      touroku_bnst_cnt = maxbunsetsu;
     }
 }
 
 int
-touroku()
+touroku ()
 {
-    w_char buffer[1024];
-    ClientBuf *c_btmp , c_b1;
+  w_char buffer[1024];
+  ClientBuf *c_btmp, c_b1;
 
-#ifdef	USING_XJUTIL
-    c_btmp = c_b;
-    c_b = &c_b1;
+#ifdef  USING_XJUTIL
+  c_btmp = c_b;
+  c_b = &c_b1;
 
-    c_b->buffer = buffer;
-    c_b->buflen = 1024;
+  c_b->buffer = buffer;
+  c_b->buflen = 1024;
 
-    make_touroku_buffer(0, c_btmp);   
-    xw_touroku(touroku_bnst[cur_bnst_]);
-    c_b = c_btmp;
-#endif	/* USING_XJUTIL */
-    return(0);
+  make_touroku_buffer (0, c_btmp);
+  xw_touroku (touroku_bnst[cur_bnst_]);
+  c_b = c_btmp;
+#endif /* USING_XJUTIL */
+  return (0);
 }
-

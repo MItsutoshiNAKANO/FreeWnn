@@ -1,5 +1,5 @@
 /*
- *  $Id: MALLOC.c,v 1.2 2001-06-14 17:55:35 ura Exp $
+ *  $Id: MALLOC.c,v 1.3 2001-06-14 18:15:59 ura Exp $
  */
 
 /*
@@ -31,133 +31,145 @@
 
 #include <stdio.h>
 #include "wnn_malloc.h"
-#undef	malloc
-#undef	realloc
-#undef	free
+#undef  malloc
+#undef  realloc
+#undef  free
 
-#ifdef	HONMONO
-extern char *malloc();
-extern void free();
-extern char *realloc();
-extern char *calloc();
+#ifdef  HONMONO
+extern char *malloc ();
+extern void free ();
+extern char *realloc ();
+extern char *calloc ();
 #else
-extern char *MALLOC();
-extern void free();
-extern char *REALLOC();
-extern char *CALLOC();
-#define	malloc(x) MALLOC(x)
-#define	calloc(x,y) CALLOC(x,y)
-#define	realloc(x,y) REALLOC(x,y)
+extern char *MALLOC ();
+extern void free ();
+extern char *REALLOC ();
+extern char *CALLOC ();
+#define malloc(x) MALLOC(x)
+#define calloc(x,y) CALLOC(x,y)
+#define realloc(x,y) REALLOC(x,y)
 #endif
 
 char *
-malloc0(size)
-int size;
+malloc0 (size)
+     int size;
 {
-    test2();
-    if(size == NULL){
-	size = 1;
+  test2 ();
+  if (size == NULL)
+    {
+      size = 1;
     }
-    return(calloc(size,1));
+  return (calloc (size, 1));
 }
 
 void
-free0(pter)
-char *pter;
+free0 (pter)
+     char *pter;
 {
-    if(pter == NULL) return;
-    free(pter);
+  if (pter == NULL)
+    return;
+  free (pter);
 }
 
 char *
-realloc0(pter,size)
-char *pter;
-int size;
+realloc0 (pter, size)
+     char *pter;
+     int size;
 {
-    if(size == NULL){
-	size = 1;
+  if (size == NULL)
+    {
+      size = 1;
     }
-    if(pter == NULL){
-	return(malloc(size));
-    }else{
-	return(realloc(pter,size));
+  if (pter == NULL)
+    {
+      return (malloc (size));
+    }
+  else
+    {
+      return (realloc (pter, size));
     }
 }
-/********************************/
-#undef	realloc
-#undef	malloc
-#undef	calloc
 
-extern char *malloc();
-extern char *calloc();
+/********************************/
+#undef  realloc
+#undef  malloc
+#undef  calloc
+
+extern char *malloc ();
+extern char *calloc ();
 static char *malloc_p;
 
-test2()
+test2 ()
 {
- test(malloc(5000));
-}
-test1()
-{
- test(malloc_p);
-}
-test(p)
-int *p;
-{
-	static int tst = 1;
-	static int tst1 = 0;
-	int *p0, *p1;
-	malloc_p = (char *)p;
-	if (tst) {
-		p1 = p - 1;
-		p0 = p1;
-		while(1) {
-		    if (tst1) {
-			    printf("%x: %x\n", p1, *p1);
-		    }
-		    p1 = *p1 & 0xfffffffe;
-		    if (p1 == p || p1 == p0){
-			printf("OK!\n");
-			break;
-		    }
-		}
-	}
+  test (malloc (5000));
 }
 
-
-char *
-MALLOC(cnt)
-int cnt;
+test1 ()
 {
-	char *p;
-	printf("malloc size = %d\n", cnt);
-	p = malloc(cnt);
-	test(p);
-	return(p);
+  test (malloc_p);
 }
 
-char *
-CALLOC(cnt,size)
-int cnt;
-int size;
+test (p)
+     int *p;
 {
-static int tmp = 0;
-	char *p;
-	printf("%d : calloc size = %d\n",tmp++, cnt);
-	p = calloc(cnt,size);
-	test(p);
-	return(p);
+  static int tst = 1;
+  static int tst1 = 0;
+  int *p0, *p1;
+  malloc_p = (char *) p;
+  if (tst)
+    {
+      p1 = p - 1;
+      p0 = p1;
+      while (1)
+        {
+          if (tst1)
+            {
+              printf ("%x: %x\n", p1, *p1);
+            }
+          p1 = *p1 & 0xfffffffe;
+          if (p1 == p || p1 == p0)
+            {
+              printf ("OK!\n");
+              break;
+            }
+        }
+    }
 }
 
 
 char *
-REALLOC(p, cnt)
-int *p;
-int cnt;
+MALLOC (cnt)
+     int cnt;
 {
-	extern char * realloc();
-	printf("realloc size = %d\n", cnt);
-	p = realloc(p, cnt);
-	test(p);
-	return(p);
+  char *p;
+  printf ("malloc size = %d\n", cnt);
+  p = malloc (cnt);
+  test (p);
+  return (p);
 }
 
+char *
+CALLOC (cnt, size)
+     int cnt;
+     int size;
+{
+  static int tmp = 0;
+  char *p;
+  printf ("%d : calloc size = %d\n", tmp++, cnt);
+  p = calloc (cnt, size);
+  test (p);
+  return (p);
+}
+
+
+char *
+REALLOC (p, cnt)
+     int *p;
+     int cnt;
+{
+  extern char *realloc ();
+  printf ("realloc size = %d\n", cnt);
+  p = realloc (p, cnt);
+  test (p);
+  return (p);
+}

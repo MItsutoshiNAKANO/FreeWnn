@@ -1,5 +1,5 @@
 /*
- * $Id: SpotProto.h,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: SpotProto.h,v 1.2 2001-06-14 18:16:14 ura Exp $
  */
 
 /*
@@ -35,16 +35,18 @@
  *
  */
 
-#ifdef	SPOT
-#define sz_ximChangeSpotReq	12
+#ifdef  SPOT
+#define sz_ximChangeSpotReq     12
 
-typedef struct {	/* 12 */
-    CARD8	reqType;
-    BYTE	pad;
-    CARD16	length B16;
-    CARD32	xic B32;
-    INT16	spot_x B16, spot_y B16;
-} ximChangeSpotReq;
+typedef struct
+{                               /* 12 */
+  CARD8 reqType;
+  BYTE pad;
+  CARD16 length B16;
+  CARD32 xic B32;
+  INT16 spot_x B16, spot_y B16;
+}
+ximChangeSpotReq;
 
-#define XIM_ChangeSpot		20
-#endif	/* SPOT */
+#define XIM_ChangeSpot          20
+#endif /* SPOT */

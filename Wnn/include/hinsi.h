@@ -1,5 +1,5 @@
 /*
- *  $Id: hinsi.h,v 1.2 2001-06-14 17:55:31 ura Exp $
+ *  $Id: hinsi.h,v 1.3 2001-06-14 18:15:56 ura Exp $
  */
 
 /*
@@ -29,6 +29,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#define MAXHINSI 	256
-#define MAXFUKUGOU 	256
-#define FUKUGOU_START 	0xffff
+#define MAXHINSI        256
+#define MAXFUKUGOU      256
+#define FUKUGOU_START   0xffff

@@ -1,5 +1,5 @@
 /*
- * $Id: typedef.h,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: typedef.h,v 1.2 2001-06-14 18:16:11 ura Exp $
  */
 
 /*
@@ -49,82 +49,93 @@
 #include <X11/Xlocale.h>
 #include "Xi18nint.h"
 
-typedef unsigned long	FLAG;
+typedef unsigned long FLAG;
 
-typedef struct _testwin {	/* Test window */
-    Window	win;		/* test WINdow */
-    Window	name;		/* Name window of test window */
-} TESTWIN;
-    
-typedef struct _resource {	/* RESOURCE name/class structure */
-     char	*name;		/* resource NAME */
-     char	*class;		/* resource CLASS */
-} RESOURCE;
+typedef struct _testwin
+{                               /* Test window */
+  Window win;                   /* test WINdow */
+  Window name;                  /* Name window of test window */
+}
+TESTWIN;
 
-typedef	struct _preedit {	/* PREEDIT attribution structure */
-    XRectangle	area;	/* preedit-AREA */
-    XRectangle	needed; /* preedit-areaNEEDED */
-    XPoint	spot;	/* preedit-SPOTlocation */
-    Colormap	cmap;	/* preedit-ColorMAP */
-    u_long	fg;	/* preedit-ForeGround */
-    u_long	bg;	/* preedit-BackGround */
-    Pixmap	bgpm;	/* preedit-BG/ PixMap */
-    XFontSet	fset;	/* preedit-FontSET */
-    int		lspc;	/* preedit-LineSPaCe */
-    Cursor	cursor;	/* preedit-CURSOR */
-} PREEDIT;
+typedef struct _resource
+{                               /* RESOURCE name/class structure */
+  char *name;                   /* resource NAME */
+  char *class;                  /* resource CLASS */
+}
+RESOURCE;
 
-typedef struct _status {	/* STATUS attribution structure */
-    XRectangle	area;	/* status-AREA */
-    XRectangle	needed; /* status-areaNEEDED */
-    Colormap	cmap;	/* status-ColorMAP */
-    u_long	fg;	/* status-ForeGround */
-    u_long	bg;	/* status-BackGround */
-    Pixmap	bgpm;	/* status-BG/ PixMap */
-    XFontSet	fset;	/* status-FontSET */
-    Cursor	cursor;	/* status-CURSOR */
-} STATUS;
+typedef struct _preedit
+{                               /* PREEDIT attribution structure */
+  XRectangle area;              /* preedit-AREA */
+  XRectangle needed;            /* preedit-areaNEEDED */
+  XPoint spot;                  /* preedit-SPOTlocation */
+  Colormap cmap;                /* preedit-ColorMAP */
+  u_long fg;                    /* preedit-ForeGround */
+  u_long bg;                    /* preedit-BackGround */
+  Pixmap bgpm;                  /* preedit-BG/ PixMap */
+  XFontSet fset;                /* preedit-FontSET */
+  int lspc;                     /* preedit-LineSPaCe */
+  Cursor cursor;                /* preedit-CURSOR */
+}
+PREEDIT;
 
-typedef	struct _valuable {	/* verify VALUABLE table structure */
-    char	*vname;		/* Valuable NAME */
-    FLAG	mode;		/* decimal or hex or string */
+typedef struct _status
+{                               /* STATUS attribution structure */
+  XRectangle area;              /* status-AREA */
+  XRectangle needed;            /* status-areaNEEDED */
+  Colormap cmap;                /* status-ColorMAP */
+  u_long fg;                    /* status-ForeGround */
+  u_long bg;                    /* status-BackGround */
+  Pixmap bgpm;                  /* status-BG/ PixMap */
+  XFontSet fset;                /* status-FontSET */
+  Cursor cursor;                /* status-CURSOR */
+}
+STATUS;
+
+typedef struct _valuable
+{                               /* verify VALUABLE table structure */
+  char *vname;                  /* Valuable NAME */
+  FLAG mode;                    /* decimal or hex or string */
 #ifdef SYSV
-    caddr_t	sval;		/* Set VALuable */
-    caddr_t	gval;		/* Get VALuable */
-#else    
-    void	*sval;		/* Set VALuable */
-    void	*gval;		/* Get VALuable */
+  caddr_t sval;                 /* Set VALuable */
+  caddr_t gval;                 /* Get VALuable */
+#else
+  void *sval;                   /* Set VALuable */
+  void *gval;                   /* Get VALuable */
 #endif
-} VALUABLE;
+}
+VALUABLE;
 
-typedef struct _cricmf {	/* CReate IC Mode Function structure */
-    FLAG	mode;		/* on or over or off or root */
-    XIC		(*fmust)();	/* Function name for create ic (MUST)  */
-    XIC		(*fmay)();	/* Function name for create ic (MAY) */
-} CRICMF;
+typedef struct _cricmf
+{                               /* CReate IC Mode Function structure */
+  FLAG mode;                    /* on or over or off or root */
+    XIC (*fmust) ();            /* Function name for create ic (MUST)  */
+    XIC (*fmay) ();             /* Function name for create ic (MAY) */
+}
+CRICMF;
 
-typedef struct _seticmf {	/* SET IC Mode Function structure */
-    Window	*mwin;		/* Menu Window id */
-    char	*mname;		/* Menu NAME */
-    FLAG	(*func)();	/* FUNCtion name for set */
-    FLAG	flag;		/* error FLAG */
-} SETICMF;
+typedef struct _seticmf
+{                               /* SET IC Mode Function structure */
+  Window *mwin;                 /* Menu Window id */
+  char *mname;                  /* Menu NAME */
+    FLAG (*func) ();            /* FUNCtion name for set */
+  FLAG flag;                    /* error FLAG */
+}
+SETICMF;
 
-typedef struct _callback {	/* CALLBACK structure */
-    XIMCallback	start;		/* START callback */
-    XIMCallback done;		/* DONE callback */
-    XIMCallback draw;		/* DRAW callback */
-    XIMCallback caret;		/* CARET callback */
-} CALLBACK;
+typedef struct _callback
+{                               /* CALLBACK structure */
+  XIMCallback start;            /* START callback */
+  XIMCallback done;             /* DONE callback */
+  XIMCallback draw;             /* DRAW callback */
+  XIMCallback caret;            /* CARET callback */
+}
+CALLBACK;
 
-typedef union _string {		/* STRING union */
-    char	*multi_byte;
-    wchar_t	*wide_char;
-} STRING;
-
-
-
-
-
-
-
+typedef union _string
+{                               /* STRING union */
+  char *multi_byte;
+  wchar_t *wide_char;
+}
+STRING;

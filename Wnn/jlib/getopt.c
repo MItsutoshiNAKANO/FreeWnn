@@ -1,5 +1,5 @@
 /*
- *  $Id: getopt.c,v 1.2 2001-06-14 17:55:34 ura Exp $
+ *  $Id: getopt.c,v 1.3 2001-06-14 18:15:58 ura Exp $
  */
 
 /*
@@ -29,89 +29,100 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/*LINTLIBRARY*/
-
+ /*LINTLIBRARY*/
 /***********************************************************************
-			getopt.c
+                        getopt.c
 
-	BSD用getopt関数。ライブラリファイルはlibgetopt.aです。
-	システムに予めgetopt()が用意されていなかったら、これを
-	リンクして下さい。そのためには、トップレベルの
-	メークファイルのGETOPTLIBに、../jlib/libgetopt.aを
-	加えて下さい。
+        BSD用getopt関数。ライブラリファイルはlibgetopt.aです。
+        システムに予めgetopt()が用意されていなかったら、これを
+        リンクして下さい。そのためには、トップレベルの
+        メークファイルのGETOPTLIBに、../jlib/libgetopt.aを
+        加えて下さい。
 
 ***********************************************************************/
-
-#define	NULL	0
-#define	EOF	(-1)
-#define	ERR_PRINT(s, c)							\
-	if(opterr){							\
-		char	errbuf[2];					\
-									\
-		errbuf[0] = c;						\
-		errbuf[1] = '\n';					\
-		(void)write(2, argv[0], (unsigned)strlen(argv[0]));	\
-		(void)write(2, s, (unsigned)strlen(s));			\
-		(void)write(2, errbuf, 2);				\
-	}
-
-#ifdef	BSD42
-#define	strchr	index
+#define NULL    0
+#define EOF     (-1)
+#define ERR_PRINT(s, c)                                                 \
+        if(opterr){                                                     \
+                char    errbuf[2];                                      \
+                                                                        \
+                errbuf[0] = c;                                          \
+                errbuf[1] = '\n';                                       \
+                (void)write(2, argv[0], (unsigned)strlen(argv[0]));     \
+                (void)write(2, s, (unsigned)strlen(s));                 \
+                (void)write(2, errbuf, 2);                              \
+        }
+#ifdef  BSD42
+#define strchr  index
 #endif
+extern int strcmp ();
+extern char *strchr ();
 
-extern	int	strcmp();
-extern	char	*strchr();
+int opterr = 1;
+int optind = 1;
+int optopt;
+char *optarg;
 
-int	opterr = 1;
-int	optind = 1;
-int	optopt;
-char	*optarg;
-
-int	getopt(argc, argv, opts)
-int	argc;
-char	**argv, *opts;
+int
+getopt (argc, argv, opts)
+     int argc;
+     char **argv, *opts;
 {
-	static	int	sp = 1;
-	register int	c;
-	register char	*cp;
+  static int sp = 1;
+  register int c;
+  register char *cp;
 
-	if(sp == 1){
-		if(optind >= argc ||
-		   argv[optind][0] != '-' || argv[optind][1] == '\0'){
-			return(EOF);
-		} else if(strcmp(argv[optind], "--") == NULL){
-			optind++;
-			return(EOF);
-		}
-	}
-	optopt = c = argv[optind][sp];
-	if(c == ':' || (cp=strchr(opts, c)) == NULL){
-		ERR_PRINT(": unknown option, -", c);
-		if(argv[optind][++sp] == '\0'){
-			optind++;
-			sp = 1;
-		}
-		return('?');
-	}
-	if(*++cp == ':'){
-		if(argv[optind][sp+1] != '\0'){
-			optarg = &argv[optind++][sp+1];
-		} else if(++optind >= argc){
-			ERR_PRINT(": argument missing for -", c);
-			sp = 1;
-			return('?');
-		} else {
-			optarg = argv[optind++];
-		}
-		sp = 1;
-	} else {
-		if(argv[optind][++sp] == '\0'){
-			sp = 1;
-			optind++;
-		}
-		optarg = NULL;
-	}
-	return(c);
+  if (sp == 1)
+    {
+      if (optind >= argc || argv[optind][0] != '-' || argv[optind][1] == '\0')
+        {
+          return (EOF);
+        }
+      else if (strcmp (argv[optind], "--") == NULL)
+        {
+          optind++;
+          return (EOF);
+        }
+    }
+  optopt = c = argv[optind][sp];
+  if (c == ':' || (cp = strchr (opts, c)) == NULL)
+    {
+      ERR_PRINT (": unknown option, -", c);
+      if (argv[optind][++sp] == '\0')
+        {
+          optind++;
+          sp = 1;
+        }
+      return ('?');
+    }
+  if (*++cp == ':')
+    {
+      if (argv[optind][sp + 1] != '\0')
+        {
+          optarg = &argv[optind++][sp + 1];
+        }
+      else if (++optind >= argc)
+        {
+          ERR_PRINT (": argument missing for -", c);
+          sp = 1;
+          return ('?');
+        }
+      else
+        {
+          optarg = argv[optind++];
+        }
+      sp = 1;
+    }
+  else
+    {
+      if (argv[optind][++sp] == '\0')
+        {
+          sp = 1;
+          optind++;
+        }
+      optarg = NULL;
+    }
+  return (c);
 }
 
 /*

@@ -1,5 +1,5 @@
 /*
- * $Id: localalloc.c,v 1.1.1.2 2000-01-16 05:11:10 ura Exp $
+ * $Id: localalloc.c,v 1.2 2001-06-14 18:16:16 ura Exp $
  */
 
 /*
@@ -28,8 +28,8 @@
  * Commentary:
  *
  * Change log:
- *	'99/04/01	本間　亮 <honma@nasu-net.or.jp>
- *		size を sizeof(char *) の整数倍に切り上げる。
+ *      '99/04/01       本間　亮 <honma@nasu-net.or.jp>
+ *              size を sizeof(char *) の整数倍に切り上げる。
  *
  * Last modified date: 20,Mar.1999
  *
@@ -47,154 +47,177 @@
 #include "xjutil.h"
 #include "sxheader.h"
 #include "xext.h"
-#else   /* XJUTIL */
+#else /* XJUTIL */
 #include "xim.h"
 #include "sheader.h"
 #include "ext.h"
-#endif  /* XJUTIL */
+#endif /* XJUTIL */
 
-extern char *malloc(), *realloc(), *calloc();
+extern char *malloc (), *realloc (), *calloc ();
 #ifdef ALLOC_DEBUG
-#define DEBUG_TBL_SIZE	10000
-typedef struct _alloc_debug_struct {
-    char *ptr;
-    int size;
-} debug_tbl;
+#define DEBUG_TBL_SIZE  10000
+typedef struct _alloc_debug_struct
+{
+  char *ptr;
+  int size;
+}
+debug_tbl;
 
 debug_tbl alloc_tbl[DEBUG_TBL_SIZE];
 static int debug_initialized = 0;
 
 void
-initialize_debug()
+initialize_debug ()
 {
-    register int i;
+  register int i;
 
-    for (i = 0; i < DEBUG_TBL_SIZE; i++) {
-	alloc_tbl[i].ptr = NULL;
-	alloc_tbl[i].size = 0;
+  for (i = 0; i < DEBUG_TBL_SIZE; i++)
+    {
+      alloc_tbl[i].ptr = NULL;
+      alloc_tbl[i].size = 0;
     }
-    debug_initialized = 1;
+  debug_initialized = 1;
 }
 
 static void
-register_debug(ptr, size)
-char *ptr;
-int size;
+register_debug (ptr, size)
+     char *ptr;
+     int size;
 {
-    register int i;
+  register int i;
 
-    for (i = 0; i < DEBUG_TBL_SIZE; i++) {
-	if (alloc_tbl[i].ptr == NULL) {
-	    alloc_tbl[i].ptr = ptr;
-	    alloc_tbl[i].size = size;
-	    return;
-	}
+  for (i = 0; i < DEBUG_TBL_SIZE; i++)
+    {
+      if (alloc_tbl[i].ptr == NULL)
+        {
+          alloc_tbl[i].ptr = ptr;
+          alloc_tbl[i].size = size;
+          return;
+        }
     }
-    print_out("alloc_table over flow");
+  print_out ("alloc_table over flow");
 }
 
 void
-unregister_debug(ptr)
-char *ptr;
+unregister_debug (ptr)
+     char *ptr;
 {
-    register int i;
+  register int i;
 
-    for (i = 0; i < DEBUG_TBL_SIZE; i++) {
-	if (alloc_tbl[i].ptr == ptr) {
-	    alloc_tbl[i].ptr = NULL;
-	    alloc_tbl[i].size = 0;
-	    return;
-	}
+  for (i = 0; i < DEBUG_TBL_SIZE; i++)
+    {
+      if (alloc_tbl[i].ptr == ptr)
+        {
+          alloc_tbl[i].ptr = NULL;
+          alloc_tbl[i].size = 0;
+          return;
+        }
     }
-    print_out1("illegal calling of free ptr = %x", ptr);
+  print_out1 ("illegal calling of free ptr = %x", ptr);
 }
 
 #endif
 
-char *Malloc(size)
-unsigned size;
+char *
+Malloc (size)
+     unsigned size;
 {
-    char *ptr;
-    if (size == 0) return(NULL);
-    size += (sizeof(char *)-(size%sizeof(char *)));
-    if ((ptr = malloc(size)) == NULL) {
+  char *ptr;
+  if (size == 0)
+    return (NULL);
+  size += (sizeof (char *) - (size % sizeof (char *)));
+  if ((ptr = malloc (size)) == NULL)
+    {
 #ifdef ALLOC_DEBUG
-	print_out1("alloc failed with size = %d", size);
+      print_out1 ("alloc failed with size = %d", size);
 #endif
-	return(NULL);
+      return (NULL);
     }
 #ifdef ALLOC_DEBUG
-    if (!debug_initialized) {
-	initialize_debug();
+  if (!debug_initialized)
+    {
+      initialize_debug ();
     }
-    register_debug(ptr, size);
+  register_debug (ptr, size);
 #endif
-    return(ptr);
+  return (ptr);
 }
 
-#ifdef nodef	/* should not use Realloc, because realloc may broke
-		   old data if it fails allocation of new area */
-char *Realloc(ptr, size)
-char *ptr;
-unsigned size;
+#ifdef nodef                    /* should not use Realloc, because realloc may broke
+                                   old data if it fails allocation of new area */
+char *
+Realloc (ptr, size)
+     char *ptr;
+     unsigned size;
 {
-    if (size == 0) return(ptr);
-    size += (sizeof(char *)-(size%sizeof(char *)));
-    if (ptr == NULL) return(Malloc(size));
+  if (size == 0)
+    return (ptr);
+  size += (sizeof (char *) - (size % sizeof (char *)));
+  if (ptr == NULL)
+    return (Malloc (size));
 #ifdef ALLOC_DEBUG
-    unregister_debug(ptr);
+  unregister_debug (ptr);
 #endif
-    if ((ptr = realloc(ptr, size)) == NULL) {
-	return(NULL);
+  if ((ptr = realloc (ptr, size)) == NULL)
+    {
+      return (NULL);
     }
 #ifdef ALLOC_DEBUG
-    register_debug(ptr, size);
+  register_debug (ptr, size);
 #endif
-    return(ptr);
+  return (ptr);
 }
 #endif
 
-char *Calloc(num, size)
-unsigned num, size;
+char *
+Calloc (num, size)
+     unsigned num, size;
 {
-    char *ptr;
-    if (size == 0) return(NULL);
-    size += (sizeof(char *)-(size%sizeof(char *)));
-    if ((ptr = calloc(num, size)) == NULL) {
-	return(NULL);
+  char *ptr;
+  if (size == 0)
+    return (NULL);
+  size += (sizeof (char *) - (size % sizeof (char *)));
+  if ((ptr = calloc (num, size)) == NULL)
+    {
+      return (NULL);
     }
 #ifdef ALLOC_DEBUG
-    if (!debug_initialized) {
-	initialize_debug();
+  if (!debug_initialized)
+    {
+      initialize_debug ();
     }
-    register_debug(ptr, size);
+  register_debug (ptr, size);
 #endif
-    return(ptr);
+  return (ptr);
 }
 
-void Free(ptr)
-char *ptr;
+void
+Free (ptr)
+     char *ptr;
 {
-    if (ptr != NULL) free(ptr);
+  if (ptr != NULL)
+    free (ptr);
 #ifdef ALLOC_DEBUG
-    unregister_debug(ptr);
+  unregister_debug (ptr);
 #endif
 }
 
 
 char *
-alloc_and_copy(src)
-register char *src;
+alloc_and_copy (src)
+     register char *src;
 {
-    register char *ptr;
-    register unsigned int n;
+  register char *ptr;
+  register unsigned int n;
 
-    if (src == NULL) return(NULL);
-    if ((ptr = Malloc((n = strlen(src))+1)) == NULL) {
-	malloc_error("allocation of work area");
-	return(NULL);
+  if (src == NULL)
+    return (NULL);
+  if ((ptr = Malloc ((n = strlen (src)) + 1)) == NULL)
+    {
+      malloc_error ("allocation of work area");
+      return (NULL);
     }
-    bcopy(src, ptr, n);
-    ptr[n] = '\0';
-    return(ptr);
+  bcopy (src, ptr, n);
+  ptr[n] = '\0';
+  return (ptr);
 }

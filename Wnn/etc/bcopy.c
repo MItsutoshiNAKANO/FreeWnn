@@ -1,5 +1,5 @@
 /*
- *  $Id: bcopy.c,v 1.2 2001-06-14 17:55:30 ura Exp $
+ *  $Id: bcopy.c,v 1.3 2001-06-14 18:15:54 ura Exp $
  */
 
 /*
@@ -35,38 +35,42 @@
 
 void
 bcopy (b1, b2, length)
-register unsigned char *b1, *b2;
-register length;
+     register unsigned char *b1, *b2;
+     register length;
 {
-    if (length <= 0)
-	return;
-    if (b1 < b2 && b1 + length > b2) {
-	b2 += length;
-	b1 += length;
-	while (length--) {
-	    *--b2 = *--b1;
-	}
-    } else {
-	memcpy(b2, b1, length);
+  if (length <= 0)
+    return;
+  if (b1 < b2 && b1 + length > b2)
+    {
+      b2 += length;
+      b1 += length;
+      while (length--)
+        {
+          *--b2 = *--b1;
+        }
+    }
+  else
+    {
+      memcpy (b2, b1, length);
     }
 }
- 
+
 void
 bzero (b, length)
-register unsigned char *b;
-register length;
+     register unsigned char *b;
+     register length;
 {
-    memset (b, 0, length);
+  memset (b, 0, length);
 }
 
 int
 bcmp (b1, b2, length)
-register unsigned char *b1;
-register unsigned char *b2;
-register length;
+     register unsigned char *b1;
+     register unsigned char *b2;
+     register length;
 {
-    if (length == 0)
-	return 0;
-    return memcmp (b1, b2, length);
+  if (length == 0)
+    return 0;
+  return memcmp (b1, b2, length);
 }
-#endif	/* SYSVR2 */
+#endif /* SYSVR2 */

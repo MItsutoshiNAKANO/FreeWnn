@@ -1,5 +1,5 @@
 /*
- *  $Id: mknode2.c,v 1.2 2001-06-14 17:55:36 ura Exp $
+ *  $Id: mknode2.c,v 1.3 2001-06-14 18:16:03 ura Exp $
  */
 
 /*
@@ -34,196 +34,198 @@
 #include "kaiseki.h"
 #include "wnn_malloc.h"
 
-static void lnk_jkdbn(), lnk_jksbn(), lnk_jksone(), freejktsone();
+static void lnk_jkdbn (), lnk_jksbn (), lnk_jksone (), freejktsone ();
 
-static struct JKT_DBN	*free_jkdbn_top = NULL;
-static struct free_list	*free_list_jkdbn = NULL;
-static struct JKT_SBN	*free_jksbn_top = NULL;
-static struct free_list	*free_list_jksbn = NULL;
-static struct JKT_SONE	*free_jksone_top = NULL;
-static struct free_list	*free_list_jksone = NULL;
+static struct JKT_DBN *free_jkdbn_top = NULL;
+static struct free_list *free_list_jkdbn = NULL;
+static struct JKT_SBN *free_jksbn_top = NULL;
+static struct free_list *free_list_jksbn = NULL;
+static struct JKT_SONE *free_jksone_top = NULL;
+static struct free_list *free_list_jksone = NULL;
 
 /************************************************/
 /* initialize link struct JKT_SONE           */
 /************************************************/
 int
-init_jktdbn()
+init_jktdbn ()
 {
-	free_area(free_list_jkdbn);
-	if (get_area(FIRST_JKDBN_KOSUU, sizeof(struct JKT_DBN),
-		&free_list_jkdbn) < 0)
-	    return (-1);
-	lnk_jkdbn(free_list_jkdbn);
-	return (0);
+  free_area (free_list_jkdbn);
+  if (get_area (FIRST_JKDBN_KOSUU, sizeof (struct JKT_DBN), &free_list_jkdbn) < 0)
+    return (-1);
+  lnk_jkdbn (free_list_jkdbn);
+  return (0);
 }
 
 /* free_jkdbn が 0 でない時に呼んだらあかんよ */
 static void
-lnk_jkdbn(list)
-struct	free_list *list;
+lnk_jkdbn (list)
+     struct free_list *list;
 {
-	register int	n;
-	register struct JKT_DBN *wk_ptr;
+  register int n;
+  register struct JKT_DBN *wk_ptr;
 
-	free_jkdbn_top = wk_ptr =
-	    (struct JKT_DBN *)((char *)list + sizeof(struct free_list));
+  free_jkdbn_top = wk_ptr = (struct JKT_DBN *) ((char *) list + sizeof (struct free_list));
 
-	for (n = list->num - 1; n > 0; wk_ptr++, n--) 
-		wk_ptr->lnk_br = wk_ptr + 1;
-	wk_ptr->lnk_br = 0;
+  for (n = list->num - 1; n > 0; wk_ptr++, n--)
+    wk_ptr->lnk_br = wk_ptr + 1;
+  wk_ptr->lnk_br = 0;
 }
 
 int
-init_jktsbn()
+init_jktsbn ()
 {
-	free_area(free_list_jksbn);
-	if (get_area(FIRST_JKSBN_KOSUU, sizeof(struct JKT_SBN),
-		&free_list_jksbn) < 0)
-	    return (-1);
-	lnk_jksbn(free_list_jksbn);
-	return (0);
+  free_area (free_list_jksbn);
+  if (get_area (FIRST_JKSBN_KOSUU, sizeof (struct JKT_SBN), &free_list_jksbn) < 0)
+    return (-1);
+  lnk_jksbn (free_list_jksbn);
+  return (0);
 }
 
 /* free_jksbn が 0 でない時に呼んだらあかんよ */
 static void
-lnk_jksbn(list)
-struct	free_list *list;
+lnk_jksbn (list)
+     struct free_list *list;
 {
-	register int	n;
-	register struct JKT_SBN *wk_ptr;
+  register int n;
+  register struct JKT_SBN *wk_ptr;
 
-	free_jksbn_top = wk_ptr =
-	    (struct JKT_SBN *)((char *)list + sizeof(struct free_list));
+  free_jksbn_top = wk_ptr = (struct JKT_SBN *) ((char *) list + sizeof (struct free_list));
 
-	for (n = list->num - 1; n > 0; wk_ptr++, n--) 
-		wk_ptr->lnk_br = wk_ptr + 1;
-	wk_ptr->lnk_br = 0;
+  for (n = list->num - 1; n > 0; wk_ptr++, n--)
+    wk_ptr->lnk_br = wk_ptr + 1;
+  wk_ptr->lnk_br = 0;
 }
 
 int
-init_jktsone()
+init_jktsone ()
 {
-	free_area(free_list_jksone);
-	if (get_area(FIRST_JKSONE_KOSUU, sizeof(struct JKT_SONE),
-		&free_list_jksone) < 0)
-	    return (-1);
-	lnk_jksone(free_list_jksone);
-	return (0);
+  free_area (free_list_jksone);
+  if (get_area (FIRST_JKSONE_KOSUU, sizeof (struct JKT_SONE), &free_list_jksone) < 0)
+    return (-1);
+  lnk_jksone (free_list_jksone);
+  return (0);
 }
 
 /* free_jksone_top が 0 でない時に呼んだらあかんよ */
 static void
-lnk_jksone(list)
-struct	free_list *list;
+lnk_jksone (list)
+     struct free_list *list;
 {
-	register int	n;
-	register struct JKT_SONE *wk_ptr;
+  register int n;
+  register struct JKT_SONE *wk_ptr;
 
-	free_jksone_top = wk_ptr =
-	    (struct JKT_SONE *)((char *)list + sizeof(struct free_list));
+  free_jksone_top = wk_ptr = (struct JKT_SONE *) ((char *) list + sizeof (struct free_list));
 
-	for (n = list->num - 1; n > 0; wk_ptr++, n--) 
-		wk_ptr->lnk_br = wk_ptr + 1;
-	wk_ptr->lnk_br = 0;
+  for (n = list->num - 1; n > 0; wk_ptr++, n--)
+    wk_ptr->lnk_br = wk_ptr + 1;
+  wk_ptr->lnk_br = 0;
 }
 
 /*******************************************************/
 /* struct JKT_SONE & JKT_SBN free エリア作成 */
 /*******************************************************/
 void
-freejktdbn(dbn)		/* struct JKT_SBN を free_area へリンク */
-register struct JKT_DBN *dbn;	/* クリアするノードのポインタ */
+freejktdbn (dbn)                /* struct JKT_SBN を free_area へリンク */
+     register struct JKT_DBN *dbn;      /* クリアするノードのポインタ */
 {
-	if (dbn == 0)
-		return;
+  if (dbn == 0)
+    return;
 
-	freejktsbn(dbn->sbn);
-	dbn->lnk_br = free_jkdbn_top;
-	free_jkdbn_top = dbn;
+  freejktsbn (dbn->sbn);
+  dbn->lnk_br = free_jkdbn_top;
+  free_jkdbn_top = dbn;
 }
 
 void
-freejktsbn(sbn)		/* struct JKT_SBN を free_area へリンク */
-struct JKT_SBN *sbn;	/* クリアするノードのポインタ */
+freejktsbn (sbn)                /* struct JKT_SBN を free_area へリンク */
+     struct JKT_SBN *sbn;       /* クリアするノードのポインタ */
 {
-	register struct JKT_SONE *sone;
-	register struct JKT_SONE *next;
-	if (sbn == 0)
-		return;
-	sbn->reference--;
-	if (sbn->reference <= 0) {
-		for (sone = sbn->sbn; sone != 0; ) {
-			next = sone->lnk_br;
-			freejktsone(sone);
-			sone = next;
-		}
-		sbn->reference = 0;
-		sbn->lnk_br = free_jksbn_top;
-		free_jksbn_top = sbn;
-		freejktsbn(sbn->parent);
-	}
+  register struct JKT_SONE *sone;
+  register struct JKT_SONE *next;
+  if (sbn == 0)
+    return;
+  sbn->reference--;
+  if (sbn->reference <= 0)
+    {
+      for (sone = sbn->sbn; sone != 0;)
+        {
+          next = sone->lnk_br;
+          freejktsone (sone);
+          sone = next;
+        }
+      sbn->reference = 0;
+      sbn->lnk_br = free_jksbn_top;
+      free_jksbn_top = sbn;
+      freejktsbn (sbn->parent);
+    }
 }
 
 static void
-freejktsone(sone)	/* struct JKT_SONE を free_area へリンク */
-register struct JKT_SONE *sone;	/* クリアするノードのポインタ */
+freejktsone (sone)              /* struct JKT_SONE を free_area へリンク */
+     register struct JKT_SONE *sone;    /* クリアするノードのポインタ */
 {
-	if (sone == 0)
-		return;
-	sone->lnk_br = free_jksone_top;
-	free_jksone_top = sone;
+  if (sone == 0)
+    return;
+  sone->lnk_br = free_jksone_top;
+  free_jksone_top = sone;
 }
 
 /******************************************/
-/* JKT_SBN JKT_SONE area の獲得		  */
+/* JKT_SBN JKT_SONE area の獲得           */
 /******************************************/
-struct JKT_DBN *getjktdbn()
+struct JKT_DBN *
+getjktdbn ()
 {
-	register struct	JKT_DBN	*rtnptr;
+  register struct JKT_DBN *rtnptr;
 
-	if (free_jkdbn_top == 0) {
-	    if (get_area(JKDBN_KOSUU, sizeof(struct JKT_DBN), &free_list_jkdbn) < 0)
-		    return ((struct JKT_DBN *)-1);
-	    lnk_jkdbn(free_list_jkdbn);
-	}
+  if (free_jkdbn_top == 0)
+    {
+      if (get_area (JKDBN_KOSUU, sizeof (struct JKT_DBN), &free_list_jkdbn) < 0)
+        return ((struct JKT_DBN *) -1);
+      lnk_jkdbn (free_list_jkdbn);
+    }
 
-	rtnptr = free_jkdbn_top;
-	free_jkdbn_top = free_jkdbn_top->lnk_br;
-	rtnptr->lnk_br = 0;
-	return(rtnptr);
+  rtnptr = free_jkdbn_top;
+  free_jkdbn_top = free_jkdbn_top->lnk_br;
+  rtnptr->lnk_br = 0;
+  return (rtnptr);
 }
 
-struct JKT_SBN *getjktsbn()
+struct JKT_SBN *
+getjktsbn ()
 {
-	register struct	JKT_SBN	*rtnptr;
+  register struct JKT_SBN *rtnptr;
 
-	if (free_jksbn_top == 0) {
-	    if (get_area(JKSBN_KOSUU, sizeof(struct JKT_SBN), &free_list_jksbn) < 0)
-		    return ((struct JKT_SBN *)-1);
-	    lnk_jksbn(free_list_jksbn);
-	}
+  if (free_jksbn_top == 0)
+    {
+      if (get_area (JKSBN_KOSUU, sizeof (struct JKT_SBN), &free_list_jksbn) < 0)
+        return ((struct JKT_SBN *) -1);
+      lnk_jksbn (free_list_jksbn);
+    }
 
-	rtnptr = free_jksbn_top;
-	free_jksbn_top = free_jksbn_top->lnk_br;
-	rtnptr->lnk_br = 0;
-	rtnptr->reference = 0;
-	rtnptr->status = 0;
-	return(rtnptr);
+  rtnptr = free_jksbn_top;
+  free_jksbn_top = free_jksbn_top->lnk_br;
+  rtnptr->lnk_br = 0;
+  rtnptr->reference = 0;
+  rtnptr->status = 0;
+  return (rtnptr);
 }
 
-struct JKT_SONE *getjktsone()
+struct JKT_SONE *
+getjktsone ()
 {
-	register struct	JKT_SONE	*rtnptr;
+  register struct JKT_SONE *rtnptr;
 
-	if (free_jksone_top == 0) {
-	    if (get_area(JKSONE_KOSUU, sizeof(struct JKT_SONE), &free_list_jksone) < 0)
-		    return ((struct JKT_SONE *)-1);
-	    lnk_jksone(free_list_jksone);
-	}
+  if (free_jksone_top == 0)
+    {
+      if (get_area (JKSONE_KOSUU, sizeof (struct JKT_SONE), &free_list_jksone) < 0)
+        return ((struct JKT_SONE *) -1);
+      lnk_jksone (free_list_jksone);
+    }
 
-	rtnptr = free_jksone_top;
-	free_jksone_top = free_jksone_top->lnk_br;
-	rtnptr->lnk_br = 0;
-	rtnptr->jentptr = 0;
-	return(rtnptr);
+  rtnptr = free_jksone_top;
+  free_jksone_top = free_jksone_top->lnk_br;
+  rtnptr->lnk_br = 0;
+  rtnptr->jentptr = 0;
+  return (rtnptr);
 }

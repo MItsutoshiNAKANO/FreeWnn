@@ -1,5 +1,5 @@
 /*
- * $Id: box.c,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: box.c,v 1.2 2001-06-14 18:16:14 ura Exp $
  */
 
 /*
@@ -34,7 +34,7 @@
  * Code:
  *
  */
-/*	Version 4.0
+/*      Version 4.0
  */
 #include <stdio.h>
 #include "commonhd.h"
@@ -43,195 +43,201 @@
 #include "xjutil.h"
 #include "sxheader.h"
 #include "xext.h"
-#else   /* XJUTIL */
+#else /* XJUTIL */
 #include "xim.h"
 #include "sheader.h"
 #include "ext.h"
-#endif  /* XJUTIL */
+#endif /* XJUTIL */
 
 BoxRec *
-create_box(parent, x, y, width, height, bw, fg, bg, bp, cursor, rev)
-Window parent;
-int x, y;
-int width, height;
-int bw;
-unsigned long fg, bg, bp;
-Cursor cursor;
-char rev;
+create_box (parent, x, y, width, height, bw, fg, bg, bp, cursor, rev)
+     Window parent;
+     int x, y;
+     int width, height;
+     int bw;
+     unsigned long fg, bg, bp;
+     Cursor cursor;
+     char rev;
 {
-    register BoxRec *box;
-    XGCValues	xgcv;
+  register BoxRec *box;
+  XGCValues xgcv;
 
-    if ((box = (BoxRec *)Malloc(sizeof(BoxRec))) == NULL) {
-	malloc_error("allocation of box struct");
-	return(NULL);
+  if ((box = (BoxRec *) Malloc (sizeof (BoxRec))) == NULL)
+    {
+      malloc_error ("allocation of box struct");
+      return (NULL);
     }
-    box->x = x;
-    box->y = y;
-    box->width = width;
-    box->height = height;
-    box->border_width = bw;
-    box->fg = fg;
-    box->bg = bg;
-    box->bp = bp;
-    box->redraw_cb = NULL;
-    box->redraw_cb_data = NULL;
-    box->cb = NULL;
-    box->cb_data = NULL;
-    box->do_ret = False;
-    box->sel_ret = -1;
-    box->reverse = rev;
-    box->in = box->map = '\0';
-    box->freeze = '\0';
-    box->next = NULL;
-    box->window = XCreateSimpleWindow(dpy, parent, (x - bw), (y - bw),
-				      width, height, bw, bp, bg);
-    xgcv.foreground = fg;
-    xgcv.function = GXinvert;
-    xgcv.plane_mask = XOR(fg, bg);
-    box->invertgc = XCreateGC(dpy, box->window, (GCForeground | GCFunction |
-						 GCPlaneMask), &xgcv);
-    if (!box->window || !box->invertgc) {
-	print_out("Could not create X resources for box.");
-	Free((char *)box);
-	return(NULL);
+  box->x = x;
+  box->y = y;
+  box->width = width;
+  box->height = height;
+  box->border_width = bw;
+  box->fg = fg;
+  box->bg = bg;
+  box->bp = bp;
+  box->redraw_cb = NULL;
+  box->redraw_cb_data = NULL;
+  box->cb = NULL;
+  box->cb_data = NULL;
+  box->do_ret = False;
+  box->sel_ret = -1;
+  box->reverse = rev;
+  box->in = box->map = '\0';
+  box->freeze = '\0';
+  box->next = NULL;
+  box->window = XCreateSimpleWindow (dpy, parent, (x - bw), (y - bw), width, height, bw, bp, bg);
+  xgcv.foreground = fg;
+  xgcv.function = GXinvert;
+  xgcv.plane_mask = XOR (fg, bg);
+  box->invertgc = XCreateGC (dpy, box->window, (GCForeground | GCFunction | GCPlaneMask), &xgcv);
+  if (!box->window || !box->invertgc)
+    {
+      print_out ("Could not create X resources for box.");
+      Free ((char *) box);
+      return (NULL);
     }
 
-    if (cursor) XDefineCursor(dpy, box->window, cursor);
-    if (rev) {
-	XSelectInput(dpy, box->window, (ButtonPressMask | ButtonReleaseMask |
-					EnterWindowMask |
-					LeaveWindowMask | ExposureMask));
-    } else {
-	XSelectInput(dpy, box->window, (ButtonPressMask | ButtonReleaseMask |
-					ExposureMask));
+  if (cursor)
+    XDefineCursor (dpy, box->window, cursor);
+  if (rev)
+    {
+      XSelectInput (dpy, box->window, (ButtonPressMask | ButtonReleaseMask | EnterWindowMask | LeaveWindowMask | ExposureMask));
     }
-    box->next = box_list;
-    box_list = box;
-    return(box);
+  else
+    {
+      XSelectInput (dpy, box->window, (ButtonPressMask | ButtonReleaseMask | ExposureMask));
+    }
+  box->next = box_list;
+  box_list = box;
+  return (box);
 }
 
 int
-remove_box(b)
-register BoxRec *b;
+remove_box (b)
+     register BoxRec *b;
 {
-    register BoxRec *p, **prev;
-    for (prev = &box_list; p = *prev; prev = &p->next) {
-	if (p == b) {
-	    *prev = p->next;
-	    XFreeGC(dpy, p->invertgc);
-	    Free((char *)p);
-	    return(0);
-	}
+  register BoxRec *p, **prev;
+  for (prev = &box_list; p = *prev; prev = &p->next)
+    {
+      if (p == b)
+        {
+          *prev = p->next;
+          XFreeGC (dpy, p->invertgc);
+          Free ((char *) p);
+          return (0);
+        }
     }
-    return(-1);
+  return (-1);
 }
 
 void
-map_box(p)
-register BoxRec *p;
+map_box (p)
+     register BoxRec *p;
 {
-    XMapWindow(dpy, p->window);
-    p->map = 1;
+  XMapWindow (dpy, p->window);
+  p->map = 1;
 }
 
 void
-unmap_box(p)
-register BoxRec *p;
+unmap_box (p)
+     register BoxRec *p;
 {
-    XUnmapWindow(dpy, p->window);
-    p->map = '\0';
-    p->in = '\0';
+  XUnmapWindow (dpy, p->window);
+  p->map = '\0';
+  p->in = '\0';
 }
 
 void
-freeze_box(p)
-register BoxRec *p;
+freeze_box (p)
+     register BoxRec *p;
 {
-    p->freeze = 1;
+  p->freeze = 1;
 }
 
 void
-unfreeze_box(p)
-register BoxRec *p;
+unfreeze_box (p)
+     register BoxRec *p;
 {
-    p->freeze = '\0';
+  p->freeze = '\0';
 }
 
 void
-moveresize_box(p, x, y, width, height)
-register BoxRec *p;
-int x, y;
-int width, height;
+moveresize_box (p, x, y, width, height)
+     register BoxRec *p;
+     int x, y;
+     int width, height;
 {
-    p->x = x;
-    p->y = y;
-    p->width = width;
-    p->height = height;
-    XMoveResizeWindow(dpy, p->window, (x - p->border_width),
-		      (y - p->border_width), width, height);
+  p->x = x;
+  p->y = y;
+  p->width = width;
+  p->height = height;
+  XMoveResizeWindow (dpy, p->window, (x - p->border_width), (y - p->border_width), width, height);
 }
 
 void
-changecolor_box(p, fg, bg, bp, flg)
-register BoxRec *p;
-unsigned long fg, bg, bp;
-unsigned long flg;
+changecolor_box (p, fg, bg, bp, flg)
+     register BoxRec *p;
+     unsigned long fg, bg, bp;
+     unsigned long flg;
 {
-    XGCValues	xgcv;
+  XGCValues xgcv;
 
-    if ((flg & BoxBackground) && (bg != p->bg)) {
-	p->bg = bg;
-	XSetWindowBackground(dpy, p->window, p->bg);
-	xgcv.background = bg;
-	xgcv.plane_mask = XOR(p->fg, p->bg);
-	XChangeGC(dpy, p->invertgc, (GCPlaneMask | GCBackground), &xgcv);
-	XClearWindow(dpy, p->window);
+  if ((flg & BoxBackground) && (bg != p->bg))
+    {
+      p->bg = bg;
+      XSetWindowBackground (dpy, p->window, p->bg);
+      xgcv.background = bg;
+      xgcv.plane_mask = XOR (p->fg, p->bg);
+      XChangeGC (dpy, p->invertgc, (GCPlaneMask | GCBackground), &xgcv);
+      XClearWindow (dpy, p->window);
     }
-    if ((flg & BoxForeground) && (fg != p->fg)) {
-	p->fg = fg;
-	xgcv.foreground = fg;
-	xgcv.plane_mask = XOR(p->fg, p->bg);
-	XChangeGC(dpy, p->invertgc, (GCPlaneMask | GCForeground), &xgcv);
+  if ((flg & BoxForeground) && (fg != p->fg))
+    {
+      p->fg = fg;
+      xgcv.foreground = fg;
+      xgcv.plane_mask = XOR (p->fg, p->bg);
+      XChangeGC (dpy, p->invertgc, (GCPlaneMask | GCForeground), &xgcv);
     }
-    if ((flg & BoxBorderPixel) && (bp != p->bp)) {
-	p->bp = bp;
-	XSetWindowBorder(dpy, p->window, p->bp);
+  if ((flg & BoxBorderPixel) && (bp != p->bp))
+    {
+      p->bp = bp;
+      XSetWindowBorder (dpy, p->window, p->bp);
     }
 }
 
 void
-redraw_box(p)
-register BoxRec *p;
+redraw_box (p)
+     register BoxRec *p;
 {
-    XClearWindow(dpy, p->window);
+  XClearWindow (dpy, p->window);
 /*
     JW3Mputc(p->string, p->window, 0, (int)p->in, IN_BORDER);
 */
-    JW3Mputc(p->string, p->window, 0, 0, IN_BORDER);
-    if (p->in) reverse_box(p, p->invertgc);
+  JW3Mputc (p->string, p->window, 0, 0, IN_BORDER);
+  if (p->in)
+    reverse_box (p, p->invertgc);
 }
 
 void
-reverse_box(p, invertgc)
-register BoxRec *p;
-GC invertgc;
+reverse_box (p, invertgc)
+     register BoxRec *p;
+     GC invertgc;
 {
-    XFillRectangle(dpy, p->window, invertgc,  0, 0, p->width, p->height);
+  XFillRectangle (dpy, p->window, invertgc, 0, 0, p->width, p->height);
 }
 
 void
-change_reverse_box(p, rev)
-register BoxRec *p;
-char rev;
+change_reverse_box (p, rev)
+     register BoxRec *p;
+     char rev;
 {
-    if (rev) {
-	XSelectInput(dpy, p->window, (ButtonPressMask | ButtonReleaseMask |
-				      EnterWindowMask |
-				      LeaveWindowMask | ExposureMask));
-    } else {
-	XSelectInput(dpy, p->window, (ButtonPressMask | ButtonReleaseMask |
-				      ExposureMask));
+  if (rev)
+    {
+      XSelectInput (dpy, p->window, (ButtonPressMask | ButtonReleaseMask | EnterWindowMask | LeaveWindowMask | ExposureMask));
     }
-    p->reverse = rev;
+  else
+    {
+      XSelectInput (dpy, p->window, (ButtonPressMask | ButtonReleaseMask | ExposureMask));
+    }
+  p->reverse = rev;
 }

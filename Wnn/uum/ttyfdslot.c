@@ -1,5 +1,5 @@
 /*
- *  $Id: ttyfdslot.c,v 1.2 2001-06-14 17:55:51 ura Exp $
+ *  $Id: ttyfdslot.c,v 1.3 2001-06-14 18:16:08 ura Exp $
  */
 
 /*
@@ -32,80 +32,96 @@
 #include "commonhd.h"
 
 /*
-	BSD42
+        BSD42
  */
 #if defined(BSD42) && (! defined(BSD43)) || defined(linux)
 
 #include <stdio.h>
 #define SLOTSIZ 32
 
-char *ttyname();
-char *rindex();
+char *ttyname ();
+char *rindex ();
 
-int ttyfdslot(fd)
-int fd;
+int
+ttyfdslot (fd)
+     int fd;
 {
-    char eachslot[SLOTSIZ];
-    register char *fullnamp;
-    register char *ttynamp;
-    register FILE *ttysfp;
-    register char *p;
-    register int slotnum;
+  char eachslot[SLOTSIZ];
+  register char *fullnamp;
+  register char *ttynamp;
+  register FILE *ttysfp;
+  register char *p;
+  register int slotnum;
 
-    if ((fullnamp = ttyname(fd)) == NULL) return NULL;
-    if ((ttynamp = rindex(fullnamp, '/')) == NULL) {
-        ttynamp = fullnamp;
-    } else {
-        ttynamp++;
+  if ((fullnamp = ttyname (fd)) == NULL)
+    return NULL;
+  if ((ttynamp = rindex (fullnamp, '/')) == NULL)
+    {
+      ttynamp = fullnamp;
     }
-    if ((ttysfp = fopen("/etc/ttys", "r")) == NULL) return NULL;
-    for (slotnum = 0; fgets(eachslot, SLOTSIZ, ttysfp); ) {
-        p = eachslot + strlen(eachslot) - 1;
-        if (*p == '\n') *p = '\0';
-        slotnum++;
-        if (strcmp(ttynamp, &eachslot[2]) == 0) {
-            fclose(ttysfp);
-            return slotnum;
+  else
+    {
+      ttynamp++;
+    }
+  if ((ttysfp = fopen ("/etc/ttys", "r")) == NULL)
+    return NULL;
+  for (slotnum = 0; fgets (eachslot, SLOTSIZ, ttysfp);)
+    {
+      p = eachslot + strlen (eachslot) - 1;
+      if (*p == '\n')
+        *p = '\0';
+      slotnum++;
+      if (strcmp (ttynamp, &eachslot[2]) == 0)
+        {
+          fclose (ttysfp);
+          return slotnum;
         }
     }
-    fclose(ttysfp);
-    return NULL;
+  fclose (ttysfp);
+  return NULL;
 }
-#endif	/* defined(BSD42) && (! defined(BSD43)) || defined(linux) */
+#endif /* defined(BSD42) && (! defined(BSD43)) || defined(linux) */
 
 
 /*
-	BSD43
+        BSD43
  */
 #if defined(BSD43) && !defined(linux)
 
 #include <ttyent.h>
 #include <stdio.h>
 
-char *ttyname();
-char *rindex();
+char *ttyname ();
+char *rindex ();
 
-int ttyfdslot(fd)
-int fd;
+int
+ttyfdslot (fd)
+     int fd;
 {
-    register char *fullnamp;
-    register char *ttynamp;
-    register int slotnum;
-    register struct ttyent	*te ;
-    if ((fullnamp = ttyname(fd)) == NULL) return NULL;
-    if ((ttynamp = rindex(fullnamp, '/')) == NULL) {
-        ttynamp = fullnamp;
-    } else {
-        ttynamp++;
-    }
-    for (slotnum = 1; (te = getttyent()) != NULL; slotnum++) {
-	if ( strcmp(te->ty_name, ttynamp) == 0 ) {
-		endttyent() ;
-		return	slotnum ;
-	}
-    }
-    endttyent() ;
+  register char *fullnamp;
+  register char *ttynamp;
+  register int slotnum;
+  register struct ttyent *te;
+  if ((fullnamp = ttyname (fd)) == NULL)
     return NULL;
+  if ((ttynamp = rindex (fullnamp, '/')) == NULL)
+    {
+      ttynamp = fullnamp;
+    }
+  else
+    {
+      ttynamp++;
+    }
+  for (slotnum = 1; (te = getttyent ()) != NULL; slotnum++)
+    {
+      if (strcmp (te->ty_name, ttynamp) == 0)
+        {
+          endttyent ();
+          return slotnum;
+        }
+    }
+  endttyent ();
+  return NULL;
 }
 
-#endif	/* defined(BSD43) && !defined(linux) */
+#endif /* defined(BSD43) && !defined(linux) */

@@ -1,5 +1,5 @@
 /*
- * $Id: uif.c,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: uif.c,v 1.2 2001-06-14 18:16:13 ura Exp $
  */
 
 /*
@@ -37,7 +37,7 @@
  * Code:
  *
  */
-/*	Version 4.0
+/*      Version 4.0
  */
 #include <stdio.h>
 #include "jslib.h"
@@ -45,7 +45,7 @@
 #include "sdefine.h"
 #include "xjutil.h"
 #include "sxheader.h"
-#include "rk_spclval.h" /* defines of CHMSIG, NISEBP */
+#include "rk_spclval.h"         /* defines of CHMSIG, NISEBP */
 #include "xext.h"
 
 
@@ -57,134 +57,150 @@ static int henkan_mode;
 */
 
 static void
-change_to_insert_mode()
+change_to_insert_mode ()
 {
   c_b->key_table = main_table[1];
-  c_b->rk_clear_tbl =  romkan_clear_tbl[1];
+  c_b->rk_clear_tbl = romkan_clear_tbl[1];
   c_b->key_in_fun = NULL;
   c_b->ctrl_code_fun = NULL;
   c_b->hanten = 0x08 | 0x20;
   henkan_mode = 1;
-  kk_cursor_normal();
+  kk_cursor_normal ();
 }
 
 static void
-change_to_empty_mode()
+change_to_empty_mode ()
 {
   c_b->key_table = main_table[3];
-  c_b->rk_clear_tbl =  romkan_clear_tbl[3];
+  c_b->rk_clear_tbl = romkan_clear_tbl[3];
   c_b->key_in_fun = NULL;
   c_b->ctrl_code_fun = NULL;
-  c_b->hanten =  0x08 | 0x20;
+  c_b->hanten = 0x08 | 0x20;
   henkan_mode = 3;
-  throw_col(0);
-  kk_cursor_normal();
+  throw_col (0);
+  kk_cursor_normal ();
 }
 
 int
-empty_modep()
+empty_modep ()
 {
-    return(henkan_mode == 3);
+  return (henkan_mode == 3);
 }
 
 int
-insert_modep()
+insert_modep ()
 {
-    return(henkan_mode == 1);
-}
-int
-redraw_nisemono_c()
-{
-    redraw_nisemono();
-    if(c_b->maxlen == 0){
-	change_to_empty_mode();
-    }
-    return(0);
+  return (henkan_mode == 1);
 }
 
 int
-isconect_jserver()
+redraw_nisemono_c ()
 {
-    if (js_isconnect(cur_env)) {
-	connect_server();
+  redraw_nisemono ();
+  if (c_b->maxlen == 0)
+    {
+      change_to_empty_mode ();
     }
-    if (js_isconnect(cur_env)) {
-	print_msg_getc(" jserver(?)", NULL, NULL, NULL);
-	t_print_l();
-	return (0);
-    }
-    return(1);
+  return (0);
 }
 
-int kill_c()
+int
+isconect_jserver ()
 {
-    t_kill();
-    if(c_b->maxlen == 0){
-	change_to_empty_mode();
+  if (js_isconnect (cur_env))
+    {
+      connect_server ();
     }
-    return(0);
+  if (js_isconnect (cur_env))
+    {
+      print_msg_getc (" jserver(?)", NULL, NULL, NULL);
+      t_print_l ();
+      return (0);
+    }
+  return (1);
 }
 
-int delete_c(c,romkan)
-int c,romkan;
+int
+kill_c ()
 {
-    t_delete_char(c , romkan);
-    if((c_b->maxlen == 0) && is_HON(romkan)){
-	change_to_empty_mode();
+  t_kill ();
+  if (c_b->maxlen == 0)
+    {
+      change_to_empty_mode ();
     }
-    return(0);
+  return (0);
 }
 
-int rubout_c(c , romkan)
-int c, romkan;
+int
+delete_c (c, romkan)
+     int c, romkan;
 {
-    t_rubout(c, romkan);
-    if((c_b->maxlen == 0) && is_HON(romkan)){
-	change_to_empty_mode();
+  t_delete_char (c, romkan);
+  if ((c_b->maxlen == 0) && is_HON (romkan))
+    {
+      change_to_empty_mode ();
     }
-    return(0);
-}  
+  return (0);
+}
+
+int
+rubout_c (c, romkan)
+     int c, romkan;
+{
+  t_rubout (c, romkan);
+  if ((c_b->maxlen == 0) && is_HON (romkan))
+    {
+      change_to_empty_mode ();
+    }
+  return (0);
+}
 
 
 
 int
-backward_c()
+backward_c ()
 {
-    if(!isconect_jserver()) {
-	return(0);
+  if (!isconect_jserver ())
+    {
+      return (0);
     }
-    if(c_b->t_c_p == c_b->t_m_start){
-    }else{
-	backward_char();
+  if (c_b->t_c_p == c_b->t_m_start)
+    {
     }
-    return(0);
+  else
+    {
+      backward_char ();
+    }
+  return (0);
 }
 
 int
-insert_it_as_yomi()
+insert_it_as_yomi ()
 {
-    change_to_insert_mode();
-    c_b->t_m_start = 0;
-    cur_bnst_ = 0;
-    t_print_l();
-    return(0);
+  change_to_insert_mode ();
+  c_b->t_m_start = 0;
+  cur_bnst_ = 0;
+  t_print_l ();
+  return (0);
 }
 
 int
-reconnect_server()
+reconnect_server ()
 {
-  return(0);
+  return (0);
 }
 
 int
-disconnect_server()
+disconnect_server ()
 {
-    WnnEnv *p;
+  WnnEnv *p;
 
-    for (p = normal_env; p; p = p->next) {
-    	if (p->env != NULL && js_isconnect(p->env)) {
-	    js_close(p->env->js_id);
-	}
+  for (p = normal_env; p; p = p->next)
+    {
+      if (p->env != NULL && js_isconnect (p->env))
+        {
+          js_close (p->env->js_id);
+        }
     }
-    return(1);
+  return (1);
 }

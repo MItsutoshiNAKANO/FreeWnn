@@ -1,5 +1,5 @@
 /*
- *  $Id: dic_head.c,v 1.2 2001-06-14 17:55:37 ura Exp $
+ *  $Id: dic_head.c,v 1.3 2001-06-14 18:16:04 ura Exp $
  */
 
 /*
@@ -35,44 +35,43 @@
 #include "jh.h"
 #include "jdata.h"
 
-extern int create_file_header(), output_header_jt(), input_file_header(),
-  input_header_jt(), input_header_hjt();
+extern int create_file_header (), output_header_jt (), input_file_header (), input_header_jt (), input_header_hjt ();
 
 int
-output_header(ofpter, jtp, fhp)
-FILE *ofpter;
-struct JT *jtp;
-struct wnn_file_head *fhp;
+output_header (ofpter, jtp, fhp)
+     FILE *ofpter;
+     struct JT *jtp;
+     struct wnn_file_head *fhp;
 {
-    create_file_header(ofpter, WNN_FT_DICT_FILE, fhp->file_passwd);
-    output_header_jt(ofpter, jtp);
-    return(0);
+  create_file_header (ofpter, WNN_FT_DICT_FILE, fhp->file_passwd);
+  output_header_jt (ofpter, jtp);
+  return (0);
 }
 
 int
-input_header(ifpter,  jtp, fhp)
-FILE *ifpter;
-struct JT *jtp;
-struct file_head *fhp;
+input_header (ifpter, jtp, fhp)
+     FILE *ifpter;
+     struct JT *jtp;
+     struct file_head *fhp;
 {
 
-    if(input_file_header(ifpter, fhp) == -1 ||
-       input_header_jt(ifpter, jtp) == -1){
-	fprintf(stderr, "Not a Wnn file\n");
-      return(-1);
-  }
-  return(0);
-}
-
-int
-input_hindo_header(ifpter, hjtp, fhp)
-FILE *ifpter;
-struct wnn_file_head *fhp;
-struct HJT *hjtp;
-{
-    if(input_file_header(ifpter, fhp) == -1 || 
-       input_header_hjt(ifpter, hjtp) == -1){
-	return(-1);
+  if (input_file_header (ifpter, fhp) == -1 || input_header_jt (ifpter, jtp) == -1)
+    {
+      fprintf (stderr, "Not a Wnn file\n");
+      return (-1);
     }
-    return(0);
+  return (0);
+}
+
+int
+input_hindo_header (ifpter, hjtp, fhp)
+     FILE *ifpter;
+     struct wnn_file_head *fhp;
+     struct HJT *hjtp;
+{
+  if (input_file_header (ifpter, fhp) == -1 || input_header_hjt (ifpter, hjtp) == -1)
+    {
+      return (-1);
+    }
+  return (0);
 }

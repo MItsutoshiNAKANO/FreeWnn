@@ -1,5 +1,5 @@
 /*
- * $Id: cursor.c,v 1.1.1.1 2000-01-16 05:07:55 ura Exp $
+ * $Id: cursor.c,v 1.2 2001-06-14 18:16:14 ura Exp $
  */
 
 /*
@@ -37,187 +37,208 @@
  * Code:
  *
  */
-/*	Version 4.0
+/*      Version 4.0
  */
 #include <stdio.h>
 #include "commonhd.h"
 #include "sdefine.h"
-#ifdef	XJUTIL
+#ifdef  XJUTIL
 #include "xjutil.h"
 #include "sxheader.h"
 #include "xext.h"
-#else	/* XJUTIL */
+#else /* XJUTIL */
 #include "xim.h"
 #include "sheader.h"
 #include "ext.h"
-#endif	/* XJUTIL */
+#endif /* XJUTIL */
 
-#ifdef	XJUTIL
+#ifdef  XJUTIL
 int cursor_colum = 0;
 static int cursor_reverse = 0;
 static int cursor_underline = 0;
 static int cursor_bold = 0;
 int cursor_invisible = 1;
-#endif	/* XJUTIL */
+#endif /* XJUTIL */
 
 void
-throw_col(col)
-int col;
+throw_col (col)
+     int col;
 {
-    throw_cur_raw(col);
-    cursor_colum = col;
+  throw_cur_raw (col);
+  cursor_colum = col;
 }
 
 void
-h_r_on()
+h_r_on ()
 {
-    if(!cursor_reverse){
-        h_r_on_raw();
-        cursor_reverse = 1;
+  if (!cursor_reverse)
+    {
+      h_r_on_raw ();
+      cursor_reverse = 1;
     }
 }
 
 void
-h_r_off()
+h_r_off ()
 {
-    if(cursor_reverse){
-        h_r_off_raw();
-        cursor_reverse = 0;
+  if (cursor_reverse)
+    {
+      h_r_off_raw ();
+      cursor_reverse = 0;
     }
-    if(cursor_bold){
-	b_s_on_raw();
-    }
-}
-
-void
-u_s_on()
-{
-    if(!cursor_underline){
-        u_s_on_raw();
-        cursor_underline = 1;
+  if (cursor_bold)
+    {
+      b_s_on_raw ();
     }
 }
 
 void
-u_s_off()
+u_s_on ()
 {
-    if(cursor_underline){
-        u_s_off_raw();
-        cursor_underline = 0;
+  if (!cursor_underline)
+    {
+      u_s_on_raw ();
+      cursor_underline = 1;
+    }
+}
+
+void
+u_s_off ()
+{
+  if (cursor_underline)
+    {
+      u_s_off_raw ();
+      cursor_underline = 0;
     }
 }
 
 static void
-b_s_on()
+b_s_on ()
 {
-    if(!cursor_bold){
-        b_s_on_raw();
-        cursor_bold = 1;
+  if (!cursor_bold)
+    {
+      b_s_on_raw ();
+      cursor_bold = 1;
     }
-    if(cursor_reverse){
-	h_r_on_raw();
+  if (cursor_reverse)
+    {
+      h_r_on_raw ();
     }
 }
 
 static void
-b_s_off()
+b_s_off ()
 {
-    if(cursor_bold){
-        b_s_off_raw();
-        cursor_bold = 0;
+  if (cursor_bold)
+    {
+      b_s_off_raw ();
+      cursor_bold = 0;
     }
 }
 
 void
-kk_cursor_invisible()
+kk_cursor_invisible ()
 {
-      if(cursor_invisible == 0){
-          cursor_invisible_raw();
-          cursor_invisible = 1;
-      }
-}
- 
-void
-kk_cursor_normal()
-{
-    if(cursor_invisible){
-        cursor_normal_raw();
-        cursor_invisible = 0;
+  if (cursor_invisible == 0)
+    {
+      cursor_invisible_raw ();
+      cursor_invisible = 1;
     }
 }
 
 void
-reset_cursor_status()
+kk_cursor_normal ()
 {
-    kk_cursor_normal();
-    h_r_off();
-    u_s_off();
+  if (cursor_invisible)
+    {
+      cursor_normal_raw ();
+      cursor_invisible = 0;
+    }
 }
 
 void
-set_cursor_status()
+reset_cursor_status ()
 {
-    if(cursor_invisible){
-	cursor_invisible_raw();
-    }else{
-	cursor_normal_raw();
-    }
-    if(cursor_reverse){
-	  h_r_on_raw();
-    }
-    if(cursor_underline){
-	  u_s_on_raw();
-    }
-    throw_cur_raw(cursor_colum);
+  kk_cursor_normal ();
+  h_r_off ();
+  u_s_off ();
 }
 
 void
-clr_line_all()
+set_cursor_status ()
 {
-    throw_cur_raw(0);
-    clr_end_screen();
-}	    
+  if (cursor_invisible)
+    {
+      cursor_invisible_raw ();
+    }
+  else
+    {
+      cursor_normal_raw ();
+    }
+  if (cursor_reverse)
+    {
+      h_r_on_raw ();
+    }
+  if (cursor_underline)
+    {
+      u_s_on_raw ();
+    }
+  throw_cur_raw (cursor_colum);
+}
+
+void
+clr_line_all ()
+{
+  throw_cur_raw (0);
+  clr_end_screen ();
+}
 
 static int saved_cursor_rev;
 static int saved_cursor_und;
 void
-push_hrus()
+push_hrus ()
 {
-    saved_cursor_rev = cursor_reverse;
-    saved_cursor_und = cursor_underline;
-    h_r_off();
-    u_s_off();
+  saved_cursor_rev = cursor_reverse;
+  saved_cursor_und = cursor_underline;
+  h_r_off ();
+  u_s_off ();
 }
 
 void
-pop_hrus()
+pop_hrus ()
 {
-    if(saved_cursor_rev)
-        h_r_on();
-    if(saved_cursor_und)
-        u_s_on();
+  if (saved_cursor_rev)
+    h_r_on ();
+  if (saved_cursor_und)
+    u_s_on ();
 }
 
 void
-set_hanten_ul(x,y)
-int x,y;
+set_hanten_ul (x, y)
+     int x, y;
 {
-    if(!x)h_r_off();
-    if(!y)u_s_off();
-    if(x)h_r_on();
-    if(y)u_s_on();
+  if (!x)
+    h_r_off ();
+  if (!y)
+    u_s_off ();
+  if (x)
+    h_r_on ();
+  if (y)
+    u_s_on ();
 }
 
 void
-set_bold(x)
-int x;
+set_bold (x)
+     int x;
 {
-    if(x)b_s_on();
+  if (x)
+    b_s_on ();
 }
 
 void
-reset_bold(x)
-int x;
+reset_bold (x)
+     int x;
 {
-    if(x)b_s_off();
+  if (x)
+    b_s_off ();
 }

@@ -1,5 +1,5 @@
 /*
- *  $Id: msg.h,v 1.2 2001-06-14 17:55:31 ura Exp $
+ *  $Id: msg.h,v 1.3 2001-06-14 18:15:57 ura Exp $
  */
 
 /*
@@ -29,27 +29,29 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-struct msg_bd {
-    int msg_id;
-    char *msg;
+struct msg_bd
+{
+  int msg_id;
+  char *msg;
 };
 
-struct msg_cat {
-    char lang[32];
-    char name[64];
-    char nlspath[64];
-    int msg_cnt;
-    struct msg_cat *nextp;
-    struct msg_bd *msg_bd;
-    /*int encoding;*/
+struct msg_cat
+{
+  char lang[32];
+  char name[64];
+  char nlspath[64];
+  int msg_cnt;
+  struct msg_cat *nextp;
+  struct msg_bd *msg_bd;
+  /*int encoding; */
 };
 
-#define	DEF_MSG "Message not found.\n"
+#define DEF_MSG "Message not found.\n"
 /*
-#define	DEF_LANG "C"
+#define DEF_LANG "C"
 */
-#define	DEF_LANG "ja_JP"
+#define DEF_LANG "ja_JP"
 
-extern struct msg_cat *msg_open();
-extern char *msg_get();
-extern void msg_close();
+extern struct msg_cat *msg_open ();
+extern char *msg_get ();
+extern void msg_close ();

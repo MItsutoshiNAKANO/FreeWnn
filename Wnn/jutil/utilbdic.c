@@ -1,5 +1,5 @@
 /*
- *  $Id: utilbdic.c,v 1.2 2001-06-14 17:55:37 ura Exp $
+ *  $Id: utilbdic.c,v 1.3 2001-06-14 18:16:04 ura Exp $
  */
 
 /*
@@ -52,13 +52,14 @@ struct wnn_file_head file_head;
 
 extern char *passwd;
 
-output_hinsi(ofpter)
-register FILE *ofpter;
+output_hinsi (ofpter)
+     register FILE *ofpter;
 {
-    register int i;
+  register int i;
 
-    for(i = 0 ; i < jt.maxserial ; i++){
-	put_short(ofpter,jeary[i]->hinsi);
+  for (i = 0; i < jt.maxserial; i++)
+    {
+      put_short (ofpter, jeary[i]->hinsi);
     }
 /*
   if(i & 0x1){
@@ -67,39 +68,44 @@ register FILE *ofpter;
 */
 }
 
-input_hinsi(ifpter)
-register FILE *ifpter;
+input_hinsi (ifpter)
+     register FILE *ifpter;
 {
-    register int i;
-    unsigned short s;
+  register int i;
+  unsigned short s;
 
-    for(i = 0 ; i < jt.maxserial ; i++){
-	if(get_short(&s, ifpter) == -1)return(-1);
-	jeary[i]->hinsi = s;
+  for (i = 0; i < jt.maxserial; i++)
+    {
+      if (get_short (&s, ifpter) == -1)
+        return (-1);
+      jeary[i]->hinsi = s;
     }
 /*
   if(i & 0x1){
     get_short(ifpter);
   }
 */
-  return(0);
+  return (0);
 }
 
 #ifdef nodef
-revdic_jt(jtp, match, hostart, tary)
-struct JT *jtp;
-int match;
-char *hostart;
-struct uind1 *tary;
+revdic_jt (jtp, match, hostart, tary)
+     struct JT *jtp;
+     int match;
+     char *hostart;
+     struct uind1 *tary;
 {
 /* Must reverse hinsi?????? */
 
-    if(jtp->syurui == WNN_UD_DICT){
-	rev_ud_hontai(hostart,jtp->maxhontai, match);
-	rev_ud_table(tary,jtp->maxtable, match);
-    }else{
-	rev_sd_hontai(hostart, match);
+  if (jtp->syurui == WNN_UD_DICT)
+    {
+      rev_ud_hontai (hostart, jtp->maxhontai, match);
+      rev_ud_table (tary, jtp->maxtable, match);
     }
-    return(0);
+  else
+    {
+      rev_sd_hontai (hostart, match);
+    }
+  return (0);
 }
 #endif

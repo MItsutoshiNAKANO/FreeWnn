@@ -1,5 +1,5 @@
 /*
- *  $Id: setutmp.c,v 1.2 2001-06-14 17:55:51 ura Exp $
+ *  $Id: setutmp.c,v 1.3 2001-06-14 18:16:08 ura Exp $
  */
 
 /*
@@ -43,7 +43,7 @@
 
 #define public
 
-char *ttyname();
+char *ttyname ();
 
 #if defined(SVR4) && !defined(DGUX)
 #include <utmpx.h>
@@ -67,133 +67,151 @@ static int suf = 0;
 # endif
 #endif
 
-public int saveutmp()
+public int
+saveutmp ()
 {
-    register int utmpFd;
-    register char *p;
+  register int utmpFd;
+  register char *p;
 
-    if (suf > 0) return 0;
-    suf = -1;
-
-    bzero(&nullut, sizeof nullut);
-    if ((p = ttyname(0)) == NULL) return -1;
-    strncpy(savttynm, rindex(p, '/') + 1, 8);
-    if (!(savslotnum = ttyslot())) return -1;
-    if ((utmpFd = open(_PATH_UTMP, O_RDONLY, 0)) < 0) return -1;
-    lseek(utmpFd, savslotnum * (sizeof saveut), 0);
-    read(utmpFd, &saveut, sizeof saveut);
-    close(utmpFd);
-    strncpy(nullut.ut_line, saveut.ut_line, 8);
-    strncpy(nullut.ut_host, saveut.ut_host, 16);
-    nullut.ut_time = saveut.ut_time;
-    suf = 1;
+  if (suf > 0)
     return 0;
+  suf = -1;
+
+  bzero (&nullut, sizeof nullut);
+  if ((p = ttyname (0)) == NULL)
+    return -1;
+  strncpy (savttynm, rindex (p, '/') + 1, 8);
+  if (!(savslotnum = ttyslot ()))
+    return -1;
+  if ((utmpFd = open (_PATH_UTMP, O_RDONLY, 0)) < 0)
+    return -1;
+  lseek (utmpFd, savslotnum * (sizeof saveut), 0);
+  read (utmpFd, &saveut, sizeof saveut);
+  close (utmpFd);
+  strncpy (nullut.ut_line, saveut.ut_line, 8);
+  strncpy (nullut.ut_host, saveut.ut_host, 16);
+  nullut.ut_time = saveut.ut_time;
+  suf = 1;
+  return 0;
 }
 
-public int setutmp(ttyFd)
-int ttyFd;
+public int
+setutmp (ttyFd)
+     int ttyFd;
 {
-    int utmpFd;
-    struct utmp ut;
-    char *p;
-    int i;
+  int utmpFd;
+  struct utmp ut;
+  char *p;
+  int i;
 
-    if (suf <= 0) return -1;
-    bzero(&ut, sizeof ut);
-    if ((p = ttyname(ttyFd)) == NULL) return -1;
-    strncpy(ut.ut_line, rindex(p, '/') + 1, 8);
-    strncpy(ut.ut_name, getpwuid(getuid())->pw_name, 8);
-    ut.ut_time = time(0);
-    strncpy(ut.ut_host, savttynm, 8);
-    if (!(i = ttyfdslot(ttyFd))) return -1;
-    if ((utmpFd = open(_PATH_UTMP, O_RDWR, 0)) < 0) return -1;
-    lseek(utmpFd, savslotnum * (sizeof nullut), 0);
-    write(utmpFd, &nullut, sizeof nullut);
-    lseek(utmpFd, i * (sizeof ut), 0);
-    write(utmpFd, &ut, sizeof ut);
-    close(utmpFd);
-    return 0;
+  if (suf <= 0)
+    return -1;
+  bzero (&ut, sizeof ut);
+  if ((p = ttyname (ttyFd)) == NULL)
+    return -1;
+  strncpy (ut.ut_line, rindex (p, '/') + 1, 8);
+  strncpy (ut.ut_name, getpwuid (getuid ())->pw_name, 8);
+  ut.ut_time = time (0);
+  strncpy (ut.ut_host, savttynm, 8);
+  if (!(i = ttyfdslot (ttyFd)))
+    return -1;
+  if ((utmpFd = open (_PATH_UTMP, O_RDWR, 0)) < 0)
+    return -1;
+  lseek (utmpFd, savslotnum * (sizeof nullut), 0);
+  write (utmpFd, &nullut, sizeof nullut);
+  lseek (utmpFd, i * (sizeof ut), 0);
+  write (utmpFd, &ut, sizeof ut);
+  close (utmpFd);
+  return 0;
 }
 #endif /* BSD42 */
 
 #ifdef SYSVR2
-public int setutmp(ttyFd)
-int ttyFd;
+public int
+setutmp (ttyFd)
+     int ttyFd;
 {
-    struct utmp ut;
-    char *p;
-    struct passwd *getpwuid();
+  struct utmp ut;
+  char *p;
+  struct passwd *getpwuid ();
 
-    memset(&ut, 0, sizeof ut);
-    if ((p = ttyname(ttyFd)) == NULL) return -1;
-    strncpy(ut.ut_line, strrchr(p, '/') + 1, 12);
-    strncpy(ut.ut_user, getpwuid(getuid())->pw_name, 8);
-    ut.ut_time = time(0);
+  memset (&ut, 0, sizeof ut);
+  if ((p = ttyname (ttyFd)) == NULL)
+    return -1;
+  strncpy (ut.ut_line, strrchr (p, '/') + 1, 12);
+  strncpy (ut.ut_user, getpwuid (getuid ())->pw_name, 8);
+  ut.ut_time = time (0);
 #ifdef DGUX
-    strncpy(ut.ut_id, &ut.ut_line[3], 4);
+  strncpy (ut.ut_id, &ut.ut_line[3], 4);
 #else
-    strncpy(ut.ut_id, &ut.ut_line[2], 4);
-    ut.ut_id[0] = 't';
+  strncpy (ut.ut_id, &ut.ut_line[2], 4);
+  ut.ut_id[0] = 't';
 #endif /* DGUX */
-    ut.ut_pid = getpid();
-    ut.ut_type = USER_PROCESS;
-    setutent(); /* is it necessary? */
-    getutid(&ut);
-    pututline(&ut);
-    endutent();
-    return 0;
+  ut.ut_pid = getpid ();
+  ut.ut_type = USER_PROCESS;
+  setutent ();                  /* is it necessary? */
+  getutid (&ut);
+  pututline (&ut);
+  endutent ();
+  return 0;
 }
 #endif /* SYSVR2 */
 
 #ifdef BSD42
-public int resetutmp(ttyFd)
-int ttyFd;
+public int
+resetutmp (ttyFd)
+     int ttyFd;
 {
-    int utmpFd;
-    struct utmp ut;
-    char *p;
-    int i;
+  int utmpFd;
+  struct utmp ut;
+  char *p;
+  int i;
 
-    bzero(&ut, sizeof ut);
-    if ((p = ttyname(ttyFd)) == NULL) return -1;
-    strncpy(ut.ut_line, rindex(p, '/') + 1, 8);
-    ut.ut_time = time(0);
-    if (!(i = ttyfdslot(ttyFd))) return -1;
-    if ((utmpFd = open(_PATH_UTMP, O_RDWR, 0)) < 0) return -1;
-    lseek(utmpFd, savslotnum * (sizeof saveut), 0);
-    write(utmpFd, &saveut, sizeof saveut);
-    lseek(utmpFd, i * (sizeof ut), 0);
-    write(utmpFd, &ut, sizeof ut);
-    close(utmpFd);
-    return 0;
+  bzero (&ut, sizeof ut);
+  if ((p = ttyname (ttyFd)) == NULL)
+    return -1;
+  strncpy (ut.ut_line, rindex (p, '/') + 1, 8);
+  ut.ut_time = time (0);
+  if (!(i = ttyfdslot (ttyFd)))
+    return -1;
+  if ((utmpFd = open (_PATH_UTMP, O_RDWR, 0)) < 0)
+    return -1;
+  lseek (utmpFd, savslotnum * (sizeof saveut), 0);
+  write (utmpFd, &saveut, sizeof saveut);
+  lseek (utmpFd, i * (sizeof ut), 0);
+  write (utmpFd, &ut, sizeof ut);
+  close (utmpFd);
+  return 0;
 }
 #endif /* BSD42 */
 
 #ifdef SYSVR2
-public int resetutmp(ttyFd)
-int ttyFd;
+public int
+resetutmp (ttyFd)
+     int ttyFd;
 {
-    struct utmp ut;
-    char *p;
-    struct passwd *getpwuid();
+  struct utmp ut;
+  char *p;
+  struct passwd *getpwuid ();
 
-    memset(&ut, 0, sizeof ut);
-    if ((p = ttyname(ttyFd)) == NULL) return -1;
-    strncpy(ut.ut_line, strrchr(p, '/') + 1, 12);
-    strncpy(ut.ut_user, getpwuid(getuid())->pw_name, 8);
-    ut.ut_time = time(0);
+  memset (&ut, 0, sizeof ut);
+  if ((p = ttyname (ttyFd)) == NULL)
+    return -1;
+  strncpy (ut.ut_line, strrchr (p, '/') + 1, 12);
+  strncpy (ut.ut_user, getpwuid (getuid ())->pw_name, 8);
+  ut.ut_time = time (0);
 #ifdef DGUX
-    strncpy(ut.ut_id, &ut.ut_line[3], 4);
+  strncpy (ut.ut_id, &ut.ut_line[3], 4);
 #else
-    strncpy(ut.ut_id, &ut.ut_line[2], 4);
-    ut.ut_id[0] = 't';
+  strncpy (ut.ut_id, &ut.ut_line[2], 4);
+  ut.ut_id[0] = 't';
 #endif /* DGUX */
-    ut.ut_pid = getpid();
-    ut.ut_type = DEAD_PROCESS;	/* not sure */
-    setutent(); /* is it necessary? */
-    getutid(&ut);
-    pututline(&ut);
-    endutent();
-    return 0;
+  ut.ut_pid = getpid ();
+  ut.ut_type = DEAD_PROCESS;    /* not sure */
+  setutent ();                  /* is it necessary? */
+  getutid (&ut);
+  pututline (&ut);
+  endutent ();
+  return 0;
 }
 #endif /* SYSVR2 */

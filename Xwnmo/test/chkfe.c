@@ -1,5 +1,5 @@
 /*
- * $Id: chkfe.c,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: chkfe.c,v 1.2 2001-06-14 18:16:10 ura Exp $
  */
 
 /*
@@ -44,26 +44,31 @@
  *                               takashi@ari.ncl.omron.co.jp
  */
 
-#include 	"exvalue.h"
-#include 	"func.h"
+#include        "exvalue.h"
+#include        "func.h"
 
-FLAG	fltev(event)
-XEvent	*event;
+/* *INDENT-OFF* */
+FLAG
+fltev (event)
+     XEvent *event;
+/* *INDENT-ON* */
 {
-    Bool	res;
+  Bool res;
 
 /*  prstatus("Calling XFilterEvent()..."); */
-    res = XFilterEvent(event, event->xany.window);
+  res = XFilterEvent (event, event->xany.window);
 /*  prstatus("done."); */
-    cls(prdisp);
-    if (res == False) {
-/*	prprint("The result of XFilterEvent() is \"False\".\n");  */
-	fprintf(icfp, "The result of XFilterEvent() is \"False\".\n");
-	return (NG);
-    } else {
-/*	prprint("The result of XFilterEvent() is \"True\".\n");  */
-	fprintf(icfp, "The result of XFilterEvent() is \"True\".\n");
-    	return (OK);
+  cls (prdisp);
+  if (res == False)
+    {
+/*      prprint("The result of XFilterEvent() is \"False\".\n");  */
+      fprintf (icfp, "The result of XFilterEvent() is \"False\".\n");
+      return (NG);
+    }
+  else
+    {
+/*      prprint("The result of XFilterEvent() is \"True\".\n");  */
+      fprintf (icfp, "The result of XFilterEvent() is \"True\".\n");
+      return (OK);
     }
 }
-

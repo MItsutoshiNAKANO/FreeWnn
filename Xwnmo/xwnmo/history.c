@@ -1,5 +1,5 @@
 /*
- * $Id: history.c,v 1.1.1.1 2000-01-16 05:07:56 ura Exp $
+ * $Id: history.c,v 1.2 2001-06-14 18:16:15 ura Exp $
  */
 
 /*
@@ -37,7 +37,7 @@
  * Code:
  *
  */
-/*	Version 4.0
+/*      Version 4.0
  */
 #include <stdio.h>
 #include "commonhd.h"
@@ -48,162 +48,174 @@
 #include "ext.h"
 
 int
-init_history()
+init_history ()
 {
-    int size1;
-    char *area_pter;
+  int size1;
+  char *area_pter;
 
-    register History *hist, *pre, *end;
+  register History *hist, *pre, *end;
 
-    if ((history_cunt = max_history) < 1) {
-	history_cunt = 0;
-	return(0);
+  if ((history_cunt = max_history) < 1)
+    {
+      history_cunt = 0;
+      return (0);
     }
-    size1 = history_cunt * sizeof(History);
-    if ((area_pter = Malloc((unsigned)size1)) == NULL) {
-	history_cunt = 0;
-	wnn_errorno = WNN_MALLOC_ERR;
-	return(-1);
+  size1 = history_cunt * sizeof (History);
+  if ((area_pter = Malloc ((unsigned) size1)) == NULL)
+    {
+      history_cunt = 0;
+      wnn_errorno = WNN_MALLOC_ERR;
+      return (-1);
     }
-    hist = beginning_of_history = end_of_history = add_history =
-	(History *)area_pter;
-    c_c->save_hist = (History *)area_pter;
-    pre = end = hist + (history_cunt - 1);
-    do {
-	hist->hbuffer = NULL;
-	pre->next = hist;
-	hist->previous = pre;
-	hist->num = 0;
-	pre = hist++;
-    } while (hist <= end);
-    return(0);
+  hist = beginning_of_history = end_of_history = add_history = (History *) area_pter;
+  c_c->save_hist = (History *) area_pter;
+  pre = end = hist + (history_cunt - 1);
+  do
+    {
+      hist->hbuffer = NULL;
+      pre->next = hist;
+      hist->previous = pre;
+      hist->num = 0;
+      pre = hist++;
+    }
+  while (hist <= end);
+  return (0);
 }
 
 static void
-set_up_history()
+set_up_history ()
 {
-    if (add_history == beginning_of_history &&
-	    end_of_history != beginning_of_history)
-	beginning_of_history = beginning_of_history->next;
-    end_of_history = add_history;
-    add_history = add_history->next;
-    current_history = NULL;
+  if (add_history == beginning_of_history && end_of_history != beginning_of_history)
+    beginning_of_history = beginning_of_history->next;
+  end_of_history = add_history;
+  add_history = add_history->next;
+  current_history = NULL;
 }
 
 int
-make_history(wstr, n)
-register w_char *wstr;
-register int	n;
+make_history (wstr, n)
+     register w_char *wstr;
+     register int n;
 {
-    register char *p;
+  register char *p;
 
-    if (!history_cunt)
-	return(0);
-    if (n <= 0 || n > maxchg || *wstr == 0) 
-	return(-1);
+  if (!history_cunt)
+    return (0);
+  if (n <= 0 || n > maxchg || *wstr == 0)
+    return (-1);
 
-    if (n == 1 && NORMAL_CHAR(*wstr)) {
-	if (!wchar_holding) {
-	    wchar_holding = 1;
-	    set_up_history();
-	    end_of_history->num = 0;
-	}
-	if (!(p = Malloc((unsigned)((end_of_history->num + 1) *
-			 sizeof(w_char))))) {
-	    malloc_error("allocation of data for history");
-	    return(-1);
-	}
-	if (end_of_history->hbuffer) Free(end_of_history->hbuffer);
-	end_of_history->hbuffer = (w_char *)p;
-	Strncpy(end_of_history->hbuffer + end_of_history->num, wstr, 1);
-	if (++(end_of_history->num) >= maxchg)
-		wchar_holding = 0;
-	return(0);
+  if (n == 1 && NORMAL_CHAR (*wstr))
+    {
+      if (!wchar_holding)
+        {
+          wchar_holding = 1;
+          set_up_history ();
+          end_of_history->num = 0;
+        }
+      if (!(p = Malloc ((unsigned) ((end_of_history->num + 1) * sizeof (w_char)))))
+        {
+          malloc_error ("allocation of data for history");
+          return (-1);
+        }
+      if (end_of_history->hbuffer)
+        Free (end_of_history->hbuffer);
+      end_of_history->hbuffer = (w_char *) p;
+      Strncpy (end_of_history->hbuffer + end_of_history->num, wstr, 1);
+      if (++(end_of_history->num) >= maxchg)
+        wchar_holding = 0;
+      return (0);
     }
-    if (wchar_holding)
-	wchar_holding = 0;
-    if (n == 1 && !(KANJI_CHAR(*wstr)))
-	/* don't insert cntrol code in history buffer */
-	return(0);
-    if (end_of_history->num == n &&
-	    Strncmp(end_of_history->hbuffer, wstr, n) == 0) {
-	current_history = NULL;
-	return(0);
+  if (wchar_holding)
+    wchar_holding = 0;
+  if (n == 1 && !(KANJI_CHAR (*wstr)))
+    /* don't insert cntrol code in history buffer */
+    return (0);
+  if (end_of_history->num == n && Strncmp (end_of_history->hbuffer, wstr, n) == 0)
+    {
+      current_history = NULL;
+      return (0);
     }
-    if (!(p = Malloc((unsigned)(n * sizeof(w_char))))) {
-	malloc_error("allocation of data for history");
-	return(-1);
+  if (!(p = Malloc ((unsigned) (n * sizeof (w_char)))))
+    {
+      malloc_error ("allocation of data for history");
+      return (-1);
     }
-    set_up_history();
-    if (end_of_history->hbuffer != NULL)
-	Free((char *)end_of_history->hbuffer);
-    end_of_history->hbuffer = (w_char *)p;
-    Strncpy(end_of_history->hbuffer, wstr, n);
-    end_of_history->num = n;
+  set_up_history ();
+  if (end_of_history->hbuffer != NULL)
+    Free ((char *) end_of_history->hbuffer);
+  end_of_history->hbuffer = (w_char *) p;
+  Strncpy (end_of_history->hbuffer, wstr, n);
+  end_of_history->num = n;
 
-    return(0);
+  return (0);
 }
 
 static int
-get_current_history(wbuf)
-register w_char *wbuf;
+get_current_history (wbuf)
+     register w_char *wbuf;
 {
-    if (!history_cunt)
-	return(0);
-    if (wchar_holding)
-	wchar_holding = 0;
-    if (current_history == NULL)
-	current_history = end_of_history;
-    Strncpy(wbuf, current_history->hbuffer, current_history->num);
-    return(current_history->num);
+  if (!history_cunt)
+    return (0);
+  if (wchar_holding)
+    wchar_holding = 0;
+  if (current_history == NULL)
+    current_history = end_of_history;
+  Strncpy (wbuf, current_history->hbuffer, current_history->num);
+  return (current_history->num);
 }
 
 void
-get_end_of_history(wbuf)
-register w_char	*wbuf;
+get_end_of_history (wbuf)
+     register w_char *wbuf;
 {
-    if (!history_cunt) {
-	*wbuf = 0;
-    } else {
-    if (wchar_holding)
-	    wchar_holding = 0;
-	Strncpy(wbuf, end_of_history->hbuffer, end_of_history->num);
-	*(wbuf + end_of_history->num) = 0;
+  if (!history_cunt)
+    {
+      *wbuf = 0;
+    }
+  else
+    {
+      if (wchar_holding)
+        wchar_holding = 0;
+      Strncpy (wbuf, end_of_history->hbuffer, end_of_history->num);
+      *(wbuf + end_of_history->num) = 0;
     }
 }
 
 int
-previous_history1(buffer)
-register w_char *buffer;
+previous_history1 (buffer)
+     register w_char *buffer;
 {
-    if (!history_cunt || current_history == beginning_of_history)
-	return(0); /* do nothing */
+  if (!history_cunt || current_history == beginning_of_history)
+    return (0);                 /* do nothing */
 
-    if (current_history != NULL)
-	current_history = current_history->previous;
-    return(get_current_history(buffer));
+  if (current_history != NULL)
+    current_history = current_history->previous;
+  return (get_current_history (buffer));
 }
 
 int
-next_history1(buffer)
-register w_char *buffer;
+next_history1 (buffer)
+     register w_char *buffer;
 {
-    if (!history_cunt || current_history == end_of_history || current_history == NULL)
-	return(0);
+  if (!history_cunt || current_history == end_of_history || current_history == NULL)
+    return (0);
 
-    current_history = current_history->next;
-    return(get_current_history(buffer));
+  current_history = current_history->next;
+  return (get_current_history (buffer));
 }
 
 void
-destroy_history()
+destroy_history ()
 {
-    register History *p;
-    register int i;
+  register History *p;
+  register int i;
 
-    if (c_c == NULL || c_c->save_hist == NULL) return;
-    for (i = 0, p = c_c->save_hist; i < history_cunt; i++, p++) {
-	if (p->hbuffer) Free((char *)p->hbuffer);
+  if (c_c == NULL || c_c->save_hist == NULL)
+    return;
+  for (i = 0, p = c_c->save_hist; i < history_cunt; i++, p++)
+    {
+      if (p->hbuffer)
+        Free ((char *) p->hbuffer);
     }
-    Free((char *)c_c->save_hist);
+  Free ((char *) c_c->save_hist);
 }

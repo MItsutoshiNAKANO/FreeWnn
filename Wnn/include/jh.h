@@ -1,5 +1,5 @@
 /*
- *  $Id: jh.h,v 1.2 2001-06-14 17:55:31 ura Exp $
+ *  $Id: jh.h,v 1.3 2001-06-14 18:15:57 ura Exp $
  */
 
 /*
@@ -53,22 +53,23 @@
 #define REVERSE 1
 #define NORMAL  0
 
-#ifndef	JS
-struct je {
+#ifndef JS
+struct je
+{
   w_char *yomi;
-  w_char *kan;			/* Historically kanji is used so use kan. */
+  w_char *kan;                  /* Historically kanji is used so use kan. */
   w_char *comm;
   UCHAR *kanji;
   unsigned int hinsi;
-#ifdef	CONVERT_with_SiSheng
+#ifdef  CONVERT_with_SiSheng
   unsigned int ss;
 #endif
   unsigned int hindo;
-  int serial;			/* Only used for rev_dic */
+  int serial;                   /* Only used for rev_dic */
 };
 
 extern struct je **jeary;
-#endif	/* JS */
+#endif /* JS */
 
 extern w_char file_comment[];
 extern w_char hinsi_list[];
@@ -77,12 +78,12 @@ extern w_char hinsi_list[];
  * Used in atod and others parameters.
  */
 
-#define HEAP_PER_LINE 10	/* avelage of kanji + comment bytes */
-#define YOMI_PER_LINE 3		/* avelage of yomi length(in w_char)*/
+#define HEAP_PER_LINE 10        /* avelage of kanji + comment bytes */
+#define YOMI_PER_LINE 3         /* avelage of yomi length(in w_char) */
 #define LINE_SIZE 1024
-#define BADLMAX 3		
-#define YOMI_KINDS (1 << 16)   /* Yomi characters Maximal */
-#define MAX_ENTRIES 70000	/* default of max-entries for atod */
+#define BADLMAX 3
+#define YOMI_KINDS (1 << 16)    /* Yomi characters Maximal */
+#define MAX_ENTRIES 70000       /* default of max-entries for atod */
 #define DEF_ENTRIES 10000
 
 #define HEAPINC 1000

@@ -1,5 +1,5 @@
 /*
- *  $Id: hinsi_file.h,v 1.2 2001-06-14 17:55:31 ura Exp $
+ *  $Id: hinsi_file.h,v 1.3 2001-06-14 18:15:56 ura Exp $
  */
 
 /*
@@ -31,20 +31,20 @@
 
 /*    品詞ファイルに関する、定義
 */
-     
 
-#define MAXHINSI 	256
-#define MAXFUKUGOU 	256
-#define MAXNODE 	256
-#define FUKUGOU_START 	0xffff - RESERVE_FUKUGOU_USIRO
-#define HEAP_LEN	(10 * (MAXHINSI + MAXFUKUGOU))
+
+#define MAXHINSI        256
+#define MAXFUKUGOU      256
+#define MAXNODE         256
+#define FUKUGOU_START   0xffff - RESERVE_FUKUGOU_USIRO
+#define HEAP_LEN        (10 * (MAXHINSI + MAXFUKUGOU))
 /* 10 bytes for each hinsi */
-#define WHEAP_LEN	(10 * MAXFUKUGOU * sizeof(short))
+#define WHEAP_LEN       (10 * MAXFUKUGOU * sizeof(short))
 /* 10 bytes for each fukugou hinsi */
 
 
-#define RESERVE_FUKUGOU_USIRO 512   /* fukugou hinsi no usiro ni 
-				       koredake reserve wo site oku */
+#define RESERVE_FUKUGOU_USIRO 512       /* fukugou hinsi no usiro ni 
+                                           koredake reserve wo site oku */
 /* hitoru ha delete sareta to iu jouhou no 
    ta me*/
 #define TERMINATE 0xffff
@@ -60,16 +60,18 @@
 #define YOYAKU_CHAR '@'
 #define CONTINUE_CHAR '\\'
 
-struct wnn_fukugou{
-    w_char *name;	/* 複合品詞の名前 */
+struct wnn_fukugou
+{
+  w_char *name;                 /* 複合品詞の名前 */
 /* fukugou hinsi is held as a string */
-    unsigned short *component;	/* 複合品詞の構成要素となる品詞の番号の配列
-				   (最後は 0xffff で終る)
-				 */
+  unsigned short *component;    /* 複合品詞の構成要素となる品詞の番号の配列
+                                   (最後は 0xffff で終る)
+                                 */
 };
 
-struct wnn_hinsi_node{
-    w_char *name;	/* 品詞ノードの名前 */
-    int kosuu;			/* 子どもの数 */
-    w_char *son;	/* 最初の子どもへのポインタ */
+struct wnn_hinsi_node
+{
+  w_char *name;                 /* 品詞ノードの名前 */
+  int kosuu;                    /* 子どもの数 */
+  w_char *son;                  /* 最初の子どもへのポインタ */
 };

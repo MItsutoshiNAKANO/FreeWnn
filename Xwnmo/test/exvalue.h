@@ -1,5 +1,5 @@
 /*
- * $Id: exvalue.h,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: exvalue.h,v 1.2 2001-06-14 18:16:11 ura Exp $
  */
 
 /*
@@ -50,46 +50,39 @@
 #include "typedef.h"
 
 /* valuable of main window */
-extern WINDOW		*prdisp, *modisp, *stdisp;
+extern WINDOW *prdisp, *modisp, *stdisp;
 
 /* valuable of X resource */
-extern Display          *dpy;
-extern int              scr;
-extern Window           rwin;
-extern TESTWIN		window1, window2, window3;
-extern Window		mroot, mwin[];
-extern XFontSet         fontset[];
-extern char      	bit_bits[ARRAY_MAX][BITS_MAX];
-extern Pixmap           pix[];
-extern u_long		pixel[ARRAY_MAX][PIX_MAX];
-extern Colormap		cmap[];
-extern Colormap		dcmap;
-extern GC		gc;
-extern CALLBACK		upec, ustc;
-extern Cursor		cursor[];
+extern Display *dpy;
+extern int scr;
+extern Window rwin;
+extern TESTWIN window1, window2, window3;
+extern Window mroot, mwin[];
+extern XFontSet fontset[];
+extern char bit_bits[ARRAY_MAX][BITS_MAX];
+extern Pixmap pix[];
+extern u_long pixel[ARRAY_MAX][PIX_MAX];
+extern Colormap cmap[];
+extern Colormap dcmap;
+extern GC gc;
+extern CALLBACK upec, ustc;
+extern Cursor cursor[];
 
 /* valuable of pointer to logfile */
-extern FILE	*imfp;		/* log file for im test */
-extern FILE	*icfp;		/* log file for ic test */
+extern FILE *imfp;              /* log file for im test */
+extern FILE *icfp;              /* log file for ic test */
 
 /* valuable to use input context */
-extern XIMStyle		uistyle;	/* Using Input STYLE */
-extern Window		uclient;	/* Using CLIENT window */
-extern Window		ufocus;		/* Using FOCUS window */
-extern RESOURCE		ures;		/* Using RESource name/class */
-extern PREEDIT		upea;		/* Using PreEdit Area */
-extern STATUS		usta;		/* Using STatus Area */
-extern FLAG		cmflag; 	/* ColorMap FLAG */
-extern FLAG		focuson; 	/* flag for FOCUS ON/off */
-extern Window		ufname;		/* Using Focus window NAME */
+extern XIMStyle uistyle;        /* Using Input STYLE */
+extern Window uclient;          /* Using CLIENT window */
+extern Window ufocus;           /* Using FOCUS window */
+extern RESOURCE ures;           /* Using RESource name/class */
+extern PREEDIT upea;            /* Using PreEdit Area */
+extern STATUS usta;             /* Using STatus Area */
+extern FLAG cmflag;             /* ColorMap FLAG */
+extern FLAG focuson;            /* flag for FOCUS ON/off */
+extern Window ufname;           /* Using Focus window NAME */
 
-extern SETICMF		ftbl[];
-extern Window		strmode;	/* STRing MODE(MB or WC) */
-extern FLAG		strflag;	/* STRing FLAG(MB or WC) */
-                             
-
-
-
-
-
-
+extern SETICMF ftbl[];
+extern Window strmode;          /* STRing MODE(MB or WC) */
+extern FLAG strflag;            /* STRing FLAG(MB or WC) */

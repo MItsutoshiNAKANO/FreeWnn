@@ -1,5 +1,5 @@
 /*
- *  $Id: hinsi.c,v 1.2 2001-06-14 17:55:50 ura Exp $
+ *  $Id: hinsi.c,v 1.3 2001-06-14 18:16:07 ura Exp $
  */
 
 /*
@@ -44,55 +44,63 @@ char *maeni = "¡∞§ÀÃ·§Î";
 #define MAXHINSI 256
 
 static w_char *
-bunpou_search(node)
-w_char *node;
+bunpou_search (node)
+     w_char *node;
 {
-    int cnt;
-    int k;
-    char *hbuf[MAXHINSI];
-    char buf[1024];		/* iikagen */
-    char *c;
-    w_char **whbuf;
-    w_char *ret;
+  int cnt;
+  int k;
+  char *hbuf[MAXHINSI];
+  char buf[1024];               /* iikagen */
+  char *c;
+  w_char **whbuf;
+  w_char *ret;
 
-    if(node == NULL) return(NULL);
-    cnt = jl_hinsi_list(bun_data_, -1, node, &whbuf);
-    if(cnt == -1){
-	errorkeyin();
-	return(NULL);
+  if (node == NULL)
+    return (NULL);
+  cnt = jl_hinsi_list (bun_data_, -1, node, &whbuf);
+  if (cnt == -1)
+    {
+      errorkeyin ();
+      return (NULL);
     }
-    if(cnt == 0) return(node);
-    for(k = 0, c = buf ; k < cnt ; k++){
-	hbuf[k] = c;
-	sStrcpy(c, whbuf[k]);
-	c += strlen(c) + 1;
+  if (cnt == 0)
+    return (node);
+  for (k = 0, c = buf; k < cnt; k++)
+    {
+      hbuf[k] = c;
+      sStrcpy (c, whbuf[k]);
+      c += strlen (c) + 1;
     }
-    hbuf[cnt] = MSG_GET(15);
- TOP:
-    k = select_one_element(hbuf, cnt + 1, 0, "", 0, 0, main_table[4]);
-    if(k == -1)return(NULL);
-    if(strcmp(hbuf[k], MSG_GET(15)) == 0) return((w_char *)MSG_GET(15));
-    Sstrcpy(node, hbuf[k]);
-    ret = bunpou_search(node);
-    if(ret == NULL) return(NULL);
-    if(strcmp((char *)ret, MSG_GET(15)) == 0) goto TOP;
-    return(ret);
+  hbuf[cnt] = MSG_GET (15);
+TOP:
+  k = select_one_element (hbuf, cnt + 1, 0, "", 0, 0, main_table[4]);
+  if (k == -1)
+    return (NULL);
+  if (strcmp (hbuf[k], MSG_GET (15)) == 0)
+    return ((w_char *) MSG_GET (15));
+  Sstrcpy (node, hbuf[k]);
+  ret = bunpou_search (node);
+  if (ret == NULL)
+    return (NULL);
+  if (strcmp ((char *) ret, MSG_GET (15)) == 0)
+    goto TOP;
+  return (ret);
 }
 
 
 int
-hinsi_in()
+hinsi_in ()
 {
-    w_char *a;
-    w_char tmp[WNN_HINSI_NAME_LEN];
+  w_char *a;
+  w_char tmp[WNN_HINSI_NAME_LEN];
 
-    Sstrcpy(tmp, ROOT);
-    not_redraw = 1;
-    if((a = bunpou_search(tmp)) == NULL ||
-       strcmp((char *)a, MSG_GET(15)) == 0) {
-	not_redraw = 0;
-	return(-1);
+  Sstrcpy (tmp, ROOT);
+  not_redraw = 1;
+  if ((a = bunpou_search (tmp)) == NULL || strcmp ((char *) a, MSG_GET (15)) == 0)
+    {
+      not_redraw = 0;
+      return (-1);
     }
-    not_redraw = 0;
-    return(jl_hinsi_number(bun_data_, a));
+  not_redraw = 0;
+  return (jl_hinsi_number (bun_data_, a));
 }

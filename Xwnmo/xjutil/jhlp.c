@@ -1,6 +1,6 @@
-#ifndef	lint
-static char rcs_id[] = "$Id: jhlp.c,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $";
-#endif	/* lint */
+#ifndef lint
+static char rcs_id[] = "$Id: jhlp.c,v 1.2 2001-06-14 18:16:12 ura Exp $";
+#endif /* lint */
 
 /*
  * FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -37,7 +37,7 @@ static char rcs_id[] = "$Id: jhlp.c,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $";
  * Code:
  *
  */
-/*	Version 4.0
+/*      Version 4.0
  */
 #include <stdio.h>
 #include <signal.h>
@@ -50,11 +50,11 @@ static char rcs_id[] = "$Id: jhlp.c,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $";
 #include "config.h"
 #include "xext.h"
 
-struct passwd *getpwuid();
+struct passwd *getpwuid ();
 
-#ifdef	BSD42
+#ifdef  BSD42
 #include <sgtty.h>
-#endif	/* BSD42 */
+#endif /* BSD42 */
 #ifdef SYSVR2
 #include <termio.h>
 #endif /* SYSVR2 */
@@ -63,59 +63,65 @@ extern char *optarg;
 extern int optind;
 
 static void
-do_end()
+do_end ()
 {
-    xw_end();
-    disconnect_server();
-    exit(0);
+  xw_end ();
+  disconnect_server ();
+  exit (0);
 }
 
 void
-terminate_handler()
+terminate_handler ()
 {
-    do_end();
+  do_end ();
 }
 
 static void
-do_main()
+do_main ()
 {
-    int buf[2];
+  int buf[2];
 
-    for (;;) {
-      xw_read(buf);
+  for (;;)
+    {
+      xw_read (buf);
     }
 }
 
 static int
-keyin0()
+keyin0 ()
 {
-    static int buf[BUFSIZ];
-    static int *bufend = buf;
-    static int *bufstart = buf;
-    int  n;
+  static int buf[BUFSIZ];
+  static int *bufend = buf;
+  static int *bufstart = buf;
+  int n;
 
-    if (bufstart < bufend) {
-        return (*bufstart++);
+  if (bufstart < bufend)
+    {
+      return (*bufstart++);
     }
-    for (;;) {
-        if ((n = xw_read(buf)) > 0) {
-            bufstart = buf;
-            bufend = buf + n;
-            return (*bufstart++);
+  for (;;)
+    {
+      if ((n = xw_read (buf)) > 0)
+        {
+          bufstart = buf;
+          bufend = buf + n;
+          return (*bufstart++);
         }
     }
 }
 
-static int conv_keyin()
+static int
+conv_keyin ()
 {
-    int keyin0();
+  int keyin0 ();
 
-    return(keyin0());
+  return (keyin0 ());
 }
 
-int keyin()
+int
+keyin ()
 {
-    return(conv_keyin());
+  return (conv_keyin ());
 }
 
 
@@ -124,58 +130,61 @@ int keyin()
  */
 
 static void
-save_signals()
+save_signals ()
 {
-    signal(SIGPIPE, SIG_IGN);
-    signal(SIGHUP,  SIG_IGN);
-    signal(SIGQUIT, SIG_IGN);
-    signal(SIGTERM, terminate_handler);
-    signal(SIGCHLD, SIG_IGN);
+  signal (SIGPIPE, SIG_IGN);
+  signal (SIGHUP, SIG_IGN);
+  signal (SIGQUIT, SIG_IGN);
+  signal (SIGTERM, terminate_handler);
+  signal (SIGCHLD, SIG_IGN);
 }
 
 void
-main(argc, argv)
-int argc;
-char **argv;
+main (argc, argv)
+     int argc;
+     char **argv;
 {
-    extern char xjutil_name[];
-    extern int counter;
-    prgname = argv[0];
+  extern char xjutil_name[];
+  extern int counter;
+  prgname = argv[0];
 
 #ifdef  DEBUG
-    fprintf(stderr, "%s, %s, %s, %d\n", argv[0], argv[1], argv[2], argv[3][0]);
-#endif  /* DEBUG */
-    display_name = (char *)alloc_and_copy(argv[1]);
-    strcpy(xjutil_name, argv[2]);
-    counter = (int)argv[3][0];
+  fprintf (stderr, "%s, %s, %s, %d\n", argv[0], argv[1], argv[2], argv[3][0]);
+#endif /* DEBUG */
+  display_name = (char *) alloc_and_copy (argv[1]);
+  strcpy (xjutil_name, argv[2]);
+  counter = (int) argv[3][0];
 
-    save_signals();
+  save_signals ();
 
-    maxchg = MAXCHG;
-    maxlength = MAXCHG * 2;
-    maxbunsetsu = MAXBUNSETSU;
+  maxchg = MAXCHG;
+  maxlength = MAXCHG * 2;
+  maxbunsetsu = MAXBUNSETSU;
 
-    if (alloc_all_buf() == -1) exit(1);
+  if (alloc_all_buf () == -1)
+    exit (1);
 
-    if(create_xjutil() == -1) {
-	exit(-1);
+  if (create_xjutil () == -1)
+    {
+      exit (-1);
     }
-    if (init_xcvtkey() == -1) {
-	return_error();
-	exit(-1);
+  if (init_xcvtkey () == -1)
+    {
+      return_error ();
+      exit (-1);
     }
 
-    switch (init_wnn()) {
+  switch (init_wnn ())
+    {
     case -1:
-	terminate_handler();
-	break;
+      terminate_handler ();
+      break;
     case -2:
-	disconnect_server();
-	do_end();
-	break;
+      disconnect_server ();
+      do_end ();
+      break;
     }
-    connect_server();
+  connect_server ();
 
-    do_main();
+  do_main ();
 }
-

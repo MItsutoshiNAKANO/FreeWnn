@@ -1,5 +1,5 @@
 /*
- * $Id: proto.h,v 1.1.1.1 2000-01-16 05:07:57 ura Exp $
+ * $Id: proto.h,v 1.2 2001-06-14 18:16:17 ura Exp $
  */
 
 /*
@@ -37,9 +37,9 @@
 
 #include "XIMproto.h"
 
-#define	EACH_REQUEST(req, size) \
-	(_ReadFromClient(((char *)req + sz_ximRequestHeader),\
-			 (size - sz_ximRequestHeader)))
-#ifdef	SPOT
+#define EACH_REQUEST(req, size) \
+        (_ReadFromClient(((char *)req + sz_ximRequestHeader),\
+                         (size - sz_ximRequestHeader)))
+#ifdef  SPOT
 #include "SpotProto.h"
-#endif	/* SPOT */
+#endif /* SPOT */

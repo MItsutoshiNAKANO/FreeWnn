@@ -1,5 +1,5 @@
 /*
- * $Id: header.c,v 1.1.1.1 2000-01-16 05:07:56 ura Exp $
+ * $Id: header.c,v 1.2 2001-06-14 18:16:15 ura Exp $
  */
 
 /*
@@ -79,7 +79,7 @@
  * PERFORMANCE OF THIS SOFTWARE.
  *
  */
-/*	Version 4.0
+/*      Version 4.0
  */
 #include <stdio.h>
 #include "sdefine.h"
@@ -100,14 +100,14 @@ int defined_by_option = 0;
 WNN_DIC_INFO *dicinfo;
 int dic_list_size;
 
-char *prgname;				/* program name (argv[0])	*/
+char *prgname;                  /* program name (argv[0])       */
 
-char *xim_title = NULL;		/* title string when henkan-off	*/
+char *xim_title = NULL;         /* title string when henkan-off */
 
-char *display_name = NULL;	/* display string		*/
-#ifdef	USING_XJUTIL
-char *xjutil_name = NULL;	/* xjutil string		*/
-#endif	/* USING_XJUTIL */
+char *display_name = NULL;      /* display string               */
+#ifdef  USING_XJUTIL
+char *xjutil_name = NULL;       /* xjutil string                */
+#endif /* USING_XJUTIL */
 
 /*
  * Default env
@@ -118,71 +118,68 @@ char *world_locale = NULL;
 
 XIMLangDataBase *cur_lang = NULL;
 
-WnnClientRec	*c_c = NULL;
-XIMClientRec	*cur_p = NULL;
-XIMClientRec	*cur_x = NULL;
-XIMInputRec	*cur_input = NULL;
-XInputManager	*xim = NULL;
-XIMInputList	input_list = NULL;
-WnnClientList	wnnclient_list = NULL;
-XIMClientList	ximclient_list = NULL;
-ReadRkfileList	read_rkfile_list = NULL;
-BoxRec		*box_list = NULL;
+WnnClientRec *c_c = NULL;
+XIMClientRec *cur_p = NULL;
+XIMClientRec *cur_x = NULL;
+XIMInputRec *cur_input = NULL;
+XInputManager *xim = NULL;
+XIMInputList input_list = NULL;
+WnnClientList wnnclient_list = NULL;
+XIMClientList ximclient_list = NULL;
+ReadRkfileList read_rkfile_list = NULL;
+BoxRec *box_list = NULL;
 
-Romkan		*cur_rk = NULL; 
-RomkanTable	*cur_rk_table = NULL;
+Romkan *cur_rk = NULL;
+RomkanTable *cur_rk_table = NULL;
 
 char read_rk_file[MAX_LANGS][62];
 
 struct msg_cat *cd;
 
-char		*root_def_servername = NULL;
-char		*root_def_reverse_servername = NULL;
-char		*root_username = NULL;
-Bool		root_henkan_off_def = 1;
-char		*root_uumkeyname = NULL;
-char		*root_rkfilename = NULL;
+char *root_def_servername = NULL;
+char *root_def_reverse_servername = NULL;
+char *root_username = NULL;
+Bool root_henkan_off_def = 1;
+char *root_uumkeyname = NULL;
+char *root_rkfilename = NULL;
 
-char		*world_lang = NULL;
-char		*arg_string = NULL;
+char *world_lang = NULL;
+char *arg_string = NULL;
 
-wchar		*wc_buf = NULL;
-unsigned char	*ct_buf = NULL;
-unsigned char	*c_buf = NULL;
-int		wc_buf_max = 0;
-int		ct_buf_max = 0;
-int		c_buf_max = 0;
+wchar *wc_buf = NULL;
+unsigned char *ct_buf = NULL;
+unsigned char *c_buf = NULL;
+int wc_buf_max = 0;
+int ct_buf_max = 0;
+int c_buf_max = 0;
 #ifndef X_WCHAR
-wchar_t		*wt_buf = NULL;
-int		wt_buf_max = 0;
+wchar_t *wt_buf = NULL;
+int wt_buf_max = 0;
 #endif /* !X_WCHAR */
 
 ConvCode cvt_key_tbl[MAX_CVT_ENTRY_CNT];
-int	cvt_key_tbl_cnt = 0; /* convert table count */
+int cvt_key_tbl_cnt = 0;        /* convert table count */
 
 XIMLangDataBase *language_db = NULL;
 XIMLcNameRec *lc_name_list = NULL;
 
 FunctionTable function_db[] = {
-    { "Normal",
-      NULL, NULL, call_t_redraw_move_normal,
-      call_t_redraw_move_1_normal, call_t_redraw_move_2_normal,
-      call_t_print_l_normal, NULL, char_len_normal, char_q_len_normal,
-      t_redraw_move_normal, t_print_l_normal, c_top_normal, c_end_normal,
-      c_end_normal, NULL, errorkeyin, call_jl_yomi_len
-    },
-#ifdef	CHINESE
-    { "Yincoding",
-      print_out_yincod, input_yincod, call_t_redraw_move_yincod,
-      call_t_redraw_move_1_yincod, call_t_redraw_move_2_yincod,
-      call_t_print_l_yincod, redraw_when_chmsig_yincod, char_len_yincod,
-      char_q_len_yincod, t_redraw_move_yincod,
-      t_print_l_yincod, c_top_yincod, c_end_yincod, c_end_nobi_yincod,
-      NULL, errorkeyin_q, not_call_jl_yomi_len
-    },
-#endif	/* CHINESE */
-    { NULL,
-      NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-      NULL, NULL, NULL, NULL, NULL, NULL
-    }
+  {"Normal",
+   NULL, NULL, call_t_redraw_move_normal,
+   call_t_redraw_move_1_normal, call_t_redraw_move_2_normal,
+   call_t_print_l_normal, NULL, char_len_normal, char_q_len_normal,
+   t_redraw_move_normal, t_print_l_normal, c_top_normal, c_end_normal,
+   c_end_normal, NULL, errorkeyin, call_jl_yomi_len},
+#ifdef  CHINESE
+  {"Yincoding",
+   print_out_yincod, input_yincod, call_t_redraw_move_yincod,
+   call_t_redraw_move_1_yincod, call_t_redraw_move_2_yincod,
+   call_t_print_l_yincod, redraw_when_chmsig_yincod, char_len_yincod,
+   char_q_len_yincod, t_redraw_move_yincod,
+   t_print_l_yincod, c_top_yincod, c_end_yincod, c_end_nobi_yincod,
+   NULL, errorkeyin_q, not_call_jl_yomi_len},
+#endif /* CHINESE */
+  {NULL,
+   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+   NULL, NULL, NULL, NULL, NULL, NULL}
 };

@@ -1,5 +1,5 @@
 /*
- *  $Id: jmt0.c,v 1.2 2001-06-14 17:55:36 ura Exp $
+ *  $Id: jmt0.c,v 1.3 2001-06-14 18:16:02 ura Exp $
  */
 
 /*
@@ -39,60 +39,69 @@
 
 
 void
-init_jmt(x)
-register int	x ;
+init_jmt (x)
+     register int x;
 {
-	register int	n;
-	register struct jdata **keep_ptr ;
-	register struct jdata **jmt_ptr_org = jmt_ptr; /* H.T. */
-	
-	if(x == 0) x = initjmt;	/* H.T. 22/12/89 */
+  register int n;
+  register struct jdata **keep_ptr;
+  register struct jdata **jmt_ptr_org = jmt_ptr;        /* H.T. */
 
-	for (n = x; n < initjmt &&
-	    (jmtp[n] == (struct jdata **)0 ||
-	     jmtp[n] == (struct jdata **) -1); n++)
-		;
+  if (x == 0)
+    x = initjmt;                /* H.T. 22/12/89 */
 
-	if (n < initjmt) {	/* Tukatte nai nodakara, kesubeki deha... */
-		keep_ptr = jmt_ptr ;
+  for (n = x; n < initjmt && (jmtp[n] == (struct jdata **) 0 || jmtp[n] == (struct jdata **) -1); n++)
+    ;
 
-		if (n == x)
-			jmt_ptr = jmtp[x] ;
-		else
-			jmt_ptr = jmtp[n] + (maxj[n] - n + 1) ;
+  if (n < initjmt)
+    {                           /* Tukatte nai nodakara, kesubeki deha... */
+      keep_ptr = jmt_ptr;
 
-		for(n = 0;(jmt_ptr + n) < keep_ptr && *(jmt_ptr + n) <= (struct jdata *)0; n++)
-			;
-		if ((jmt_ptr + n) < keep_ptr)
-			j_e_p = *(jmt_ptr + n) ;
-	} else {
-	  	jmt_ptr = jmt_ ;  
-    		j_e_p = jmtw_ ;
-	}
+      if (n == x)
+        jmt_ptr = jmtp[x];
+      else
+        jmt_ptr = jmtp[n] + (maxj[n] - n + 1);
+
+      for (n = 0; (jmt_ptr + n) < keep_ptr && *(jmt_ptr + n) <= (struct jdata *) 0; n++)
+        ;
+      if ((jmt_ptr + n) < keep_ptr)
+        j_e_p = *(jmt_ptr + n);
+    }
+  else
+    {
+      jmt_ptr = jmt_;
+      j_e_p = jmtw_;
+    }
 /* this part is added 8/18 by H.T */
-	for(keep_ptr = jmt_ptr ; keep_ptr < jmt_ptr_org ; keep_ptr++){
-		*keep_ptr = NULL;
-	}
+  for (keep_ptr = jmt_ptr; keep_ptr < jmt_ptr_org; keep_ptr++)
+    {
+      *keep_ptr = NULL;
+    }
 }
 
 
 int
 jmt_set (yomi)
-register int	yomi;	/* 読み文字列の先頭へのポインタ(逆順) */
+     register int yomi;         /* 読み文字列の先頭へのポインタ(逆順) */
 {
-	register int	n ;
-	if ((n = jishobiki(&(bun[yomi]), jmt_ptr)) > 0) {
-		jmtp[yomi] = jmt_ptr;
-		jmt_ptr += n ;
-		maxj[yomi] = yomi + (n - 1) ;
-	} else {
-		if (n == 0) {
-			jmtp[yomi] = 0 ;
-			maxj[yomi] = 0 ;
-		} else{
-		    jmtp[yomi] = 0;
-		    maxj[yomi] = 0;
-		}
-	}
-	return(1) ;
+  register int n;
+  if ((n = jishobiki (&(bun[yomi]), jmt_ptr)) > 0)
+    {
+      jmtp[yomi] = jmt_ptr;
+      jmt_ptr += n;
+      maxj[yomi] = yomi + (n - 1);
+    }
+  else
+    {
+      if (n == 0)
+        {
+          jmtp[yomi] = 0;
+          maxj[yomi] = 0;
+        }
+      else
+        {
+          jmtp[yomi] = 0;
+          maxj[yomi] = 0;
+        }
+    }
+  return (1);
 }

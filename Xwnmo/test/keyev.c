@@ -1,5 +1,5 @@
 /*
- * $Id: keyev.c,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: keyev.c,v 1.2 2001-06-14 18:16:11 ura Exp $
  */
 
 /*
@@ -47,83 +47,73 @@
 #include "exvalue.h"
 #include "func.h"
 
-FLAG	keyev(ic, mode)	/* transaction of KEY EVent */
-XIC	ic;
-FLAG 	mode;
+/* *INDENT-OFF* */
+FLAG
+keyev (ic, mode)                /* transaction of KEY EVent */
+    XIC ic;
+    FLAG mode;
+/* *INDENT-ON* */
 {
-    int		cnt;
-    FLAG	res;
-    FLAG	funend;
+  int cnt;
+  FLAG res;
+  FLAG funend;
 
-    XEvent	event;
+  XEvent event;
 
-    for(;;) {
-	XNextEvent(dpy, &event);
-	switch(event.type) {
-	  case Expose:
-	    dstrwin();
-	    break;
-	  case KeyPress:
-	    if (fltev(&event) == NG)
-		xlstr(ic, &event);
-	    break;
-	  case ButtonPress:
-	    if (event.xbutton.window == strmode) {
-		XClearWindow(dpy, strmode);
-		if (strflag == MB) {
-		    strflag = WC;
-		    XDrawString(dpy, strmode, gc, MSTR_XY,
-				"Mode: WC", strlen("Mode: WC"));
-		} else if (strflag == WC) {
-		    strflag = MB;
-		    XDrawString(dpy, strmode, gc, MSTR_XY,
-				"Mode: MB", strlen("Mode: MB"));
-		}
-		XFlush(dpy);
-	    } else {
-		funend = NG;
-		for (cnt = 0; (ftbl[cnt].mname != NULL)
-		     && (funend != OK); cnt++) {
-		    if (event.xbutton.window == *ftbl[cnt].mwin) {
-			if (ftbl[cnt].flag == CHMOD) {
-			    XClearArea(dpy, window1.win, 0, 0, 0, 0, True);
-			    return (MENU);
-			}
-			else {
-			    cwcolor(*ftbl[cnt].mwin, pixel[cmflag][0]);
-			    res = (*ftbl[cnt].func)(ic, mode);
-			    cwcolor(*ftbl[cnt].mwin, pixel[cmflag][1]);
-			    if (res == COMP)
-				funend = OK;
-			    else
-				return (res);
-			}
-		    }
-		}
-		break;
-	    }
-	}
+  for (;;)
+    {
+      XNextEvent (dpy, &event);
+      switch (event.type)
+        {
+        case Expose:
+          dstrwin ();
+          break;
+        case KeyPress:
+          if (fltev (&event) == NG)
+            xlstr (ic, &event);
+          break;
+        case ButtonPress:
+          if (event.xbutton.window == strmode)
+            {
+              XClearWindow (dpy, strmode);
+              if (strflag == MB)
+                {
+                  strflag = WC;
+                  XDrawString (dpy, strmode, gc, MSTR_XY, "Mode: WC", strlen ("Mode: WC"));
+                }
+              else if (strflag == WC)
+                {
+                  strflag = MB;
+                  XDrawString (dpy, strmode, gc, MSTR_XY, "Mode: MB", strlen ("Mode: MB"));
+                }
+              XFlush (dpy);
+            }
+          else
+            {
+              funend = NG;
+              for (cnt = 0; (ftbl[cnt].mname != NULL) && (funend != OK); cnt++)
+                {
+                  if (event.xbutton.window == *ftbl[cnt].mwin)
+                    {
+                      if (ftbl[cnt].flag == CHMOD)
+                        {
+                          XClearArea (dpy, window1.win, 0, 0, 0, 0, True);
+                          return (MENU);
+                        }
+                      else
+                        {
+                          cwcolor (*ftbl[cnt].mwin, pixel[cmflag][0]);
+                          res = (*ftbl[cnt].func) (ic, mode);
+                          cwcolor (*ftbl[cnt].mwin, pixel[cmflag][1]);
+                          if (res == COMP)
+                            funend = OK;
+                          else
+                            return (res);
+                        }
+                    }
+                }
+              break;
+            }
+        }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

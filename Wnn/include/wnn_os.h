@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_os.h,v 1.2 2001-06-14 17:55:32 ura Exp $
+ *  $Id: wnn_os.h,v 1.3 2001-06-14 18:15:57 ura Exp $
  */
 
 /*
@@ -39,7 +39,7 @@
 #ifdef SYSVR2
 #include <fcntl.h>
 #include <string.h>
-#define index	strchr
+#define index   strchr
 #ifndef re_signal
 # define re_signal(x, y) signal((x), (y))
 #endif
@@ -84,11 +84,11 @@
 
 #ifndef SIGNALRETURNSINT
 typedef void intfntype;
-#define SIGNAL_RETURN	return
+#define SIGNAL_RETURN   return
 #else
 typedef int intfntype;
-#define SIGNAL_RETURN	return(0)
+#define SIGNAL_RETURN   return(0)
 #endif
-typedef intfntype (*intfnptr)();
+typedef intfntype (*intfnptr) ();
 
-#endif	/* _WNN_OS_ */
+#endif /* _WNN_OS_ */

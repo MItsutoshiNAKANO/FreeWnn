@@ -1,6 +1,6 @@
-#ifndef	lint
-static char rcs_id[] = "$Id: killxwnmo.c,v 1.1.1.1 2000-01-16 05:07:56 ura Exp $";
-#endif	/* lint */
+#ifndef lint
+static char rcs_id[] = "$Id: killxwnmo.c,v 1.2 2001-06-14 18:16:16 ura Exp $";
+#endif /* lint */
 
 /*
  * FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -43,76 +43,80 @@ static char rcs_id[] = "$Id: killxwnmo.c,v 1.1.1.1 2000-01-16 05:07:56 ura Exp $
 #include "sdefine.h"
 
 void
-signal_catch()
+signal_catch ()
 {
-    printf("Could not get any replay from the input manager \"%s\".\n",
-	   XIM_INPUTMETHOD);
-    exit(1);
+  printf ("Could not get any replay from the input manager \"%s\".\n", XIM_INPUTMETHOD);
+  exit (1);
 }
 
 void
-main(argc, argv)
-int argc;
-char **argv;
+main (argc, argv)
+     int argc;
+     char **argv;
 {
-    Display *dpy;
-    Window window, im_id;
-    XEvent event;
-    Atom atom_im, prop_id = (Atom)0;
-    char uname[128], *p;
-    int force = 0;
-    extern int getuid();
+  Display *dpy;
+  Window window, im_id;
+  XEvent event;
+  Atom atom_im, prop_id = (Atom) 0;
+  char uname[128], *p;
+  int force = 0;
+  extern int getuid ();
 
-    if (argc > 1) {
-	if (argv[1][0] == '-' && argv[1][1] == '9') force = 1;
+  if (argc > 1)
+    {
+      if (argv[1][0] == '-' && argv[1][1] == '9')
+        force = 1;
     }
-    if (!(dpy = XOpenDisplay(""))) {
-	printf("Could not open Display\n");
-	exit(1);
+  if (!(dpy = XOpenDisplay ("")))
+    {
+      printf ("Could not open Display\n");
+      exit (1);
     }
-    if ((atom_im = XInternAtom(dpy, XIM_INPUTMETHOD, True)) == None ||
-	(im_id = XGetSelectionOwner(dpy, atom_im)) == (Window)0) {
-	printf("Could not find the input manager \"%s\".\n", XIM_INPUTMETHOD);
-	exit(1);
+  if ((atom_im = XInternAtom (dpy, XIM_INPUTMETHOD, True)) == None || (im_id = XGetSelectionOwner (dpy, atom_im)) == (Window) 0)
+    {
+      printf ("Could not find the input manager \"%s\".\n", XIM_INPUTMETHOD);
+      exit (1);
     }
-    window = XCreateSimpleWindow(dpy, RootWindow(dpy, DefaultScreen(dpy)),
-				 10, 10, 10, 10, 1, 0, 0);
-    prop_id = XInternAtom(dpy, "XWNMO_KILL_PROP", False);
-    if (!(p = getpwuid(getuid())->pw_name)) {
-	printf("Could not get the user name.\n");
-	exit(1);
+  window = XCreateSimpleWindow (dpy, RootWindow (dpy, DefaultScreen (dpy)), 10, 10, 10, 10, 1, 0, 0);
+  prop_id = XInternAtom (dpy, "XWNMO_KILL_PROP", False);
+  if (!(p = getpwuid (getuid ())->pw_name))
+    {
+      printf ("Could not get the user name.\n");
+      exit (1);
     }
-    strcpy(uname, p);
-    XChangeProperty(dpy, RootWindow(dpy, DefaultScreen(dpy)), prop_id,
-		    XA_STRING, 8, PropModeReplace, (unsigned char *)uname,
-		    strlen(uname));
-    event.type = ClientMessage;
-    event.xclient.format = 32;
-    event.xclient.window = window;
-    event.xclient.data.l[0] = XWNMO_KILL;
-    event.xclient.data.l[1] = window;
-    event.xclient.data.l[2] = prop_id;
-    event.xclient.data.l[3] = force;
-    XSendEvent(dpy, im_id, False, NoEventMask, &event);
-    signal(SIGALRM, signal_catch);
-    alarm(10);	/* If return doesn't occur while 10 minutes, go to exit. */
-    while(1) {
-	XNextEvent(dpy, &event);
-	if (event.type != ClientMessage ||
-	    event.xclient.data.l[0] != XWNMO_KILL) continue;
-	if (event.xclient.data.l[1] == XWNMO_KILL_OK) {
-	    printf("Completed termination of the input manager \"%s\".\n",
-		   XIM_INPUTMETHOD);
-	} else {
-	    printf("Failed termination of the input manager \"%s\".\n",
-		   XIM_INPUTMETHOD);
-	    if (event.xclient.data.l[2] == -1) {
-		printf("Because permission denied.\n");
-	    } else {
-		printf("Because %d client(s) connect(s) to it.\n",
-		       event.xclient.data.l[2]);
-	    }
-	}
-	exit(0);
+  strcpy (uname, p);
+  XChangeProperty (dpy, RootWindow (dpy, DefaultScreen (dpy)), prop_id, XA_STRING, 8, PropModeReplace, (unsigned char *) uname, strlen (uname));
+  event.type = ClientMessage;
+  event.xclient.format = 32;
+  event.xclient.window = window;
+  event.xclient.data.l[0] = XWNMO_KILL;
+  event.xclient.data.l[1] = window;
+  event.xclient.data.l[2] = prop_id;
+  event.xclient.data.l[3] = force;
+  XSendEvent (dpy, im_id, False, NoEventMask, &event);
+  signal (SIGALRM, signal_catch);
+  alarm (10);                   /* If return doesn't occur while 10 minutes, go to exit. */
+  while (1)
+    {
+      XNextEvent (dpy, &event);
+      if (event.type != ClientMessage || event.xclient.data.l[0] != XWNMO_KILL)
+        continue;
+      if (event.xclient.data.l[1] == XWNMO_KILL_OK)
+        {
+          printf ("Completed termination of the input manager \"%s\".\n", XIM_INPUTMETHOD);
+        }
+      else
+        {
+          printf ("Failed termination of the input manager \"%s\".\n", XIM_INPUTMETHOD);
+          if (event.xclient.data.l[2] == -1)
+            {
+              printf ("Because permission denied.\n");
+            }
+          else
+            {
+              printf ("Because %d client(s) connect(s) to it.\n", event.xclient.data.l[2]);
+            }
+        }
+      exit (0);
     }
 }

@@ -1,5 +1,5 @@
 /*
- *  $Id: sstrings.c,v 1.2 2001-06-14 17:55:31 ura Exp $
+ *  $Id: sstrings.c,v 1.3 2001-06-14 18:15:55 ura Exp $
  */
 
 /*
@@ -34,75 +34,81 @@
 #include "wnn_os.h"
 #include "wnn_string.h"
 
-extern int eeuc_to_ieuc();
-extern int ieuc_to_eeuc();
+extern int eeuc_to_ieuc ();
+extern int ieuc_to_eeuc ();
 
-int 
-wnn_sStrcpy(c , w)
-register char *c;
-register w_char *w;
+int
+wnn_sStrcpy (c, w)
+     register char *c;
+     register w_char *w;
 {
-    register int ret;
+  register int ret;
 
-    ret = ieuc_to_eeuc(c, w, -1);
-    c[ret] = '\0';
-    return(ret);
+  ret = ieuc_to_eeuc (c, w, -1);
+  c[ret] = '\0';
+  return (ret);
 }
 
 
 int
-wnn_Sstrcpy(w , c )
-w_char *w;
-unsigned char *c;
+wnn_Sstrcpy (w, c)
+     w_char *w;
+     unsigned char *c;
 {
-    register int ret;
+  register int ret;
 
-    ret = eeuc_to_ieuc(w, c, -1)/sizeof(w_char);
-    w[ret] = (w_char)0;
-    return(ret);
+  ret = eeuc_to_ieuc (w, c, -1) / sizeof (w_char);
+  w[ret] = (w_char) 0;
+  return (ret);
 }
 
 #ifdef nodef
 char *
-wnn_Stos(c)
-w_char *c;
+wnn_Stos (c)
+     w_char *c;
 {
-    char *c1 = (char *)c;
-    for(;*c;c++){
-	if(ASCIIP(*c)){
-	    *c1++ = *c;
-	}else{
-	    *c1++ = (*c << 8);
-	    *c1++ = *c;
-	}	
+  char *c1 = (char *) c;
+  for (; *c; c++)
+    {
+      if (ASCIIP (*c))
+        {
+          *c1++ = *c;
+        }
+      else
+        {
+          *c1++ = (*c << 8);
+          *c1++ = *c;
+        }
     }
-    return((char *)c);
+  return ((char *) c);
 }
 #endif
 
-char *wnn_sStrncpy(s1,s2,n)
-register char *s1;
-register w_char *s2;
-register int n;
+char *
+wnn_sStrncpy (s1, s2, n)
+     register char *s1;
+     register w_char *s2;
+     register int n;
 {
-    eeuc_to_ieuc(s1, s2, n/sizeof(w_char));
-    return s1;
+  eeuc_to_ieuc (s1, s2, n / sizeof (w_char));
+  return s1;
 }
 
 #ifdef CHINESE
 int
-wnn_Sstrcat(w , c )
-w_char *w;
-unsigned char *c;
+wnn_Sstrcat (w, c)
+     w_char *w;
+     unsigned char *c;
 {
-    w_char *w0 = w;
-    register int ret;
+  w_char *w0 = w;
+  register int ret;
 
-    if (!c || !*c) return(0);
-    for ( ; *w; w++);
-    ret = eeuc_to_ieuc(w, c, strlen(c))/sizeof(w_char);
-    w[ret] = (w_char)0;
-    ret += (w - w0);
-    return(ret);
+  if (!c || !*c)
+    return (0);
+  for (; *w; w++);
+  ret = eeuc_to_ieuc (w, c, strlen (c)) / sizeof (w_char);
+  w[ret] = (w_char) 0;
+  ret += (w - w0);
+  return (ret);
 }
 #endif

@@ -1,5 +1,5 @@
 /*
- * $Id: xheader.c,v 1.1.1.1 2000-01-16 05:07:53 ura Exp $
+ * $Id: xheader.c,v 1.2 2001-06-14 18:16:13 ura Exp $
  */
 
 /*
@@ -37,7 +37,7 @@
  * Code:
  *
  */
-/*	Version 4.0
+/*      Version 4.0
  */
 #include <stdio.h>
 #include "config.h"
@@ -47,7 +47,7 @@
 #include "sxheader.h"
 #include "xext.h"
 
-int	max_env = 0;
+int max_env = 0;
 WnnEnv *normal_env = NULL;
 WnnEnv *reverse_env = NULL;
 WnnEnv *cur_normal_env = NULL;
@@ -58,13 +58,13 @@ int save_env_reverse_id[32];
 int env_is_reverse = 0;
 
 w_char *input_buffer;
-w_char *return_buf;	/* return you mojiretsu buffer */
+w_char *return_buf;             /* return you mojiretsu buffer */
 
-int	cur_bnst_  = 0;	/* current bunsetsu pointer */
+int cur_bnst_ = 0;              /* current bunsetsu pointer */
 
 int rubout_code = 127;
 
-int (*main_table[TBL_CNT][TBL_SIZE])();
+int (*main_table[TBL_CNT][TBL_SIZE]) ();
 char romkan_clear_tbl[TBL_CNT][TBL_SIZE];
 char jishopath[256];
 char hindopath[256];
@@ -104,62 +104,59 @@ int maxlength;
 WNN_DIC_INFO *dicinfo;
 int dic_list_size;
 
-char *prgname;	/* argv[0] */
+char *prgname;                  /* argv[0] */
 
-struct wnn_ret_buf	rb = {0, NULL};
-struct wnn_ret_buf	dicrb = {0, NULL};
-struct wnn_ret_buf	wordrb = {0, NULL};
+struct wnn_ret_buf rb = { 0, NULL };
+struct wnn_ret_buf dicrb = { 0, NULL };
+struct wnn_ret_buf wordrb = { 0, NULL };
 
-Xjutil		*xjutil = NULL;
-XIMRootRec	*cur_root = NULL;
-JutilTextRec	*cur_text = NULL;
+Xjutil *xjutil = NULL;
+XIMRootRec *cur_root = NULL;
+JutilTextRec *cur_text = NULL;
 
-Romkan		*cur_rk = NULL;
-RomkanTable	*cur_rk_table = NULL;
+Romkan *cur_rk = NULL;
+RomkanTable *cur_rk_table = NULL;
 
-BoxRec		*box_list = NULL;
+BoxRec *box_list = NULL;
 
-XjutilFSList	font_set_list = NULL;
-XjutilFSRec	*cur_fs = NULL;
+XjutilFSList font_set_list = NULL;
+XjutilFSRec *cur_fs = NULL;
 
 struct msg_cat *cd;
 
-wchar		*wc_buf = NULL;
-unsigned char	*ct_buf = NULL;
-unsigned char	*c_buf = NULL;
-int		wc_buf_max = 0;
-int		ct_buf_max = 0;
-int		c_buf_max = 0;
+wchar *wc_buf = NULL;
+unsigned char *ct_buf = NULL;
+unsigned char *c_buf = NULL;
+int wc_buf_max = 0;
+int ct_buf_max = 0;
+int c_buf_max = 0;
 #ifndef X_WCHAR
-wchar_t		*wt_buf = NULL;
-int		wt_buf_max = 0;
+wchar_t *wt_buf = NULL;
+int wt_buf_max = 0;
 #endif /* !X_WCHAR */
 
 ConvCode cvt_key_tbl[MAX_CVT_ENTRY_CNT];
-int	cvt_key_tbl_cnt = 0; /* convert table count */
+int cvt_key_tbl_cnt = 0;        /* convert table count */
 
 FunctionTable *f_table = NULL;
 
 FunctionTable function_db[] = {
-    { "Normal",
-      NULL, NULL, call_t_redraw_move_normal,
-      call_t_redraw_move_1_normal, call_t_redraw_move_2_normal,
-      call_t_print_l_normal, NULL, char_len_normal, char_q_len_normal,
-      t_redraw_move_normal, t_print_l_normal, c_top_normal, c_end_normal,
-      c_end_normal, hani_settei_normal, NULL, NULL
-    },
-#ifdef	CHINESE
-    { "Yincoding",
-      print_out_yincod, input_yincod, call_t_redraw_move_yincod,
-      call_t_redraw_move_1_yincod, call_t_redraw_move_2_yincod,
-      call_t_print_l_yincod, redraw_when_chmsig_yincod, char_len_yincod,
-      char_q_len_yincod, t_redraw_move_yincod,
-      t_print_l_yincod, c_top_yincod, c_end_yincod, c_end_nobi_yincod,
-      hani_settei_yincod, NULL, NULL
-    },
-#endif	/* CHINESE */
-    { NULL,
-      NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-      NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
-    }
+  {"Normal",
+   NULL, NULL, call_t_redraw_move_normal,
+   call_t_redraw_move_1_normal, call_t_redraw_move_2_normal,
+   call_t_print_l_normal, NULL, char_len_normal, char_q_len_normal,
+   t_redraw_move_normal, t_print_l_normal, c_top_normal, c_end_normal,
+   c_end_normal, hani_settei_normal, NULL, NULL},
+#ifdef  CHINESE
+  {"Yincoding",
+   print_out_yincod, input_yincod, call_t_redraw_move_yincod,
+   call_t_redraw_move_1_yincod, call_t_redraw_move_2_yincod,
+   call_t_print_l_yincod, redraw_when_chmsig_yincod, char_len_yincod,
+   char_q_len_yincod, t_redraw_move_yincod,
+   t_print_l_yincod, c_top_yincod, c_end_yincod, c_end_nobi_yincod,
+   hani_settei_yincod, NULL, NULL},
+#endif /* CHINESE */
+  {NULL,
+   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL}
 };

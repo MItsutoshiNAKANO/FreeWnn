@@ -1,5 +1,5 @@
 /*
- *  $Id: oldatonewa.c,v 1.3 2001-06-14 17:55:37 ura Exp $
+ *  $Id: oldatonewa.c,v 1.4 2001-06-14 18:16:04 ura Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: oldatonewa.c,v 1.3 2001-06-14 17:55:37 ura Exp $";
+static char *rcs_id = "$Id: oldatonewa.c,v 1.4 2001-06-14 18:16:04 ura Exp $";
 #endif /* lint */
 
 #include <stdio.h>
@@ -39,127 +39,140 @@ static char *rcs_id = "$Id: oldatonewa.c,v 1.3 2001-06-14 17:55:37 ura Exp $";
 #include "wnn_string.h"
 
 static char *ohinsi[] = {
-    "カ行五段",
-    "カ行(行く)",
-    "ガ行五段",
-    "サ行五段",
-    "タ行五段",
-    "ナ行五段",
-    "バ行五段",
-    "マ行五段",
-    "ラ行五段",
-    "ワ行五段",
-    "一段&名詞",
-    "一段",
-    "サ行(する)&名詞",
-    "サ行(する)",
-    "ザ行(ずる)",
-    "来(こ)",
-    "形容詞",
-    "形容動詞",
-    "名詞",
-    "連体詞",
-    "副詞",
-    "接続詞,感動詞",
-    "来(き)",
-    "来(く)",
-    "接頭語",
-    "接尾語",
-    "助数詞",
-    "数詞",
-    "ラ行(下さい)",
-    "固有名詞",
-    "形容動詞(たる)",
-    "単漢字"
-  };
+  "カ行五段",
+  "カ行(行く)",
+  "ガ行五段",
+  "サ行五段",
+  "タ行五段",
+  "ナ行五段",
+  "バ行五段",
+  "マ行五段",
+  "ラ行五段",
+  "ワ行五段",
+  "一段&名詞",
+  "一段",
+  "サ行(する)&名詞",
+  "サ行(する)",
+  "ザ行(ずる)",
+  "来(こ)",
+  "形容詞",
+  "形容動詞",
+  "名詞",
+  "連体詞",
+  "副詞",
+  "接続詞,感動詞",
+  "来(き)",
+  "来(く)",
+  "接頭語",
+  "接尾語",
+  "助数詞",
+  "数詞",
+  "ラ行(下さい)",
+  "固有名詞",
+  "形容動詞(たる)",
+  "単漢字"
+};
 
 #define LINE_SIZE 1024
 
-extern int motoni2();
-static int get_line1();
-static char *get_string();
+extern int motoni2 ();
+static int get_line1 ();
+static char *get_string ();
 
 int
-main()
+main ()
 {
   char buffer[LINE_SIZE];
 
-  fgets(buffer, LINE_SIZE, stdin);
-  printf("\\total %s",buffer);
-  for(;fgets(buffer, LINE_SIZE, stdin) != NULL;){
-    get_line1(buffer);
-  }
+  fgets (buffer, LINE_SIZE, stdin);
+  printf ("\\total %s", buffer);
+  for (; fgets (buffer, LINE_SIZE, stdin) != NULL;)
+    {
+      get_line1 (buffer);
+    }
   exit (0);
 }
 
 static int
-get_line1(buffer)
-char *buffer;
+get_line1 (buffer)
+     char *buffer;
 {
-  char *get_string();
+  char *get_string ();
   char *c = buffer;
   char tmp[LINE_SIZE];
   char kanji[LINE_SIZE];
   char yomi[LINE_SIZE];
   /*
-  char comment[LINE_SIZE];
-  */
+     char comment[LINE_SIZE];
+   */
   w_char wyomi[LINE_SIZE];
   w_char wyomi1[LINE_SIZE];
   int hinsi;
   int hindo;
   int k;
-  int	len;
+  int len;
 
-  if((c = get_string(yomi, c)) == NULL ) return(1);
-  wnn_Sstrcpy(wyomi,yomi);
-  wnn_Sreverse(wyomi1,wyomi);
-  wnn_sStrcpy(yomi,wyomi1);
-  if((c = get_string(kanji, c)) == NULL ) return(-1);
-  if((c = get_string(tmp, c)) == NULL ) return(-1);
-  sscanf(tmp,"%x",&hinsi);
-  if((c = get_string(tmp,c)) == NULL ) return(-1);
-  sscanf(tmp,"%d",&hindo);
-  hindo = motoni2(hindo);
-  for(k = 0 ; k < 32 ; k++){
-    if(hinsi & (1 << k)){
+  if ((c = get_string (yomi, c)) == NULL)
+    return (1);
+  wnn_Sstrcpy (wyomi, yomi);
+  wnn_Sreverse (wyomi1, wyomi);
+  wnn_sStrcpy (yomi, wyomi1);
+  if ((c = get_string (kanji, c)) == NULL)
+    return (-1);
+  if ((c = get_string (tmp, c)) == NULL)
+    return (-1);
+  sscanf (tmp, "%x", &hinsi);
+  if ((c = get_string (tmp, c)) == NULL)
+    return (-1);
+  sscanf (tmp, "%d", &hindo);
+  hindo = motoni2 (hindo);
+  for (k = 0; k < 32; k++)
+    {
+      if (hinsi & (1 << k))
+        {
 /*
       printf("%s\t\t%s\t\t%s\t\t%d\n",yomi,kanji,ohinsi[k],hindo);
 */
-      printf("%s\t", yomi);
-      len = strlen(yomi);
-	if(len < 8)	printf("\t");
-	if(len < 16)	printf("\t");
-      printf("%s\t", kanji);
-      len = strlen(kanji);
-	if(len < 8)	printf("\t");
-	if(len < 16)	printf("\t");
-      printf("%s\t", ohinsi[k]);
-      len = strlen(ohinsi[k]);
-	if(len < 8)	printf("\t");
-      printf("%d\n", hindo);
+          printf ("%s\t", yomi);
+          len = strlen (yomi);
+          if (len < 8)
+            printf ("\t");
+          if (len < 16)
+            printf ("\t");
+          printf ("%s\t", kanji);
+          len = strlen (kanji);
+          if (len < 8)
+            printf ("\t");
+          if (len < 16)
+            printf ("\t");
+          printf ("%s\t", ohinsi[k]);
+          len = strlen (ohinsi[k]);
+          if (len < 8)
+            printf ("\t");
+          printf ("%d\n", hindo);
+        }
     }
-  }
-  return(0);
+  return (0);
 }
 
 static char *
-get_string(str,buf)
-char *str;
-char *buf;
+get_string (str, buf)
+     char *str;
+     char *buf;
 {
   char *c = buf;
   /*
-  int k;
-  */
-  for(;*c == '\t' || *c == ' ';c++);
-  if(*c == '\0' || *c == '\n'){
-    return(NULL);
-  }
-  for(;*c != '\t' && *c != ' ' && *c != '\n' && *c != '\0';c++){
-    *str++ = *c;
-  }
+     int k;
+   */
+  for (; *c == '\t' || *c == ' '; c++);
+  if (*c == '\0' || *c == '\n')
+    {
+      return (NULL);
+    }
+  for (; *c != '\t' && *c != ' ' && *c != '\n' && *c != '\0'; c++)
+    {
+      *str++ = *c;
+    }
   *str = 0;
-  return(c);
+  return (c);
 }
-

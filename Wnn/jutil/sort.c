@@ -1,5 +1,5 @@
 /*
- *  $Id: sort.c,v 1.3 2001-06-14 17:55:37 ura Exp $
+ *  $Id: sort.c,v 1.4 2001-06-14 18:16:04 ura Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ sort program
 */
 
 #ifndef lint
-static char *rcs_id = "$Id: sort.c,v 1.3 2001-06-14 17:55:37 ura Exp $";
+static char *rcs_id = "$Id: sort.c,v 1.4 2001-06-14 18:16:04 ura Exp $";
 #endif /* lint */
 
 #include <stdio.h>
@@ -44,54 +44,54 @@ static char *rcs_id = "$Id: sort.c,v 1.3 2001-06-14 17:55:37 ura Exp $";
 #include "jh.h"
 #include "jdata.h"
 
-extern int init_heap();
-extern void ujis_header(), read_ujis(), reverse_yomi(), sort(),
-  output_ujis();
+extern int init_heap ();
+extern void ujis_header (), read_ujis (), reverse_yomi (), sort (), output_ujis ();
 int reverse = 0;
 struct JT jt;
 struct wnn_file_head file_head;
 
 void
-main(argc, argv)
-int argc;
-char **argv;
+main (argc, argv)
+     int argc;
+     char **argv;
 {
-    int c;
-    char *cswidth_name;
-    extern char *get_cswidth_name();
-    extern void set_cswidth();
-    extern int optind;
-    extern char *optarg;
+  int c;
+  char *cswidth_name;
+  extern char *get_cswidth_name ();
+  extern void set_cswidth ();
+  extern int optind;
+  extern char *optarg;
 
-    if (cswidth_name = get_cswidth_name(WNN_DEFAULT_LANG))
-	set_cswidth(create_cswidth(cswidth_name));
-    while ((c = getopt(argc,argv,"r")) != EOF) {
-	switch(c){
-	case 'r':
-	    reverse = 1;
-	    break;
-	}
+  if (cswidth_name = get_cswidth_name (WNN_DEFAULT_LANG))
+    set_cswidth (create_cswidth (cswidth_name));
+  while ((c = getopt (argc, argv, "r")) != EOF)
+    {
+      switch (c)
+        {
+        case 'r':
+          reverse = 1;
+          break;
+        }
     }
-    init_heap(MAX_ENTRIES * HEAP_PER_LINE,
-	      MAX_ENTRIES * YOMI_PER_LINE,
-	      MAX_ENTRIES, MAX_ENTRIES, stdin);
-    
+  init_heap (MAX_ENTRIES * HEAP_PER_LINE, MAX_ENTRIES * YOMI_PER_LINE, MAX_ENTRIES, MAX_ENTRIES, stdin);
+
 #ifdef CHINESE
-    { int which_dict;
-    ujis_header(&which_dict);
-    }
+  {
+    int which_dict;
+    ujis_header (&which_dict);
+  }
 #else
-    ujis_header();
+  ujis_header ();
 #endif
-    read_ujis(NORMAL, 0, 0);
+  read_ujis (NORMAL, 0, 0);
 #ifdef CHINESE
-    sort();
+  sort ();
 #else
-    if(reverse)
-	reverse_yomi();
-    sort();
-    if(reverse)
-	reverse_yomi();
+  if (reverse)
+    reverse_yomi ();
+  sort ();
+  if (reverse)
+    reverse_yomi ();
 #endif
-    output_ujis(stdout, 0, 1);
+  output_ujis (stdout, 0, 1);
 }

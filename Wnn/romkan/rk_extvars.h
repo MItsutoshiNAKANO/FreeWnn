@@ -1,5 +1,5 @@
 /*
- *  $Id: rk_extvars.h,v 1.2 2001-06-14 17:55:49 ura Exp $
+ *  $Id: rk_extvars.h,v 1.3 2001-06-14 18:16:05 ura Exp $
  */
 
 /*
@@ -30,67 +30,71 @@
  */
 
 /***********************************************************************
-			rk_extvars.h
-						88. 6.16  訂 補
+                        rk_extvars.h
+                                                88. 6.16  訂 補
 
-	二つ以上のファイルにまたがって使われる変数のextern宣言。
-	本体はrk_vars.cで定義。
+        二つ以上のファイルにまたがって使われる変数のextern宣言。
+        本体はrk_vars.cで定義。
 ***********************************************************************/
-/*	Version 3.0
+/*      Version 3.0
  */
-extern	char	rk_errstat;
+extern char rk_errstat;
 
-extern	int	flags;
-extern	jmp_buf env0;
+extern int flags;
+extern jmp_buf env0;
 
-extern	FILE	*modefile;
-extern	char	nulstr[];
+extern FILE *modefile;
+extern char nulstr[];
 
-extern	char	*hcurread, *mcurread, *curfnm, *curdir;
-extern	letter	*ltrbufbgn;
-extern	FILE	*nestfile[], **base;
+extern char *hcurread, *mcurread, *curfnm, *curdir;
+extern letter *ltrbufbgn;
+extern FILE *nestfile[], **base;
 
-extern	struct	modestat
+extern struct modestat
 {
-	modetyp	moderng;	/* モードの状態の最大値＋１ */
-	modetyp	curmode;	/* モードの状態 */
-} modesw[];
+  modetyp moderng;              /* モードの状態の最大値＋１ */
+  modetyp curmode;              /* モードの状態 */
+}
+modesw[];
 
-extern	char	hyoshu[];
-extern	char	**modmeiptr, *modmeibgn[], *modmeimem, modmeimem_[];
-extern	char	**dspnamptr, *dspnambgn[], *dspcod, dspcod_[], *dspmod[][2];
+extern char hyoshu[];
+extern char **modmeiptr, *modmeibgn[], *modmeimem, modmeimem_[];
+extern char **dspnamptr, *dspnambgn[], *dspcod, dspcod_[], *dspmod[][2];
 
-extern	char	**hyomeiorg, **hyomeiptr, *hyomeimem;
-extern	char	**pathmeiorg, **pathmeiptr, *pathareaorg, *pathmeimem;
+extern char **hyomeiorg, **hyomeiptr, *hyomeimem;
+extern char **pathmeiorg, **pathmeiptr, *pathareaorg, *pathmeimem;
 
-extern	int	usemaehyo[], usehyo[], useatohyo[], naibu_[], *naibu;
+extern int usemaehyo[], usehyo[], useatohyo[], naibu_[], *naibu;
 
-extern	letter	*lptr;
-extern	letter	rk_input, disout[], rk_output[], keybuf[], urabuf[];
-extern	int	lastoutlen, lastkbflen;
-extern	letter	oneletter[], nil[];
-extern	int	hyonum;
+extern letter *lptr;
+extern letter rk_input, disout[], rk_output[], keybuf[], urabuf[];
+extern int lastoutlen, lastkbflen;
+extern letter oneletter[], nil[];
+extern int hyonum;
 
-extern	struct funstr	/* 組み込み関数の性質を保持するstruct */
+extern struct funstr            /* 組み込み関数の性質を保持するstruct */
 {
-	char	*fnname;	/* 関数名 */
-	char	appear;		/* 入力コード部・出力コード部・バッファ残り部
-				   に書けるかどうかのフラグ３ビット */
-	char	argnum;		/* 引数の個数 */
-	char	fntype;		/* 結果のタイプ */
-} rk_funstr;
+  char *fnname;                 /* 関数名 */
+  char appear;                  /* 入力コード部・出力コード部・バッファ残り部
+                                   に書けるかどうかのフラグ３ビット */
+  char argnum;                  /* 引数の個数 */
+  char fntype;                  /* 結果のタイプ */
+}
+rk_funstr;
 
-extern	struct	dat	/* 入力・出力・バッファ残り部へのポインタ */
+extern struct dat               /* 入力・出力・バッファ残り部へのポインタ */
 {
-	letter	*code[3];
-} rk_dat;
+  letter *code[3];
+}
+rk_dat;
 
-extern	struct	hyo
+extern struct hyo
 /* 一つの対応表の、変換データ及び各変数の変域の、格納場所へのポインタ。*/
 {
-	struct	dat	*data;
-	letter		**hensudef;
-} rk_hyo;
+  struct dat *data;
+  letter **hensudef;
+}
+rk_hyo;
 
-extern	struct	funstr	func[];
-extern	struct	hyo	hyo_n[];
+extern struct funstr func[];
+extern struct hyo hyo_n[];

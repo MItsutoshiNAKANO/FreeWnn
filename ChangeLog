@@ -1,3 +1,25 @@
+Fri Feb 25 01:17:04 2000  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* 開発版 1.1.1-a016 として内部リリース
+
+Thu Feb 24 02:24:05 2000  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* 何度 indent コマンドを実行しても同じ結果が出るようにソースを修正。
+	(問題の箇所を /* *INDENT-OFF* */、/* *INDENT-ON* */ で囲っている。)
+	
+Wed Feb 23 00:35:09 2000  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/jutil/wnnkill.c: indent が美しくなるように ifdef の関係を調
+	整
+	* Wnn/jutil/wnnstat.c: (同上)
+	* Wnn/jutil/dtoa.c: (同上)
+	
+Wed Feb 23 00:32:19 2000  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/etc/xutoj.c: 文法エラーの修正(普段は指定されない ifdef のた
+	めわからなかった。indent を書ける際に発覚) 
+	([freewnn:00336] 元木さんのパッチ)
+
 Mon Feb 14 02:23:38 2000  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
 
 	* 開発版 1.1.1-a015 として内部リリース
