@@ -1,5 +1,5 @@
 /*
- *  $Id: commonhd.h,v 1.9 2002-05-05 05:13:08 hiroo Exp $
+ *  $Id: commonhd.h,v 1.10 2003-05-30 16:17:59 hiroo Exp $
  */
 
 /*
@@ -38,7 +38,7 @@
 #include <stdio.h>
 
 #define JSERVER_VERSION 0x4200  /* minor version */
-#define _SERVER_VERSION "FreeWnn 1.1.0 pl20"
+#define _SERVER_VERSION "FreeWnn 1.1.0 pl21"
 
 #include "wnnerror.h"
 
