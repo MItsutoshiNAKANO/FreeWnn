@@ -1,5 +1,5 @@
 /*
- * $Id: ddefine.h,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: ddefine.h,v 1.2 2000-01-16 05:35:34 ura Exp $
  */
 
 /*
@@ -42,11 +42,7 @@
  * define of daemon
  ************************/
 
-/*
-	注意!! 注意!! 注意!! 注意!! 注意!! 注意!! 注意!!
-	<ctype.h> を インクルードするときは、
-	このファイルより先にインクルードすること
-*/
+#include <ctype.h>
 
 #define SIZE_JISHOTABLE 1000  
 #define SIZE_JISHOHEAP 2000

@@ -1,14 +1,11 @@
 #
-# $Id: Makefile.in,v 1.1.1.1 2000-01-16 05:10:45 ura Exp $
+# $Id: Makefile.in,v 1.3 2000-01-16 06:37:13 ura Exp $
 #
 
 # FreeWnn is a network-extensible Kana-to-Kanji conversion system.
 # This file is part of FreeWnn.
 #
-# Copyright Kyoto University Research Institute for Mathematical Sciences
-#                 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
-# Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
+# Copyright Wnn Consortium. 1993
 #
 # Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
 #
@@ -29,15 +26,17 @@
 # Commentary:
 #
 # Change log:
+#	'99/04/19	TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
+#		インストールディレクトリを変更可能にする
 #
-# Last modified date: 23,Mar.1999
+# Last modified date: 19,Apr.1999
 #
 
 # Makefile for gerodic 1.00
 #
 #	Jun. 26th '93 Wnn Consortium
 
-PREFIX = /usr/local
+PREFIX = @prefix@
 WNNBINDIR=${PREFIX}/bin/Wnn4
 WNNWNNDIR=${PREFIX}/lib/wnn
 

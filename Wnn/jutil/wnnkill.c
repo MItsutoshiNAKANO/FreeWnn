@@ -1,5 +1,5 @@
 #ifndef lint
-static char *rcs_id = "$Id: wnnkill.c,v 1.1.1.1 2000-01-16 05:07:46 ura Exp $";
+static char *rcs_id = "$Id: wnnkill.c,v 1.3 2000-01-16 06:37:15 ura Exp $";
 #endif /* lint */
 
 /*
@@ -43,7 +43,7 @@ static char *rcs_id = "$Id: wnnkill.c,v 1.1.1.1 2000-01-16 05:07:46 ura Exp $";
 #include "jslib.h"
 #include "jd_sock.h"
 #include "commonhd.h"
-#include "config.h"
+#include "wnn_config.h"
 #include "wnn_os.h"
 
 static void out();
@@ -65,7 +65,7 @@ int ocode = (TTY_CCODE + 4);
 int ocode = TTY_HCODE;
 #endif
 
-void
+int
 main(argc, argv)
 int argc;
 char **argv;

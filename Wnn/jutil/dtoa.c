@@ -1,5 +1,5 @@
 #ifndef lint
-static char *rcs_id = "$Id: dtoa.c,v 1.1.1.1 2000-01-16 05:07:46 ura Exp $";
+static char *rcs_id = "$Id: dtoa.c,v 1.3 2000-01-16 06:37:15 ura Exp $";
 #endif /* lint */
 
 /*
@@ -44,7 +44,7 @@ static char *rcs_id = "$Id: dtoa.c,v 1.1.1.1 2000-01-16 05:07:46 ura Exp $";
 
 #include <stdio.h>
 #include "commonhd.h"
-#include "config.h"
+#include "wnn_config.h"
 #include "jslib.h"
 #include "jh.h"
 #include "jdata.h"
@@ -79,7 +79,7 @@ struct wnn_file_head file_head;
 
 char *hinsi_file_name = NULL;
 
-void
+int
 main(argc, argv)
 int argc;
 char **argv;
