@@ -1,5 +1,5 @@
 /*
- *  $Id: atod.c,v 1.5 2001-06-14 18:16:03 ura Exp $
+ *  $Id: atod.c,v 1.6 2002-03-07 17:11:45 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -34,11 +34,13 @@ UJIS 形式を、辞書登録可能形式, 及び固定形式辞書に変換するプログラム。
 */
 
 #ifndef lint
-static char *rcs_id = "$Id: atod.c,v 1.5 2001-06-14 18:16:03 ura Exp $";
+static char *rcs_id = "$Id: atod.c,v 1.6 2002-03-07 17:11:45 hiroo Exp $";
 #endif /* lint */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
+#include <unistd.h>
 #include "commonhd.h"
 #include "wnn_config.h"
 #include "jslib.h"
@@ -48,6 +50,7 @@ static char *rcs_id = "$Id: atod.c,v 1.5 2001-06-14 18:16:03 ura Exp $";
 #include "cplib.h"
 #endif
 #include "wnn_string.h"
+#include "wnn_os.h"
 
 extern int wnn_loadhinsi (), init_heap (), little_endian (), Sorted (), asshuku (), revdic ();
 extern void ujis_header (), read_ujis (), reverse_yomi (), create_rev_dict (),

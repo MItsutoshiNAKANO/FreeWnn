@@ -1,5 +1,5 @@
 /*
- *  $Id: wnntouch.c,v 1.4 2001-06-14 18:16:04 ura Exp $
+ *  $Id: wnntouch.c,v 1.5 2002-03-07 17:11:45 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -34,10 +34,11 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: wnntouch.c,v 1.4 2001-06-14 18:16:04 ura Exp $";
+static char *rcs_id = "$Id: wnntouch.c,v 1.5 2002-03-07 17:11:45 hiroo Exp $";
 #endif /* lint */
 
 #include <stdio.h>
+#include <unistd.h>
 #include "jslib.h"
 #include "commonhd.h"
 
