@@ -1,5 +1,5 @@
 /*
- *  $Id: xutoj.c,v 1.6 2002-03-23 21:13:58 hiroo Exp $
+ *  $Id: xutoj.c,v 1.7 2002-03-24 01:25:13 hiroo Exp $
  */
 
 /*
@@ -37,7 +37,10 @@
 
 #if STDC_HEADERS
 #  include <stdlib.h>
-#endif
+#  include <string.h>
+#elif HAVE_STRINGS_H
+#  include <strings.h>
+#endif /* STDC_HEADERS */
 
 #include "commonhd.h"
 #include "wnn_config.h"

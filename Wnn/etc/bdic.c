@@ -1,5 +1,5 @@
 /*
- *  $Id: bdic.c,v 1.8 2002-03-21 06:56:38 hiroo Exp $
+ *  $Id: bdic.c,v 1.9 2002-03-24 01:25:13 hiroo Exp $
  */
 
 /*
@@ -46,17 +46,24 @@
 #include <X11/Xos.h>
 #else
 #include <sys/types.h>
-#endif
+#endif /* UX386 */
+
+#include <stdio.h>
+#if STDC_HEADERS
+#  include <string.h>
+#elif HAVE_STRINGS_H
+#  include <strings.h>
+#endif /* STDC_HEADERS */
+
 #ifndef JS
 #include <sys/stat.h>
-#include <stdio.h>
 #if HAVE_UNISTD_H
 #  include <unistd.h>
 #endif
 #include "commonhd.h"
 #include "jslib.h"
 #include "jh.h"
-#endif
+#endif /* JS */
 #include "jdata.h"
 #include "wnn_os.h"
 #include "wnn_string.h"
