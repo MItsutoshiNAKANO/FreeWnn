@@ -1,5 +1,5 @@
 /*
- *  $Id: bdic.c,v 1.6 2002-03-08 19:50:17 hiroo Exp $
+ *  $Id: bdic.c,v 1.7 2002-03-21 04:25:18 hiroo Exp $
  */
 
 /*
@@ -47,7 +47,9 @@
 #ifndef JS
 #include <sys/stat.h>
 #include <stdio.h>
-#include <unistd.h>
+#if HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
 #include "commonhd.h"
 #include "jslib.h"
 #include "jh.h"
@@ -1257,13 +1259,13 @@ create_null_dic (fn, comm, passwd, hpasswd, which)
 #endif /* BDIC_WRITE_CHECK */
     }
 
-#if defined(BSD42)&& !defined(BEOS)
+#if HAVE_FCHMOD
   fchmod (fileno (fp), 0664);
   fclose (fp);
-#else /* SYSV */
+#else /* !HAVE_FCHMOD */
   fclose (fp);
   chmod (fn, 0664);
-#endif /* BSD42 */
+#endif /* !HAVE_FCHMOD */
   return (0);
 }
 
@@ -1321,13 +1323,13 @@ create_hindo_file (funiq, fn, comm, passwd, serial)
   putnull (fp, serial);
 #endif /* BDIC_WRITE_CHECK */
 
-#if defined(BSD42) && !defined(BEOS)
+#if HAVE_FCHMOD
   fchmod (fileno (fp), 0664);
   fclose (fp);
-#else /* SYSV */
+#else /* !HAVE_FCHMOD */
   fclose (fp);
   chmod (fn, 0664);
-#endif /* BSD42 */
+#endif /* !HAVE_FCHMOD */
   return (0);
 }
 

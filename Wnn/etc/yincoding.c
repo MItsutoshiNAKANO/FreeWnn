@@ -1,5 +1,5 @@
 /*
- *  $Id: yincoding.c,v 1.3 2001-06-14 18:15:56 ura Exp $
+ *  $Id: yincoding.c,v 1.4 2002-03-21 04:25:18 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -35,12 +35,12 @@
 #include  <ctype.h>
 #include  "commonhd.h"
 #ifdef CHINESE
-#ifdef SYSVR2
-#include  <string.h>
-#endif
-#ifdef BSD42
-#include  <strings.h>
-#endif
+#if STDC_HEADERS
+#  include  <string.h>
+#elif HAVE_STRINGS_H
+#  include  <strings.h>
+#endif /* STDC_HEADERS */
+
 #include  "cplib.h"
 #include  "rk_spclval.h"
 #include  "jh.h"
