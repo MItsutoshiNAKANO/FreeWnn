@@ -1,5 +1,5 @@
 /*
- *  $Id: wnnkill.c,v 1.9 2005-01-30 17:03:50 aonoto Exp $
+ *  $Id: wnnkill.c,v 1.10 2005-01-30 17:14:20 aonoto Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: wnnkill.c,v 1.9 2005-01-30 17:03:50 aonoto Exp $";
+static char *rcs_id = "$Id: wnnkill.c,v 1.10 2005-01-30 17:14:20 aonoto Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -74,6 +74,7 @@ int ocode = TTY_HCODE;
 #endif
 
 static void out (const char* format, ...);
+static void usage (char *prog);
 
 int
 main (int argc, char** argv)
