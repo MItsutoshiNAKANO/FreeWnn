@@ -1,3 +1,16 @@
+Wed Sep 22 01:15:58 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* 開発版 1.1.1-a008 として内部リリース
+
+Wed Sep 22 00:30:33 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* configure を autoconf-1.13 ベースに変更。(今までは 1.12 ベー
+	ス)
+
+Wed Sep 22 00:26:07 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* 辞書を Pubdic から Pubdic+ に変更。
+ 
 Sun Sep 19 00:24:33 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
 
 	* 開発版 1.1.1-a007 として内部リリース
@@ -6,7 +19,7 @@ Sat Sep 18 20:09:23 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
 
 	* crypt ライブラリがリンクされないようになっていたため NetBSD でコ
 	ンパイルできなくなっていたのを修正。
-	([freewnn:00124] のパッチ。[freewnn:00124] にて永江さんが指摘)
+	([freewnn:00124] のパッチ。[freewnn:00123] にて永江さんが指摘)
 
 Thu Sep 16 03:40:33 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
 

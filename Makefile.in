@@ -30,7 +30,7 @@ CWNNDIR = cWnn
 
 KWNNDIR = kWnn
 
-SUBDIRS= $(WNNDIR) $(CWNNDIR) $(KWNNDIR)
+SUBDIRS= PubdicPlus $(WNNDIR) $(CWNNDIR) $(KWNNDIR)
 
 World::
 	@echo ""

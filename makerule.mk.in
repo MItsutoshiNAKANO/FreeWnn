@@ -1,5 +1,5 @@
 #
-# $Id: makerule.mk.in,v 1.3 2000-01-16 06:52:38 ura Exp $
+# $Id: makerule.mk.in,v 1.4 2000-01-16 07:06:07 ura Exp $
 #
 
 # FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -119,7 +119,7 @@ LDOPTIONS = $(CDEBUGFLAGS) $(CCOPTIONS)
       WNNLIBDIR = @libdir@
     WNNTERM_LIB = -ltermcap
 
-      PUBDICSRC = $(IMTOP)/Pubdic
+  PUBDICPLUSSRC = $(IMTOP)/PubdicPlus
   WNNCONSDICSRC = $(IMTOP)/Wnn-consortium/dic
 
          WNNTOP = $(IMTOP)/Wnn

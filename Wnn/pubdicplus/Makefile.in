@@ -51,7 +51,7 @@ all:: $(LINKS) $(DICS)
 
 includes:: $(LINKS)
 
-Version:  $(PUBDICSRC)/Version
+Version:  $(PUBDICPLUSSRC)/Version
 	$(RM) $@
 	$(LN) $? $@
 
@@ -62,7 +62,7 @@ depend:: Version
 clean::
 	$(RM) Version
 
-bio.hd:  $(PUBDICSRC)/bio.hd
+bio.hd:  $(PUBDICPLUSSRC)/bio.hd
 	$(RM) $@
 	$(LN) $? $@
 
@@ -73,7 +73,7 @@ depend:: bio.hd
 clean::
 	$(RM) bio.hd
 
-bio.u:  $(PUBDICSRC)/bio.u
+bio.u:  $(PUBDICPLUSSRC)/bio.u
 	$(RM) $@
 	$(LN) $? $@
 
@@ -84,7 +84,7 @@ depend:: bio.u
 clean::
 	$(RM) bio.u
 
-chimei.hd:  $(PUBDICSRC)/chimei.hd
+chimei.hd:  $(PUBDICPLUSSRC)/chimei.hd
 	$(RM) $@
 	$(LN) $? $@
 
@@ -95,7 +95,7 @@ depend:: chimei.hd
 clean::
 	$(RM) chimei.hd
 
-chimei.u:  $(PUBDICSRC)/chimei.u
+chimei.u:  $(PUBDICPLUSSRC)/chimei.u
 	$(RM) $@
 	$(LN) $? $@
 
@@ -106,7 +106,7 @@ depend:: chimei.u
 clean::
 	$(RM) chimei.u
 
-computer.hd:  $(PUBDICSRC)/computer.hd
+computer.hd:  $(PUBDICPLUSSRC)/computer.hd
 	$(RM) $@
 	$(LN) $? $@
 
@@ -117,7 +117,7 @@ depend:: computer.hd
 clean::
 	$(RM) computer.hd
 
-computer.u:  $(PUBDICSRC)/computer.u
+computer.u:  $(PUBDICPLUSSRC)/computer.u
 	$(RM) $@
 	$(LN) $? $@
 
@@ -128,7 +128,7 @@ depend:: computer.u
 clean::
 	$(RM) computer.u
 
-fzk.attr:  $(PUBDICSRC)/fzk.attr
+fzk.attr:  $(PUBDICPLUSSRC)/fzk.attr
 	$(RM) $@
 	$(LN) $? $@
 
@@ -139,7 +139,7 @@ depend:: fzk.attr
 clean::
 	$(RM) fzk.attr
 
-fzk.con:  $(PUBDICSRC)/fzk.con
+fzk.con:  $(PUBDICPLUSSRC)/fzk.con
 	$(RM) $@
 	$(LN) $? $@
 
@@ -150,7 +150,7 @@ depend:: fzk.con
 clean::
 	$(RM) fzk.con
 
-fzk.fzkattr:  $(PUBDICSRC)/fzk.fzkattr
+fzk.fzkattr:  $(PUBDICPLUSSRC)/fzk.fzkattr
 	$(RM) $@
 	$(LN) $? $@
 
@@ -161,7 +161,7 @@ depend:: fzk.fzkattr
 clean::
 	$(RM) fzk.fzkattr
 
-fzk.jirattr:  $(PUBDICSRC)/fzk.jirattr
+fzk.jirattr:  $(PUBDICPLUSSRC)/fzk.jirattr
 	$(RM) $@
 	$(LN) $? $@
 
@@ -172,7 +172,7 @@ depend:: fzk.jirattr
 clean::
 	$(RM) fzk.jirattr
 
-fzk.jircon:  $(PUBDICSRC)/fzk.jircon
+fzk.jircon:  $(PUBDICPLUSSRC)/fzk.jircon
 	$(RM) $@
 	$(LN) $? $@
 
@@ -183,7 +183,7 @@ depend:: fzk.jircon
 clean::
 	$(RM) fzk.jircon
 
-fzk.master:  $(PUBDICSRC)/fzk.master
+fzk.master:  $(PUBDICPLUSSRC)/fzk.master
 	$(RM) $@
 	$(LN) $? $@
 
@@ -194,7 +194,7 @@ depend:: fzk.master
 clean::
 	$(RM) fzk.master
 
-fzk.shuutan:  $(PUBDICSRC)/fzk.shuutan
+fzk.shuutan:  $(PUBDICPLUSSRC)/fzk.shuutan
 	$(RM) $@
 	$(LN) $? $@
 
@@ -205,7 +205,7 @@ depend:: fzk.shuutan
 clean::
 	$(RM) fzk.shuutan
 
-jinmei.hd:  $(PUBDICSRC)/jinmei.hd
+jinmei.hd:  $(PUBDICPLUSSRC)/jinmei.hd
 	$(RM) $@
 	$(LN) $? $@
 
@@ -216,7 +216,7 @@ depend:: jinmei.hd
 clean::
 	$(RM) jinmei.hd
 
-jinmei.u:  $(PUBDICSRC)/jinmei.u
+jinmei.u:  $(PUBDICPLUSSRC)/jinmei.u
 	$(RM) $@
 	$(LN) $? $@
 
@@ -227,7 +227,7 @@ depend:: jinmei.u
 clean::
 	$(RM) jinmei.u
 
-kihon.hd:  $(PUBDICSRC)/kihon.hd
+kihon.hd:  $(PUBDICPLUSSRC)/kihon.hd
 	$(RM) $@
 	$(LN) $? $@
 
@@ -238,7 +238,7 @@ depend:: kihon.hd
 clean::
 	$(RM) kihon.hd
 
-kihon.u:  $(PUBDICSRC)/kihon.u
+kihon.u:  $(PUBDICPLUSSRC)/kihon.u
 	$(RM) $@
 	$(LN) $? $@
 
@@ -249,7 +249,7 @@ depend:: kihon.u
 clean::
 	$(RM) kihon.u
 
-koyuu.hd:  $(PUBDICSRC)/koyuu.hd
+koyuu.hd:  $(PUBDICPLUSSRC)/koyuu.hd
 	$(RM) $@
 	$(LN) $? $@
 
@@ -260,7 +260,7 @@ depend:: koyuu.hd
 clean::
 	$(RM) koyuu.hd
 
-koyuu.u:  $(PUBDICSRC)/koyuu.u
+koyuu.u:  $(PUBDICPLUSSRC)/koyuu.u
 	$(RM) $@
 	$(LN) $? $@
 
@@ -271,7 +271,7 @@ depend:: koyuu.u
 clean::
 	$(RM) koyuu.u
 
-setsuji.hd:  $(PUBDICSRC)/setsuji.hd
+setsuji.hd:  $(PUBDICPLUSSRC)/setsuji.hd
 	$(RM) $@
 	$(LN) $? $@
 
@@ -282,7 +282,7 @@ depend:: setsuji.hd
 clean::
 	$(RM) setsuji.hd
 
-setsuji.u:  $(PUBDICSRC)/setsuji.u
+setsuji.u:  $(PUBDICPLUSSRC)/setsuji.u
 	$(RM) $@
 	$(LN) $? $@
 
@@ -293,7 +293,7 @@ depend:: setsuji.u
 clean::
 	$(RM) setsuji.u
 
-special.hd:  $(PUBDICSRC)/special.hd
+special.hd:  $(PUBDICPLUSSRC)/special.hd
 	$(RM) $@
 	$(LN) $? $@
 
@@ -304,7 +304,7 @@ depend:: special.hd
 clean::
 	$(RM) special.hd
 
-special.u:  $(PUBDICSRC)/special.u
+special.u:  $(PUBDICPLUSSRC)/special.u
 	$(RM) $@
 	$(LN) $? $@
 
@@ -315,7 +315,7 @@ depend:: special.u
 clean::
 	$(RM) special.u
 
-symbol.hd:  $(PUBDICSRC)/symbol.hd
+symbol.hd:  $(PUBDICPLUSSRC)/symbol.hd
 	$(RM) $@
 	$(LN) $? $@
 
@@ -326,7 +326,7 @@ depend:: symbol.hd
 clean::
 	$(RM) symbol.hd
 
-symbol.u:  $(PUBDICSRC)/symbol.u
+symbol.u:  $(PUBDICPLUSSRC)/symbol.u
 	$(RM) $@
 	$(LN) $? $@
 
@@ -337,7 +337,7 @@ depend:: symbol.u
 clean::
 	$(RM) symbol.u
 
-tankan.hd:  $(PUBDICSRC)/tankan.hd
+tankan.hd:  $(PUBDICPLUSSRC)/tankan.hd
 	$(RM) $@
 	$(LN) $? $@
 
@@ -348,7 +348,7 @@ depend:: tankan.hd
 clean::
 	$(RM) tankan.hd
 
-tankan.u:  $(PUBDICSRC)/tankan.u
+tankan.u:  $(PUBDICPLUSSRC)/tankan.u
 	$(RM) $@
 	$(LN) $? $@
 

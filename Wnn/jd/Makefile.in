@@ -73,7 +73,7 @@ depend:: wnnenvrc_R
 clean::
 	$(RM) wnnenvrc_R
 
-hinsi.data:  ../../Pubdic/hinsi.data
+hinsi.data:  $(PUBDICPLUSSRC)/hinsi.data
 	$(RM) $@
 	$(LN) $? $@
 
