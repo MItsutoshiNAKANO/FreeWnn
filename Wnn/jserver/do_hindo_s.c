@@ -1,5 +1,5 @@
 /*
- *  $Id: do_hindo_s.c,v 1.6 2001-06-18 09:09:42 ura Exp $
+ *  $Id: do_hindo_s.c,v 1.7 2002-05-02 15:18:53 hiroo Exp $
  */
 
 /*
@@ -33,15 +33,15 @@
 #include <config.h>
 #endif
 
+#if STDC_HEADERS
+#  include <stdlib.h>             /* rand(), drand48() */
+#endif
+
 #include "commonhd.h"
 #include "jslib.h"
 #include "kaiseki.h"
 #include "jdata.h"
 #include "de_header.h"
-
-#ifdef HAVE_DRAND48
-#include <stdlib.h>             /* drand48() */
-#endif
 
 static int hindo_set ();
 
