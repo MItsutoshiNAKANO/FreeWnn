@@ -1,5 +1,5 @@
 /*
- *  $Id: screen.c,v 1.6 2002-05-12 22:51:17 hiroo Exp $
+ *  $Id: screen.c,v 1.7 2002-06-22 13:26:21 hiroo Exp $
  */
 
 /*
@@ -581,13 +581,8 @@ get_rk_modes ()
   char *p;
 
   strcpy (rk_modes, (NULL == (p = romkan_dispmode ())? "[   ]" : p));
-#ifndef SYSVR2
-  if ((p = (char *) index (rk_modes, ':')) != NULL && *(p + 1))
-    {
-#else
   if ((p = (char *) strchr (rk_modes, ':')) != NULL && *(p + 1))
     {
-#endif
       set_cur_env (*(++p));
       *p = '\0';
     }

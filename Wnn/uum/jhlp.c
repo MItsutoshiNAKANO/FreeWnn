@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.11 2002-06-15 13:02:14 hiroo Exp $
+ *  $Id: jhlp.c,v 1.12 2002-06-22 13:26:21 hiroo Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.11 2002-06-15 13:02:14 hiroo Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.12 2002-06-22 13:26:21 hiroo Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -668,21 +668,14 @@ parse_options (argc, argv)
   register char *default_ostr = OPTIONS;
   char ostr[64];
   register char *p;
-#ifdef  SYSVR2
-#define index   strchr
-#endif /* SYSVR2 */
-
-#if !defined(linux)
-  extern char *index ();
-#endif
 
   strcpy (ostr, default_getoptstr);
   strcat (ostr, lang_db->getoptstr);
   while ((c = getopt (argc, argv, ostr)) != EOF)
     {
-      if (!(p = index (default_ostr, c)) || (*do_opt[p - default_ostr]) () < 0)
+      if (!(p = strchr (default_ostr, c)) || (*do_opt[p - default_ostr]) () < 0)
         {
-          if (!(p = index (lang_db->ostr, c)) || (*lang_db->do_opt[p - lang_db->ostr]) () < 0)
+          if (!(p = strchr (lang_db->ostr, c)) || (*lang_db->do_opt[p - lang_db->ostr]) () < 0)
             {
               strcpy (ostr, default_ostr);
               strcat (ostr, lang_db->ostr);
@@ -690,9 +683,6 @@ parse_options (argc, argv)
             }
         }
     }
-#ifdef  SYSVR2
-#undef index
-#endif /* SYSVR2 */
 }
 
 /** tty に対する ioctl のセット */

@@ -1,5 +1,5 @@
 /*
- *  $Id: setutmp.c,v 1.5 2002-05-12 22:51:17 hiroo Exp $
+ *  $Id: setutmp.c,v 1.6 2002-06-22 13:26:21 hiroo Exp $
  */
 
 /*
@@ -55,10 +55,10 @@
 #include <utmp.h>
 
 #include "commonhd.h"
+#include "sdefine.h"
+#include "sheader.h"
 
 #define public
-
-char *ttyname ();
 
 #if defined(SVR4) && !defined(DGUX)
 #include <utmpx.h>
@@ -95,7 +95,7 @@ saveutmp ()
   bzero (&nullut, sizeof nullut);
   if ((p = ttyname (0)) == NULL)
     return -1;
-  strncpy (savttynm, rindex (p, '/') + 1, 8);
+  strncpy (savttynm, strrchr (p, '/') + 1, 8);
   if (!(savslotnum = ttyslot ()))
     return -1;
   if ((utmpFd = open (_PATH_UTMP, O_RDONLY, 0)) < 0)
@@ -124,7 +124,7 @@ setutmp (ttyFd)
   bzero (&ut, sizeof ut);
   if ((p = ttyname (ttyFd)) == NULL)
     return -1;
-  strncpy (ut.ut_line, rindex (p, '/') + 1, 8);
+  strncpy (ut.ut_line, strrchr (p, '/') + 1, 8);
   strncpy (ut.ut_name, getpwuid (getuid ())->pw_name, 8);
   ut.ut_time = time (0);
   strncpy (ut.ut_host, savttynm, 8);
@@ -185,7 +185,7 @@ resetutmp (ttyFd)
   bzero (&ut, sizeof ut);
   if ((p = ttyname (ttyFd)) == NULL)
     return -1;
-  strncpy (ut.ut_line, rindex (p, '/') + 1, 8);
+  strncpy (ut.ut_line, strrchr (p, '/') + 1, 8);
   ut.ut_time = time (0);
   if (!(i = ttyfdslot (ttyFd)))
     return -1;

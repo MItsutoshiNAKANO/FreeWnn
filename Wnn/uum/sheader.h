@@ -1,5 +1,5 @@
 /*
- *  $Id: sheader.h,v 1.10 2002-06-15 13:02:14 hiroo Exp $
+ *  $Id: sheader.h,v 1.11 2002-06-22 13:26:21 hiroo Exp $
  */
 
 /*
@@ -208,6 +208,9 @@ extern void err (char *);
 /* printf.c */
 extern void FPRINTF ();
 extern void PRINTF ();
+
+/* ttyfdslot.c */
+extern int  ttyfdslot (int fd);
 
 /* to be classified */
 extern void b_s_off_raw (void);

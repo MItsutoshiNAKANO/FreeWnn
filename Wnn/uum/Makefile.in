@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.10 2001-09-16 11:42:58 hiroo Exp $
+#   $Id: Makefile.in,v 1.11 2002-06-22 13:26:21 hiroo Exp $
 #
 
 #
@@ -37,7 +37,7 @@ LOCAL_INSTFLAGS = $(INSTUIDFLAGS) -o $(UUMOWNER)
 
        UUMOWNER = root
        INCLUDES = -I$(WNNINCLUDESRC) -I$(WNNROMKANSRC) -I$(TOP)
-        DEFINES = $(SIGNAL_DEFINES) $(WNNDEFINES) $(WNNLANGDEF)
+        DEFINES = $(WNNDEFINES) $(WNNLANGDEF)
 LOCAL_LIBRARIES = $(WNNJLIB) $(WNNCONVLIB) @LIBS@
 
 SRC1= epilogue.c header.c kensaku.c kuten.c jis_in.c       prologue.c touroku.c jikouho.c jutil.c w_string.c       printf.c termio.c hinsi.c termcap.c       ttyfdslot.c setutmp.c redraw.c history.c key_bind.c       screen.c basic_op.c uif.c cursor.c jhlp.c       select_ele.c inspect.c wnnrc_op.c functions.c

@@ -1,5 +1,5 @@
 /*
- *  $Id: uif.c,v 1.7 2002-05-12 22:51:17 hiroo Exp $
+ *  $Id: uif.c,v 1.8 2002-06-22 13:26:21 hiroo Exp $
  */
 
 /*
@@ -1287,13 +1287,8 @@ env_state ()
 
   if ((p = romkan_dispmode ()) == NULL)
     return (ret);
-#ifndef SYSVR2
-  if ((p = (char *) index (p, ':')) == NULL)
-    return (ret);
-#else
   if ((p = (char *) strchr (p, ':')) == NULL)
     return (ret);
-#endif
   return (*(p + 1));
 }
 

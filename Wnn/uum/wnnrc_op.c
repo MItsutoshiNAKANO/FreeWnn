@@ -1,5 +1,5 @@
 /*
- *  $Id: wnnrc_op.c,v 1.9 2002-06-15 13:11:44 hiroo Exp $
+ *  $Id: wnnrc_op.c,v 1.10 2002-06-22 13:26:21 hiroo Exp $
  */
 
 /*
@@ -140,9 +140,6 @@ expand_expr (s)
   int noerr, expandsuc;
   struct passwd *u;
   extern struct passwd *getpwnam ();
-#if defined(SYSVR2) && !defined(AIXV3) && !defined(linux)
-  extern char *strchr ();
-#endif /* defined(SYSVR2) && !defined(AIXV3) */
 
   if (*s != '~' && *s != '@')
     {

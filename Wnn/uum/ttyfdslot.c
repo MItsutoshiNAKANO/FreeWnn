@@ -1,5 +1,5 @@
 /*
- *  $Id: ttyfdslot.c,v 1.3 2001-06-14 18:16:08 ura Exp $
+ *  $Id: ttyfdslot.c,v 1.4 2002-06-22 13:26:21 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -28,23 +28,37 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
+#include <stdio.h>
+#if STDC_HEADERS
+#  include <string.h>
+#else
+#  if HAVE_MEMORY_H
+#    include <memory.h>
+#  endif
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif
+#endif /* STDC_HEADERS */
+#if HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
 
 #include "commonhd.h"
+#include "wnn_os.h"
 
 /*
         BSD42
  */
 #if defined(BSD42) && (! defined(BSD43)) || defined(linux)
 
-#include <stdio.h>
 #define SLOTSIZ 32
 
-char *ttyname ();
-char *rindex ();
-
 int
-ttyfdslot (fd)
-     int fd;
+ttyfdslot (int fd)
 {
   char eachslot[SLOTSIZ];
   register char *fullnamp;
@@ -89,14 +103,9 @@ ttyfdslot (fd)
 #if defined(BSD43) && !defined(linux)
 
 #include <ttyent.h>
-#include <stdio.h>
-
-char *ttyname ();
-char *rindex ();
 
 int
-ttyfdslot (fd)
-     int fd;
+ttyfdslot (int fd)
 {
   register char *fullnamp;
   register char *ttynamp;
