@@ -1,5 +1,5 @@
 #ifndef lint
-static char *rcs_id = "$Id: dtoa.c,v 1.1.1.1 2000-01-16 05:07:46 ura Exp $";
+static char *rcs_id = "$Id: dtoa.c,v 1.2 2000-01-16 05:48:53 ura Exp $";
 #endif /* lint */
 
 /*
@@ -79,7 +79,7 @@ struct wnn_file_head file_head;
 
 char *hinsi_file_name = NULL;
 
-void
+int
 main(argc, argv)
 int argc;
 char **argv;

@@ -1,5 +1,5 @@
 dnl
-dnl $Id: configure.in,v 1.1.1.1 2000-01-16 05:10:44 ura Exp $
+dnl $Id: configure.in,v 1.4 2000-01-16 06:01:38 ura Exp $
 dnl
 
 dnl FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -54,23 +54,65 @@ case $hosttype in
         CPP=/lib/cpp
     fi
     ;;
-"FreeBSD")
+"FreeBSD"|"NetBSD"|"OpenBSD")
     CCOPTIONS="-DCSRG_BASED"
     CDEBUGFLAGS="-O2 -fno-strength-reduce"
     if test -x /usr/libexec/cpp; then
         CPP=/usr/libexec/cpp
     fi
     ;;
+"BSD/OS")
+    CCOPTIONS="-DCSRG_BASED"
+    CDEBUGFLAGS="-O2 -fno-strength-reduce"
+    if test -x /usr/bin/cpp; then
+        CPP=/usr/bin/cpp
+    fi
+    ;;
 "SunOS")
+    case `uname -r` in
+    4.*)
+      if test $CC = gcc; then
+        CDEBUGFLAGS=-O2
+	CCOPTIONS="-Dsun -Dsparc"
+      else
+        CDEBUGFLAGS=-O4
+        CCOPTIONS=""
+      fi
+      CPP=/usr/lib/cpp
+      ;;
+    5.*)
+      if test $CC = gcc; then
+          CDEBUGFLAGS=-O2
+          CCOPTIONS="-Dsun -Dsparc -DSVR4 -DSYSV"
+      else
+          CCOPTIONS="-Xc -xF -xcg92 -Dsun -Dsparc -DSVR4 -DSYSV"
+      fi
+      if test -x /usr/ccs/lib/cpp; then
+          CPP=/usr/ccs/lib/cpp
+      fi
+      ;;
+    *)
+      { echo "configure: error: "This system is not supported."" 1>&2; exit 1; }
+      ;;
+    esac
+    ;;
+"HP-UX")
     if test $CC = gcc; then
         CDEBUGFLAGS=-O2
-        CCOPTIONS="-Dsun -Dsparc -DSVR4 -DSYSV"
+        CCOPTIONS="-Dhpux -DSYSV"
     else
-        CCOPTIONS="-Xc -xF -xcg92 -Dsun -Dsparc -DSVR4 -DSYSV"
+        CCOPTIONS="-Ae -Dhpux -DSYSV"
     fi
-    if test -x /usr/ccs/lib/cpp; then
-        CPP=/usr/ccs/lib/cpp
-    fi
+    case `uname -r` in
+    A.09.*)
+      if test -x /lib/cpp; then
+          CPP=/lib/cpp
+      fi
+      ;;
+    *)
+      { echo "configure: error: "This system is not supported."" 1>&2; exit 1; }
+      ;;
+    esac
     ;;
 *)
     AC_MSG_ERROR("This system is not supported.")

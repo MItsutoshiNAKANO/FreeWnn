@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.1.1.1 2000-01-16 05:11:26 ura Exp $
+# $Id: Makefile.in,v 1.4 2000-01-16 06:01:57 ura Exp $
 #
 
 # FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -36,8 +36,6 @@
 all::
 
 .SUFFIXES: .i
-
- _NULLCMD_ = @ echo -n
 
 TKLIBNAME = tk80
 
@@ -106,7 +104,7 @@ CXXEXTRA_INCLUDES =
              LINT = lint
       LINTLIBFLAG = -C
          LINTOPTS = -axz
-               LN = @LN_S@ -s
+               LN = @LN_S@
              MAKE = make
                MV = mv -f
                CP = cp
@@ -461,7 +459,7 @@ LINTFONT = $(LINTLIBDIR)/llib-lfont.ln
 
           IMTOP = $(TOP)
 
-         PREFIX = /usr/local
+         PREFIX = @prefix@
       WNNWNNDIR = ${PREFIX}/lib/wnn
       WNNBINDIR = ${PREFIX}/bin
       WNNINCDIR = $(INCROOT)
@@ -667,30 +665,14 @@ SRCS= $(SRC1) $(SRC3) $(LOCAL_ETCSRCS)
 OBJS= $(OBJ1) $(OBJ3) $(LOCAL_ETCOBJS) $(LOCAL_RKOBJS)
 
 all::
-	$(_NULLCMD_)
-	$(_NULLCMD_)
-	$(_NULLCMD_)
-	$(_NULLCMD_)
 
 includes::
-	$(_NULLCMD_)
-	$(_NULLCMD_)
-	$(_NULLCMD_)
-	$(_NULLCMD_)
 
 .c.o:
-	$(_NULLCMD_)
-	$(_NULLCMD_)
 	$(RM) $@
-	 $(CC) -c $(CFLAGS) $(_NOOP_) $*.c
-	$(_NULLCMD_)
-	$(_NULLCMD_)
+	$(CC) -c $(CFLAGS) $(_NOOP_) $*.c
 
 clean::
-	$(_NULLCMD_)
-	$(_NULLCMD_)
-	$(_NULLCMD_)
-	$(_NULLCMD_)
 
 all:: $(LINKS) $(OBJS) libkwnn.a
 
@@ -746,7 +728,6 @@ libgetopt.a: $(OBJ2) $(EXTRALIBRARYDEPS)
 	$(RM) $@
 	$(AR) $@ $(OBJ2)
 	$(RANLIB) $@
-	$(_NULLCMD_)
 
 lintlib:: llib-lgetopt.ln
 
@@ -767,7 +748,6 @@ libkwnn.a: $(OBJS) $(EXTRALIBRARYDEPS)
 	$(RM) $@
 	$(AR) $@ $(OBJS)
 	$(RANLIB) $@
-	$(_NULLCMD_)
 
 lintlib:: llib-lkwnn.ln
 
