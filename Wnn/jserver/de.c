@@ -28,7 +28,7 @@
 /*
         Jserver         (Nihongo Daemon)
 */
-static char rcs_id[] = "$Id: de.c,v 1.32 2003-06-18 11:10:45 aono Exp $";
+static char rcs_id[] = "$Id: de.c,v 1.33 2003-06-20 15:34:29 aono Exp $";
 
 #if defined(HAVE_CONFIG_H)
 #  include <config.h>
@@ -517,16 +517,21 @@ new_client (void)               /* NewClient */
     fromhost (&tcpd_request);
     if (!hosts_access (&tcpd_request))
       {
-	log_err ("%s: reject client.", cmd_name); /* should be log_info? */
-      }
-    read (sd, gomi, 1024);
-    shutdown (sd, 2);
-#ifdef HAVE_CLOSESOCKET
-    closesocket (sd);
+	log_err ("reject client."); /* should be log_info? */
+				    /* should we log IP address / hostname? */
+#ifdef HAVE_RECV
+	recv (sd, gomi, 1024, 0);
 #else
-    close (sd);
+	read (sd, gomi, 1024);
 #endif
-    return;
+	shutdown (sd, 2);
+#ifdef HAVE_CLOSESOCKET
+	closesocket (sd);
+#else
+	close (sd);
+#endif
+	return;
+      }
   }
 #endif /*  HAVE_LIBWRAP */
 
