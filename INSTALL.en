@@ -1,5 +1,5 @@
 #
-#   $Id: INSTALL.en,v 1.1 2001-06-18 09:09:20 ura Exp $
+#   $Id: INSTALL.en,v 1.2 2001-09-16 11:16:13 hiroo Exp $
 #
 
 #
@@ -36,12 +36,12 @@
 
 1. expand FreeWnn tarball.
 
-        $ zcat FreeWnn-*.tar.gz | tar xvf -
+        $ gzcat FreeWnn-*.tar.gz | tar xvf -
         (You should use appropriate filename depending the FreeWnn version)
 
-2. change directory to FreeWnn-*/Xsi
+2. change directory to FreeWnn-*/
 
-        $ cd FreeWnn-*/Xsi
+        $ cd FreeWnn-*
 
 3. run configure
 
@@ -76,3 +76,22 @@ by specifying option --prefix when you run configure.
         $ ./configure --help
 
 will give you list of options that configure accepts.
+Below are the main configure option of FreeWnn.
+
+  enabled by default:
+  --enable-libraries    compile and install FreeWnn libraries.
+  --enable-server       compile and install FreeWnn servers.
+  --enable-Wnn          compile and install Wnn (Japanese).
+  --enable-cWnn         compile and install cWnn (Chinese).
+  --enable-kWnn         compile and install kWnn (Korean).
+
+  disabled by default:
+  --enable-ipv6         enable IPv6 feature.
+  --enable-unsafe-path  allow creating files in jserver_dir.
+
+If the option --enable-unsafe-path is enabled, the [cjkt]server daemon
+create file in an arbitrary path, and they accept request from client of
+any hosts. This feature is a security hole that allow creation of files
+in an arbitrary path as the user that run [cjkt]server.
+Unless you used to place FreeWnn dictionary files in a path other than
+jserver_dir (lib/wnn/$LANG/dic/usr), you should not enable this feature.
