@@ -1,3 +1,22 @@
+Sun, 6 Apr 2003 06:30:49  Hiroo Ono <hiroo oikumene.gcd.org>
+	* Wnn/uum/jhlp.c: err() を uum_err() に変更し、libc の err() と重なら
+	  ないようにする。
+	* Wnn/uum/sheader.h: 同上。
+	* Wnn/jserver/bnsetu_kai.c:
+	  struct kangovect を typedef した word_vertor に置き換え。
+	* Wnn/jserver/ddefine.h:
+	  コメントアウトされていた部分と、kangovect の定義を削除。
+	* Wnn/jserver/fzk.c:
+	  struct kangovect を typedef した word_vertor に置き換え。
+	  関数プロトタイプ及び定義を ISO C 形式に変更。
+	  register 修飾子の削除。
+	  error1() を log_err() に置き換え。
+	  コメントアウトされていたコードを削除。
+	  malloc した領域を零クリアするように変更 (bzero または calloc を使用)。
+	  これは、起動後 jserver がまともに動いていなかったバグの修正である。
+	* Wnn/jserver/fzk.h: word_vector 及び fzkvect を typedef する。
+	   ddefine.h の読み込み。
+
 Mon, 30 Dec 2002 00:03:24  Hiroo Ono <hiroo oikumene.gcd.org>
 	* PubdicPlus/pubdic.p
 	  誤字修正 「とらわれる: 因われる→囚われる」。

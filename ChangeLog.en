@@ -1,3 +1,22 @@
+Sun, 6 Apr 2003 06:30:49  Hiroo Ono <hiroo oikumene.gcd.org>
+	* Wnn/uum/jhlp.c: Change err() to uum_err().
+	  Avoid overriding err() in libc.
+	* Wnn/uum/sheader.h: ditto.
+	* Wnn/jserver/bnsetu_kai.c:
+	  Convert "struct kangovect" to typedef'ed "word_vertor".
+	* Wnn/jserver/ddefine.h:
+	  Remove commented out code and "kangovect" definition.
+	* Wnn/jserver/fzk.c:
+	  Convert "struct kangovect" to typedef'ed "word_vertor".
+	  Make function prototypes and definition ISO C style.
+	  Get rid of the keyword "register".
+	  Convert error1() to log_err().
+	  Remove commented out code.
+	  Zero clear malloc'ed areas using bzero() or calloc(). It will
+	  make jserver work again.
+	* Wnn/jserver/fzk.h: typedef word_vector and fzkvect.
+	  include ddefine.h.
+
 Mon, 30 Dec 2002 00:03:24  Hiroo Ono <hiroo oikumene.gcd.org>
         * PubdicPlus/pubdic.p
 	  Fixed the word "torawareru".
