@@ -1,5 +1,5 @@
 /*
- *  $Id: js.c,v 1.13 2002-06-15 13:02:14 hiroo Exp $
+ *  $Id: js.c,v 1.14 2003-05-11 18:25:22 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2001, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -79,9 +79,6 @@ extern  Variables
 #endif
 #include <sys/stat.h>
 #include <sys/types.h>
-#ifdef UX386
-#  include <X11/Xos.h>
-#endif
 
 #include "jd_sock.h"
 #include "commonhd.h"

@@ -1,5 +1,5 @@
 /*
- *  $Id: rk_modread.c,v 1.7 2002-03-30 13:44:20 hiroo Exp $
+ *  $Id: rk_modread.c,v 1.8 2003-05-11 18:25:26 hiroo Exp $
  */
 
 /*
@@ -1340,11 +1340,7 @@ chk_get_int (p, ip, range)
     {
       if (!is_digit (*p))
         return (-1);
-#if defined(UX386) || defined(sun386)
-      out = out * 10;
-#else
       out *= 10;
-#endif
       out += ctov (*p);
     }
   if (range != 0)

@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.14 2003-04-06 05:55:17 hiroo Exp $
+ *  $Id: jhlp.c,v 1.15 2003-05-11 18:25:29 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002-2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.14 2003-04-06 05:55:17 hiroo Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.15 2003-05-11 18:25:29 hiroo Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -67,9 +67,6 @@ static char *rcs_id = "$Id: jhlp.c,v 1.14 2003-04-06 05:55:17 hiroo Exp $";
 #ifdef HAVE_UNISTD_H
 #  include <unistd.h>
 #endif
-#ifdef UX386
-#include <sys/kdef.h>
-#endif
 
 #include "jllib.h"
 #include "commonhd.h"
@@ -78,9 +75,7 @@ static char *rcs_id = "$Id: jhlp.c,v 1.14 2003-04-06 05:55:17 hiroo Exp $";
 #include "wnn_config.h"
 #include "wnn_os.h"
 
-
 jmp_buf kk_env;
-
 
 #ifdef HAVE_WAIT3
 #       include <sys/wait.h>

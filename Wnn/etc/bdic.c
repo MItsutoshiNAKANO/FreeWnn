@@ -1,5 +1,5 @@
 /*
- *  $Id: bdic.c,v 1.10 2002-06-22 13:24:31 hiroo Exp $
+ *  $Id: bdic.c,v 1.11 2003-05-11 18:25:09 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -42,12 +42,7 @@
 #endif
 #endif /* defined(JSERVER) || defined(JS) */
 
-#ifdef UX386
-#include <X11/Xos.h>
-#else
 #include <sys/types.h>
-#endif /* UX386 */
-
 #include <stdio.h>
 #if STDC_HEADERS
 #  include <string.h>

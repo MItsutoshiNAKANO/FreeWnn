@@ -1,5 +1,5 @@
 /*
- *  $Id: jd_sock.h,v 1.4 2001-06-18 09:09:33 ura Exp $
+ *  $Id: jd_sock.h,v 1.5 2003-05-11 18:25:20 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -37,28 +37,13 @@
  *    jslib header file
  */
 
-#ifdef UX386
-#undef  AF_UNIX
-#include <X11/Xos.h>
-#else
 #include <sys/types.h>
-#endif /* UX386 */
 #include <sys/socket.h>
 #ifdef  AF_UNIX
 #include <sys/un.h>
 #endif /* AF_UNIX */
-
-#ifdef UX386
-#include <net/in.h>
-#else
 #include <netinet/in.h>
-#endif /* UX386 */
-
-#if     defined(uniosu) || defined(UX386)
-#include <net/netdb.h>          /* SX */
-#else
-#include <netdb.h>              /* SUN or BSD SYSV */
-#endif /*uniosu */
+#include <netdb.h>
 
 #ifdef TAIWANESE
 #ifndef CHINESE
