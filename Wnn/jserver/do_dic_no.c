@@ -1,5 +1,5 @@
 /*
- *  $Id: do_dic_no.c,v 1.4 2001-06-14 18:28:53 ura Exp $
+ *  $Id: do_dic_no.c,v 1.5 2003-05-11 18:41:49 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -42,13 +42,10 @@
 #include "jdata.h"
 #include "hinsi_file.h"
 
-
-void put_dic_info ();
-static void return_jbiki (), return_jbiki1 ();
-static int count_jdata (), count_jdata_kanji ();
-extern struct cnv_env *env[];
-extern struct wnn_file files[];
-struct wnn_dic dic_table[MAX_DIC];
+static void return_jbiki (struct jdata *jd);
+static void return_jbiki1 (struct jdata *jd);
+static int count_jdata (struct jdata *p);
+static int count_jdata_kanji (struct jdata *p);
 
 void
 dic_init ()
@@ -85,8 +82,7 @@ js_dic_info ()
 }
 
 void
-put_dic_info (dic_no)
-     int dic_no;
+put_dic_info (int dic_no)
 {
   int fid, hfid;
   struct JT *jtl;
@@ -183,7 +179,7 @@ js_word_search_by_env ()
 #else
   Sreverse (ryomi, yomi);
 #endif /* CONVERT_from_TOP */
-  init_jmt (0);
+  init_jmt ();
 
   n = jishobiki (ryomi, jmt_ptr);
   if (n != Strlen (yomi))
@@ -216,7 +212,7 @@ js_word_search ()
 #else
   Sreverse (ryomi, yomi);
 #endif /* CONVERT_from_TOP */
-  init_jmt (0);
+  init_jmt ();
 
   n = word_search (dic_no, ryomi, jmt_ptr);
   if (n != Strlen (yomi))
@@ -289,8 +285,7 @@ js_word_info ()
 
 
 static void
-return_jbiki (jd)
-     struct jdata *jd;
+return_jbiki (struct jdata *jd)
 {
   put4_cur (count_jdata (jd));
   put4_cur (count_jdata_kanji (jd));
@@ -298,8 +293,7 @@ return_jbiki (jd)
 }
 
 static void
-return_jbiki1 (jd)
-     struct jdata *jd;
+return_jbiki1 (struct jdata *jd)
 {
   int t;
   w_char kouho[LENGTHKANJI];
@@ -345,8 +339,7 @@ return_jbiki1 (jd)
 }
 
 static int
-count_jdata (p)
-     struct jdata *p;
+count_jdata (struct jdata *p)
 {
   int sum;
 
@@ -358,8 +351,7 @@ count_jdata (p)
 }
 
 static int
-count_jdata_kanji (p)
-     struct jdata *p;
+count_jdata_kanji (struct jdata *p)
 {
   int sum, t;
   w_char kouho[LENGTHKANJI];

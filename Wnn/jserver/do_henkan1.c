@@ -1,5 +1,5 @@
 /*
- *  $Id: do_henkan1.c,v 1.6 2002-06-22 13:25:45 hiroo Exp $
+ *  $Id: do_henkan1.c,v 1.7 2003-05-11 18:41:49 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -90,7 +90,7 @@ henkan_setup ()
 #else
   bun_pter_ = index + 1;
 #endif
-  init_jmt (0);
+  init_jmt ();
 #ifdef  DEBUG
   wsputs ("\n");
 #endif

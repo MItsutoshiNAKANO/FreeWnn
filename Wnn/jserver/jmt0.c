@@ -1,5 +1,5 @@
 /*
- *  $Id: jmt0.c,v 1.3 2001-06-14 18:16:02 ura Exp $
+ *  $Id: jmt0.c,v 1.4 2003-05-11 18:41:44 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -29,49 +29,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <stdio.h>
+
 #include "commonhd.h"
+#include "de_header.h"
 #include "jslib.h"
 #include "jdata.h"
 #include "kaiseki.h"
-#include "de_header.h"
-
-#include <stdio.h>
-
 
 void
-init_jmt (x)
-     register int x;
+init_jmt (void)
 {
-  register int n;
-  register struct jdata **keep_ptr;
-  register struct jdata **jmt_ptr_org = jmt_ptr;        /* H.T. */
+  struct jdata **keep_ptr;
+  struct jdata **jmt_ptr_org = jmt_ptr;
 
-  if (x == 0)
-    x = initjmt;                /* H.T. 22/12/89 */
+  jmt_ptr = jmt_;
+  j_e_p = jmtw_;
 
-  for (n = x; n < initjmt && (jmtp[n] == (struct jdata **) 0 || jmtp[n] == (struct jdata **) -1); n++)
-    ;
-
-  if (n < initjmt)
-    {                           /* Tukatte nai nodakara, kesubeki deha... */
-      keep_ptr = jmt_ptr;
-
-      if (n == x)
-        jmt_ptr = jmtp[x];
-      else
-        jmt_ptr = jmtp[n] + (maxj[n] - n + 1);
-
-      for (n = 0; (jmt_ptr + n) < keep_ptr && *(jmt_ptr + n) <= (struct jdata *) 0; n++)
-        ;
-      if ((jmt_ptr + n) < keep_ptr)
-        j_e_p = *(jmt_ptr + n);
-    }
-  else
-    {
-      jmt_ptr = jmt_;
-      j_e_p = jmtw_;
-    }
-/* this part is added 8/18 by H.T */
   for (keep_ptr = jmt_ptr; keep_ptr < jmt_ptr_org; keep_ptr++)
     {
       *keep_ptr = NULL;
@@ -80,10 +54,10 @@ init_jmt (x)
 
 
 int
-jmt_set (yomi)
-     register int yomi;         /* 読み文字列の先頭へのポインタ(逆順) */
+jmt_set (int yomi)
+	/* yomi: 読み文字列の先頭へのポインタ(逆順) */
 {
-  register int n;
+  int n;
   if ((n = jishobiki (&(bun[yomi]), jmt_ptr)) > 0)
     {
       jmtp[yomi] = jmt_ptr;
@@ -105,3 +79,4 @@ jmt_set (yomi)
     }
   return (1);
 }
+

@@ -1,5 +1,5 @@
 /*
- *  $Id: get_kaiarea.c,v 1.4 2002-05-12 22:51:16 hiroo Exp $
+ *  $Id: get_kaiarea.c,v 1.5 2003-05-11 18:41:49 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -35,6 +35,7 @@
 #include <stdio.h>
 #if STDC_HEADERS
 #  include <stdlib.h>
+#  include <sys/types.h>
 #else
 #  if HAVE_MALLOC_H
 #    include <malloc.h>
@@ -46,63 +47,63 @@
 #include "jdata.h"
 #include "kaiseki.h"
 
+/*
+ * get_kaiseki_area: take memory areas for analysing.
+ * return value: fail = NULL, success != NULL
+ */
 int
-get_kaiseki_area (kana_len)
-     int kana_len;
+get_kaiseki_area (size_t kana_len)
 {
-  char *c;
-  char *area_pter;
-
-  int maxj_len = (kana_len * sizeof (int) + 7) & 0xfffffff8;
-  int jmtp_len = (kana_len * sizeof (struct jdata **) + 7) & 0xfffffff8;
-  int jmt_len = (SIZE_JISHOTABLE * sizeof (struct jdata *) + 7) & 0xfffffff8;
-  int jmtw_len = (SIZE_JISHOHEAP * sizeof (struct jdata) + 7) & 0xfffffff8;
-
-  int bun_len = ((kana_len + 1) * sizeof (w_char) + 7) & 0xfffffff8;
-
-  if ((area_pter = malloc (bun_len + jmtw_len + jmt_len + jmtp_len + maxj_len)) == NULL)
+  if (NULL == (maxj = (int *) calloc (kana_len, sizeof(int))))
     {
       wnn_errorno = WNN_MALLOC_INITIALIZE;
-      error1 ("malloc in get_kaiseki_area");
-      return (-1);
+      log_debug ("malloc failed in maxj.");
+      return (NULL);
     }
 
-  maxj = (int *) area_pter;
-  area_pter += maxj_len;
-  for (c = (char *) maxj; c < area_pter;)
+  if (NULL == (jmtp = (struct jdata ***) calloc (kana_len, sizeof (struct jdata **))))
     {
-      *(c++) = 0;
+      wnn_errorno = WNN_MALLOC_INITIALIZE;
+      log_debug ("malloc failed in jmtp.");
+      return (NULL);
     }
 
-  jmtp = (struct jdata ***) area_pter;
-  area_pter += jmtp_len;
-  for (c = (char *) jmtp; c < area_pter;)
+  if (NULL == (jmt_ = (struct jdata **) calloc (SIZE_JISHOTABLE, sizeof (struct jdata *))))
     {
-      *(c++) = 0;
+      wnn_errorno = WNN_MALLOC_INITIALIZE;
+      log_debug ("malloc failed in jmt_.");
+      return (NULL);
     }
 
-  jmt_ = (struct jdata **) area_pter;
-  area_pter += jmt_len;
-  jmtw_ = (struct jdata *) area_pter;
-  area_pter += jmtw_len;
+  if (NULL == (jmtw_ = (struct jdata *) calloc (SIZE_JISHOHEAP, sizeof (struct jdata))))
+    {
+      wnn_errorno = WNN_MALLOC_INITIALIZE;
+      log_debug ("malloc failed in jmtw_.");
+      return (NULL);
+    }
+
   jmt_end = jmt_ + SIZE_JISHOTABLE;
-  jmt_ptr = jmt_end;            /* H.T. To initialize all in jmt_init */
+  jmt_ptr = jmt_end;		/* H.T. To initialize all in jmt_init */
   jmtw_end = jmtw_ + SIZE_JISHOHEAP;
 
-  bun = (w_char *) area_pter;
-  area_pter += bun_len;
+  if (NULL == (bun = (w_char *) calloc ((kana_len + 1), sizeof (w_char))))
+    {
+      wnn_errorno = WNN_MALLOC_INITIALIZE;
+      log_debug ("malloc failed in bun.");
+      return (NULL);
+    }
 
   maxchg = kana_len;
-  initjmt = maxchg - 1;
-  bun[maxchg] = NULL;
 
-  return (0);
+  return (1);
 }
 
 
-/* サーバーが起きた時に呼ぶ
-        解析ワークエリアをクリアする
-        変換がエラーリターンした時にも呼んでね。*/
+/*
+ * サーバーが起きた時に呼ぶ
+ * 解析ワークエリアをクリアする
+ * 変換がエラーリターンした時にも呼んでね。
+ */
 
 void
 init_work_areas ()
@@ -114,3 +115,4 @@ init_work_areas ()
   init_jktsbn ();
   init_jktsone ();
 }
+
