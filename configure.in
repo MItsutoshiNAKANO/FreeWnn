@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.16 2001-08-14 13:43:20 hiroo Exp $
+dnl   $Id: configure.in,v 1.17 2001-09-16 11:35:57 hiroo Exp $
 dnl
 
 dnl
@@ -37,38 +37,35 @@ AC_CONFIG_HEADER(config.h)
 
 dnl
 dnl srcdir の絶対パスバージョンの作成。本当はこんなものを定義しなくても
-dnl 動くように Makefile.in を書くべきである。ちょっとずつそうなるように
-dnl 直していきたい
+dnl 動くように Makefile.in を書くべきである。
+dnl 多分、修正できたので、とりあえず comment out しておく。
 dnl
-case "$top_srcdir" in
-  .)  abs_top_srcdir=`pwd` ;;
-  /*) abs_top_srcdir=top_srcdir;;
-  *) # Relative path.
-    abs_top_srcdir=`pwd`$ac_dots$ac_given_srcdir ;;
-esac
-AC_SUBST(abs_top_srcdir)
+dnl case "$top_srcdir" in
+dnl   .)  abs_top_srcdir=`pwd` ;;
+dnl   /*) abs_top_srcdir=top_srcdir;;
+dnl   *) # Relative path.
+dnl     abs_top_srcdir=`pwd`$ac_dots$ac_given_srcdir ;;
+dnl esac
+dnl AC_SUBST(abs_top_srcdir)
 
 dnl ====================================================================
 dnl Check optional features
 dnl ====================================================================
 
 AC_CANONICAL_HOST
-dnl AM_PROG_LIBTOOL
 
-AC_ARG_ENABLE(sharedlib,
-[  --enable-sharedlib      build shared library using GNU libtool],
- [if test "$enableval" = yes
-  then
-    use_sharedlib=yes
-  else
-    use_sharedlib=no
-  fi], [use_sharedlib=default])
+dnl build and install libraries, server or client
 
-
-dnl build and install libraries or server
+AC_ARG_ENABLE(debug,
+[  --enable-debug             enable debug options [default=no]],
+[case "${enableval}" in
+   yes) debug=true ;;
+   no)  debug=false ;;
+   *)   AC_MSG_ERROR(bad value for --enable-debug)
+esac], debug=false)
 
 AC_ARG_ENABLE(libraries,
-[  --enable-libraries         build and install libraries [default=yes]],
+[  --enable-libraries      build and install libraries [default=yes]],
 [case "${enableval}" in
    yes) libraries=true ;;
    no)  libraries=false ;;
@@ -83,6 +80,13 @@ AC_ARG_ENABLE(server,
    *)   AC_MSG_ERROR(bad value for --enable-server) ;;
 esac], server=true)
 
+AC_ARG_ENABLE(client,
+[  --enable-client         build and install clients [default=no]],
+[case "${enableval}" in
+   yes) client=true ;;
+   no)  client=false ;;
+   *)   AC_MSG_ERROR(bad value for --enable-client) ;;
+esac], client=false)
 
 if test $libraries = true; then
 	SUBDIRS="\$(LIB_SUBDIRS)"
@@ -92,6 +96,11 @@ if test $server = true; then
 	SUBDIRS="$SUBDIRS \$(SERVER_SUBDIRS)"
 	WNNMANDIR="$WNNMANDIR \$(SERVER_WNNMANDIR)"
 fi
+if test $client = true; then
+	SUBDIRS="$SUBDIRS \$(CLIENT_SUBDIRS)"
+dnl currently client is only uum and its man is in SERVER_WNNMANDIR
+dnl	WNNMANDIR=$WNNMANDIR \$(CLIENT_WNNMANDIR)"
+fi
 
 AC_SUBST(SUBDIRS)
 AC_SUBST(WNNMANDIR)
@@ -99,7 +108,7 @@ AC_SUBST(WNNMANDIR)
 dnl For Severs
 
 AC_ARG_ENABLE(Wnn,
-[  --enable-Wnn         build and install Wnn [default=true]],
+[  --enable-Wnn         build and install Wnn [default=yes]],
 [case "${enableval}" in
    yes) Wnn="Wnn";;
    no)  Wnn="" ;;
@@ -118,7 +127,7 @@ dnl AC_SUBST(JSERVER_SUBDIRS1)
 AC_SUBST(JSERVER_SUBDIRS2)
 
 AC_ARG_ENABLE(cWnn,
-[  --enable-cWnn         build and install cWnn [default=true]],
+[  --enable-cWnn         build and install cWnn [default=yes]],
 [case "${enableval}" in
    yes) cWnn="cWnn" ;;
    no)  cWnn="" ;;
@@ -127,7 +136,7 @@ esac], cWnn="cWnn")
 AC_SUBST(cWnn)
 
 AC_ARG_ENABLE(kWnn,
-[  --enable-kWnn         build and install kWnn [default=true]],
+[  --enable-kWnn         build and install kWnn [default=yes]],
 [case "${enableval}" in
    yes) kWnn="kWnn" ;;
    no)  kWnn="" ;;
@@ -229,14 +238,27 @@ AC_SUBST(KWNNJLIB)
 AC_SUBST(DEPKWNNJLIB)
 AC_SUBST(KHINSI_DATA)
 
-AC_ARG_ENABLE(inet6,
-[  --enable-inet6          build and install inet6 [default=false]],
+AC_ARG_ENABLE(ipv6,
+[  --enable-ipv6           build and install IPv6 [default=no]],
 [case "${enableval}" in
-   yes) inet6="-DINET6";;
-   no)  inet6="" ;;
-   *)   AC_MSG_ERROR(bad value for --enable-inet6) ;;
-esac], inet6="")
-AC_SUBST(inet6)
+   yes) ipv6="-DINET6";;
+   no)  ipv6="" ;;
+   *)   AC_MSG_ERROR(bad value for --enable-ipv6) ;;
+esac], ipv6="")
+AC_SUBST(ipv6)
+
+AC_ARG_ENABLE(unsafe-path,
+[  --enable-unsafe-path    allow creating files in an arbitrary path [default=no]],
+[case "${enableval}" in
+   yes) unsafe_path = true;;
+   no)  unsafe_path = false;;
+   *)   AC_MSG_ERROR(bad value for --enable-unsafe-path) ;;
+esac], unsafe_path=false)
+AC_SUBST(unsafe_path)
+
+if test ${unsafe_path} = true; then
+	AC_DEFINE(WNN_ALLOW_UNSAFE_PATH)
+fi
 
 dnl
 dnl Checks for cc and cpp.
@@ -245,57 +267,95 @@ AC_PROG_CC
 
 dnl Use environment variable (if set). It will be overridden
 dnl in supported system though...
-# CCOPTIONS=""
 CDEBUGFLAGS=${CDEBUGFLAGS:-"-O"}
 case $host in
 *-*-linux*)
     CCOPTIONS="-Dlinux -D_POSIX_SOURCE -D_BSD_SOURCE"
-    CDEBUGFLAGS="-O2 -fno-strength-reduce"
+    if test $debug = true; then
+      CDEBUGFLAGS="-g2 -O2 -fno-strength-reduce"
+    else
+      CDEBUGFLAGS="-O2 -fno-strength-reduce"
+    fi
     ;;
 *-*-freebsd*|*-*-netbsd*|*-*-openbsd*)
     CCOPTIONS="-DCSRG_BASED"
-    CDEBUGFLAGS="-O2 -fno-strength-reduce"
+    if test $debug = true; then
+      CDEBUGFLAGS="-g2 -O2 -fno-strength-reduce"
+    else
+      CDEBUGFLAGS="-O2 -fno-strength-reduce"
+    fi
     ;;
 *-*-bsdi*)
     CCOPTIONS="-DCSRG_BASED"
-    CDEBUGFLAGS="-O2 -fno-strength-reduce"
+    if test $debug = true; then
+      CDEBUGFLAGS="-g2 -O2 -fno-strength-reduce"
+    else
+      CDEBUGFLAGS="-O2 -fno-strength-reduce"
+    fi
     ;;
 *-*-sunos*)
-      if test $CC = gcc; then
-        CDEBUGFLAGS=-O2
+      if test `basename $CC` = gcc; then
 	CCOPTIONS="-Dsun -Dsparc"
+        if test $debug = true; then
+          CDEBUGFLAGS="-g2 -O2"
+        else
+          CDEBUGFLAGS=-O2
+        fi
       else
-        CDEBUGFLAGS=-O4
         CCOPTIONS=""
+        CDEBUGFLAGS=-O4
       fi
       ;;
 *-*-solaris2.*)
     # Will 'solaris*' be OK?
-      if test $CC = gcc; then
+      if test `basename $CC` = gcc; then
+        CCOPTIONS="-Dsun -D`uname -p` -DSVR4 -DSYSV"
+        if test $debug = true; then
+          CDEBUGFLAGS="-g2 -O2"
+        else
           CDEBUGFLAGS=-O2
-          CCOPTIONS="-Dsun -D`uname -p` -DSVR4 -DSYSV"
+        fi
       else
-          CCOPTIONS="-Xc -xF -xcg92 -Dsun -D`uname -p` -DSVR4 -DSYSV"
+        CCOPTIONS="-Xc -xF -xcg92 -Dsun -D`uname -p` -DSVR4 -DSYSV"
+          CDEBUGFLAGS=-O4
       fi
     ;;
 *-*-hpux*)
-    if test $CC = gcc; then
-        CDEBUGFLAGS=-O2
+    if test `basename $CC` = gcc; then
         CCOPTIONS="-Dhpux -DSYSV"
+        if test $debug = true; then
+          CDEBUGFLAGS="-g2 -O2"
+        else
+          CDEBUGFLAGS=-O2
+        fi
     else
         CCOPTIONS="-Ae -Dhpux -DSYSV"
     fi
       ;;
 i[[34567]]86-pc-beos*)
-	  CCOPTIONS="-DBEOS -D_POSIX_SOURCE -D_BSD_SOURCE"
+	CCOPTIONS="-DBEOS -D_POSIX_SOURCE -D_BSD_SOURCE"
+        if test $debug = true; then
+	  CDEBUGFLAGS="-g2 -O2 -fno-strength-reduce"
+        else
 	  CDEBUGFLAGS="-O2 -fno-strength-reduce"
+        fi
 	;;
 powerpc-*-beos*)
-	  CCOPTIONS="-DBEOS -D_POSIX_SOURCE -D_BSD_SOURCE"
+	CCOPTIONS="-DBEOS -D_POSIX_SOURCE -D_BSD_SOURCE"
+        if test $debug = true; then
+	  CDEBUGFLAGS="-g2"
+        else
+	  CDEBUGFLAGS=""
+        fi
 	;;
 *-*-aix*)
-    if test $CC = gcc; then
+    if test `basename $CC` = gcc; then
       CDEBUGFLAGS=-O2
+        if test $debug = true; then
+	  CDEBUGFLAGS="-g2"
+        else
+	  CDEBUGFLAGS=""
+        fi
     else
       CDEBUGFLAGS=-O
     fi
@@ -306,6 +366,13 @@ powerpc-*-beos*)
     AC_MSG_WARN([(It may or may not work if you set CCOPTIONS properly.)])
     ;;
 esac
+
+if test ${debug} = true; then
+     INSTPGMFLAGS =
+else
+     INSTPGMFLAGS = -s
+fi
+AC_SUBST(INSTPGMFLAGS)
 
 echo "Set CDEBUGFLAGS and CCOPTIONS to following:"
 echo '  CDEBUGFLAGS="'"$CDEBUGFLAGS"'"'

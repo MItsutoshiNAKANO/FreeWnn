@@ -21,14 +21,20 @@
 /* Define if you can safely include both <sys/time.h> and <time.h>.  */
 #undef TIME_WITH_SYS_TIME
 
-/* Define to `long' if <sys/types.h> doesn't define.  */
+/* Define to `long' if <sys/types.h> does not define.  */
 #undef time_t
 
-/* Define to 'socklen_t' if <sys/socket.h> does'n define. */
+/* Define to 'socklen_t' if <sys/socket.h> does not define. */
 #undef socklen_t
 
-/* Define to 'RAND_MAX' if <stdlib.h> does'n define. */
+/* Define to 'RAND_MAX' if <stdlib.h> does not define. */
 #undef HAVE_RAND_MAX
+
+/*
+ * Defined if you allow creating a file in an arbitrary path
+ * which is the traditional feature.
+ */
+#undef WNN_ALLOW_UNSAFE_PATH
 
 /* Define if you have the closesocket function.  */
 #undef HAVE_CLOSESOCKET
