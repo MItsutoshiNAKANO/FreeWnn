@@ -1,5 +1,5 @@
 /*
- *  $Id: bnsetu_kai.c,v 1.4 2003-04-06 06:30:48 hiroo Exp $
+ *  $Id: bnsetu_kai.c,v 1.5 2003-05-11 18:35:54 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -96,12 +96,9 @@ sbn_kai (yomi_sno, yomi_eno, endvect, endvect1, tsbnptr, bnst_num, parent)
   for (ii = 0; ii < fzkcnt; ii++)
     {
       i = getfzkoh (ichbnpbp, ii)->offset;
-      if (jmtp[i] == (struct jdata **) UN_KNOWN)
-        {                       /* もう引いた? */
-          if (jmt_set (i) == -1)
-            {                   /* 辞書引き */
-              return (-1);
-            }
+      if (jmtp[i] == (struct jdata **) UN_KNOWN) /* もう引いた? */
+        {
+          jmt_set (i);		/* 辞書引き */
         }
     }
 

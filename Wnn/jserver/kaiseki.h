@@ -1,5 +1,5 @@
 /*
- *  $Id: kaiseki.h,v 1.4 2002-08-12 16:25:46 hiroo Exp $
+ *  $Id: kaiseki.h,v 1.5 2003-05-11 18:35:54 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -32,13 +32,28 @@
 #ifndef JSERVER_KAISEKI_H
 #define JSERVER_KAISEKI_H 1
 
+#ifdef STDC_HEADERS
+# include <sys/types.h>
+#endif /* STDC_HEADERS */
+
+#ifdef  GLOBAL_VALUE_DEFINE
+#define GLOBAL
+#define GLOBAL_VAL(v)  = (v)
+#else
+#define GLOBAL  extern
+#define GLOBAL_VAL(v)
+#endif /* GLOBAL_VALUE_DEFINE */
+
+#include "commonhd.h"
+#include "ddefine.h"
+
 /*********************
  *  header of daemon 
 **********************/
-#define WNN_BUN         0
-#define WNN_ZENKOUHO    1
-#define WNN_SHO         0
-#define WNN_DAI         1
+#define WNN_BUN		0
+#define WNN_ZENKOUHO	1
+#define WNN_SHO		0
+#define WNN_DAI		1
 
 
 #define _MININT 0x80000000
@@ -60,7 +75,7 @@ extern struct fzkkouho *getfzkoh1_body ();
     (((((int)*((v) + ((h) / (sizeof(int)<<3))) >> (int)((int)(h) % (int)((int)sizeof(int)<<(int)3))) & 1) == 1) ? \
         WNN_CONNECT_BK : WNN_NOT_CONNECT_BK)
 
-extern struct FT *ft;           /* カレントの付属語テーブル */
+GLOBAL struct FT *ft;           /* カレントの付属語テーブル */
 
 /* 解析エリアの管理用のリスト */
 struct free_list
@@ -138,53 +153,49 @@ struct free_list
 /*********************
  * kaiseki work area
 **********************/
-extern w_char *bun;             /* D */
+GLOBAL w_char *bun;		/* D */
+GLOBAL w_char giji_eisuu[20];	/* 擬似「英数」の定義 */
+GLOBAL size_t maxchg;
+GLOBAL int *maxj;		/* maxj is counts to entries in jmt_ */
 
-extern w_char giji_eisuu[];     /* 擬似「英数」の定義 */
-
-extern int maxchg;
-extern int initjmt;             /* I think initjmt is the length of jmt_ */
-
-extern int *maxj;               /* maxj is counts to entries in jmt_ */
-
-/* jmt_ptr is used in jmt0.c only.
+/* jmt_ptr is used in jmt0.c only. (untrue! do_dic_no.c use it 2003.05.09)
    but it must be changed by clients.
    jishobiki does not use it. this is sent to jishobiki by arguments
    */
 
-/* j_e_p is used to hold the current point to which jmtw_ is used */
-extern struct jdata *j_e_p;
-extern struct jdata **jmt_;
-extern struct jdata *jmtw_;
-extern struct jdata **jmt_end;
-extern struct jdata *jmtw_end;
-extern struct jdata **jmt_ptr;
-extern struct jdata ***jmtp;
+GLOBAL struct jdata *j_e_p;	/* holds the current point to which jmtw_ is used */
+GLOBAL struct jdata **jmt_;
+GLOBAL struct jdata *jmtw_;
+GLOBAL struct jdata **jmt_end;
+GLOBAL struct jdata *jmtw_end;
+GLOBAL struct jdata **jmt_ptr;
+GLOBAL struct jdata ***jmtp;
+
 
 /********************************
  *      疑似自立語の品詞        *
  ********************************/
-#ifdef  nodef
-extern int sentou_no;
-extern int suuji_no;
-extern int katakanago_no;
-extern int eisuu_no;
-extern int kigou_no;
-extern int toji_kakko_no;
-extern int fuzokugo_no;
-extern int kai_kakko_no;
-extern int giji_no;
+#ifdef nodef
+GLOBAL int sentou_no;		/* 「先頭」文節先頭に成れるもの	*/
+GLOBAL int suuji_no;		/* 「数字」数詞相当		*/
+GLOBAL int katakanago_no;	/* 「カナ」外来語など 名詞相当	*/
+GLOBAL int eisuu_no;		/* 「英数」			*/
+GLOBAL int kigou_no;		/* 「記号」			*/
+GLOBAL int toji_kakko_no;	/* 「閉括弧」			*/
+GLOBAL int fuzokugo_no;		/*   付属語だけ			*/
+GLOBAL int kai_kakko_no;	/* 「開括弧」			*/
+GLOBAL int giji_no;		/*   疑似			*/
 #endif /* nodef */
 
-#define sentou_no       0
-#define suuji_no        1
-#define katakanago_no   2
-#define eisuu_no        3
-#define kigou_no        4
-#define toji_kakko_no   5
-#define fuzokugo_no     6
-#define kai_kakko_no    7
-#define giji_no         8
+#define sentou_no       0	/* 「先頭」文節先頭に成れるもの	*/
+#define suuji_no        1	/* 「数字」数詞相当		*/
+#define katakanago_no   2	/* 「カナ」外来語など 名詞相当	*/
+#define eisuu_no        3	/* 「英数」			*/
+#define kigou_no        4	/* 「記号」			*/
+#define toji_kakko_no   5	/* 「閉括弧」			*/
+#define fuzokugo_no     6	/*   付属語だけ			*/
+#define kai_kakko_no    7	/* 「開括弧」			*/
+#define giji_no         8	/*   疑似			*/
 
 #endif /* JSERVER_KAISEKI_H */
 

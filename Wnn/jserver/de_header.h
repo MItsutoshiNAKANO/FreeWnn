@@ -1,5 +1,5 @@
 /*
- *  $Id: de_header.h,v 1.16 2002-11-08 09:15:06 hamajima Exp $
+ *  $Id: de_header.h,v 1.17 2003-05-11 18:35:54 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2001, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -31,6 +31,14 @@
 
 #ifndef JSERVER_DE_HEADER_H
 #define JSERVER_DE_HEADER_H 1
+
+#ifdef  GLOBAL_VALUE_DEFINE
+#define GLOBAL
+#define GLOBAL_VAL(v)  = (v)
+#else
+#define GLOBAL  extern
+#define GLOBAL_VAL(v)
+#endif /* GLOBAL_VALUE_DEFINE */
 
 #define DAEMON
 
@@ -69,6 +77,10 @@
 /* value of file.localf */
 #define LOCAL   1
 #define REMOTE  0
+
+/* SERVER OPTIONS */
+#define OPT_FORK	0x01
+#define OPT_VERBOSE	0x02
 
 
 /*
@@ -166,41 +178,33 @@ struct wnn_file
 /*
         external variables of daemon
 */
+GLOBAL char SER_VERSION[] GLOBAL_VAL(_SERVER_VERSION);
 
-extern char cmd_name[];
-
-extern CLIENT *client;          /* ask about Mr. Takeoka */
-extern int max_client;
-extern CLIENT *c_c;             /* this means current client */
-extern int cur_client;
-extern int clientp;
+GLOBAL CLIENT *client;
+GLOBAL int max_client GLOBAL_VAL(CL_MAX);
+GLOBAL CLIENT *c_c GLOBAL_VAL(NULL);	/* this means current client */
+GLOBAL int cur_client;
+GLOBAL int clientp;
 
 /*      env,dic,file    */
-extern struct cnv_env *c_env;
+GLOBAL struct cnv_env *env[MAX_ENV];
+GLOBAL struct cnv_env *c_env;
+/* GLOBAL struct cnv_env *s_env[]; */
+GLOBAL int max_sticky_env GLOBAL_VAL(ST_MAX);
 
-extern struct cnv_env *env[];
-extern struct wnn_file files[];
-extern struct wnn_dic dic_table[];
+GLOBAL struct wnn_file files[MAX_FILES];
+GLOBAL struct wnn_dic dic_table[MAX_DIC];
 
-extern int max_sticky_env;
-extern struct cnv_env *s_env[];
-
-extern int wnn_errorno;
+GLOBAL int wnn_errorno GLOBAL_VAL(0);
 
 /* option flags */
-extern int noisy;
-extern int option_flag;
-#define SERVER_FORK	1	/* fork server, detach tty */
-#define SERVER_NOFORK	0	/* not fork server */
+GLOBAL int noisy GLOBAL_VAL(0);
+GLOBAL int option_flag GLOBAL_VAL(0);
 
-extern char jserver_dir[];
-extern char jserverrcfile[];
-
-extern char SER_VERSION[];
-
-extern char *hinsi_file_name;
-
-extern char lang_dir[];
+GLOBAL char jserver_dir[MAXPATHLEN];
+GLOBAL char jserverrcfile[MAXPATHLEN];
+GLOBAL char *hinsi_file_name GLOBAL_VAL(NULL);
+GLOBAL char lang_dir[MAXPATHLEN];
 
 /* atojis.c */
 extern w_char *get_giji_knj ();
@@ -273,7 +277,7 @@ extern void used_dic_fuzoku_delete ();
 /* do_dic_no.c */
 extern void dic_init ();
 extern void js_dic_info ();
-extern void put_dic_info ();
+extern void put_dic_info (int);
 extern void js_word_add ();
 extern void js_word_delete ();
 extern void js_word_search_by_env ();
@@ -286,46 +290,45 @@ extern void js_hinsi_list ();
 extern void js_hinsi_dicts ();
 extern void js_hinsi_table_set ();
 /* do_env.c */
-extern void js_open ();
-extern void js_close ();
-extern void env_init ();
-extern void js_connect ();
-extern void js_env_sticky ();
-extern void js_env_un_sticky ();
-extern void js_env_exist ();
-extern void new_env ();
-extern void disconnect_all_env_of_client ();
-extern void js_disconnect ();
-extern void js_env_list ();
-extern void js_param_set ();
-extern void js_param_get ();
-extern int envhandle ();
+extern void js_open (void);
+extern void js_close (void);
+extern void env_init (void);
+extern void js_connect (void);
+extern void js_env_sticky (void);
+extern void js_env_un_sticky (void);
+extern void js_env_exist (void);
+extern void disconnect_all_env_of_client (void);
+extern void js_disconnect (void);
+extern void js_env_list (void);
+extern void js_param_set (void);
+extern void js_param_get (void);
+extern int envhandle (void);
 /* do_filecom.c */
-extern void file_init ();
-extern void js_mkdir ();
-extern void js_access ();
-extern void js_file_list_all ();
-extern void js_file_list ();
-extern void js_file_info ();
-extern void js_file_stat ();
-extern int file_stat ();
-extern void js_file_discard ();
-extern void del_all_file_in_env ();
-extern void js_hindo_file_create ();
-extern void js_hindo_file_create_client ();
-extern void js_dic_file_create ();
-extern void js_file_comment_set ();
-extern void js_file_loaded_local ();
-extern void js_file_loaded ();
-extern int file_loaded ();
-extern void js_file_send ();
-extern void js_file_read ();
-extern void js_file_write ();
-extern void js_file_receive ();
-extern int get_new_fid ();
-extern int find_fid_in_env ();
-extern void js_file_remove ();
-extern void js_file_password_set ();
+extern void file_init (void);
+extern void js_mkdir (void);
+extern void js_access (void);
+extern void js_file_list_all (void);
+extern void js_file_list (void);
+extern void js_file_info (void);
+extern void js_file_stat (void);
+extern int file_stat (char *);
+extern void js_file_discard (void);
+extern void del_all_file_in_env (int);
+extern void js_hindo_file_create (void);
+extern void js_hindo_file_create_client (void);
+extern void js_dic_file_create (void);
+extern void js_file_comment_set (void);
+extern void js_file_loaded_local (void);
+extern void js_file_loaded (void);
+extern int file_loaded (char *);
+extern void js_file_send (void);
+extern void js_file_read (void);
+extern void js_file_write (void);
+extern void js_file_receive (void);
+extern int get_new_fid (void);
+extern int find_fid_in_env (int, int);
+extern void js_file_remove (void);
+extern void js_file_password_set (void);
 /* do_henkan.c */
 extern void ret_dai ();
 extern void ret_sho ();
@@ -373,8 +376,8 @@ extern void fzk_discard ();
 extern int fzk_kai ();
 extern int fzk_ckvt ();
 /* get_kaiarea.c */
-extern int get_kaiseki_area ();
-extern void init_work_areas ();
+extern int get_kaiseki_area (size_t);
+extern void init_work_areas (void);
 /* hinsi_list.c */
 extern void make_hinsi_list ();
 extern int hinsi_table_set ();
@@ -427,10 +430,10 @@ extern int inspect ();
 extern int get_yomi_from_serial ();
 extern int get_yomi_from_serial ();
 /* jmt0.c */
-extern void init_jmt ();
-extern int jmt_set ();
+extern void init_jmt (void);
+extern int jmt_set (int);
 /* mknode0.c */
-extern int init_bzd ();
+extern int init_bzd (void);
 extern int init_ichbnp ();
 extern void clr_node ();
 extern void freebzd ();

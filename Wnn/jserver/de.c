@@ -6,7 +6,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2001, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -28,7 +28,7 @@
 /*
         Jserver         (Nihongo Daemon)
 */
-static char rcs_id[] = "$Id: de.c,v 1.28 2002-09-01 17:13:10 hiroo Exp $";
+static char rcs_id[] = "$Id: de.c,v 1.29 2003-05-11 18:35:55 hiroo Exp $";
 
 #if defined(HAVE_CONFIG_H)
 #  include <config.h>
@@ -63,18 +63,16 @@ static char rcs_id[] = "$Id: de.c,v 1.28 2002-09-01 17:13:10 hiroo Exp $";
 #  include <sys/param.h>
 #endif
 
+#include "getopt.h"
+
 #include "commonhd.h"
 #include "wnn_config.h"
 #include "jd_sock.h"
 #include "demcom.h"
 #include "wnn_os.h"
+#define GLOBAL_VALUE_DEFINE 1
 #include "de_header.h"
-
-#ifdef UX386
-#include <sys/termio.h>
-#undef  AF_UNIX
-#endif
-
+#undef  GLOBAL_VALUE_DEFINE
 #include "msg.h"
 
 #ifdef SOLARIS
@@ -92,6 +90,12 @@ static char rcs_id[] = "$Id: de.c,v 1.28 2002-09-01 17:13:10 hiroo Exp $";
 #ifndef min
 #define min(x,y)        ( (x)<(y) ? (x) : (y) )
 #endif
+
+#ifndef INET6
+#  define OPTIONARGS  "Df:s:h:N:p:vu4"
+#else
+#  define OPTIONARGS  "Df:s:h:N:p:vu46"
+#endif /* INET6 */
 
 /*      Accept Socket   */
 #ifdef INET6
@@ -215,7 +219,7 @@ static void dmp (char*, int);
 #endif
 
 
-char cmd_name[16];
+static char cmd_name[16];
 
 /* No arguments are used. Only options. */
 int
@@ -242,13 +246,14 @@ main (int argc, char *argv[])
     set_cswidth (create_cswidth (cswidth_name));
 
   port = -1;
-  option_flag |= SERVER_FORK;
+  /* option default */
+  option_flag = (OPT_FORK & ~OPT_VERBOSE);
 
   setuid (geteuid ());
   get_options (argc, argv);
   print_version();
   log_debug("invoked as %s.", argv[0]);
-  if (option_flag & SERVER_FORK)
+  if (option_flag & OPT_FORK)
     {
       if (fork ())
 	{
@@ -268,7 +273,7 @@ main (int argc, char *argv[])
   signal (SIGINT, signal_hand);
   signal (SIGQUIT, signal_hand);
   signal (SIGTERM, terminate_hand);
-  if (option_flag & SERVER_FORK)
+  if (option_flag & OPT_FORK)
     {
 #ifdef  SIGTSTP
       signal (SIGTSTP, SIG_IGN);
@@ -280,19 +285,23 @@ main (int argc, char *argv[])
   env_init ();
   file_init ();
   dic_init ();
-  get_kaiseki_area (LENGTHCONV + 1);    /* 変換可能文字数 */
+  if (NULL == get_kaiseki_area (LENGTHCONV + 1))    /* 変換可能文字数 */
+    {
+      log_err ("get_kaiseki_area failed.");
+      exit (1);
+    }
   init_work_areas ();
-  init_jmt (0);
+  init_jmt ();
 
   read_default_files ();
 
-  if (option_flag & SERVER_FORK)
+  if (option_flag & OPT_FORK)
     {
       /* End of initialization, kill parent */
       kill (getppid (), SIGTERM);
       fclose (stdin);
       fclose (stdout);
-      if (!noisy)
+      if (!(option_flag & OPT_VERBOSE))
 	{
 #if !(defined(BSD) && (BSD >= 199306))  /* !4.4BSD-Lite by Taoka */
 	  fclose (stderr);
@@ -1130,63 +1139,96 @@ static void
 get_options (int argc, char **argv)
 {
   int c;
-  extern char *optarg;
+  int digit_optind = 0;
 
   strcpy (jserverrcfile, LIBDIR);       /* usr/local/lib/wnn */
   strcat (jserverrcfile, SERVER_INIT_FILE);     /* ja_JP/jserverrc */
-#ifndef INET6
-  while ((c = getopt (argc, argv, "f:s:h:N:p:vu4")) != EOF)
-#else
-  while ((c = getopt (argc, argv, "f:s:h:N:p:vu46")) != EOF)
-#endif
+
+  while (1)
     {
+      int this_option_optind = optind ? optind : 1;
+      int option_index = 0;
+      static struct option long_options[] =
+      {
+	{"baseport",	1, NULL, 'p'},
+	{"inet",	0, NULL, '4'},
+	{"inet6",	0, NULL, '6'},
+	{"jserverrc",	1, NULL, 'f'},
+	{"version",	0, NULL, 'v'},
+	{0, 0, 0, 0}
+      };
+
+      c = getopt_long (argc, argv, OPTIONARGS,
+		       long_options, &option_index);
+      if (c == -1)
+        break;
+
       switch (c)
-        {
-        case 'f':
+	{
+	case 'D': /* do not detach, not a daemon */
+	  option_flag &= ~OPT_FORK;
+	  break;
+
+        case 'f': /* --jserverrc FILENAME */
           strcpy (jserverrcfile, optarg);
           break;
+
         case 's':
-          noisy = 1;
+	  /* should nuke noisy someday */
+          noisy = 1; option_flag |= OPT_VERBOSE;
           if (strcmp ("-", optarg) != 0)
             {
+	      /** maybe FILE wnnerr = stderr; or wnnerr = open(optarg...) is better? or freopen is normal method? */
+	      /** take a look at daemon(3) */
               if (freopen (optarg, "a", stderr) == NULL)
                 {
+		  /** fprintf to stderr? */
                   printf ("Error in opening scriptfile %s.\n", optarg);
                   exit (1);
                 }
             }
           log_debug ("script started");
           break;
+
         case 'h':
-          hinsi_file_name = optarg;
+	  /* var hinsi_file_name polluted */
+          hinsi_file_name = optarg; 
           break;
+
         case 'N':
           serverNO = atoi (optarg);
+	  /* error handling needed */
           break;
+
         case 'p':
           port = atoi (optarg);
+	  /* error handling needed */
           break;
+
         case 'v':
           print_version();
           usage();
-	  exit (0);
+
         case 'u':
 	  listen_proto &= ~PROTO_ALL;
 	  listen_proto |= PROTO_UN;
-          break;
+
         case '4':
 	  listen_proto &= ~PROTO_ALL;
 	  listen_proto |= PROTO_INET;
-          break;
+
 #ifdef INET6
         case '6':
 	  listen_proto &= ~PROTO_ALL;
 	  listen_proto |= PROTO_INET6;
           break;
-#endif
+#endif /* INET6 */
+
         default:
+          print_version();
 	  usage();
-        }
+	  break;
+	}
     }
 }
 
@@ -1234,9 +1276,9 @@ usage (void)
 {
   fprintf(stderr, 
 #ifdef INET6
-	  "usage: %s [-f <init_file> -s <log_file(\"-\" for stderr)> -h <pos_file> -N <serverNO> -p <port_base> -u -4 -6]\n",
+	  "usage: %s [-Du46][-f <init_file> -s <log_file(\"-\" for stderr)> -h <pos_file> -N <serverNO> -p <port_base>]\n",
 #else
-	  "usage: %s [-f <init_file> -s <log_file(\"-\" for stderr)> -h <pos_file> -N <serverNO> -p <port_base> -u -4]\n",
+	  "usage: %s [-Du4][-f <init_file> -s <log_file(\"-\" for stderr)> -h <pos_file> -N <serverNO> -p <port_base>]\n",
 #endif
 	  cmd_name);
   fprintf(stderr,
