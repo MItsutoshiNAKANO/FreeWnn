@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.32 2002-09-01 17:48:19 hiroo Exp $
+dnl   $Id: configure.in,v 1.33 2003-05-11 18:22:57 hiroo Exp $
 dnl
 
 dnl
@@ -10,7 +10,7 @@ dnl Copyright Kyoto University Research Institute for Mathematical Sciences
 dnl                 1987, 1988, 1989, 1990, 1991, 1992
 dnl Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 dnl Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-dnl Copyright FreeWnn Project 1999, 2000, 2001, 2002
+dnl Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2003
 dnl 
 dnl Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 dnl 
@@ -256,77 +256,67 @@ dnl Checks for cc and cpp.
 dnl
 AC_PROG_CC
 
-dnl Use environment variable (if set). It will be overridden
-dnl in supported system though...
-CDEBUGFLAGS=${CDEBUGFLAGS:-"-O"}
+dnl System specific options
+dnl Now that we are using autoconf, CCOPTIONS should be nuked...
 case $host in
 *-*-linux*)
     CCOPTIONS="-Dlinux -D_POSIX_SOURCE -D_BSD_SOURCE"
-    CDEBUGFLAGS="-O2 -fno-strength-reduce"
     ;;
 *-*-freebsd*|*-*-netbsd*|*-*-openbsd*)
-    CDEBUGFLAGS="-O2 -fno-strength-reduce"
     ;;
 *-*-bsdi*)
-    CDEBUGFLAGS="-O2 -fno-strength-reduce"
     ;;
 *-*-sunos*)
       if test $GCC = yes; then
 	CCOPTIONS="-Dsun -Dsparc"
-        CDEBUGFLAGS=-O2
       else
         CCOPTIONS=""
-        CDEBUGFLAGS=-O4
       fi
       ;;
 *-*-solaris2.*)
     # Will 'solaris*' be OK?
       if test $GCC = yes; then
         CCOPTIONS="-Dsun -D`uname -p` -DSVR4 -DSYSV"
-        CDEBUGFLAGS=-O2
       else
         CCOPTIONS="-Xc -xF -xcg92 -Dsun -D`uname -p` -DSVR4 -DSYSV"
-        CDEBUGFLAGS=-O4
       fi
     ;;
 *-*-hpux*)
     if test $GCC = yes; then
         CCOPTIONS="-Dhpux -DSYSV"
-        CDEBUGFLAGS=-O2
     else
         CCOPTIONS="-Ae -Dhpux -DSYSV"
     fi
       ;;
 i[[34567]]86-pc-beos*)
 	CCOPTIONS="-DBEOS -D_POSIX_SOURCE -D_BSD_SOURCE"
-	CDEBUGFLAGS="-O2 -fno-strength-reduce"
 	;;
 powerpc-*-beos*)
 	CCOPTIONS="-DBEOS -D_POSIX_SOURCE -D_BSD_SOURCE"
 	;;
 *-*-aix*)
-    if test $GCC = yes; then
-      CDEBUGFLAGS=-O2
-    else
-      CDEBUGFLAGS=-O
-    fi
     CCOPTIONS="-DSYSV"
     ;;
 *)
-    AC_MSG_WARN("It is not reported if FreeWnn works on this system.  But continuing...")
-    AC_MSG_WARN([(It may or may not work if you set CCOPTIONS properly.)])
+dnl    AC_MSG_WARN("It is not reported if FreeWnn works on this system.  But continuing...")
+dnl    AC_MSG_WARN([(It may or may not work if you set CCOPTIONS properly.)])
     ;;
 esac
 
 dnl Checking if we use gcc or not
 if test $debug = true; then
     if test $GCC = yes; then
-      CDEBUGFLAGS="-g2 -Wall -fstack-check $CDEBUGFLAGS"
+      CDEBUGFLAGS=${CDEBUGFLAGS:-"-g2 -O2 -Wall -fstack-check"}
+    else
+      CDEBUGFLAGS=${CDEBUGFLAGS:-""}
     fi
     INSTPGMFLAGS=
 else
+    CDEBUGFLAGS=""
     INSTPGMFLAGS="-s"
 fi
+AC_SUBST(CCOPTIONS)
+AC_SUBST(CDEBUGFLAGS)
 AC_SUBST(INSTPGMFLAGS)
 
 echo "Set CDEBUGFLAGS and CCOPTIONS to following:"
@@ -349,8 +339,6 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 AC_SUBST(LIBTOOL_DEPS)
-AC_SUBST(CCOPTIONS)
-AC_SUBST(CDEBUGFLAGS)
 
 dnl Checks for libraries.
 dnl ### dnl Replace `main' with a function in -lX11:

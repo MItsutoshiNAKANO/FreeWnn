@@ -2511,76 +2511,62 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-CDEBUGFLAGS=${CDEBUGFLAGS:-"-O"}
 case $host in
 *-*-linux*)
     CCOPTIONS="-Dlinux -D_POSIX_SOURCE -D_BSD_SOURCE"
-    CDEBUGFLAGS="-O2 -fno-strength-reduce"
     ;;
 *-*-freebsd*|*-*-netbsd*|*-*-openbsd*)
-    CDEBUGFLAGS="-O2 -fno-strength-reduce"
     ;;
 *-*-bsdi*)
-    CDEBUGFLAGS="-O2 -fno-strength-reduce"
     ;;
 *-*-sunos*)
       if test $GCC = yes; then
 	CCOPTIONS="-Dsun -Dsparc"
-        CDEBUGFLAGS=-O2
       else
         CCOPTIONS=""
-        CDEBUGFLAGS=-O4
       fi
       ;;
 *-*-solaris2.*)
     # Will 'solaris*' be OK?
       if test $GCC = yes; then
         CCOPTIONS="-Dsun -D`uname -p` -DSVR4 -DSYSV"
-        CDEBUGFLAGS=-O2
       else
         CCOPTIONS="-Xc -xF -xcg92 -Dsun -D`uname -p` -DSVR4 -DSYSV"
-        CDEBUGFLAGS=-O4
       fi
     ;;
 *-*-hpux*)
     if test $GCC = yes; then
         CCOPTIONS="-Dhpux -DSYSV"
-        CDEBUGFLAGS=-O2
     else
         CCOPTIONS="-Ae -Dhpux -DSYSV"
     fi
       ;;
 i[34567]86-pc-beos*)
 	CCOPTIONS="-DBEOS -D_POSIX_SOURCE -D_BSD_SOURCE"
-	CDEBUGFLAGS="-O2 -fno-strength-reduce"
 	;;
 powerpc-*-beos*)
 	CCOPTIONS="-DBEOS -D_POSIX_SOURCE -D_BSD_SOURCE"
 	;;
 *-*-aix*)
-    if test $GCC = yes; then
-      CDEBUGFLAGS=-O2
-    else
-      CDEBUGFLAGS=-O
-    fi
     CCOPTIONS="-DSYSV"
     ;;
 *)
-    { echo "$as_me:$LINENO: WARNING: \"It is not reported if FreeWnn works on this system.  But continuing...\"" >&5
-echo "$as_me: WARNING: \"It is not reported if FreeWnn works on this system.  But continuing...\"" >&2;}
-    { echo "$as_me:$LINENO: WARNING: (It may or may not work if you set CCOPTIONS properly.)" >&5
-echo "$as_me: WARNING: (It may or may not work if you set CCOPTIONS properly.)" >&2;}
     ;;
 esac
 
 if test $debug = true; then
     if test $GCC = yes; then
-      CDEBUGFLAGS="-g2 -Wall -fstack-check $CDEBUGFLAGS"
+      CDEBUGFLAGS=${CDEBUGFLAGS:-"-g2 -O2 -Wall -fstack-check"}
+    else
+      CDEBUGFLAGS=${CDEBUGFLAGS:-""}
     fi
     INSTPGMFLAGS=
 else
+    CDEBUGFLAGS=""
     INSTPGMFLAGS="-s"
 fi
+
+
 
 
 echo "Set CDEBUGFLAGS and CCOPTIONS to following:"
@@ -4121,7 +4107,7 @@ test "x$enable_libtool_lock" != xno && enable_libtool_lock=yes
 case $host in
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4124 "configure"' > conftest.$ac_ext
+  echo '#line 4110 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -4650,7 +4636,7 @@ chmod -w .
 save_CFLAGS="$CFLAGS"
 CFLAGS="$CFLAGS -o out/conftest2.$ac_objext"
 compiler_c_o=no
-if { (eval echo configure:4653: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
+if { (eval echo configure:4639: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
   # The compiler can only warn and ignore the option if not recognized
   # So say no if there are warnings
   if test -s out/conftest.err; then
@@ -6269,7 +6255,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 6272 "configure"
+#line 6258 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -6367,7 +6353,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 6370 "configure"
+#line 6356 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -7085,8 +7071,6 @@ LIBTOOL_DEPS="$ac_aux_dir/ltmain.sh"
 LIBTOOL='$(SHELL) $(top_builddir)/libtool'
 
 # Prevent multiple expansion
-
-
 
 
 
@@ -9411,6 +9395,8 @@ s,@CPPFLAGS@,$CPPFLAGS,;t t
 s,@ac_ct_CC@,$ac_ct_CC,;t t
 s,@EXEEXT@,$EXEEXT,;t t
 s,@OBJEXT@,$OBJEXT,;t t
+s,@CCOPTIONS@,$CCOPTIONS,;t t
+s,@CDEBUGFLAGS@,$CDEBUGFLAGS,;t t
 s,@INSTPGMFLAGS@,$INSTPGMFLAGS,;t t
 s,@CPP@,$CPP,;t t
 s,@INSTALL_PROGRAM@,$INSTALL_PROGRAM,;t t
@@ -9425,8 +9411,6 @@ s,@STRIP@,$STRIP,;t t
 s,@ac_ct_STRIP@,$ac_ct_STRIP,;t t
 s,@LIBTOOL@,$LIBTOOL,;t t
 s,@LIBTOOL_DEPS@,$LIBTOOL_DEPS,;t t
-s,@CCOPTIONS@,$CCOPTIONS,;t t
-s,@CDEBUGFLAGS@,$CDEBUGFLAGS,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@JS_SUPPORTOBJS@,$JS_SUPPORTOBJS,;t t
 CEOF

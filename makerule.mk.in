@@ -1,5 +1,5 @@
 #
-#   $Id: makerule.mk.in,v 1.10 2001-09-16 11:38:35 hiroo Exp $
+#   $Id: makerule.mk.in,v 1.11 2003-05-11 18:22:57 hiroo Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001
+# Copyright FreeWnn Project 1999, 2000, 2001, 2003
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -52,10 +52,11 @@ all::
 
 
                AR = ar cq
-               CC = @CC@
                AS = as
 
-              CPP = @CPP@
+CPP = @CPP@
+CC = @CC@
+CCLINK = $(CC)
 
      INSTALLFLAGS =
                LD = ld
@@ -88,19 +89,12 @@ all::
      INSTMANFLAGS = -m 0444
      INSTDATFLAGS = -m 0444
 
-      CDEBUGFLAGS = @CDEBUGFLAGS@
-        CCOPTIONS = @CCOPTIONS@ @ipv6@
-
-ALLDEFINES = $(INCLUDES) -DFUNCPROTO=15 -DNARROWPROTO $(DEFINES)
-CFLAGS = $(CDEBUGFLAGS) $(CCOPTIONS) $(ALLDEFINES) @DEFS@
+CCOPTIONS = @CCOPTIONS@
+ALLDEFINES = $(INCLUDES) $(DEFINES)
+CFLAGS = @CFLAGS@ @CDEBUGFLAGS@ $(CCOPTIONS) @ipv6@ @DEFS@ $(ALLDEFINES)
+LIBS = @LIBS@
 LINTFLAGS = $(LINTOPTS) -DLINT $(ALLDEFINES) $(DEPEND_DEFINES)
-LDOPTIONS = $(CDEBUGFLAGS) $(CCOPTIONS)
-
-           CCLINK = $(CC)
-
-
-
-
+LDOPTIONS = @CDEBUGFLAGS@ $(CCOPTIONS)
 
 
 #
@@ -247,8 +241,7 @@ all::
 	for i in $$SUBDIRS ;\
 	do \
 	echo "making" all "in $(CURRENT_DIR)/$$i..."; \
-	(cd $$i && $(MAKE) $(MFLAGS) $(PARALLELMFLAGS) \
-	'CDEBUGFLAGS=$(CDEBUGFLAGS)' all) \
+	(cd $$i && $(MAKE) $(MFLAGS) $(PARALLELMFLAGS) all) \
 	|| if [ $$cont -eq 0 ]; then exit 1; fi; \
 	done
 
@@ -260,8 +253,7 @@ includes::
 	for i in $$SUBDIRS ;\
 	do \
 	echo "making" all "in $(CURRENT_DIR)/$$i..."; \
-	(cd $$i && $(MAKE) $(MFLAGS) $(PARALLELMFLAGS) \
-	'CDEBUGFLAGS=$(CDEBUGFLAGS)' includes) \
+	(cd $$i && $(MAKE) $(MFLAGS) $(PARALLELMFLAGS) includes) \
 	|| if [ $$cont -eq 0 ]; then exit 1; fi; \
 	done
 
@@ -273,8 +265,7 @@ install::
 	for i in $$SUBDIRS ;\
 	do \
 	echo "installing" all "in $(CURRENT_DIR)/$$i..."; \
-	(cd $$i && $(MAKE) $(MFLAGS) $(PARALLELMFLAGS) \
-	'CDEBUGFLAGS=$(CDEBUGFLAGS)' install) \
+	(cd $$i && $(MAKE) $(MFLAGS) $(PARALLELMFLAGS) install) \
 	|| if [ $$cont -eq 0 ]; then exit 1; fi; \
 	done
 
@@ -286,8 +277,7 @@ install.man::
 	for i in $$SUBDIRS ;\
 	do \
 	echo "installing man pages" "in $(CURRENT_DIR)/$$i..."; \
-	(cd $$i && $(MAKE) $(MFLAGS) $(PARALLELMFLAGS) \
-	'CDEBUGFLAGS=$(CDEBUGFLAGS)' install.man) \
+	(cd $$i && $(MAKE) $(MFLAGS) $(PARALLELMFLAGS) install.man) \
 	|| if [ $$cont -eq 0 ]; then exit 1; fi; \
 	done
 
