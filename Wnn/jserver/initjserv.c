@@ -1,5 +1,5 @@
 /*
- * $Id: initjserv.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: initjserv.c,v 1.2 2000-01-16 05:35:34 ura Exp $
  */
 
 /*
@@ -70,9 +70,6 @@ char	*s;
 	char	tmp[EXPAND_PATH_LENGTH];
 	register char	*p, *s1;
 	int	noerr, expandsuc;
-#if defined(SYSVR2) && !defined(AIXV3)
-        extern  char    *strchr();
-#endif /* defined(SYSVR2) && !defined(AIXV3) */
 
     if(*s != '@') {
 	strcpy(tmp, s);

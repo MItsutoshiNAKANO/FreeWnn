@@ -1,5 +1,5 @@
 /*
- * $Id: screen.c,v 1.1.1.1 2000-01-16 05:07:51 ura Exp $
+ * $Id: screen.c,v 1.2 2000-01-16 05:35:37 ura Exp $
  */
 
 /*
@@ -512,11 +512,6 @@ char *
 get_rk_modes()
 {
     char	*p;
-#ifndef SYSVR2
-    extern char *index();
-#else
-    extern char *strchr();
-#endif
 
     strcpy(rk_modes, (NULL == (p = romkan_dispmode()) ? "[   ]" : p));
 #ifndef SYSVR2
