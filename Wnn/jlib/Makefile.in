@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.11 2003-05-11 18:31:43 hiroo Exp $
+#   $Id: Makefile.in,v 1.12 2004-06-28 16:24:35 hiroo Exp $
 #
 
 #
@@ -72,7 +72,7 @@ includes::
 
 .c.o:
 	$(RM) $@
-	$(LIBTOOL) $(CC) -c $(CFLAGS) $(_NOOP_) $*.c
+	$(LIBTOOL) --mode=compile $(CC) -c $(CFLAGS) $(_NOOP_) $*.c
 
 clean::
 	$(RM) -r .libs
@@ -87,7 +87,7 @@ lint:
 
 kankana: kankana.o
 	$(RM) $@
-	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) kankana.o $(WNNJLIB) @LIBS@
+	$(LIBTOOL) --mode=link $(CCLINK) -o $@ $(LDOPTIONS) kankana.o $(WNNJLIB) @LIBS@
 
 clean::
 	$(RM) kankana
@@ -95,7 +95,7 @@ clean::
 all:: libwnn.la
 
 libwnn.la: $(OBJS) $(EXTRALIBRARYDEPS)
-	$(LIBTOOL) $(CC) -o $@ $(OBJS:.o=.lo) -rpath $(WNNLIBDIR) -version-info $(WNNJLIBVERSION)
+	$(LIBTOOL) --mode=build $(CC) -o $@ $(OBJS:.o=.lo) -rpath $(WNNLIBDIR) -version-info $(WNNJLIBVERSION)
 
 lintlib:: llib-lwnn.ln
 
@@ -108,28 +108,28 @@ instlib:: install
 install:: libwnn.la
 	@if [ -d $(DESTDIR)$(WNNLIBDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(WNNLIBDIR)); fi
-	$(LIBTOOL) $(INSTALL) $(INSTLIBFLAGS) libwnn.la $(DESTDIR)$(WNNLIBDIR)
+	$(LIBTOOL) --mode=install $(INSTALL) $(INSTLIBFLAGS) libwnn.la $(DESTDIR)$(WNNLIBDIR)
 
 $(OBJ3) : $(SRC3)
-	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
+	$(LIBTOOL) --mode=compile $(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
 
 $(OBJ4) : $(SRC4)
-	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
+	$(LIBTOOL) --mode=compile $(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
 
 $(OBJ5) : $(SRC5)
-	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
+	$(LIBTOOL) --mode=compile $(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
 
 $(OBJ6) : $(SRC6)
-	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
+	$(LIBTOOL) --mode=compile $(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
 
 $(OBJ7) : $(SRC7)
-	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
+	$(LIBTOOL) --mode=compile $(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
 
 $(OBJ8) : $(SRC8)
-	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
+	$(LIBTOOL) --mode=compile $(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
 
 $(OBJ9) : $(SRC9)
-	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
+	$(LIBTOOL) --mode=compile $(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
 
 $(LOCAL_RKOBJS) : $(LOCAL_RKSRCS)
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
