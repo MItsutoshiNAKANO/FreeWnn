@@ -1,5 +1,5 @@
 /*
- *  $Id: de_vars.c,v 1.4 2001-08-14 13:43:21 hiroo Exp $
+ *  $Id: de_vars.c,v 1.5 2002-08-12 16:25:46 hiroo Exp $
  */
 
 /*
@@ -50,6 +50,7 @@ struct cnv_env *c_env;          /* current env  */
 
 int wnn_errorno = 0;
 int noisy;
+int option_flag = 0;
 
 char jserver_dir[128];
 char jserverrcfile[128];

@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.24 2002-06-22 13:25:45 hiroo Exp $
+ *  $Id: de.c,v 1.25 2002-08-12 16:25:46 hiroo Exp $
  */
 
 /*
@@ -52,8 +52,9 @@
 #  endif
 #endif /* STDC_HEADERS */
 #include <sys/ioctl.h>
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
 #if HAVE_UNISTD_H
 #  include <unistd.h>
 #endif
@@ -90,7 +91,6 @@
 #undef USE_SETSOCKOPT
 #endif
 
-#define DOFORK	1
 #define QUIET	1
 
 #define NOT_QUIET       DEBUG | !QUIET
@@ -223,12 +223,13 @@ main (argc, argv)
     set_cswidth (create_cswidth (cswidth_name));
 
   port = -1;
+  option_flag |= SERVER_FORK;
 
   setuid (geteuid ());
   get_options (argc, argv);
   print_version();
   log_debug("invoked as %s.", argv[0]);
-  if (DOFORK)
+  if (option_flag & SERVER_FORK)
     {
       if (fork ())
 	{
@@ -248,7 +249,7 @@ main (argc, argv)
   signal (SIGINT, signal_hand);
   signal (SIGQUIT, signal_hand);
   signal (SIGTERM, terminate_hand);
-  if (DOFORK)
+  if (option_flag & SERVER_FORK)
     {
 #ifdef  SIGTSTP
       signal (SIGTSTP, SIG_IGN);
@@ -266,7 +267,7 @@ main (argc, argv)
 
   read_default_files ();
 
-  if (DOFORK)
+  if (option_flag & SERVER_FORK)
     {
       /* End of initialization, kill parent */
       kill (getppid (), SIGTERM);
@@ -318,9 +319,7 @@ daemon_main ()
       new_client ();
       for (;;)
         {
-#ifdef DEBUG
-          error1 ("main loop: ready_socks = %02X\n", ready_socks);
-#endif
+          log_debug ("main loop: ready_socks = %02X", ready_socks);
           if (get_client () == -1)
             break;
           c_c = &client[cur_clp];
@@ -441,7 +440,7 @@ new_client ()                   /* NewClient */
     {
       return;
     }
-  error1 ("new Client: sd = %d\n", sd);
+  log_debug ("new client: sd = %d", sd);
   /* reserve 2 fd */
   for (full = i = 0; i < 2; i++)
     {

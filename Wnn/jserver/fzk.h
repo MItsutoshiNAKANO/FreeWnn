@@ -1,5 +1,5 @@
 /*
- *  $Id: fzk.h,v 1.3 2001-06-14 18:16:01 ura Exp $
+ *  $Id: fzk.h,v 1.4 2002-08-12 16:25:46 hiroo Exp $
  */
 
 /*
@@ -28,6 +28,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
+#ifndef JSERVER_FZK_H
+#define JSERVER_FZK_H 1
 
 #define YOMI_L  8               /* 付属語の読みの長さの最大値 */
 
@@ -84,3 +87,6 @@ struct FT
   int fzklength;                /* 付属語数 */
 #endif
 };
+
+#endif /* JSERVER_FZK_H */
+

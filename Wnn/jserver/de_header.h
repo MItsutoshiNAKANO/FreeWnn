@@ -1,5 +1,5 @@
 /*
- *  $Id: de_header.h,v 1.13 2002-07-14 04:12:59 hiroo Exp $
+ *  $Id: de_header.h,v 1.14 2002-08-12 16:25:46 hiroo Exp $
  */
 
 /*
@@ -28,6 +28,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
+#ifndef JSERVER_DE_HEADER_H
+#define JSERVER_DE_HEADER_H 1
 
 #define DAEMON
 
@@ -182,7 +185,11 @@ extern struct cnv_env *s_env[];
 
 extern int wnn_errorno;
 
+/* option flags */
 extern int noisy;
+extern int option_flag;
+#define SERVER_FORK	1	/* fork server, detach tty */
+#define SERVER_NOFORK	0	/* not fork server */
 
 extern char jserver_dir[];
 extern char jserverrcfile[];
@@ -545,3 +552,6 @@ extern int motoni2 ();
 /* pwd.c */
 extern int new_pwd ();
 extern int check_pwd ();
+
+#endif /* JSERVER_DE_HEADER_H */
+

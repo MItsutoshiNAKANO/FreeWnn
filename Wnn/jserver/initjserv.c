@@ -1,5 +1,5 @@
 /*
- *  $Id: initjserv.c,v 1.13 2002-07-14 04:12:59 hiroo Exp $
+ *  $Id: initjserv.c,v 1.14 2002-08-12 16:25:46 hiroo Exp $
  */
 
 /*
@@ -63,10 +63,11 @@ struct wnn_param default_para = {
 /* 数字 カナ 英数 記号 閉括弧 付属語 開括弧 */
 };
 
+static int expand_expr (char *s);
 static int read_default_file (char *buffer, size_t buffer_size);
 #ifndef CHINESE
-static int expand_argument (unsigned char*);
-static int get_bcksla (char*);
+static int expand_argument (unsigned char *st);
+static int get_bcksla (char *st);
 #endif /* !CHINESE */
 
 static int
@@ -75,7 +76,7 @@ expand_expr (char *s)
         返り、その場合sの中身は着々とそのまんま。sの長さ＜256と仮定してる。*/
  /**    @USR (env名、logname), @LANG の展開 */
 {
-  char tmp[EXPAND_PATH_LENGTH];
+  char tmp[1+EXPAND_PATH_LENGTH];
   register char *p, *s1;
   int noerr, expandsuc;
 
@@ -142,32 +143,63 @@ expand_expr (char *s)
 }
 
 /* daemon initialize routine */
+
+/* Read [cjkt]server configuration file and set the parameters. */
+/* RETURN VALUE: 0: success; -1: failure */
 int
 read_default (void)
 {
-  FILE *fp, *fopen ();
-  char data[EXPAND_PATH_LENGTH];
-  char code[EXPAND_PATH_LENGTH];
-  char s[20][EXPAND_PATH_LENGTH];
-  register int num;
-#ifndef CHINESE
-  register int i;
-#endif
+  static const char sep[] = " \t";
+  FILE *fp;
+  char data[EXPAND_PATH_LENGTH +1];
+  char code[EXPAND_PATH_LENGTH +1];
+  char param[EXPAND_PATH_LENGTH +1];
+  char *word;
+  int i, num, *v[17];
 
+  log_debug ("sep: \"%s\"", sep);
   strcpy (jserver_dir, JSERVER_DIR);
 
   if ((fp = fopen (jserverrcfile, "r")) == NULL)
     {
-      perror ("");
-      printf ("Error can't open %s\n", jserverrcfile);
+      log_err ("can't open %s\n", jserverrcfile);
       return (-1);
     }
 
+  /* copy the pointer for looping */
+  v[0]  = &default_para.n;
+  v[1]  = &default_para.nsho;
+  v[2]  = &default_para.p1;
+  v[3]  = &default_para.p2;
+  v[4]  = &default_para.p3;
+  v[5]  = &default_para.p4;
+  v[6]  = &default_para.p5;
+  v[7]  = &default_para.p6;
+  v[8]  = &default_para.p7;
+  v[9]  = &default_para.p8;
+  v[10] = &default_para.p9;
+  v[11] = &default_para.p10;
+  v[12] = &default_para.p11;
+  v[13] = &default_para.p12;
+  v[14] = &default_para.p13;
+  v[15] = &default_para.p14;
+  v[16] = &default_para.p15;
+
   while (fgets (data, EXPAND_PATH_LENGTH, fp) != NULL)
     {
-      num = sscanf (data,
-                    "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s",
-                    code, s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7], s[8], s[9], s[10], s[11], s[12], s[13], s[14], s[15], s[16], s[17], s[18], s[19]);
+      num = sscanf (data, "%s", code);
+      if (num <= 0)
+	{
+	  /* no command on the line */
+	  continue;
+	}
+      code[EXPAND_PATH_LENGTH] = '\0';
+      if (code[0] == ';')
+	{
+	  /* the line is commented out */
+	  continue;
+	}
+
 /*
         if(strcmp(code, "jt_len") == 0){
             jt_len = atoi(s[0]);
@@ -175,57 +207,77 @@ read_default (void)
             hjt_len = atoi(s[0]);
         }
 */
+
       if (strcmp (code, "max_client") == 0)
         {
-          sscanf (data, "%s %d ", code, &max_client);
-          error1 ("max_client=%d\n", max_client);
+          num = sscanf (data, "%s %d ", code, &max_client);
+	  if (num != 2)
+	    {
+	      log_err ("command %s invalid.", code);
+	      continue;
+	    }
+          log_debug ("max_client=%d", max_client);
         }
       else if (strcmp (code, "max_sticky_env") == 0)
         {
-          sscanf (data, "%s %d ", code, &max_sticky_env);
-          error1 ("max_sticky_env=%d\n", max_sticky_env);
+          num = sscanf (data, "%s %d ", code, &max_sticky_env);
+	  if (num != 2)
+	    {
+	      log_err ("command %s invalid.", code);
+	      continue;
+	    }
+          log_debug ("max_sticky_env=%d", max_sticky_env);
         }
       else if (strcmp ((code + 1), "server_dir") == 0)
         {
-          if (expand_expr (s[0]) != 0)
+	  num = sscanf (data , "%s %s", code, param);
+	  if (num != 2)
+	    {
+	      log_err ("command %s invalid.", code);
+	      continue;
+	    }
+          if (expand_expr (param) != 0)
             {
-              printf ("Error can't expand %s\n", s[0]);
+              log_err ("command %s: can't expand %s\n", code, param);
             }
-          strcpy (jserver_dir, s[0]);
+          strcpy (jserver_dir, param);
+	  log_debug ("jserver_dir=%s", jserver_dir);
         }
       else if (strcmp (code, "def_param") == 0)
         {
-	  default_para.n    = atoi(s[0]);
-	  default_para.nsho = atoi(s[1]);
-	  default_para.p1   = atoi(s[2]);
-	  default_para.p2   = atoi(s[3]);
-	  default_para.p3   = atoi(s[4]);
-	  default_para.p4   = atoi(s[5]);
-	  default_para.p5   = atoi(s[6]);
-	  default_para.p6   = atoi(s[7]);
-	  default_para.p7   = atoi(s[8]);
-	  default_para.p8   = atoi(s[9]);
-	  default_para.p9   = atoi(s[10]);
-	  default_para.p10  = atoi(s[11]);
-	  default_para.p11  = atoi(s[12]);
-	  default_para.p12  = atoi(s[13]);
-	  default_para.p13  = atoi(s[14]);
-	  default_para.p14  = atoi(s[15]);
-	  default_para.p15  = atoi(s[16]);
-#ifndef CHINESE
+	  word = strtok (data, " \t"); /* discard first word "def_param" */
+	  for (i = 0; (i <= 16); i++) {
+	    word = strtok (NULL, " \t");
+	    if (word == NULL)
+	      {
+		log_err ("%s has only %d parameters.", code, i);
+	        return (-1);
+	      }
+	    *v[i] = atoi (word); /* XXX: default to 0 if error */
+	  }
+	  log_debug ("command %s had %d parameters", code, i);
         }
-      else if (strcmp (code, "set_giji_eisuu") == 0 && num >= 2)
+#ifndef CHINESE
+      /* else if (strcmp (code, "set_giji_eisuu") == 0 && num >= 2) */
+      else if (strcmp (code, "set_giji_eisuu") == 0)
         {
-          for (i = 0; i < num - 1; i++)
-            {
-              giji_eisuu[i] = expand_argument (s[i]);
-            }
+	  word = strtok (data, sep); /* discard first word "set_giji_eisuu" */
+	  for (i = 0; (word || i < 20); i++)
+	    {
+	      word = strtok (NULL, sep);
+	      if (word == NULL)
+		{
+		  break;
+		}
+              giji_eisuu[i] = expand_argument (word);
+	    }
+	  log_debug ("%s has %d parameters.", code, i);
           for (; i < 20; i++)
             {
               giji_eisuu[i] = 0xffff;
             }
-#endif
         }
+#endif
     }
   fclose (fp);
   return (0);
@@ -234,11 +286,11 @@ read_default (void)
 int
 read_default_files (void)
 {
-  FILE *fp, *fopen ();
-  char data[256];
+  FILE *fp;
+  char data[EXPAND_PATH_LENGTH+1];
   int num;
-  char code[256];
-  char file[256];
+  char code[EXPAND_PATH_LENGTH+1];
+  char file[EXPAND_PATH_LENGTH+1];
 
   if ((fp = fopen (jserverrcfile, "r")) == NULL)
     {
@@ -251,7 +303,7 @@ read_default_files (void)
       num = sscanf (data, "%s %s", code, file);
       if (strcmp (code, "readfile") == 0 && num == 2)
         {
-          read_default_file (file, 256);
+          read_default_file (file, EXPAND_PATH_LENGTH+1);
         }
     }
   fclose (fp);
@@ -261,17 +313,6 @@ read_default_files (void)
   return (0);
 }
 
-/*
-dummy_env()
-{
-    int i = 0;
-    struct cnv_env *ne;
-
-    if((ne= (struct cnv_env *)malloc(sizeof(struct cnv_env)))==0) return -1;
-    env[i]=ne; new_env(i,"dummy_env");
-}
-*/
-
 static int
 read_default_file (char* buffer, size_t buffer_size)
 {
@@ -280,7 +321,7 @@ read_default_file (char* buffer, size_t buffer_size)
   buffer = expand_file_name (buffer, buffer_size);
   if (!buffer)
     {
-      printf ("filename too long. %s\n", buffer);
+      log_err ("read_default_file: filename too long. %s", buffer);
       return (-1);
     }
 

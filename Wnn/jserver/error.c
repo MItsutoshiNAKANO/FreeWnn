@@ -1,5 +1,5 @@
 /*
- *  $Id: error.c,v 1.14 2002-07-14 04:26:57 hiroo Exp $
+ *  $Id: error.c,v 1.15 2002-08-12 16:25:46 hiroo Exp $
  */
 
 /*
@@ -34,6 +34,7 @@
 #endif
 
 #include <stdio.h>
+#include <ctype.h>
 #include <time.h>
 #include <errno.h>
 #include <signal.h>
@@ -55,6 +56,7 @@
 
 #include "commonhd.h"
 #include "de_header.h"
+#include "jslib.h"
 
 /* static void exit_hand (); */		/* Not used for now */
 static void vwrite_log (const char *, va_list);
@@ -126,8 +128,8 @@ vwrite_log(const char *format, va_list ap)
   FILE *fplog = stderr;
   time_t obakenoQ;
   struct tm *Q;
-/*  struct passed *getpwiuid();  */
   char *chopped = NULL;
+  char client_uname[WNN_ENVNAME_LEN];
   unsigned int formlen;
   const char *month[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
 			 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -139,8 +141,13 @@ vwrite_log(const char *format, va_list ap)
 	  month[Q->tm_mon], Q->tm_mday, Q->tm_year + 1900,
 	  Q->tm_hour, Q->tm_min, Q->tm_sec);
   if(c_c) {
-    fprintf(fplog, "client=%s",
-	    (c_c->user_name[0] ? c_c->user_name : "<UNKNOWN>"));
+    if (isgraph (c_c->user_name[0])) {
+      strncpy (client_uname, c_c->user_name, WNN_ENVNAME_LEN);
+      client_uname[WNN_ENVNAME_LEN-1]='\0';
+    } else {
+      strcpy (client_uname, "<UNKNOWN>");
+    }
+    fprintf(fplog, "client=%s", client_uname);
     /* getpwuid(c_c->uid)->pw_name ? */
   } else {
     fputs("server", fplog);

@@ -1,5 +1,5 @@
 /*
- *  $Id: kaiseki.h,v 1.3 2001-06-14 18:16:02 ura Exp $
+ *  $Id: kaiseki.h,v 1.4 2002-08-12 16:25:46 hiroo Exp $
  */
 
 /*
@@ -28,6 +28,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
+#ifndef JSERVER_KAISEKI_H
+#define JSERVER_KAISEKI_H 1
 
 /*********************
  *  header of daemon 
@@ -182,3 +185,6 @@ extern int giji_no;
 #define fuzokugo_no     6
 #define kai_kakko_no    7
 #define giji_no         8
+
+#endif /* JSERVER_KAISEKI_H */
+

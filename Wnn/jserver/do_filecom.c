@@ -1,5 +1,5 @@
 /*
- *  $Id: do_filecom.c,v 1.9 2002-07-14 04:26:57 hiroo Exp $
+ *  $Id: do_filecom.c,v 1.10 2002-08-12 16:25:46 hiroo Exp $
  */
 
 /*
@@ -220,7 +220,7 @@ int
 file_stat (file_name)
      char *file_name;
 {
-  FILE *fp, *fopen ();
+  FILE *fp;
   struct wnn_file_head fh;
   struct JT jt;
   struct HJT hjt;

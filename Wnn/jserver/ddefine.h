@@ -1,5 +1,5 @@
 /*
- *  $Id: ddefine.h,v 1.4 2001-06-14 18:16:00 ura Exp $
+ *  $Id: ddefine.h,v 1.5 2002-08-12 16:25:46 hiroo Exp $
  */
 
 /*
@@ -32,6 +32,9 @@
 /************************
  * define of daemon
  ************************/
+
+#ifndef JSERVER_DDEFINE_H
+#define JSERVER_DDEFINE_H 1
 
 #include <ctype.h>
 
@@ -306,3 +309,5 @@ struct DSD_DBN
 #define UN_KNOWN        -1
 
 #define NOTHING         0
+
+#endif /* JSERVER_DDEFINE_H */
