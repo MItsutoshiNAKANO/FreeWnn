@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.37 2003-06-08 03:09:48 hiroo Exp $
+dnl   $Id: configure.in,v 1.38 2003-06-10 10:39:08 aono Exp $
 dnl
 
 dnl
@@ -263,10 +263,6 @@ case $host in
 *-*-linux*)
     CCOPTIONS="-Dlinux -D_POSIX_SOURCE -D_BSD_SOURCE"
     ;;
-*-*-freebsd*|*-*-netbsd*|*-*-openbsd*)
-    ;;
-*-*-bsdi*)
-    ;;
 *-*-darwin*)
     # Unfortunately, autoconf (at least 2.57) does not recognize
     # proper CPP. (Normal cpp-precomp nor auto-retrying in basic mode does
@@ -319,7 +315,7 @@ if test $debug = true; then
     fi
     INSTPGMFLAGS=
 else
-    CDEBUGFLAGS=""
+    CDEBUGFLAGS=${CDEBUGFLAGS:-""}
     INSTPGMFLAGS="-s"
 fi
 AC_SUBST(CCOPTIONS)
@@ -370,8 +366,6 @@ AC_CHECK_HEADERS(fcntl.h syslog.h unistd.h utmp.h utmpx.h \
 	malloc.h strings.h memory.h \
 	curses.h ncurses.h sgtty.h term.h termio.h termios.h \
 )
-dnl If you don't use ansidecl.h, use this (and modify Wnn/jserver/error.c)
-dnl AC_CHECK_HEADERS(stdarg.h varargs.h, break)
 
 dnl
 dnl Checks for typedefs, structures, and compiler characteristics.
@@ -379,12 +373,12 @@ dnl
 AC_TYPE_MODE_T
 AC_HEADER_TIME
 
-dnl AC_CHECK_TYPES(time_t,
+dnl AC_CHECK_TYPES(time_t,,
 dnl	AC_DEFINE(time_t, long, [Define missing time_t.]),
 dnl		[INCLUDES = time.h])
-AC_CHECK_TYPES(socklen_t,
+AC_CHECK_TYPES(socklen_t,,
 		AC_DEFINE(socklen_t, int, [Define missing socklen_t.]),
-		[INCLUDES = sys/socket.h])
+		[#include <sys/socket.h>])
 
 dnl
 dnl Checks for symbol
