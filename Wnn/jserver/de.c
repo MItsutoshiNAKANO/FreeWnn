@@ -28,11 +28,12 @@
 /*
         Jserver         (Nihongo Daemon)
 */
-static char rcs_id[] = "$Id: de.c,v 1.29 2003-05-11 18:35:55 hiroo Exp $";
+static char rcs_id[] = "$Id: de.c,v 1.30 2003-06-07 02:20:55 hiroo Exp $";
 
 #if defined(HAVE_CONFIG_H)
 #  include <config.h>
 #endif
+#include "getopt.h"
 
 #include <stdio.h>
 #include <ctype.h>
@@ -283,7 +284,10 @@ main (int argc, char *argv[])
   daemon_init ();
 
   env_init ();
-  file_init ();
+  if (file_init () == NULL)
+    {
+      exit (1);
+    }
   dic_init ();
   if (NULL == get_kaiseki_area (LENGTHCONV + 1))    /* 変換可能文字数 */
     {
