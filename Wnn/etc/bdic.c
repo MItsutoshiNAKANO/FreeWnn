@@ -1,5 +1,5 @@
 /*
- *  $Id: bdic.c,v 1.5 2001-06-14 18:15:55 ura Exp $
+ *  $Id: bdic.c,v 1.6 2002-03-08 19:50:17 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -47,6 +47,7 @@
 #ifndef JS
 #include <sys/stat.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "commonhd.h"
 #include "jslib.h"
 #include "jh.h"

@@ -1,5 +1,5 @@
 /*
- *  $Id: xutoj.c,v 1.4 2001-06-14 18:15:56 ura Exp $
+ *  $Id: xutoj.c,v 1.5 2002-03-08 19:50:17 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -31,6 +31,7 @@
 
 #define NEED_CR
 
+#include <stdlib.h>
 #include "commonhd.h"
 #include "wnn_config.h"
 #include "wnn_os.h"
@@ -2057,7 +2058,7 @@ icns_to_big5 (big5, icns, siz)
 {
   register unsigned char *d = big5;
   register w_char *s = icns;
-  register i = siz;
+  register int i = siz;
   short code_out;               /* Buffering one two-byte code  */
 
   if (d == NULL || s == NULL)
