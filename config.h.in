@@ -1,20 +1,4 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
-/* $Id: config.h.in,v 1.18 2002-09-01 17:48:22 hiroo Exp $ */
-
-/* Define `socklen_t' to int if <sys/socket.h> does not define. */
-#undef socklen_t
-
-/* Define to `long' if <sys/types.h> does not define.  */
-#undef time_t
-
-/*
- * Defined if you allow creating a file in an arbitrary path
- * which is the traditional feature.
- */
-#undef WNN_ALLOW_UNSAFE_PATH
-
-/* Define if the signal function returns void. */
-#undef RETSIGTYPE_VOID
 
 /* Define to 1 if you have the `bcmp' function. */
 #undef HAVE_BCMP
@@ -130,6 +114,9 @@
 /* Define to 1 if you have the `socket' function. */
 #undef HAVE_SOCKET
 
+/* Define to 1 if the system has the type `socklen_t'. */
+#undef HAVE_SOCKLEN_T
+
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
 
@@ -181,6 +168,9 @@
 /* Define to 1 if you have the <term.h> header file. */
 #undef HAVE_TERM_H
 
+/* Define to 1 if the system has the type `time_t'. */
+#undef HAVE_TIME_T
+
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
@@ -223,8 +213,14 @@
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 #undef TIME_WITH_SYS_TIME
 
+/* Define to allow writing to other than JSERVERDIR. */
+#undef WNN_ALLOW_UNSAFE_PATH
+
 /* Define to `int' if <sys/types.h> does not define. */
 #undef mode_t
 
-/* Define to `long' if <sys/types.h> does not define. */
+/* Define missing socklen_t. */
+#undef socklen_t
+
+/* Define missing time_t. */
 #undef time_t

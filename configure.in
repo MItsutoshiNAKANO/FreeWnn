@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.33 2003-05-11 18:22:57 hiroo Exp $
+dnl   $Id: configure.in,v 1.34 2003-06-04 14:05:22 hiroo Exp $
 dnl
 
 dnl
@@ -248,7 +248,8 @@ esac], unsafe_path=false)
 AC_SUBST(unsafe_path)
 
 if test ${unsafe_path} = true; then
-	AC_DEFINE(WNN_ALLOW_UNSAFE_PATH)
+	AC_DEFINE(WNN_ALLOW_UNSAFE_PATH, 1,
+		[Define to allow writing to other than JSERVERDIR.])
 fi
 
 dnl
@@ -265,6 +266,12 @@ case $host in
 *-*-freebsd*|*-*-netbsd*|*-*-openbsd*)
     ;;
 *-*-bsdi*)
+    ;;
+*-*-darwin*)
+    # Unfortunately, autoconf (at least 2.57) does not recognize
+    # proper CPP. (Normal cpp-precomp nor auto-retrying in basic mode does
+    # not work with pubdic+ processing.) So define here ....
+    CPP=${CPP:-"gcc -E -no-cpp-precomp"}
     ;;
 *-*-sunos*)
       if test $GCC = yes; then
@@ -371,22 +378,10 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 dnl
 AC_TYPE_MODE_T
 AC_HEADER_TIME
-AC_CHECK_TYPE(time_t, long)
 
-dnl
-dnl socklen_t は sys/socket.h や bits/socket.h で定義されているので、
-dnl AC_CHECK_TYPE では検出できない
-dnl
-AC_MSG_CHECKING(for socklen_t)
-AC_EGREP_CPP(socklen_t, [#include <sys/socket.h>], AC_MSG_RESULT(yes), 
-[ 
-AC_DEFINE(socklen_t, int)
-AC_MSG_RESULT(no)
-])
-dnl code below is for the same thing with autoconf 2.53
-dnl AC_CHECK_TYPES(socklen_t,,
-dnl 	AC_DEFINE(socklen_t, int),
-dnl	[INCLUDES = sys/socket.h])
+AC_CHECK_TYPES(time_t, AC_DEFINE(time_t, long, [Define missing time_t.]))
+AC_CHECK_TYPES(socklen_t,
+	AC_DEFINE(socklen_t, int, [Define missing socklen_t.]), [INCLUDES = sys/socket.h])
 
 dnl
 dnl Checks for symbol
