@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.24 2002-03-31 11:30:21 h-abe Exp $
+dnl   $Id: configure.in,v 1.25 2002-05-01 20:27:16 hiroo Exp $
 dnl
 
 dnl
@@ -376,6 +376,7 @@ AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS(fcntl.h sgtty.h termio.h unistd.h)
 AC_CHECK_HEADERS(sys/file.h sys/ioctl.h sys/time.h sys/types.h sys/param.h)
 AC_CHECK_HEADERS(malloc.h strings.h memory.h)
+AC_CHECK_HEADERS(syslog.h)
 dnl If you don't use ansidecl.h, use this (and modify Wnn/jserver/error.c)
 dnl AC_CHECK_HEADERS(stdarg.h varargs.h, break)
 
@@ -423,7 +424,7 @@ AC_CHECK_FUNC(setpgrp)
 AC_FUNC_SETPGRP
 AC_CHECK_FUNCS(gethostname select)
 AC_CHECK_FUNCS(socket closesocket setsockopt send recv)
-AC_CHECK_FUNCS(vsyslog)
+AC_CHECK_FUNCS(syslog vsyslog setenv)
 dnl for bcopy/index -> memcpy/strchr conversion (preparation):
 dnl AC_CHECK_FUNCS(strchr memcpy)
 
@@ -433,15 +434,6 @@ AC_CHECK_FUNCS(mkdir vasprintf, ,
 [JS_SUPPORTOBJS="$JS_SUPPORTOBJS ${ac_func}.o"])
 AC_SUBST(JS_SUPPORTOBJS)
 
-dnl Check extra libraries for jserver
-case $host in
-i[[34567]]86-pc-beos*)
-	JS_SUPPORTLIBS=-lbe
-	;;
-*)
-	;;
-esac
-AC_SUBST(JS_SUPPORTLIBS)
 
 dnl
 dnl Creating Makefiles.
