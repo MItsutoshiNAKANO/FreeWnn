@@ -1,5 +1,5 @@
 /*
- *  $Id: fzk.c,v 1.5 2002-05-12 22:51:16 hiroo Exp $
+ *  $Id: fzk.c,v 1.6 2003-04-06 06:30:48 hiroo Exp $
  */
 
 /*
@@ -28,6 +28,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
+static char rcs_id[] = "$Id: fzk.c,v 1.6 2003-04-06 06:30:48 hiroo Exp $";
+
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
@@ -35,6 +38,7 @@
 #include <stdio.h>
 #if STDC_HEADERS
 #  include <stdlib.h>
+#  include <string.h>
 #else
 #  if HAVE_MALLOC_H
 #    include <malloc.h>
@@ -50,12 +54,21 @@
 #define vungetc(k, pt) {if(pt) {ungetc((k),(pt));}else{xungetc_cur(k);}}
 
 #ifndef NO_FZK
-static void link_job ();
-static int fzk_ken (), setfzk ();
-static struct fzkentry *bsrch ();
+static void link_job (int, struct FT *);
+static int fzk_ken (w_char *, w_char *, word_vector *, struct fzkken *);
+static int setfzk (struct fzkentry *, struct fzkken **, word_vector *, int);
+static struct fzkentry *bsrch (w_char *);
 #endif
-static void fzk_orvt ();
-static int fzk_ck_vector (), bittest (), get_decimal (), check_eof (), get_hexsa (), get_string (), check_eof (), kng_ckvt ();
+static int kng_ckvt (word_vector *, int);
+static int fzk_ck_vector (word_vector *);
+static void fzk_orvt (int *, int *);
+static int bittest (int *, int);
+static int error_fzk (void);
+static int error_eof (void);
+static int get_decimal (FILE *);
+static int get_hexsa (FILE *);
+static int get_string (FILE *, unsigned char *);
+static int check_eof (FILE *);
 
 #ifndef NO_FZK
 static int fzkvect_kosuu;       /* 付属語ベクタ数 */
@@ -106,8 +119,7 @@ static int kango_length;        /* 幹語数 */
 
 
 struct FT *
-fzk_read (fp)
-     register FILE *fp;
+fzk_read (FILE *fp)
 {
   struct FT *fzk_tbl;
 
@@ -122,12 +134,11 @@ fzk_read (fp)
 }
 
 struct FT *
-fzk_ld (fp)
-     register FILE *fp;
+fzk_ld (FILE *fp)
 {
   struct FT *fzk_tbl;
-  register int k, l, m;
-  register int vect_count = 0;
+  int k, l, m;
+  int vect_count = 0;
 #ifndef NO_FZK
   struct fzkentry *ptr;
   unsigned char charyomi[(YOMI_L + 1) * 2];
@@ -150,47 +161,41 @@ fzk_ld (fp)
   if (fzkvect_l > VECT_L)
     {
       wnn_errorno = WNN_FZK_TOO_DEF;
-      error1 ("Sorry, your fuzokugo bit data has too many id.\n");
-      error1 ("Please change define VECT_L %d and compile again\n", fzkvect_l);
+      log_err ("Sorry, your fuzokugo bit data has too many id.");
+      log_err ("Please change define VECT_L %d and compile again.", fzkvect_l);
       return (NULL);
     }
 
   if (kango_vect_l > KANGO_VECT_L)
     {
       wnn_errorno = WNN_FZK_TOO_DEF;
-      error1 ("Sorry, your kango bit data has too many id.\n");
-      error1 ("Please change define KANGO_VECT_L %d and compile again\n", kango_vect_l);
+      log_err ("Sorry, your kango bit data has too many id.");
+      log_err ("Please change define KANGO_VECT_L %d and compile again.", kango_vect_l);
       return (NULL);
     }
-#ifdef nodef                    /* This check doesn't need anymore. KUWARI */
-  if (kango_vect_kosuu > KANGO_VECT_KOSUU)
-    {
-      wnn_errorno = WNN_FZK_TOO_DEF;
-      error1 ("Sorry, your kango bit vector has too many id.\n");
-      error1 ("Please change define KANGO_VECT_KOSUU %d and compile again\n", kango_vect_kosuu);
-      return (NULL);
-    }
-#endif
 
   if (kango_length > KANGO_HINSI_MX)
     {
       wnn_errorno = WNN_FZK_TOO_DEF;
-      error1 ("Sorry, your kango bit data has too many id.\n");
-      error1 ("Please change define KANGO_MX %d and compile again\n", kango_length);
+      log_err ("Sorry, your kango bit data has too many id.");
+      log_err ("Please change define KANGO_MX %d and compile again.", kango_length);
       return (NULL);
     }
   if (kango_vect_kosuu > kango_length)
     {
       wnn_errorno = WNN_FZK_TOO_DEF;
-      error1 ("KANGO vector kosuu is more than KANGO hinsi suu\n");
+      log_err ("KANGO vector kosuu is more than the number of KANGO hinsi.");
       return (NULL);
     }
   if ((fzk_tbl = (struct FT *) malloc (sizeof (struct FT))) == NULL)
     {
       wnn_errorno = WNN_MALLOC_ERR;
-      error1 ("malloc error in fzk\n");
+      log_err ("fzk_ld: malloc error.");
       return (NULL);
     }
+  /* clear struct */
+  bzero (fzk_tbl, sizeof (struct FT));
+
   fzk_tbl->kango_hinsi_area = NULL;
   fzk_tbl->kango_vect_area = NULL;
   fzk_tbl->fzkvect_l = fzkvect_l;
@@ -200,35 +205,35 @@ fzk_ld (fp)
   fzk_tbl->tablefuzokugo = NULL;
   fzk_tbl->fzklength = fzklength;
 
-  if ((fzk_tbl->vect_area = (struct fzkvect *) malloc (sizeof (struct fzkvect) * fzkvect_kosuu)) == NULL)
+  if ((fzk_tbl->vect_area = (fzkvect *) calloc (fzkvect_kosuu, sizeof (fzkvect))) == NULL)
     {
       wnn_errorno = WNN_MALLOC_ERR;
-      error1 ("malloc error in fzk\n");
+      log_err ("fzk_ld: malloc error.");
       fzk_discard (fzk_tbl);
       return (NULL);
     }
 #endif /* NO_FZK */
 
-  if ((fzk_tbl->kango_hinsi_area = (int *) malloc (sizeof (int) * kango_length)) == NULL)
+  if ((fzk_tbl->kango_hinsi_area = (int *) calloc (kango_length, sizeof (int))) == NULL)
     {
       wnn_errorno = WNN_MALLOC_ERR;
       error1 ("malloc error in fzk\n");
       fzk_discard (fzk_tbl);
       return (NULL);
     }
-  if ((fzk_tbl->kango_vect_area = (struct kangovect *) malloc (sizeof (struct kangovect) * (kango_vect_kosuu + SV_KOSUU))) == NULL)
+  if ((fzk_tbl->kango_vect_area = (word_vector *) calloc ((kango_vect_kosuu + SV_KOSUU), sizeof (word_vector))) == NULL)
     {
       wnn_errorno = WNN_MALLOC_ERR;
-      error1 ("malloc error in fzk\n");
+      log_err ("fzk_ld: malloc error.");
       fzk_discard (fzk_tbl);
       return (NULL);
     }
 
 #ifndef NO_FZK
-  if ((fzk_tbl->tablefuzokugo = (struct fzkentry *) malloc (sizeof (struct fzkentry) * fzk_tbl->fzklength)) == NULL)
+  if ((fzk_tbl->tablefuzokugo = (struct fzkentry *) calloc (fzk_tbl->fzklength, sizeof (struct fzkentry))) == NULL)
     {
       wnn_errorno = WNN_MALLOC_ERR;
-      error1 ("malloc error in fzk\n");
+      log_err ("fzk_ld: malloc error.");
       fzk_discard (fzk_tbl);
       return (NULL);
     }
@@ -251,8 +256,9 @@ fzk_ld (fp)
             }
         }
     }
-#endif /* NO_FZK */
-/* 終端 vector を SV_KOSUU 個読み取ります */
+#endif /* !NO_FZK */
+/* 終端 vector を SV_KOSUU 個読み取る */
+
   for (l = 0; l < SV_KOSUU; l++)
     {
       for (k = 0; k < fzkvect_l; k++)
@@ -260,7 +266,7 @@ fzk_ld (fp)
           fzk_tbl->kango_vect_area[l].vector[k] = get_hexsa (fp);
         }
     }
-/* 幹語接続ベクタを読み取る V4.0 */
+/* 幹語接続ベクタを読み取る */
   /* 幹語前端接続ベクタNo. - 幹語前端接続ベクタ */
   for (m = 0; m < kango_vect_kosuu; m++)
     {
@@ -343,16 +349,15 @@ fzk_ld (fp)
 
 #ifdef  nodef
 void
-giji_hinsi_err (str)
-     char *str;
+giji_hinsi_err (char *str)
 {
   wnn_errorno = WNN_GIJI_HINSI_ERR;
-  error1 ("GIJI hinsi (%s) is not defined in hinsi data file.\n", str);
+  log_err ("GIJI hinsi (%s) is not defined in hinsi data file.", str);
 }
 #endif /* nodef */
+
 void
-fzk_discard (fzk_tbl)
-     struct FT *fzk_tbl;
+fzk_discard (struct FT *fzk_tbl)
 {
   if (fzk_tbl->kango_hinsi_area != NULL)
     free (fzk_tbl->kango_hinsi_area);
@@ -369,12 +374,10 @@ fzk_discard (fzk_tbl)
 
 #ifndef NO_FZK
 static void
-link_job (x, fzk_tbl)
-     register int x;
-     struct FT *fzk_tbl;
+link_job (int x, struct FT *fzk_tbl)
 {
-  register int n;
-  register struct fzkentry *pter_a, *pter_b;
+  int n;
+  struct fzkentry *pter_a, *pter_b;
 
   for (pter_a = fzk_tbl->tablefuzokugo, x--, n = 0; n < x; n++, pter_a++)
     {
@@ -390,39 +393,37 @@ link_job (x, fzk_tbl)
  */
 
 int
-fzk_kai (start, end, syuutan_vect, syuutan_vect1, ichbnp_p)
-     w_char *start;             /* string start pointer */
-     w_char *end;               /* string end   pointer */
-     int syuutan_vect;          /* 文節終端 vector */
-     int syuutan_vect1;         /* 文節終端 vector 1 */
-     struct ICHBNP **ichbnp_p;  /* ich-bunpou area 付属語候補 set pointer
-                                   pointer */
+fzk_kai (w_char *start,		/* string start pointer */
+	w_char *end,		/* string end   pointer */
+	int syuutan_vect,	/* 文節終端 vector */
+	int syuutan_vect1,	/* 文節終端 vector 1 */
+	struct ICHBNP **ichbnp_p) /* ich-bunpou area 付属語候補 set pointer pointer */
 {
 #ifndef NO_FZK
-  static struct fzkwork fzkwk[STRK_L + 1];      /* 解析 work area */
-  static struct fzkwork fzkwk1[STRK_L + 1];     /* 解析 work area */
+  static word_vector fzkwk[STRK_L + 1];		/* 付属語解析 work area */
+  static word_vector fzkwk1[STRK_L + 1];	/* 付属語解析 work area */
   static int maxpoint = STRK_L;
 
   struct fzkken fzkinf[YOMI_L + 1];     /* 検索 work area */
   struct fzkken fzkinf1[YOMI_L + 1];    /* 検索 work area */
   struct fzkken *fzkinfp;
-  struct ICHBNP *getibsp ();
-  struct ICHBNP *ichbnptr, *wkptr;
+  struct ICHBNP *ichbnptr = NULL;
+  struct ICHBNP *wkptr = NULL;
 
-  register int point;           /* index */
-  register int i, j;            /* work index */
-  register int cnt, n;          /* counter */
-  struct kangovect *endvect;    /* 文節終端 vector pointer */
-  struct kangovect *endvect1;   /* 文節終端 vector 1 */
+  int point;           /* index */
+  int i, j;            /* work index */
+  int cnt, n;          /* counter */
+  word_vector *endvect;			/* 文節終端 vector pointer */
+  word_vector *endvect1;		/* 文節終端 vector 1 */
 
   int fzkvect_l = ft->fzkvect_l;
   int kango_vect_l = ft->kango_vect_l;
 
-  endvect = (struct kangovect *) ft->kango_vect_area + syuutan_vect;
+  endvect = (word_vector *) ft->kango_vect_area + syuutan_vect;
   if (syuutan_vect1 != WNN_VECT_NO)
-    endvect1 = (struct kangovect *) ft->kango_vect_area + syuutan_vect1;
+    endvect1 = (word_vector *) ft->kango_vect_area + syuutan_vect1;
   else
-    endvect1 = 0;
+    endvect1 = NULL;
 
   /*
    * initialize
@@ -451,7 +452,7 @@ fzk_kai (start, end, syuutan_vect, syuutan_vect1, ichbnp_p)
       if (point > STRK_L)
         {
           wnn_errorno = WNN_WKAREA_FULL;
-          error1 ("Fuzokugo-kaiseki area is full");
+          log_err ("fzk_kai: fuzokugo-kaiseki area is full.");
           return (-1);
         }
       if (fzk_ck_vector (&fzkwk[point]))
@@ -461,7 +462,7 @@ fzk_kai (start, end, syuutan_vect, syuutan_vect1, ichbnp_p)
           for (fzkinfp = &fzkinf[0]; fzkinfp->ent_ptr; fzkinfp++)
             {
               n = (fzkinfp->ent_ptr)->yomi_su;
-              fzk_orvt (&fzkwk[point + n], &(fzkinfp->vector[0]));
+              fzk_orvt (fzkwk[point + n].vector, fzkinfp->vector);
               maxpoint = (maxpoint < point + n) ? point + n : maxpoint;
             }
         }
@@ -472,7 +473,7 @@ fzk_kai (start, end, syuutan_vect, syuutan_vect1, ichbnp_p)
           for (fzkinfp = &fzkinf1[0]; fzkinfp->ent_ptr; fzkinfp++)
             {
               n = (fzkinfp->ent_ptr)->yomi_su;
-              fzk_orvt (&fzkwk1[point + n], &(fzkinfp->vector[0]));
+              fzk_orvt (fzkwk1[point + n].vector, fzkinfp->vector);
               maxpoint = (maxpoint < point + n) ? point + n : maxpoint;
             }
         }
@@ -484,7 +485,8 @@ fzk_kai (start, end, syuutan_vect, syuutan_vect1, ichbnp_p)
    */
   for (point = cnt = 0, *ichbnp_p = NULL; point <= maxpoint; point++)
     {
-      if (kng_ckvt (&fzkwk[point], kango_vect_l) || kng_ckvt (&fzkwk1[point], kango_vect_l))
+      if (kng_ckvt (&fzkwk[point], kango_vect_l) ||
+	  kng_ckvt (&fzkwk1[point], kango_vect_l))
         {
           if (!(n = cnt % FZKIBNO))
             {
@@ -493,7 +495,7 @@ fzk_kai (start, end, syuutan_vect, syuutan_vect1, ichbnp_p)
                   if (*ichbnp_p != NULL)
                     (void) freeibsp (*ichbnp_p);
                   *ichbnp_p = NULL;
-                  error1 ("Error in fzk_kai.");
+                  log_err ("fzk_kai: error.");
                   return (-1);
                 }
               else
@@ -516,27 +518,26 @@ fzk_kai (start, end, syuutan_vect, syuutan_vect1, ichbnp_p)
     }
   return (cnt);
 #else /* NO_FZK */
-  struct ICHBNP *getibsp ();
   struct ICHBNP *wkptr;
 
-  register int i;               /* work index */
-  struct kangovect *endvect;    /* 文節終端 vector pointer */
-  struct kangovect *endvect1;   /* 文節終端 vector 1 */
+  int i;               /* work index */
+  word_vector *endvect;		/* 文節終端 vector pointer */
+  word_vector *endvect1;	/* 文節終端 vector 1 */
 
   int kango_vect_l = ft->kango_vect_l;
 
-  endvect = (struct kangovect *) ft->kango_vect_area + syuutan_vect;
+  endvect = (word_vector *) ft->kango_vect_area + syuutan_vect;
   if (syuutan_vect1 != WNN_VECT_NO)
-    endvect1 = (struct kangovect *) ft->kango_vect_area + syuutan_vect1;
+    endvect1 = (word_vector *) ft->kango_vect_area + syuutan_vect1;
   else
-    endvect1 = 0;
+    endvect1 = NULL;
 
   *ichbnp_p = NULL;
-  if (kng_ckvt (&endvect, kango_vect_l) || kng_ckvt (&endvect1, kango_vect_l))
+  if (kng_ckvt (endvect, kango_vect_l) || kng_ckvt (endvect1, kango_vect_l))
     {
       if ((wkptr = getibsp ()) == NULL)
         {
-          error1 ("Error in fzk_kai.");
+          log_err ("fzk_kai: error.");
           return (-1);
         }
       else
@@ -547,7 +548,7 @@ fzk_kai (start, end, syuutan_vect, syuutan_vect1, ichbnp_p)
       for (i = 0; i < kango_vect_l; i++)
         {
           wkptr->fzkib[0].vector[i] = endvect->vector[i];
-          if (endvect1 != 0)
+          if (endvect1 != NULL)
             wkptr->fzkib1[0].vector[i] = endvect1->vector[i];
         }
     }
@@ -561,14 +562,13 @@ fzk_kai (start, end, syuutan_vect, syuutan_vect1, ichbnp_p)
  */
 
 static int
-kng_ckvt (vector, kango_vect_l)
-     register int *vector;
-     register int kango_vect_l;
+kng_ckvt (word_vector *wv, int kango_vect_l)
 {
-  register int i, rts;
+  int i, rts;
+  int *v = wv->vector;
 
   for (rts = 0, i = kango_vect_l; i > 0; i--)
-    rts |= *vector++;           /* OR cheak */
+    rts |= *v++;           /* OR cheak */
   return (rts);
 }
 
@@ -577,22 +577,22 @@ kng_ckvt (vector, kango_vect_l)
  * fzk_ckvt
  */
 int
-fzk_ckvt (vector)
-     register int vector;
+fzk_ckvt (int vector)
 {
-  return vector >= 0 && fzk_ck_vector (&ft->kango_vect_area[vector]);
+  return vector >= 0 &&
+	 fzk_ck_vector (&ft->kango_vect_area[vector]);
 }
 
 
 static int
-fzk_ck_vector (vector)
-     register int *vector;
+fzk_ck_vector (word_vector *wv)
 {
-  register int i, rts;
+  int i, rts;
+  int *v = wv->vector;
 
-  rts = *vector++ & ~0x01;      /* 「先頭可」のビットを除く */
+  rts = *v++ & ~0x01;		/* 「先頭可」のビットを除く */
   for (i = ft->fzkvect_l - 1; i > 0; i--)
-    rts |= *vector++;           /* OR cheak */
+    rts |= *v++;		/* OR cheak */
   return (rts);
 }
 
@@ -602,11 +602,9 @@ fzk_ck_vector (vector)
  */
 
 static void
-fzk_orvt (vector1, vector2)
-     register int *vector1;
-     register int *vector2;
+fzk_orvt (int *vector1, int *vector2)
 {
-  register int i;
+  int i;
 
   for (i = ft->fzkvect_l; i > 0; i--)
     *vector1++ |= *vector2++;   /* OR set */
@@ -614,16 +612,12 @@ fzk_orvt (vector1, vector2)
 
 #ifndef NO_FZK
 static int
-fzk_ken (start, end, vector, fzkptr)
-     w_char *start;
-     w_char *end;
-     int vector[];
-     struct fzkken *fzkptr;
+fzk_ken (w_char *start, w_char *end, word_vector *wv, struct fzkken *fzkptr)
 {
-  register int yomicnt;
-  register int setno;
+  int yomicnt;
+  int setno;
   struct fzkken *ansptr;
-  register struct fzkentry *search_ptr;
+  struct fzkentry *search_ptr;
   w_char key[YOMI_L + 1];
   int fzkvect_l = ft->fzkvect_l;
 
@@ -638,7 +632,7 @@ fzk_ken (start, end, vector, fzkptr)
       search_ptr = (struct fzkentry *) bsrch (key);
       if (search_ptr != NULL)
         {
-          setno = setfzk (search_ptr, &ansptr, vector, fzkvect_l);
+          setno = setfzk (search_ptr, &ansptr, wv, fzkvect_l);
           ansptr->ent_ptr = NULL;
           return (setno);
         }
@@ -649,25 +643,24 @@ fzk_ken (start, end, vector, fzkptr)
 
 /******************************************/
 static int
-setfzk (entry_ptr, answer_ptr, vector, fzkvect_l)
-     struct fzkentry *entry_ptr;
-     struct fzkken **answer_ptr;
-     int vector[];
-     int fzkvect_l;
+setfzk (struct fzkentry *entry_ptr,
+	struct fzkken **answer_ptr,
+	word_vector *wv,
+	int fzkvect_l)
 {
-  register int setno;
-  register int vectroop;
-  register int wcnt, setflg;
-  register struct fzkvect *vect_ptr;
+  int setno;
+  int vectroop;
+  int wcnt, setflg;
+  fzkvect *vect_ptr;
 
   if (entry_ptr != NULL)
     {
-      setno = setfzk (entry_ptr->link, answer_ptr, vector, fzkvect_l);
+      setno = setfzk (entry_ptr->link, answer_ptr, wv, fzkvect_l);
       for (wcnt = 0; wcnt < fzkvect_l; (*answer_ptr)->vector[wcnt++] = 0);
       setflg = 0;
       for (vectroop = entry_ptr->kosu, vect_ptr = entry_ptr->pter; vectroop > 0; vectroop--, vect_ptr++)
         {
-          if (bittest (vector, vect_ptr->no) > 0)
+          if (bittest (wv->vector, vect_ptr->no) > 0)
             {
               setflg = 1;
               for (wcnt = 0; wcnt < fzkvect_l; wcnt++)
@@ -690,14 +683,12 @@ setfzk (entry_ptr, answer_ptr, vector, fzkvect_l)
 
 /***************************************************/
 static int
-bittest (vector, no)
-     int vector[];
-     int no;
+bittest (int vector[], int no)
 {
-  register int wvect;
+  int wvect;
 
-  wvect = vector[no / (sizeof (int) << 3)];     /* << 3 == * 8  */
-  wvect >>= (int) (no % (sizeof (int) << 3));
+  wvect = vector[no / (sizeof (int) * 8)];
+  wvect >>= (int) (no % (sizeof (int) * 8));
   if ((wvect & 0x00000001) == 1)
     return (1);
   else
@@ -705,22 +696,19 @@ bittest (vector, no)
 }
 
 /*
-int Strncmp(s1,s2,n)
-register w_char *s1;
-register w_char *s2;
-register int n;
+int Strncmp(w_char *s1, w_char *s2, int n)
 {
   if(n == 0)return(0);
   for (;n > 0 && *s1++ == *s2++;n--);
   return (int)(*--s1 - *--s2);
 }
 */
+
 #ifndef NO_FZK
 static struct fzkentry *
-bsrch (key_yomi)
-     w_char *key_yomi;
+bsrch (w_char *key_yomi)
 {
-  register int low, high, j, flg;
+  int low, high, j, flg;
 
   for (low = 0, high = ft->fzklength; low < high;)
     {
@@ -729,8 +717,8 @@ bsrch (key_yomi)
          flg = Strncmp(key_yomi, (ft->tablefuzokugo + j)->yomi, YOMI_L);
        */
       {
-        register int n;
-        register w_char *s1, *s2;
+        int n;
+        w_char *s1, *s2;
         s1 = key_yomi;
         s2 = (ft->tablefuzokugo + j)->yomi;
         for (n = YOMI_L; n > 0 && *s1++ == *s2++; n--);
@@ -748,24 +736,23 @@ bsrch (key_yomi)
 #endif
 
 static int
-error_fzk ()
+error_fzk (void)
 {
   wnn_errorno = WNN_NOT_FZK_FILE;
-  error1 ("Bat format in fzk_file\n");
+  log_err ("Bad format in fzk_file.");
   return (-1);
 }
 
 static int
-error_eof ()
+error_eof (void)
 {
   wnn_errorno = WNN_NOT_FZK_FILE;
-  error1 ("Unecpected EOF in reading fzk_file\n");
+  log_err ("Unecpected EOF in reading fzk_file.");
   return (-1);
 }
 
 static int
-get_decimal (fp)
-     register FILE *fp;
+get_decimal (FILE *fp)
 {
   unsigned char buf[24];
   int k;
@@ -781,8 +768,7 @@ get_decimal (fp)
 }
 
 static int
-get_hexsa (fp)
-     register FILE *fp;
+get_hexsa (FILE *fp)
 {
   unsigned char buf[24];
   int k;
@@ -798,12 +784,10 @@ get_hexsa (fp)
 }
 
 static int
-get_string (fp, buf)
-     register FILE *fp;
-     register unsigned char *buf;
+get_string (FILE *fp, unsigned char *buf)
 {
-  register unsigned char *c = buf;
-  register int k;
+  unsigned char *c = buf;
+  int k;
   for (; (k = vgetc (fp)) == ';' || k == '\n' || k == '\t' || k == ' ';)
     {
       if (k == ';')
@@ -831,15 +815,15 @@ get_string (fp, buf)
 }
 
 static int
-check_eof (fp)
-     register FILE *fp;
+check_eof (FILE *fp)
 {
   unsigned char buf[24];
   if (get_string (fp, buf) != EOF)
     {
       wnn_errorno = WNN_NOT_FZK_FILE;
-      error1 ("Not at the end of fzk_file\n");
+      log_err ("Not at the end of fzk_file.");
       return (-1);
     }
   return (0);
 }
+

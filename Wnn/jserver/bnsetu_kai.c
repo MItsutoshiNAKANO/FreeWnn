@@ -1,5 +1,5 @@
 /*
- *  $Id: bnsetu_kai.c,v 1.3 2001-06-14 18:15:59 ura Exp $
+ *  $Id: bnsetu_kai.c,v 1.4 2003-04-06 06:30:48 hiroo Exp $
  */
 
 /*
@@ -824,11 +824,11 @@ kan_ckvt (hinsi, vector)
      register int vector;       /* 付属語前端ベクタ */
 {
   register int *v;
-  v = (int *) ((struct kangovect *) ft->kango_vect_area + vector);
+  v = (int *) ((word_vector *) ft->kango_vect_area + vector);
   return (kan_ck_vector (hinsi, v));
   /*
      return (kan_ck_vector(hinsi,
-     ((struct kangovect *) ft->kango_vect_area + vector)));
+     ((word_vector *) ft->kango_vect_area + vector)));
    */
 }
 

@@ -1,5 +1,5 @@
 /*
- *  $Id: fzk.h,v 1.4 2002-08-12 16:25:46 hiroo Exp $
+ *  $Id: fzk.h,v 1.5 2003-04-06 06:30:48 hiroo Exp $
  */
 
 /*
@@ -32,17 +32,29 @@
 #ifndef JSERVER_FZK_H
 #define JSERVER_FZK_H 1
 
+#include "ddefine.h"
+
 #define YOMI_L  8               /* 付属語の読みの長さの最大値 */
 
 #define STRK_L  128             /* 付属語解析のための作業領域の大きさ */
                                 /* これが、付属語文字列の長さの最大値 */
 
+/*
+ * Don't know why word_vector (former kangovect) and fzkvect
+ * should differ. Can not they be merged?  (2003.04.06 Hiroo Ono)
+ */
+/* 幹語・付属語ベクトル */
+typedef struct
+{
+  int vector[VECT_L];		/* 付属語ベクトル */
+} word_vector;
+
 /* 付属語ベクトルの構造 */
-struct fzkvect
+typedef struct fzkvect
 {
   int no;                       /* 付属語ベクトルの番号 */
   int vector[VECT_L];           /* 付属語ベクトル */
-};
+} fzkvect;
 
 /* 付属語エントリーの構造 */
 struct fzkentry
@@ -61,13 +73,6 @@ struct fzkken
   int vector[VECT_L];           /* 付属語ベクトル */
 };
 
-/* 付属語解析のための作業領域の構造 */
-struct fzkwork
-{
-  int vector[VECT_L];           /* 付属語ベクトル */
-};
-
-
 /*
         structure of FZK TABLE
  */
@@ -76,7 +81,7 @@ struct FT
 #ifndef NO_FZK
   struct fzkvect *vect_area;
 #endif
-  struct kangovect *kango_vect_area;
+  word_vector *kango_vect_area;
 #ifndef NO_FZK
   struct fzkentry *tablefuzokugo;
 #endif

@@ -1,5 +1,5 @@
 /*
- *  $Id: ddefine.h,v 1.5 2002-08-12 16:25:46 hiroo Exp $
+ *  $Id: ddefine.h,v 1.6 2003-04-06 06:30:48 hiroo Exp $
  */
 
 /*
@@ -45,13 +45,6 @@
 #define KANGO_VECT_L (KANGO_HINSI_MX+8*4-1)/(8*4)       /* 幹語接続ベクタの長さ */
 #define FZKVECT_L       5       /* 付属語ベクタの長さ */
 #define VECT_L  KANGO_VECT_L + FZKVECT_L        /* 接続ベクタの長さ */
-#ifdef nodef                    /* This define doesn't need anymore, KUWARI */
-#ifdef  CHINESE
-#define KANGO_VECT_KOSUU        256     /* 幹語接続ベクタの最大数 */
-#else
-#define KANGO_VECT_KOSUU        20      /* 幹語接続ベクタの最大数 */
-#endif /* CHINESE */
-#endif /* nodef */
 
 struct fzkkouho
 {                               /* used in reffering to fuzokugo jouhou 
@@ -186,12 +179,6 @@ struct ICHBNP
 
 #define kuten(x)        (((x)==KUTEN_NUM)? True:False)
 #define touten(x)       (((x)==TOUTEN_NUM)? True:False)
-
-/* 幹語の前端接続ベクトルの構造 */
-struct kangovect
-{
-  unsigned int vector[VECT_L];  /* 幹語ベクトル */
-};
 
 struct SYO_BNSETSU
 {
