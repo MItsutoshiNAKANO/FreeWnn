@@ -1,5 +1,5 @@
 /*
- *  $Id: bdic.c,v 1.11 2003-05-11 18:25:09 hiroo Exp $
+ *  $Id: bdic.c,v 1.12 2004-07-12 17:53:02 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002, 2003
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2003, 2004
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -36,10 +36,16 @@
 #  include <config.h>
 #endif
 
+#if defined (JS)
+# define JS_STATIC	static
+#else /* !JS */
+# define JS_STATIC
+#endif /* !JS */
+
 #if defined(JSERVER) || defined(JS)
-#ifdef WRITE_CHECK
-#define BDIC_WRITE_CHECK
-#endif
+# ifdef WRITE_CHECK
+#  define BDIC_WRITE_CHECK
+# endif
 #endif /* defined(JSERVER) || defined(JS) */
 
 #include <sys/types.h>
@@ -51,73 +57,133 @@
 #endif /* STDC_HEADERS */
 
 #ifndef JS
-#include <sys/stat.h>
-#if HAVE_UNISTD_H
+# include <sys/stat.h>
+# if HAVE_UNISTD_H
 #  include <unistd.h>
-#endif
-#include "commonhd.h"
-#include "jslib.h"
-#include "jh.h"
+# endif
+# include "commonhd.h"
+# include "jslib.h"
+# include "jh.h"
 #endif /* JS */
 #include "jdata.h"
 #include "wnn_os.h"
 #include "wnn_string.h"
 
 #ifdef JSERVER
-#ifndef BDIC_WRITE_CHECK
-#define vputc(X, pt) ((pt)? putc((X), (pt)):xputc_cur(X))
-#endif /* !BDIC_WRITE_CHECK */
-#define vgetc(pt) ((pt)? getc((pt)):xgetc_cur())
+# ifndef BDIC_WRITE_CHECK
+#  define vputc(X, pt) ((pt)? putc((X), (pt)):xputc_cur(X))
+# endif /* !BDIC_WRITE_CHECK */
+# define vgetc(pt) ((pt)? getc((pt)):xgetc_cur())
 extern int xgetc_cur ();
-#else
-#ifdef JS
-#ifndef BDIC_WRITE_CHECK
-#define vputc(X, pt) putc((X), (pt))
-#endif /* !BDIC_WRITE_CHECK */
-#define vgetc(pt) getc(pt)
-#else
-#define vputc(X, pt) putc((X), (pt))
-#define vgetc(pt) getc(pt)
-#endif
-#endif
+#else /* !JSERVER */
+# ifdef JS
+#  ifndef BDIC_WRITE_CHECK
+#   define vputc(X, pt) putc((X), (pt))
+#  endif /* !BDIC_WRITE_CHECK */
+#  define vgetc(pt) getc(pt)
+# else /* !JS */
+#  define vputc(X, pt) putc((X), (pt))
+#  define vgetc(pt) getc(pt)
+# endif /* !JS */
+#endif /* !JSERVER */
 
 #ifndef min
-#define min(a, b) ((a > b)? b:a)
-#define max(a, b) ((a < b)? b:a)
+# define min(a, b) ((a > b)? b:a)
+# define max(a, b) ((a < b)? b:a)
 #endif
 
-#ifdef JS
-static
-#else
-extern
-#endif
-int output_file_header (), input_file_uniq (), output_header_jt (),
-#ifdef BDIC_WRITE_CHECK
-  put_short (), output_file_uniq (),
-#endif
-       /* BDIC_WRITE_CHECK */
-  create_file_header (), input_file_header (), change_file_uniq1 (), output_header_hjt ();
+/* XXX: function prototypes to be moved to some header file. */
+/* bdic.c */
+/* following functions are only used in bdic.c
+ * put_null, put_nstring, put_int
+ * get_null, get_nstring
+ */
+JS_STATIC int put_null (FILE* ofpter, int n);
+JS_STATIC int put_nstring (FILE* ofpter, char* c, int n);
+JS_STATIC int put_n_EU_str (FILE* ofpter, w_char* c, int n);
+JS_STATIC int put_short (FILE* ofpter, int i);
+JS_STATIC int put_int (FILE* ofpter, int i);
+JS_STATIC int get_null (FILE* ifpter, int n);
+JS_STATIC int get_nstring (FILE* ifpter, int n, char* st);
+JS_STATIC int get_n_EU_str (FILE* ifpter, int n, w_char* st);
+JS_STATIC int get_short (short* sp, FILE* ifpter);
+JS_STATIC int get_int (int* ip, FILE* ifpter);
 
-#ifdef JS
-static
-#else
-extern
-#endif
+#ifndef JS
+void udytoS (w_char* yomi, int tnum, char* hostart, struct uind1 * tary);
+#endif /* !JS */
+
 #ifdef BDIC_WRITE_CHECK
-void new_pwd ();
-#else                           /* BDIC_WRITE_CHECK */
-void put_short (), output_file_uniq (), new_pwd ();
+JS_STATIC void check_backup (char* n);
+JS_STATIC void delete_tmp_file (char* n);
+JS_STATIC char* make_backup_file (char* n);
+JS_STATIC char* make_tmp_file (char* n, int copy, FILE** ret_fp);
+JS_STATIC void move_tmp_to_org (char* tmp_name, char* org_name, int copy);
 #endif /* BDIC_WRITE_CHECK */
 
-#ifdef BDIC_WRITE_CHECK
+JS_STATIC int create_file_header (FILE* ofpter, int file_type, char* file_passwd);
+JS_STATIC int output_file_header (FILE* ofpter, struct wnn_file_head* hp);
+JS_STATIC int input_file_header (FILE* ifpter,  struct wnn_file_head* hp);
+JS_STATIC int output_file_uniq (struct wnn_file_uniq* funiq, FILE* ofpter);
+JS_STATIC int input_file_uniq (struct wnn_file_uniq* funiq, FILE* ifpter);
+JS_STATIC int check_inode (FILE* f, struct wnn_file_head* fh);
+JS_STATIC int change_file_uniq (struct wnn_file_head* fh, char* n);
+JS_STATIC int change_file_uniq1 (
+	FILE* ofpter, int file_type, char* file_passwd,
+	struct wnn_file_uniq* file_uniq);
+
 #ifdef JSERVER
-extern void xputc_cur ();
+int f_uniq_cmp (struct wnn_file_uniq *a, struct wnn_file_uniq* b);
+#endif /* JSERVER */
+
+#if     !defined(JS) && !defined(JSERVER)
+void vputs (char* c, FILE* fp);
+int  vputws (w_char* w, FILE* fp);
+int  put_yomi_str (w_char* yomi, FILE* ofpter);
+#endif /* !JS && !JSERVER */
+
+#ifndef JS
+void Get_knj2 (UCHAR* kptr, int kanji2, w_char* kouho, w_char* yomi, w_char* comment);
+void get_kanji_str (UCHAR* kptr, w_char* kanji, w_char* yomi, w_char* comment);
+void Get_kanji_str_r (UCHAR* kptr, w_char** tmpk, w_char** tmpy, w_char** tmpc);
+UCHAR kanjiaddr (UCHAR* d0, w_char* kanji, w_char* yomi, w_char* comment);
+#endif /* !JS */
+
+JS_STATIC int create_null_dic (
+	char* fn, w_char* comm, char* passwd, char* hpasswd, int which);
+JS_STATIC int create_hindo_file (
+	struct wnn_file_uniq* funiq,
+	char* fn, w_char* comm, char* passwd, int serial);
+
+/* XXX: input_* are not used in JSlib */
+JS_STATIC int input_header_jt (FILE* ifpter, struct JT* jt1);
+JS_STATIC int output_header_jt (FILE* ofpter, struct JT* jt1);
+JS_STATIC int input_header_hjt (FILE* ifpter, struct HJT* hjt1);
+JS_STATIC int output_header_hjt (FILE* ofpter, struct HJT* hjt1);
+
+#if     !defined(JS) && !defined(JSERVER)
+/* Only used in JUTIL */
+void Print_entry (
+	w_char* yomi, w_char* kstr, w_char* cstr,
+	int hindo, int ima, int hinsi, int serial,
+	FILE* ofpter, int esc_exp);
+#endif /* !JS && !JSERVER */
+
+/* XXX: prototype of functions in other files.
+ *      should be replaced to including some header files. */
+JS_STATIC void new_pwd (char*, char*);	/* in etc/pwd.c */
+char *wnn_get_hinsi_name (int);		/* in etc/gethinsi.c */
+#ifdef JSERVER
+void xputc_cur (unsigned char);		/* in jserver/snd_rcv.c */
+#endif /* JSERVER */
+
+
+#ifdef BDIC_WRITE_CHECK
 
 static int
-vputc (c, fp)
-     char c;
-     FILE *fp;
+vputc (char c, FILE* fp)
 {
+# ifdef JSERVER
   if (fp)
     {
       if (fwrite (&c, sizeof (char), 1, fp) <= 0)
@@ -127,156 +193,113 @@ vputc (c, fp)
     {
       xputc_cur (c);
     }
-  return (0);
-}
-#else /* JSERVER */
-static int
-vputc (c, fp)
-     char c;
-     FILE *fp;
-{
+# else /* !JSERVER */
   if (fwrite (&c, sizeof (char), 1, fp) <= 0)
     return (-1);
+# endif /* !JSERVER */
+
   return (0);
 }
-#endif /* JSERVER */
 #endif /* BDIC_WRITE_CHECK */
 
-#ifdef JS
-static
-#endif
-#ifdef BDIC_WRITE_CHECK
-  int
-#else                           /* BDIC_WRITE_CHECK */
-  void
-#endif                          /* BDIC_WRITE_CHECK */
-putnull (ofpter, n)
-     register FILE *ofpter;
-     register int n;
+/* XXX					note 2004.07.08  Hiroo Ono
+ * It used to return int only if BDIC_WRITE_CHECK was defined,
+ * otherwise it was a void function.
+ * For the sake of source code simplicity, I unified the funtion to always
+ * return int: It returns the write status when BDIC_WRITE_CHECK is defined
+ * and just 0 when not. No testing on performace was performed (though I
+ * believe it does not have significant effect).
+ * Similar changes are also applied to following functions.
+ */
+JS_STATIC int
+put_null (FILE* ofpter, int n)
 {
   for (; n; n--)
     {
 #ifdef BDIC_WRITE_CHECK
       if (vputc ('\0', ofpter) == -1)
         return (-1);
-#else /* BDIC_WRITE_CHECK */
+#else /* !BDIC_WRITE_CHECK */
       vputc ('\0', ofpter);
-#endif /* BDIC_WRITE_CHECK */
+#endif /* !BDIC_WRITE_CHECK */
     }
-#ifdef BDIC_WRITE_CHECK
+
   return (0);
-#endif /* BDIC_WRITE_CHECK */
 }
 
-#ifdef JS
-static
-#endif
-#ifdef BDIC_WRITE_CHECK
-  int
-#else                           /* BDIC_WRITE_CHECK */
-  void
-#endif                          /* BDIC_WRITE_CHECK */
-put_n_str (ofpter, c, n)
-     register FILE *ofpter;
-     register int n;
-     register char *c;
+/* XXX was void when BDIC_WRITE_CHECK was not defined. cf put_null() above. */
+JS_STATIC int
+put_nstring (FILE* ofpter, char* c, int n)
 {
   for (; n; n--)
     {
 #ifdef BDIC_WRITE_CHECK
       if (vputc (*c++, ofpter) == -1)
         return (-1);
-#else /* BDIC_WRITE_CHECK */
+#else /* !BDIC_WRITE_CHECK */
       vputc (*c++, ofpter);
-#endif /* BDIC_WRITE_CHECK */
+#endif /* !BDIC_WRITE_CHECK */
     }
-#ifdef BDIC_WRITE_CHECK
+
   return (0);
-#endif /* BDIC_WRITE_CHECK */
 }
 
-#ifdef JS
-static
-#endif
-#ifdef BDIC_WRITE_CHECK
-  int
-#else                           /* BDIC_WRITE_CHECK */
-  void
-#endif                          /* BDIC_WRITE_CHECK */
-put_n_EU_str (ofpter, c, n)
-     register FILE *ofpter;
-     register w_char *c;
-     register int n;
+/* XXX was void when BDIC_WRITE_CHECK was not defined. cf put_null() above. */
+JS_STATIC int
+put_n_EU_str (FILE* ofpter, w_char* c, int n)
 {
   for (; n; n--)
     {
 #ifdef BDIC_WRITE_CHECK
       if (put_short (ofpter, (int) (*c++)) == -1)
         return (-1);
-#else /* BDIC_WRITE_CHECK */
+#else  /* !BDIC_WRITE_CHECK */
       put_short (ofpter, (int) (*c++));
-#endif /* BDIC_WRITE_CHECK */
+#endif /* !BDIC_WRITE_CHECK */
     }
-#ifdef BDIC_WRITE_CHECK
+
   return (0);
-#endif /* BDIC_WRITE_CHECK */
 }
 
-#ifdef JS
-static
-#endif
-#ifdef BDIC_WRITE_CHECK
-  int
-#else                           /* BDIC_WRITE_CHECK */
-  void
-#endif                          /* BDIC_WRITE_CHECK */
-put_short (ofpter, i)
-     register FILE *ofpter;
-     register int i;
+/* XXX was void when BDIC_WRITE_CHECK was not defined. cf put_null() above. */
+JS_STATIC int
+put_short (FILE* ofpter, int i)
 {
 #ifdef BDIC_WRITE_CHECK
   if ((vputc (i >> 8, ofpter) == -1) || (vputc (i, ofpter) == -1))
     return (-1);
-  return (0);
 #else /* BDIC_WRITE_CHECK */
   vputc (i >> 8, ofpter);
   vputc (i, ofpter);
 #endif /* BDIC_WRITE_CHECK */
+
+  return (0);
 }
 
-#ifdef JS
-static
-#endif
-#ifdef BDIC_WRITE_CHECK
-  int
-#else                           /* BDIC_WRITE_CHECK */
-  void
-#endif                          /* BDIC_WRITE_CHECK */
-putint (ofpter, i)
-     register FILE *ofpter;
-     register int i;
+/* XXX was void when BDIC_WRITE_CHECK was not defined. cf put_null() above. */
+JS_STATIC int
+put_int (FILE* ofpter, int i)
 {
 #ifdef BDIC_WRITE_CHECK
-  if ((vputc (i >> 24, ofpter) == -1) || (vputc (i >> 16, ofpter) == -1) || (vputc (i >> 8, ofpter) == -1) || (vputc (i, ofpter) == -1))
+  if ((vputc (i >> 24, ofpter) == -1)
+      || (vputc (i >> 16, ofpter) == -1)
+      || (vputc (i >> 8, ofpter) == -1)
+      || (vputc (i, ofpter) == -1))
     return (-1);
-  return (0);
 #else /* BDIC_WRITE_CHECK */
   vputc (i >> 24, ofpter);
   vputc (i >> 16, ofpter);
   vputc (i >> 8, ofpter);
   vputc (i, ofpter);
 #endif /* BDIC_WRITE_CHECK */
+
+  return (0);
 }
 
-#ifdef JS
-static
-#endif
-  int
-getnull (ifpter, n)
-     register FILE *ifpter;
-     register int n;
+JS_STATIC int
+get_null (FILE* ifpter, int n)
 {
-  register int k;
+  int k;
 
   for (; n; n--)
     {
@@ -284,17 +307,12 @@ getnull (ifpter, n)
       if (k == -1)
         return (-1);
     }
+
   return (0);
 }
 
-#ifdef JS
-static
-#endif
-  int
-getnstring (ifpter, n, st)
-     register FILE *ifpter;
-     register int n;
-     register char *st;
+JS_STATIC int
+get_nstring (FILE* ifpter, int n, char* st)
 {
   int k;
 
@@ -308,15 +326,11 @@ getnstring (ifpter, n, st)
   return (0);
 }
 
-#if     !defined(JS) && !defined(JSERVER)
-int
-get_n_EU_str (ifpter, n, st)
-     register FILE *ifpter;
-     register int n;
-     register w_char *st;
+
+JS_STATIC int
+get_n_EU_str (FILE* ifpter, int n, w_char* st)
 {
-  register int k;
-  extern int get_short ();
+  int k;
 
   for (; n; n--)
     {
@@ -327,13 +341,11 @@ get_n_EU_str (ifpter, n, st)
   return (0);
 }
 
-int
-get_short (sp, ifpter)
-     register short *sp;
-     FILE *ifpter;
+JS_STATIC int
+get_short (short* sp, FILE* ifpter)
 {
-  register int i = 0;
-  register int k;
+  int i = 0;
+  int k;
 
   i |= (k = vgetc (ifpter)) << 8;
   if (k == -1)
@@ -344,18 +356,13 @@ get_short (sp, ifpter)
   *sp = i;
   return (0);
 }
-#endif
 
-#ifdef JS
-static
-#endif
-  int
-getint (ip, ifpter)
-     register FILE *ifpter;
-     int *ip;
+
+JS_STATIC int
+get_int (int* ip, FILE* ifpter)
 {
-  register int i = 0;
-  register int k;
+  int i = 0;
+  int k;
 
   i |= (k = vgetc (ifpter)) << 24;
   if (k == -1)
@@ -375,11 +382,7 @@ getint (ip, ifpter)
 
 #ifndef JS
 void
-udytoS (yomi, tnum, hostart, tary)
-     register w_char *yomi;
-     register int tnum;
-     char *hostart;
-     register struct uind1 *tary;
+udytoS (w_char* yomi, int tnum, char* hostart, struct uind1 * tary)
 {
   struct uind2 *hop;
   int len;
@@ -401,12 +404,11 @@ udytoS (yomi, tnum, hostart, tary)
   bcopy ((char *) ((hop->yomi) + 1), (char *) (yomi + 4), max (0, ((len - 4)) * 2));
   yomi[len] = 0;
 }
-#endif
+#endif /* !JS */
 
 #ifdef BDIC_WRITE_CHECK
 static char *
-make_tmp_name (n)
-     char *n;
+make_tmp_name (char* n)
 {
   static char buf[256];
 
@@ -417,8 +419,7 @@ make_tmp_name (n)
 }
 
 static char *
-make_backup_name (n)
-     char *n;
+make_backup_name (char* n)
 {
   static char buf[256];
 
@@ -428,42 +429,9 @@ make_backup_name (n)
   return (buf);
 }
 
-#ifdef nodef
-static char *
-make_backup_name (n)
-     char *n;
-{
-  static char buf[256];
-  char base_name[64];
-  char *p;
 
-  if (n == NULL || *n == '\0')
-    return NULL;
-  strcpy (buf, n);
-  if ((p = strrchr (buf, '/')) == NULL)
-    {
-      strcpy (base_name, buf);
-      sprintf (buf, "#%s#", base_name);
-    }
-  else
-    {
-      p++;
-      strcpy (base_name, p);
-      *p = '\0';
-      strcat (buf, "#");
-      strcat (buf, base_name);
-      strcat (buf, "#");
-    }
-  return (buf);
-}
-#endif
-
-#ifdef JS
-static
-#endif
-  void
-check_backup (n)
-     char *n;
+JS_STATIC void
+check_backup (char* n)
 {
   char *p;
 
@@ -478,8 +446,7 @@ check_backup (n)
 }
 
 static int
-copy_file_to_file (from, to)
-     FILE *from, *to;
+copy_file_to_file (FILE* from, FILE* to)
 {
   char buf[1024];
   int r_len, w_len, i;
@@ -507,23 +474,15 @@ copy_file_to_file (from, to)
   return (0);
 }
 
-#ifdef JS
-static
-#endif
-  void
-delete_tmp_file (n)
-     char *n;
+JS_STATIC void
+delete_tmp_file (char* n)
 {
   if (n && *n)
     unlink (n);
 }
 
-#ifdef JS
-static
-#endif
-char *
-make_backup_file (n)
-     char *n;
+JS_STATIC char*
+make_backup_file (char* n)
 {
   FILE *fp, *fp2;
   char *p, *p2;
@@ -551,14 +510,8 @@ make_backup_file (n)
   return (p);
 }
 
-#ifdef JS
-static
-#endif
-char *
-make_tmp_file (n, copy, ret_fp)
-     char *n;
-     int copy;
-     FILE **ret_fp;
+JS_STATIC char*
+make_tmp_file (char* n, int copy, FILE** ret_fp)
 {
   FILE *fp, *fp2;
   struct wnn_file_head fh;
@@ -588,13 +541,8 @@ make_tmp_file (n, copy, ret_fp)
   return p;
 }
 
-#ifdef JS
-static
-#endif
-  void
-move_tmp_to_org (tmp_name, org_name, copy)
-     char *tmp_name, *org_name;
-     int copy;
+JS_STATIC void
+move_tmp_to_org (char* tmp_name, char* org_name, int copy)
 {
   FILE *org, *tmp;
 
@@ -617,14 +565,8 @@ move_tmp_to_org (tmp_name, org_name, copy)
 }
 #endif /* BDIC_WRITE_CHECK */
 
-#ifdef JS
-static
-#endif
-  int
-create_file_header (ofpter, file_type, file_passwd)
-     FILE *ofpter;
-     int file_type;
-     char *file_passwd;
+JS_STATIC int
+create_file_header (FILE* ofpter, int file_type, char* file_passwd)
 {
   struct stat buf;
   char hostname[WNN_HOSTLEN];
@@ -666,104 +608,86 @@ create_file_header (ofpter, file_type, file_passwd)
 
 /* 128 Bytes File Header */
 
-#ifdef JS
-static
-#endif
-  int
-output_file_header (ofpter, hp)
-     FILE *ofpter;
-     struct wnn_file_head *hp;
+JS_STATIC int
+output_file_header (FILE* ofpter, struct wnn_file_head* hp)
 {
 #ifdef BDIC_WRITE_CHECK
-  if ((put_n_str (ofpter, WNN_FILE_STRING, WNN_FILE_STRING_LEN) == -1) ||
-      (putint (ofpter, hp->file_type) == -1) ||
-      (output_file_uniq (&hp->file_uniq, ofpter) == -1) ||
-      (output_file_uniq (&hp->file_uniq_org, ofpter) == -1) || (put_n_str (ofpter, hp->file_passwd, WNN_PASSWD_LEN) == -1) || (putnull (ofpter, 36) == -1))
+  if ((put_nstring (ofpter, WNN_FILE_STRING, WNN_FILE_STRING_LEN) == -1)
+      || (put_int (ofpter, hp->file_type) == -1)
+      || (output_file_uniq (&hp->file_uniq, ofpter) == -1)
+      || (output_file_uniq (&hp->file_uniq_org, ofpter) == -1)
+      || (put_nstring (ofpter, hp->file_passwd, WNN_PASSWD_LEN) == -1)
+      || (put_null (ofpter, 36) == -1))
     return (-1);                /* Future Use */
 #else /* BDIC_WRITE_CHECK */
-  put_n_str (ofpter, WNN_FILE_STRING, WNN_FILE_STRING_LEN);
-  putint (ofpter, hp->file_type);
+  put_nstring (ofpter, WNN_FILE_STRING, WNN_FILE_STRING_LEN);
+  put_int (ofpter, hp->file_type);
   output_file_uniq (&hp->file_uniq, ofpter);
   output_file_uniq (&hp->file_uniq_org, ofpter);
-  put_n_str (ofpter, hp->file_passwd, WNN_PASSWD_LEN);
-  putnull (ofpter, 36);         /* Future Use */
+  put_nstring (ofpter, hp->file_passwd, WNN_PASSWD_LEN);
+  put_null (ofpter, 36);         /* Future Use */
 #endif /* BDIC_WRITE_CHECK */
+
   return (0);
 }
 
-#ifdef JS
-static
-#endif
-  int
-input_file_header (ifpter, hp)
-     FILE *ifpter;
-     struct wnn_file_head *hp;
+JS_STATIC int
+input_file_header (FILE* ifpter,  struct wnn_file_head* hp)
 {
-
   char wnn_file_string[WNN_FILE_STRING_LEN + 1];
   int err = 0;
 
-  getnstring (ifpter, WNN_FILE_STRING_LEN, wnn_file_string);
+  get_nstring (ifpter, WNN_FILE_STRING_LEN, wnn_file_string);
   if (strncmp (wnn_file_string, WNN_FILE_STRING, WNN_FILE_STRING_LEN))
     err = -1;
-  if (getint ((&hp->file_type), ifpter) == -1)
+  if (get_int ((&hp->file_type), ifpter) == -1)
     err = -1;
   if (input_file_uniq (&(hp->file_uniq), ifpter) == -1)
     err = -1;
   if (input_file_uniq (&(hp->file_uniq_org), ifpter) == -1)
     err = -1;
-  getnstring (ifpter, WNN_PASSWD_LEN, hp->file_passwd);
-  getnull (ifpter, 36);
+  get_nstring (ifpter, WNN_PASSWD_LEN, hp->file_passwd);
+  get_null (ifpter, 36);
+
   return (err);
 }
 
-#ifdef JS
-static
-#endif
-#ifdef BDIC_WRITE_CHECK
-  int
-#else                           /* BDIC_WRITE_CHECK */
-  void
-#endif                          /* BDIC_WRITE_CHECK */
-output_file_uniq (funiq, ofpter)
-     struct wnn_file_uniq *funiq;
-     FILE *ofpter;
+/* XXX was void when BDIC_WRITE_CHECK was not defined. cf put_null() above. */
+JS_STATIC int
+output_file_uniq (struct wnn_file_uniq* funiq, FILE* ofpter)
 {
 #ifdef BDIC_WRITE_CHECK
-  if ((putint (ofpter, funiq->time) == -1) ||
-      (putint (ofpter, funiq->dev) == -1) ||
-      (putint (ofpter, funiq->inode) == -1) || (put_n_str (ofpter, funiq->createhost, strlen (funiq->createhost)) == -1) || (putnull (ofpter, WNN_HOSTLEN - strlen (funiq->createhost)) == -1))
+  if ((put_int (ofpter, funiq->time) == -1)
+      || (put_int (ofpter, funiq->dev) == -1)
+      || (put_int (ofpter, funiq->inode) == -1)
+      || (put_nstring (ofpter, funiq->createhost, strlen (funiq->createhost)) == -1)
+      || (put_null (ofpter, WNN_HOSTLEN - strlen (funiq->createhost)) == -1))
     return (-1);
-  return (0);
 #else /* BDIC_WRITE_CHECK */
-  putint (ofpter, funiq->time);
-  putint (ofpter, funiq->dev);
-  putint (ofpter, funiq->inode);
-  put_n_str (ofpter, funiq->createhost, strlen (funiq->createhost));
-  putnull (ofpter, WNN_HOSTLEN - strlen (funiq->createhost));
+  put_int (ofpter, funiq->time);
+  put_int (ofpter, funiq->dev);
+  put_int (ofpter, funiq->inode);
+  put_nstring (ofpter, funiq->createhost, strlen (funiq->createhost));
+  put_null (ofpter, WNN_HOSTLEN - strlen (funiq->createhost));
 #endif /* BDIC_WRITE_CHECK */
-}
 
-#ifdef JS
-static
-#endif
-  int
-input_file_uniq (funiq, ifpter)
-     struct wnn_file_uniq *funiq;
-     FILE *ifpter;
-{
-  if (getint (&(funiq->time), ifpter) == -1 || getint (&(funiq->dev), ifpter) == -1 || getint (&(funiq->inode), ifpter) == -1 || getnstring (ifpter, WNN_HOSTLEN, funiq->createhost) == -1)
-    return (-1);
   return (0);
 }
 
-#ifdef JS
-static
-#endif
-  int
-check_inode (f, fh)
-     FILE *f;
-     struct wnn_file_head *fh;
+JS_STATIC int
+input_file_uniq (struct wnn_file_uniq* funiq, FILE* ifpter)
+{
+  if (get_int (&(funiq->time), ifpter) == -1
+      || get_int (&(funiq->dev), ifpter) == -1
+      || get_int (&(funiq->inode), ifpter) == -1
+      || get_nstring (ifpter, WNN_HOSTLEN, funiq->createhost) == -1)
+    return (-1);
+
+  return (0);
+}
+
+JS_STATIC int
+check_inode (FILE* f, struct wnn_file_head* fh)
 {
   struct stat buf;
   if (fstat (fileno (f), &buf) == -1)
@@ -777,13 +701,8 @@ check_inode (f, fh)
   return (0);
 }
 
-#ifdef JS
-static
-#endif
-  int
-change_file_uniq (fh, n)
-     struct wnn_file_head *fh;
-     char *n;
+JS_STATIC int
+change_file_uniq (struct wnn_file_head* fh, char* n)
 {
   int x;
   FILE *fp;
@@ -813,31 +732,30 @@ change_file_uniq (fh, n)
   fseek (fp, 0, 0);
   x = input_file_header (fp, fh);       /* It must not occur. */
   fclose (fp);
-#ifdef BDIC_WRITE_CHECK
+
   if (x == -1)
     {
+#ifdef BDIC_WRITE_CHECK
       delete_tmp_file (tmp);
       delete_tmp_file (backup);
+#endif /* BDIC_WRITE_CHECK */
       return (-1);
     }
+
+#ifdef BDIC_WRITE_CHECK
   move_tmp_to_org (tmp, n, 0);
   delete_tmp_file (backup);
-#else /* BDIC_WRITE_CHECK */
-  if (x == -1)
-    return (-1);
 #endif /* BDIC_WRITE_CHECK */
+
   return (0);
 }
 
-#ifdef JS
-static
-#endif
-  int
-change_file_uniq1 (ofpter, file_type, file_passwd, file_uniq)
-     FILE *ofpter;
-     int file_type;
-     char *file_passwd;
-     struct wnn_file_uniq *file_uniq;
+JS_STATIC int
+change_file_uniq1 (
+	FILE* ofpter,
+	int file_type,
+	char* file_passwd,
+	struct wnn_file_uniq* file_uniq)
 {
   struct stat buf;
   char hostname[WNN_HOSTLEN];
@@ -881,8 +799,7 @@ change_file_uniq1 (ofpter, file_type, file_passwd, file_uniq)
 
 #ifdef JSERVER
 int
-f_uniq_cmp (a, b)
-     char a[], b[];
+f_uniq_cmp (struct wnn_file_uniq *a, struct wnn_file_uniq* b)
 {
   return bcmp (a, b, sizeof (struct wnn_file_uniq));
 }
@@ -890,9 +807,7 @@ f_uniq_cmp (a, b)
 
 #if     !defined(JS) && !defined(JSERVER)
 void
-vputs (c, fp)
-     register char *c;
-     register FILE *fp;
+vputs (char* c, FILE* fp)
 {
   while (*c)
     {
@@ -901,30 +816,24 @@ vputs (c, fp)
 }
 
 int
-vputws (w, fp)
-     register w_char *w;
-     register FILE *fp;
+vputws (w_char* w, FILE* fp)
 {
-  register int n;
+  int n;
   UCHAR tmp[LENGTHYOMI * 3];
 
   n = wnn_sStrcpy (tmp, w);
   vputs (tmp, fp);
   return (n);
 }
-#endif
+#endif /* !JS && !JSERVER */
 
-
-extern char *wnn_get_hinsi_name ();
 
 #if     !defined(JS) && !defined(JSERVER)
 int
-put_yomi_str (yomi, ofpter)
-     w_char *yomi;
-     FILE *ofpter;
+put_yomi_str (w_char* yomi, FILE* ofpter)
 {
-  register int c;
-  register int i = 0;
+  int c;
+  int i = 0;
   UCHAR tmp[LENGTHYOMI * 3], *p;
 
   wnn_sStrcpy (tmp, yomi);
@@ -952,30 +861,24 @@ put_yomi_str (yomi, ofpter)
     }
   return (i);
 }
-#endif
+#endif /* !JS && !JSERVER */
 
 #ifndef JS
 void
-Get_knj2 (kptr, kanji2, kouho, yomi, comment)
-     UCHAR *kptr;
-     int kanji2;
-     w_char *kouho, *comment, *yomi;
+Get_knj2 (UCHAR* kptr, int kanji2, w_char* kouho, w_char* yomi, w_char* comment)
 {
-  extern void get_kanji_str ();
-
   int tcnt;
   for (tcnt = 0; tcnt < kanji2; tcnt++)
     {
       kptr += *kptr;
     }
   get_kanji_str (kptr, kouho, yomi, comment);
+
   return;
 }
 
 void
-get_kanji_str (kptr, kanji, yomi, comment)
-     UCHAR *kptr;
-     w_char *kanji, *comment, *yomi;
+get_kanji_str (UCHAR* kptr, w_char* kanji, w_char* yomi, w_char* comment)
 {
   w_char *tmpy;
   w_char *tmpk;
@@ -984,26 +887,24 @@ get_kanji_str (kptr, kanji, yomi, comment)
 
   Get_kanji_str_r (kptr, &tmpk, &tmpy, &tmpc);
 
-#ifdef CONVERT_from_TOP         /* Don't warry. Only use in server and jutil */
+# ifdef CONVERT_from_TOP	/* Don't worry. Only used in server and jutil */
   if (kanji && tmpk)
     wnn_Strcpy (kanji, tmpk);
   if (yomi && tmpy)
     wnn_Strcpy (yomi, tmpy);
-#else /* conver from bottom */
+# else /* !CONVERT_from_TOP */
   if (kanji && tmpk)
     wnn_Sreverse (kanji, tmpk);
   if (yomi && tmpy)
     wnn_Sreverse (yomi, tmpy);
-#endif /* CONVERT_from_TOP */
+# endif /* !CONVERT_from_TOP */
   if (comment && tmpc)
     wnn_Strcpy (comment, tmpc);
 }
 
 
 void
-Get_kanji_str_r (kptr, tmpk, tmpy, tmpc)
-     UCHAR *kptr;
-     w_char **tmpk, **tmpy, **tmpc;
+Get_kanji_str_r (UCHAR* kptr, w_char** tmpk, w_char** tmpy, w_char** tmpc)
 {
   int state = *(kptr + 1);
   static w_char dmy = 0;        /* Must not be allocated on Stack!! */
@@ -1037,11 +938,9 @@ Get_kanji_str_r (kptr, tmpk, tmpy, tmpc)
     }
 }
 
-#ifdef nodef
+# ifdef nodef
 int
-Get_kanji_len (kptr, which)
-     UCHAR *kptr;
-     int which;
+Get_kanji_len (UCHAR* kptr, int which)
 {
   w_char tmp[LENGTHYOMI];
 
@@ -1057,9 +956,7 @@ Get_kanji_len (kptr, which)
 }
 
 void
-get_kanji_str_r (kptr, kanji, yomi, comment)
-     UCHAR *kptr;
-     w_char *kanji, *comment, *yomi;
+get_kanji_str_r (UCHAR* kptr, w_char* kanji, w_char* yomi, w_char* comment)
 {
   w_char *c;
   int n, k;
@@ -1106,14 +1003,10 @@ get_kanji_str_r (kptr, kanji, yomi, comment)
   if (c)
     *c = 0;
 }
-#endif
+# endif /* nodef */
 
-/* *INDENT-OFF* */
 UCHAR
-kanjiaddr (d0, kanji, yomi, comment)
-     UCHAR *d0;
-     w_char *kanji, *yomi, *comment;
-/* *INDENT-ON* */
+kanjiaddr (UCHAR* d0, w_char* kanji, w_char* yomi, w_char* comment)
 {
   w_char *dest = (w_char *) (d0 + 2);
   int state = 0;
@@ -1121,36 +1014,36 @@ kanjiaddr (d0, kanji, yomi, comment)
 
   if (yomi && *yomi)
     {
-#ifdef CONVERT_from_TOP         /* Don't warry. Only use in server and jutil */
+# ifdef CONVERT_from_TOP	/* Don't worry. Only used in server and jutil */
       pt = yomi;
       for (; *pt;)
         {
           *dest++ = *pt++;
         }
-#else /* conver from bottom */
+# else /* !CONVERT_from_TOP */
       pt = yomi + wnn_Strlen (yomi) - 1;
       for (; pt >= yomi;)
         {
           *dest++ = *pt--;
         }
-#endif /* CONVERT_from_TOP */
+# endif /* !CONVERT_from_TOP */
       state |= HAS_YOMI;
       *dest++ = 0;
     }
 
-#ifdef CONVERT_from_TOP         /* Don't warry. Only use in server and jutil */
+# ifdef CONVERT_from_TOP	/* Don't worry. Only used in server and jutil */
   pt = kanji;
   for (; *pt;)
     {
       *dest++ = *pt++;
     }
-#else /* conver from bottom */
+# else /* !CONVERT_from_TOP */
   pt = kanji + wnn_Strlen (kanji) - 1;
   for (; pt >= kanji;)
     {
       *dest++ = *pt--;
     }
-#endif /* CONVERT_from_TOP */
+# endif /* !CONVERT_from_TOP */
   *dest++ = 0;
 
   if (comment && *comment)
@@ -1168,23 +1061,20 @@ kanjiaddr (d0, kanji, yomi, comment)
   return (*d0);
 }
 
-#endif
+#endif /* JS */
 
 
-#ifdef JS
-static
-#endif
-  int
-create_null_dic (fn, comm, passwd, hpasswd, which)
-     char *fn;
-     w_char *comm;
-     char *passwd, *hpasswd;    /* not encoded passwd */
-     int which;
+JS_STATIC int
+create_null_dic (
+	char* fn,
+	w_char* comm,
+	char* passwd,
+	char* hpasswd,	/* not encoded */
+	int which)
 {
   FILE *fp;
   struct JT jt;
   char epasswd[WNN_PASSWD_LEN];
-  extern void new_pwd ();
 
   jt.total = 0;
   jt.gosuu = 0;
@@ -1227,7 +1117,8 @@ create_null_dic (fn, comm, passwd, hpasswd, which)
     {
       bzero (epasswd, WNN_PASSWD_LEN);
     }
-  if (create_file_header (fp, WNN_FT_DICT_FILE, epasswd) == -1 || output_header_jt (fp, &jt) == -1)
+  if (create_file_header (fp, WNN_FT_DICT_FILE, epasswd) == -1
+      || output_header_jt (fp, &jt) == -1)
     {
       fclose (fp);
       return (-1);
@@ -1244,13 +1135,13 @@ create_null_dic (fn, comm, passwd, hpasswd, which)
   if (which == WNN_UD_DICT)
     {
 #ifdef BDIC_WRITE_CHECK
-      if (putint (fp, 0) == -1)
+      if (put_int (fp, 0) == -1)
         {                       /* hontai[0] */
           fclose (fp);
           return (-1);
         }
 #else /* BDIC_WRITE_CHECK */
-      putint (fp, 0);           /* hontai[0] */
+      put_int (fp, 0);           /* hontai[0] */
 #endif /* BDIC_WRITE_CHECK */
     }
 
@@ -1265,16 +1156,13 @@ create_null_dic (fn, comm, passwd, hpasswd, which)
 }
 
 
-#ifdef JS
-static
-#endif
-  int
-create_hindo_file (funiq, fn, comm, passwd, serial)
-     struct wnn_file_uniq *funiq;
-     char *fn;
-     w_char *comm;
-     char *passwd;              /* Not encoded */
-     int serial;
+JS_STATIC int
+create_hindo_file (
+	struct wnn_file_uniq* funiq,
+	char* fn,
+	w_char* comm,
+	char* passwd,	/* Not encoded */
+	int serial)
 {
   FILE *fp;
   struct HJT hjt;
@@ -1307,7 +1195,9 @@ create_hindo_file (funiq, fn, comm, passwd, serial)
       return (-1);
     }
 #ifdef BDIC_WRITE_CHECK
-  if ((output_header_hjt (fp, &hjt) == -1) || (put_n_EU_str (fp, comm, hjt.maxcomment) == -1) || (putnull (fp, serial) == -1))
+  if ((output_header_hjt (fp, &hjt) == -1)
+      || (put_n_EU_str (fp, comm, hjt.maxcomment) == -1)
+      || (put_null (fp, serial) == -1))
     {
       fclose (fp);
       return (-1);
@@ -1315,7 +1205,7 @@ create_hindo_file (funiq, fn, comm, passwd, serial)
 #else /* BDIC_WRITE_CHECK */
   output_header_hjt (fp, &hjt);
   put_n_EU_str (fp, comm, hjt.maxcomment);
-  putnull (fp, serial);
+  put_null (fp, serial);
 #endif /* BDIC_WRITE_CHECK */
 
 #if HAVE_FCHMOD
@@ -1330,115 +1220,115 @@ create_hindo_file (funiq, fn, comm, passwd, serial)
 
 /* Header Total 128 Bytes */
 
-#ifndef JS
-int
-input_header_jt (ifpter, jt1)
-     FILE *ifpter;
-     struct JT *jt1;
+JS_STATIC int
+input_header_jt (FILE* ifpter, struct JT* jt1)
 {
-  if (getint (&jt1->syurui, ifpter) == -1 ||
-      getint (&jt1->maxcomment, ifpter) == -1 ||
-      getint (&jt1->maxhinsi_list, ifpter) == -1 ||
-      getint (&jt1->maxserial, ifpter) == -1 ||
-      getint (&jt1->maxkanji, ifpter) == -1 ||
-      getint (&jt1->maxtable, ifpter) == -1 ||
-      getint (&jt1->maxhontai, ifpter) == -1 ||
-      getint (&jt1->gosuu, ifpter) == -1 ||
-      getnstring (ifpter, WNN_PASSWD_LEN, jt1->hpasswd) == -1 ||
-      getint (&jt1->total, ifpter) == -1 ||
-      getint (&jt1->maxri1[D_YOMI], ifpter) == -1 || getint (&jt1->maxri1[D_KANJI], ifpter) == -1 || getint (&jt1->maxri2, ifpter) == -1 || getnull (ifpter, 56) == -1)
+  if (get_int (&jt1->syurui, ifpter) == -1
+      || get_int (&jt1->maxcomment, ifpter) == -1
+      || get_int (&jt1->maxhinsi_list, ifpter) == -1
+      || get_int (&jt1->maxserial, ifpter) == -1
+      || get_int (&jt1->maxkanji, ifpter) == -1
+      || get_int (&jt1->maxtable, ifpter) == -1
+      || get_int (&jt1->maxhontai, ifpter) == -1
+      || get_int (&jt1->gosuu, ifpter) == -1
+      || get_nstring (ifpter, WNN_PASSWD_LEN, jt1->hpasswd) == -1
+      || get_int (&jt1->total, ifpter) == -1
+      || get_int (&jt1->maxri1[D_YOMI], ifpter) == -1
+      || get_int (&jt1->maxri1[D_KANJI], ifpter) == -1
+      || get_int (&jt1->maxri2, ifpter) == -1
+      || get_null (ifpter, 56) == -1)
     return (-1);
+
   return (0);
 }
-#endif
 
-#ifdef JS
-static
-#endif
-  int
-output_header_jt (ofpter, jt1)
-     FILE *ofpter;
-     struct JT *jt1;
+JS_STATIC int
+output_header_jt (FILE* ofpter, struct JT* jt1)
 {
 #ifdef BDIC_WRITE_CHECK
-  if ((putint (ofpter, jt1->syurui) == -1) ||
-      (putint (ofpter, jt1->maxcomment) == -1) ||
-      (putint (ofpter, jt1->maxhinsi_list) == -1) ||
-      (putint (ofpter, jt1->maxserial) == -1) ||
-      (putint (ofpter, jt1->maxkanji) == -1) ||
-      (putint (ofpter, jt1->maxtable) == -1) ||
-      (putint (ofpter, jt1->maxhontai) == -1) ||
-      (putint (ofpter, jt1->gosuu) == -1) ||
-      (put_n_str (ofpter, jt1->hpasswd, WNN_PASSWD_LEN) == -1) ||
-      (putint (ofpter, jt1->total) == -1) ||
-      (putint (ofpter, jt1->maxri1[D_YOMI]) == -1) || (putint (ofpter, jt1->maxri1[D_KANJI]) == -1) || (putint (ofpter, jt1->maxri2) == -1) || (putnull (ofpter, 56) == -1))
+  if ((put_int (ofpter, jt1->syurui) == -1)
+      || (put_int (ofpter, jt1->maxcomment) == -1)
+      || (put_int (ofpter, jt1->maxhinsi_list) == -1)
+      || (put_int (ofpter, jt1->maxserial) == -1)
+      || (put_int (ofpter, jt1->maxkanji) == -1)
+      || (put_int (ofpter, jt1->maxtable) == -1)
+      || (put_int (ofpter, jt1->maxhontai) == -1)
+      || (put_int (ofpter, jt1->gosuu) == -1)
+      || (put_nstring (ofpter, jt1->hpasswd, WNN_PASSWD_LEN) == -1)
+      || (put_int (ofpter, jt1->total) == -1)
+      || (put_int (ofpter, jt1->maxri1[D_YOMI]) == -1)
+      || (put_int (ofpter, jt1->maxri1[D_KANJI]) == -1)
+      || (put_int (ofpter, jt1->maxri2) == -1)
+      || (put_null (ofpter, 56) == -1))
     return (-1);
 #else /* BDIC_WRITE_CHECK */
-  putint (ofpter, jt1->syurui);
-  putint (ofpter, jt1->maxcomment);
-  putint (ofpter, jt1->maxhinsi_list);
-  putint (ofpter, jt1->maxserial);
-  putint (ofpter, jt1->maxkanji);
-  putint (ofpter, jt1->maxtable);
-  putint (ofpter, jt1->maxhontai);
-  putint (ofpter, jt1->gosuu);
-  put_n_str (ofpter, jt1->hpasswd, WNN_PASSWD_LEN);
-  putint (ofpter, jt1->total);
-  putint (ofpter, jt1->maxri1[D_YOMI]);
-  putint (ofpter, jt1->maxri1[D_KANJI]);
-  putint (ofpter, jt1->maxri2);
-  putnull (ofpter, 56);
+  put_int (ofpter, jt1->syurui);
+  put_int (ofpter, jt1->maxcomment);
+  put_int (ofpter, jt1->maxhinsi_list);
+  put_int (ofpter, jt1->maxserial);
+  put_int (ofpter, jt1->maxkanji);
+  put_int (ofpter, jt1->maxtable);
+  put_int (ofpter, jt1->maxhontai);
+  put_int (ofpter, jt1->gosuu);
+  put_nstring (ofpter, jt1->hpasswd, WNN_PASSWD_LEN);
+  put_int (ofpter, jt1->total);
+  put_int (ofpter, jt1->maxri1[D_YOMI]);
+  put_int (ofpter, jt1->maxri1[D_KANJI]);
+  put_int (ofpter, jt1->maxri2);
+  put_null (ofpter, 56);
 #endif /* BDIC_WRITE_CHECK */
+
   return (0);
 }
 
 /* Header 64 Byte */
-#ifndef JS
-int
-input_header_hjt (ifpter, hjt1)
-     FILE *ifpter;
-     struct HJT *hjt1;
+JS_STATIC int
+input_header_hjt (FILE* ifpter, struct HJT* hjt1)
 {
-  if (input_file_uniq (&hjt1->dic_file_uniq, ifpter) == -1 ||   /* 7 * 4 */
-      getint (&hjt1->maxcomment, ifpter) == -1 || getint (&hjt1->maxserial, ifpter) == -1 || getnull (ifpter, 28) == -1)
-    {
-      return (-1);
-    }
+  if (input_file_uniq (&hjt1->dic_file_uniq, ifpter) == -1	/* 7 * 4 */
+      || get_int (&hjt1->maxcomment, ifpter) == -1
+      || get_int (&hjt1->maxserial, ifpter) == -1
+      || get_null (ifpter, 28) == -1)
+    return (-1);
+
   return (0);
 }
-#endif
 
-#ifdef JS
-static
-#endif
-  int
-output_header_hjt (ofpter, hjt1)
-     FILE *ofpter;
-     struct HJT *hjt1;
+JS_STATIC int
+output_header_hjt (FILE* ofpter, struct HJT* hjt1)
 {
 #ifdef BDIC_WRITE_CHECK
-  if ((output_file_uniq (&hjt1->dic_file_uniq, ofpter) == -1) || (putint (ofpter, hjt1->maxcomment) == -1) || (putint (ofpter, hjt1->maxserial) == -1) || (putnull (ofpter, 28) == -1))
+  if ((output_file_uniq (&hjt1->dic_file_uniq, ofpter) == -1)
+      || (put_int (ofpter, hjt1->maxcomment) == -1)
+      || (put_int (ofpter, hjt1->maxserial) == -1)
+      || (put_null (ofpter, 28) == -1))
     return (-1);
 #else /* BDIC_WRITE_CHECK */
   output_file_uniq (&hjt1->dic_file_uniq, ofpter);
-  putint (ofpter, hjt1->maxcomment);
-  putint (ofpter, hjt1->maxserial);
-  putnull (ofpter, 28);
+  put_int (ofpter, hjt1->maxcomment);
+  put_int (ofpter, hjt1->maxserial);
+  put_null (ofpter, 28);
 #endif /* BDIC_WRITE_CHECK */
+
   return (0);
 }
 
 
 #if     !defined(JS) && !defined(JSERVER)
-/* Only use JUTIL */
+/* Only used in JUTIL */
 void
-Print_entry (yomi, kstr, cstr, hindo, ima, hinsi, serial, ofpter, esc_exp)
-     w_char *yomi, *kstr, *cstr;
-     int serial, hindo, ima, hinsi;
-     FILE *ofpter;
-     int esc_exp;
+Print_entry (
+	w_char* yomi,
+	w_char* kstr,
+	w_char* cstr,
+	int hindo,
+	int ima,
+	int hinsi,
+	int serial,
+	FILE* ofpter,
+	int esc_exp)
 {
-  register int len;
+  int len;
   char *k;
   char buf[32];
   static w_char revy[LENGTHKANJI];
@@ -1509,7 +1399,7 @@ Print_entry (yomi, kstr, cstr, hindo, ima, hinsi, serial, ofpter, esc_exp)
     }
   vputc ('\n', ofpter);
 }
-#endif
+#endif /* !JS && !JSERVER */
 
 #ifdef BDIC_WRITE_CHECK
 #undef BDIC_WRITE_CHECK

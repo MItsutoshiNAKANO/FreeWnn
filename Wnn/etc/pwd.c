@@ -1,5 +1,5 @@
 /*
- *  $Id: pwd.c,v 1.5 2002-03-24 02:01:20 hiroo Exp $
+ *  $Id: pwd.c,v 1.6 2004-07-12 17:53:02 hiroo Exp $
  */
 
 /*
@@ -52,11 +52,17 @@
 #endif /* !JS */
 
 #ifdef JS
-static
-#endif
-  void
-new_pwd (src, encd)
-     char *src, *encd;
+# define JS_STATIC static
+#else  /* !JS */
+# define JS_STATIC
+#endif /* !JS */
+
+/* etc/pwd.c */
+JS_STATIC void new_pwd (char* src, char* encd);
+JS_STATIC int check_pwd (char* src, char* encd);
+
+JS_STATIC void
+new_pwd (char* src, char* encd)
 {
   int i, x, c;
   char xx[3];
@@ -87,12 +93,8 @@ new_pwd (src, encd)
   strncpy (encd, cr, WNN_PASSWD_LEN);
 }
 
-#ifdef JS
-static
-#endif
-  int
-check_pwd (src, encd)
-     char *src, *encd;
+JS_STATIC int
+check_pwd (char* src, char* encd)
 {
   if (strcmp (encd, "") == 0)
     return (1);                 /* No passwd */
