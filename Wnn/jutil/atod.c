@@ -1,5 +1,5 @@
 /*
- *  $Id: atod.c,v 1.10 2002-07-14 04:26:57 hiroo Exp $
+ *  $Id: atod.c,v 1.11 2002-11-12 10:25:01 aono Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ UJIS 形式を、辞書登録可能形式, 及び固定形式辞書に変換するプログラム。
 */
 
 #ifndef lint
-static char *rcs_id = "$Id: atod.c,v 1.10 2002-07-14 04:26:57 hiroo Exp $";
+static char *rcs_id = "$Id: atod.c,v 1.11 2002-11-12 10:25:01 aono Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -520,11 +520,12 @@ output_dic_index ()
 static void
 usage ()
 {
-  fprintf (stderr, "Usage : %s [-r -R -S -e -s maximum word count(default %d) -P passwd (or -N) -p hindo_passwd (or -n) -h hinsi_file_name] <dictonary filename>\n", com_name, MAX_ENTRIES);
+  fprintf (stderr, "Usage : %s [-r -R -S -U -e -s maximum word count(default %d) -P passwd (or -N) -p hindo_passwd (or -n) -h hinsi_file_name] <dictonary filename>\n", com_name, MAX_ENTRIES);
   fprintf (stderr, "Input the ascii dictionary from stdin\n");
   fprintf (stderr, "-r is for creating dictionary with normal and reverse index\n");
-  fprintf (stderr, "-R is for creating reverse dictionary\n");
-  fprintf (stderr, "-S is for creating static  dictionary.\n");
+  fprintf (stderr, "-R is for creating reverse (implies updatable) dictionary. (default)\n");
+  fprintf (stderr, "-S is for creating static    dictionary.\n");
+  fprintf (stderr, "-U is for creating updatable dictionary.\n");
   fprintf (stderr, "-e is for compacting kanji string.\n");
   exit1 ();
 }

@@ -1,5 +1,5 @@
 /*
- *  $Id: revdic.c,v 1.3 2001-06-14 18:15:55 ura Exp $
+ *  $Id: revdic.c,v 1.4 2002-11-12 10:25:01 aono Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -80,7 +80,8 @@ rev_ud_hontai (hostart, maxhontai, match)
   int k;
   int len;
 
-  for (hop = (struct uind2 *) hostart; (UCHAR *) hop < hoend;)
+  /* Skip first 4 bytes for some reason. (cf. ujistoud() in atod.c) */ 
+  for (hop = (struct uind2 *)((int *) hostart + 1); (UCHAR *) hop < hoend;)
     {
       rev_int (&(hop->next));
       rev_int (&(hop->serial));
