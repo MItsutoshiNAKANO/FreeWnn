@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.10 2001-08-14 13:43:20 hiroo Exp $
+#   $Id: Makefile.in,v 1.11 2001-09-24 08:36:12 hiroo Exp $
 #
 
 #
@@ -49,7 +49,7 @@ JSERVER_SUBDIRS2 = Contrib/dic/gerodic
 
 SUBDIRS= $(WNNDIR) @JSERVER_SUBDIRS2@ $(CWNNDIR) $(KWNNDIR) @SUBDIRS@
 
-LIBTOOL_DEPS = @LIBTOOLD_DEPS@
+LIBTOOL_DEPS = @LIBTOOL_DEPS@
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
 

@@ -1,3 +1,6 @@
+Mon Sep 24 08:25:28 UTC 2001  Hiroo Ono <hiroo@oikumene.gcd.org>
+        * Fix for configure.in and Makefile.in ([freewnn:00753] by T.Aono).
+
 Sun Sep 16 11:10:20 UTC 2001  Hiroo Ono <hiroo@oikumene.gcd.org>
         * Added --enable-debug option to the configure script.
 	  it adds -g2 option to CDEBUGFLAGS if CC is GCC, and remove

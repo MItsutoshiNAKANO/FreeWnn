@@ -1299,7 +1299,7 @@ case $host in
 *-*-freebsd*|*-*-netbsd*|*-*-openbsd*)
     CCOPTIONS="-DCSRG_BASED"
     if test $debug = true; then
-      CDEBUGFLAGS="-g2 -O2 -fno-strength-reduce"
+      CDEBUGFLAGS="-g2 -O2 -fno-strength-reduce -fstack-check"
     else
       CDEBUGFLAGS="-O2 -fno-strength-reduce"
     fi
@@ -1387,9 +1387,9 @@ powerpc-*-beos*)
 esac
 
 if test ${debug} = true; then
-     INSTPGMFLAGS =
+     INSTPGMFLAGS=
 else
-     INSTPGMFLAGS = -s
+     INSTPGMFLAGS="-s"
 fi
 
 
