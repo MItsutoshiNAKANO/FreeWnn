@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.16 2002-03-08 08:36:02 aono Exp $
+ *  $Id: de.c,v 1.17 2002-03-08 17:57:58 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2001
+ * Copyright FreeWnn Project 1999, 2000, 2001, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -37,7 +37,11 @@
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <signal.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "commonhd.h"
 #include "wnn_config.h"
 #include "jd_sock.h"
@@ -50,10 +54,6 @@
 extern int errno;               /* Pure BSD */
 
 #include <sys/ioctl.h>
-
-#if defined(HAVE_SYS_TYPES_H)
-#include <sys/types.h>
-#endif
 
 #if defined(HAVE_SYS_PARAM_H)
 #include <sys/param.h>
@@ -118,7 +118,7 @@ extern int errno;               /* Pure BSD */
 #ifdef INET6
 #define PROTO_INET6	0x8
 #endif
-static listen_proto = PROTO_ALL;
+static int listen_proto = PROTO_ALL;
 
 jmp_buf client_dead;
 
@@ -304,6 +304,7 @@ main (argc, argv)
   daemon_main ();
 
   daemon_fin ();
+  return (0);	/* it is not reached. only for avoiding compiler warning. */
 }
 
 static void

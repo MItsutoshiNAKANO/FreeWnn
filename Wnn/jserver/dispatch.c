@@ -1,5 +1,5 @@
 /*
- *  $Id: dispatch.c,v 1.6 2001-09-16 11:50:47 hiroo Exp $
+ *  $Id: dispatch.c,v 1.7 2002-03-08 17:57:59 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -38,10 +38,8 @@
 #endif
 
 #include <stdio.h>
-
-#if defined(HAVE_SYS_TYPES_H)
-#include "sys/types.h"
-#endif
+#include <stdlib.h>
+#include <sys/types.h>
 
 #include "commonhd.h"
 #include "demcom.h"
