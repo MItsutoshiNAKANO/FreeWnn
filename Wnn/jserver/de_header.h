@@ -1,5 +1,5 @@
 /*
- *  $Id: de_header.h,v 1.15 2002-09-01 17:13:10 hiroo Exp $
+ *  $Id: de_header.h,v 1.16 2002-11-08 09:15:06 hamajima Exp $
  */
 
 /*
@@ -45,6 +45,7 @@
 #endif        /* CHINESE */
 
 #include "jslib.h"
+#include "commonhd.h"
 #include "jdata.h"
 #include "ddefine.h"
 #include "wnn_os.h"
