@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.39 2003-06-11 11:16:05 aono Exp $
+dnl   $Id: configure.in,v 1.40 2004-05-21 13:55:53 aono Exp $
 dnl
 
 dnl
@@ -44,7 +44,7 @@ AC_CANONICAL_HOST
 dnl build and install libraries, server or client
 
 AC_ARG_ENABLE(debug,
-[  --enable-debug             enable debug options [default=no]],
+[  --enable-debug          enable debug options [[default=no]]],
 [case "${enableval}" in
    yes) debug=true ;;
    no)  debug=false ;;
@@ -52,7 +52,7 @@ AC_ARG_ENABLE(debug,
 esac], debug=false)
 
 AC_ARG_ENABLE(libraries,
-[  --enable-libraries      build and install libraries [default=yes]],
+[  --enable-libraries      build and install libraries [[default=yes]]],
 [case "${enableval}" in
    yes) libraries=true ;;
    no)  libraries=false ;;
@@ -60,7 +60,7 @@ AC_ARG_ENABLE(libraries,
 esac], libraries=true)
 
 AC_ARG_ENABLE(server,
-[  --enable-server         build and install server [default=yes]],
+[  --enable-server         build and install server [[default=yes]]],
 [case "${enableval}" in
    yes) server=true ;;
    no)  server=false ;;
@@ -68,7 +68,7 @@ AC_ARG_ENABLE(server,
 esac], server=true)
 
 AC_ARG_ENABLE(client,
-[  --enable-client         build and install clients [default=no]],
+[  --enable-client         build and install clients [[default=no]]],
 [case "${enableval}" in
    yes) client=true ;;
    no)  client=false ;;
@@ -95,7 +95,7 @@ AC_SUBST(WNNMANDIR)
 dnl For Severs
 
 AC_ARG_ENABLE(Wnn,
-[  --enable-Wnn         build and install Wnn [default=yes]],
+[  --enable-Wnn            build and install Wnn [[default=yes]]],
 [case "${enableval}" in
    yes) Wnn="Wnn";;
    no)  Wnn="" ;;
@@ -114,7 +114,7 @@ dnl AC_SUBST(JSERVER_SUBDIRS1)
 AC_SUBST(JSERVER_SUBDIRS2)
 
 AC_ARG_ENABLE(cWnn,
-[  --enable-cWnn         build and install cWnn [default=yes]],
+[  --enable-cWnn           build and install cWnn [[default=yes]]],
 [case "${enableval}" in
    yes) cWnn="cWnn" ;;
    no)  cWnn="" ;;
@@ -123,7 +123,7 @@ esac], cWnn="cWnn")
 AC_SUBST(cWnn)
 
 AC_ARG_ENABLE(kWnn,
-[  --enable-kWnn         build and install kWnn [default=yes]],
+[  --enable-kWnn           build and install kWnn [[default=yes]]],
 [case "${enableval}" in
    yes) kWnn="kWnn" ;;
    no)  kWnn="" ;;
@@ -142,13 +142,13 @@ dnl esac], with_libwnn=no)
 dnl 
 
 AC_ARG_WITH(libwnn,
-[  --with-libwnn               use installed Wnn library [default=no]],
+[  --with-libwnn             use installed Wnn library [[default=no]]],
 [  with_libwnn="${withval}"
 AC_ARG_WITH(wnn-includes,
-[  --with-wnn-includes=DIR  WNN include files are in DIR],
+[  --with-wnn-includes=DIR   WNN include files are in DIR],
 [wnnincludedir="-I${withval}"], [wnnincludedir=''])
 AC_ARG_WITH(wnn-libraries,
-[  --with-wnn-libraries=DIR Search for WNN libraries in DIR[default=/usr/local/lib]],
+[  --with-wnn-libraries=DIR  Search for WNN libraries in DIR [[default=/usr/local/lib]]],
 [wnnlibdir="${withval}"], [wnnlibdir='/usr/local/lib'])
 	if test "X${with_libwnn}" = X-lwnn; then
 		WNNJLIB="-L${wnnlibdir} -lwnn"
@@ -169,13 +169,13 @@ AC_SUBST(DEPWNNJLIB)
 AC_SUBST(HINSI_DATA)
 
 AC_ARG_WITH(libcwnn,
-[  --with-libcwnn               use installed cWnn library [default=no]],
+[  --with-libcwnn            use installed cWnn library [[default=no]]],
 [
 AC_ARG_WITH(cwnn-includes,
 [  --with-cwnn-includes=DIR  CWNN include files are in DIR],
 [cwnnincludedir="-I${withval}"], [cwnnincludedir=''])
 AC_ARG_WITH(cwnn-libraries,
-[  --with-cwnn-libraries=DIR Search for CWNN libraries in DIR[default=/usr/local/lib]],
+[  --with-cwnn-libraries=DIR Search for CWNN libraries in DIR [[default=/usr/local/lib]]],
 [cwnnlibdir="${withval}"], [cwnnlibdir='/usr/local/lib'])
 	if test "X${with_libcwnn}" = X-lcwnn; then
 		CWNNJLIB="-L${cwnnlibdir} -lcwnn"
@@ -199,13 +199,13 @@ AC_SUBST(CHINSI_DATA)
 AC_SUBST(THINSI_DATA)
 
 AC_ARG_WITH(libkwnn,
-[  --with-libkwnn               use installed kWnn library [default=no]],
+[  --with-libkwnn            use installed kWnn library [[default=no]]],
 [
 AC_ARG_WITH(kwnn-includes,
 [  --with-kwnn-includes=DIR  KWNN include files are in DIR],
 [kwnnincludedir="-I${withval}"], [kwnnincludedir=''])
 AC_ARG_WITH(kwnn-libraries,
-[  --with-kwnn-libraries=DIR Search for KWNN libraries in DIR[default=/usr/local/lib]],
+[  --with-kwnn-libraries=DIR Search for KWNN libraries in DIR [[default=/usr/local/lib]]],
 [kwnnlibdir="${withval}"], [kwnnlibdir='/usr/local/lib'])
 	if test "X${with_libkwnn}" = X-lkwnn; then
 		KWNNJLIB="-L${kwnnlibdir} -lkwnn"
@@ -230,7 +230,7 @@ dnl Build Options
 dnl
 
 AC_ARG_ENABLE(ipv6,
-[  --enable-ipv6           build and install IPv6 [default=no]],
+[  --enable-ipv6           build and install IPv6 [[default=no]]],
 [case "${enableval}" in
    yes) ipv6="-DINET6";;
    no)  ipv6="" ;;
@@ -239,7 +239,7 @@ esac], ipv6="")
 AC_SUBST(ipv6)
 
 AC_ARG_ENABLE(unsafe-path,
-[  --enable-unsafe-path    allow creating files in an arbitrary path [default=no]],
+[  --enable-unsafe-path    allow creating files in an arbitrary path [[default=no]]],
 [case "${enableval}" in
    yes) unsafe_path=true;;
    no)  unsafe_path=false;;
