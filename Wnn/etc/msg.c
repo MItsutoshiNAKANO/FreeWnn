@@ -1,5 +1,5 @@
 /*
- *  $Id: msg.c,v 1.9 2002-03-23 21:13:58 hiroo Exp $
+ *  $Id: msg.c,v 1.10 2002-05-07 22:26:26 hiroo Exp $
  */
 
 /*
@@ -98,10 +98,10 @@ getlang (lang)
 
 static int
 _search (id, bd)
-     register int id;
-     register struct msg_bd *bd;
+    int *id;
+    struct msg_bd *bd;
 {
-  return (id - bd->msg_id);
+  return (*id - bd->msg_id);
 }
 
 static void
