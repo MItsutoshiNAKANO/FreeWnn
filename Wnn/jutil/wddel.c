@@ -1,5 +1,5 @@
 #ifndef lint
-static char *rcs_id = "$Id: wddel.c,v 1.1.1.1 2000-01-16 05:07:46 ura Exp $";
+static char *rcs_id = "$Id: wddel.c,v 1.2 2000-01-16 05:48:53 ura Exp $";
 #endif /* lint */
 
 /*
@@ -53,6 +53,8 @@ static char *rcs_id = "$Id: wddel.c,v 1.1.1.1 2000-01-16 05:07:46 ura Exp $";
 #define COMMENT_SET 2
 #define HINDO_SET 3
 
+#define LINE_SIZE 256
+
 char *def_server;
 
 int dic_no = -1;
@@ -87,7 +89,7 @@ err()
     exit(1);
 }
 
-void
+int
 main(argc, argv)
 int argc;
 char **argv;
@@ -100,7 +102,7 @@ char **argv;
     int k;
     int num;
     int sno;
-    char s[256];
+    char s[LINE_SIZE];
     char *cswidth_name;
     extern char *get_cswidth_name();
     extern void set_cswidth();
@@ -189,7 +191,7 @@ char **argv;
 	fprintf(stderr, "The specified dictionary isn't registable\n");
 	exit(1);
     }
-    while(gets(s)){
+    while(fgets(s, sizeof(s), stdin)) {
 	char com[LENGTHYOMI];
 	char Com[LENGTHYOMI];
 	int ima, hindo;

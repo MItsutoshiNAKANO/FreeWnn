@@ -1,5 +1,5 @@
 /*
- * "$Id: de.c,v 1.1.1.2 2000-01-16 05:10:52 ura Exp $"
+ * "$Id: de.c,v 1.2 2000-01-16 05:48:52 ura Exp $"
  */
 
 /*
@@ -186,7 +186,7 @@ int get2_cur();
 char cmd_name[80];
 
 /* No arguments are used. Only options. */
-void
+int
 main(argc, argv)
 int argc;
 char **argv;

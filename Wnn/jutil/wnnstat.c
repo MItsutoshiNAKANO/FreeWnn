@@ -1,5 +1,5 @@
 #ifndef lint
-static char *rcs_id = "$Id: wnnstat.c,v 1.1.1.2 2000-01-16 05:10:53 ura Exp $";
+static char *rcs_id = "$Id: wnnstat.c,v 1.2 2000-01-16 05:48:53 ura Exp $";
 #endif /* lint */
 
 /*
@@ -92,7 +92,7 @@ int com = W_WHO;
 
 struct msg_cat *cd;
 
-void
+int
 main(argc,argv)
 int argc;
 char **argv;

@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.1.1.1 2000-01-16 05:11:08 ura Exp $
+# $Id: Makefile.in,v 1.3 2000-01-16 05:49:02 ura Exp $
 #
 
 # FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -36,8 +36,6 @@
 all::
 
 .SUFFIXES: .i
-
- _NULLCMD_ = @ echo -n
 
 TKLIBNAME = tk80
 
@@ -106,7 +104,7 @@ CXXEXTRA_INCLUDES =
              LINT = lint
       LINTLIBFLAG = -C
          LINTOPTS = -axz
-               LN = @LN_S@ -s
+               LN = @LN_S@
              MAKE = make
                MV = mv -f
                CP = cp

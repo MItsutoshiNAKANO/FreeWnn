@@ -1,5 +1,5 @@
 #ifndef lint
-static char *rcs_id = "$Id: atof.c,v 1.1.1.1 2000-01-16 05:07:46 ura Exp $";
+static char *rcs_id = "$Id: atof.c,v 1.2 2000-01-16 05:48:52 ura Exp $";
 #endif /* lint */
 
 /*
@@ -287,7 +287,7 @@ char *c;
   exit(1);
 }
 
-void
+int
 main(argc, argv)
 int argc;
 char **argv;

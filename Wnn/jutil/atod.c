@@ -1,5 +1,5 @@
 #ifndef lint
-static char *rcs_id = "$Id: atod.c,v 1.1.1.1 2000-01-16 05:07:46 ura Exp $";
+static char *rcs_id = "$Id: atod.c,v 1.2 2000-01-16 05:48:52 ura Exp $";
 #endif /* lint */
 
 /*
@@ -209,7 +209,7 @@ extern int sort_func_sdic();
 extern int sort_func_je();
 FILE *ofpter , *fopen();
 
-void
+int
 main(argc,argv)
      int argc ;
      char **argv;
