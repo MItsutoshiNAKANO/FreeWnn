@@ -1,6 +1,102 @@
+
+Sat Jun 15 13:11:45 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* acconfig.h:
+	  EB Library <URI:http://www.sra.co.jp/people/m-kasahr/eb/>.
+	  を参考に、RETSIGTYPE_VOID hack を追加。
+	* configure.in:
+	  *BSD 用の CCOPTIONS から -DCSRG_BASED を削除。
+	  configure のサイズ縮小の為、AC_CHECK_HEADERS 及び AC_CHECK_FUNCS
+	  をまとめた。
+	  AC_CHECK_TYPES の使いかたの体裁変更。
+	  EB Library を参考に、RETSIGTYPE_VOID hack を追加。
+	  各言語について、無効時は Makefile の生成をしない。
+	  getdtablesize() チェック追加。
+	* config.h.in, configure: 再生成 (GNU Autoconf 2.53)
+	* Wnn/include/wnn_os.h:
+	  bzero/memset, strchr/index strrchr/rindex glue.
+	  SIGNALRETURNSINT を RETSIGTYPE 及び RETSIGTYPE_VOID で置き換え。
+	  WNN_NFD マクロを暫定的な file descriptor 数チェックに使用。
+	* Wnn/jlib/getopt.c, jl.c, js.c,
+	  Wnn/jserver/initjserv.c,
+	  Wnn/romkan/rk_header.h:
+	  config.h または wnn_os.h を include して BSD42 macro を削除。
+	* Wnn/jserver/de.c:
+	  WNN_NFD マクロを暫定的な file descriptor 数チェックに使用。
+	* Wnn/jserver/de_header.h, error.c,
+	  Wnn/uum/jhlp.c:
+	  RETSIGTYPE and RETSIGTYPE_VOID を使用するように変更。
+	  WNN_NFD マクロを暫定的な file descriptor 数チェックに使用。
+	* Wnn/uum/sheader.h:
+	  コメントの変更。
+	* Wnn/uum/wnnrc_op.c:
+	  BSD42 macro 削除。
+
+Fri Jun 14 19:39:30 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org> 
+	* Makefile.in: 削除コマンドとして $(RM) の使用を徹底。
+
+Thu Jun 13 21:27:51 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* FreeWnn/Wnn/uum/jhlp.c, termio.c:
+	  独自に持っている setenv() の定義を変更
+	  - エラーメッセージの出力を行なわない。
+	  - setenv() を持っているシステムとの互換性の為、ダミーの引数を追加。
+	* FreeWnn/Wnn/uum/termcap.c: curses ヘッダの取り込み。
+	* FreeWnn/Wnn/uum/sheader.h: 体裁の変更。
+
+Mon Jun 10 22:15:23 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* PubdicPlus/pod.c: config.h の include.
+
+Sun Jun 09 11:08:41 UTC 2002  Hiroaki Abe <h-abe@pc.highway.ne.jp> 
+	* FreeWnn/configure.in:
+	  BeOS R5.1 用に、libbind.so のチェックを追加。
+
+Mon May 27 16:33:52 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/pubdicplus/Makefile.in:
+	  <config.h> が include されるように、$(TOP) を include path に追加。
+
+Sat May 25 11:24:47 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* FreeWnn/PubdicPlus/ fzk.con, fzk.attr, fzk.jircon:
+	  五段可能動詞追加 ([wnn-users 973],[wnn-users 975] 片山さん)。
+	  接頭語の拡張 ([wnn-users 978] Fe2+さん)。
+
+Sat May 25 05:57:43 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/jserver/ MALLOC.c, malloc.c: malloc() wrapper の削除。
+
+Sun May 12 22:51:18 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/conv/cvt_key.c: register 修飾子削除。
+	* Wnn/uum/setutmp.c:
+	  setenv() の引数修正 及び、必要なシステムヘッダの include。
+	* kWnn/jserver/Makefile.in, kWnn/include/Makefile.in,
+	  cWnn/jserver/Makefile.in, cWnn/include/Makefile.in,
+	  Wnn/jserver/Makefile.in:
+	  wnn_malloc.h 及び malloc.c を削除。
+	* Wnn/etc/ msg.c, vasprintf.c,
+	  Wnn/jlib/ jl.c, js.c, kankana.c,
+	  Wnn/jlib.V3/jlv3.c,
+	  Wnn/jserver/ b_index.c, daibun_kai.c, de.c, dispatch.c,
+		  do_env.c, error.c, fzk.c, get_kaiarea.c,
+		  hinsi_list.c,initjserv.c, jikouho.c, jikouho_d.c,
+		  mknode0.c, mknode1.c, mknode2.c, readfile.c,
+	  Wnn/jutil/ atod.c, atorev.c, dtoa.c, ujisf.c, wddel.c,
+		  wdreg.c, wnnstat.c,
+	  Wnn/uum/ basic_op.c, history.c, prologue.c, screen.c,
+		  termcap.c, uif.c, wnnrc_op.c:
+	  malloc() 等の為に stdlib.h (または malloc.h) を include する。
+	  独自で malloc() のプロトタイプを書いてある場合は削除。
+	  必要に応じて、その他システムヘッダを include。
+	* Wnn/uum/sheader.h: 不要なプロトタイプを削除。
+	* Makefile.in: distclean target に、autoconf 2.53 で作られる
+		ファイルの削除を追加。
+
+Sun May 12 01:01:47 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* CONTRIBUTEORS: 更新
+	* configure.in, configure, config.h.in:
+	  bcopy/bzero/bcmp をチェックする。
+	* Wnn/etc/bcopy.c:
+	  bcopy/bzero/bcmp をチェックする。
+	  register 修飾子を削除。
+
 Sat May 11 13:03:37 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
-	* INSTALL INSTALL.en
-	  Update.
+	* INSTALL INSTALL.en: Update.
 
 Tue May 07 22:26:30 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	* Wnn/etc/msg.c:

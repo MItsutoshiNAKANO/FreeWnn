@@ -1,6 +1,104 @@
+
+Sat Jun 15 13:11:45 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* acconfig.h:
+	  Added RETSIGTYPE_VOID hack taken from EB Library
+	  <URI:http://www.sra.co.jp/people/m-kasahr/eb/>.
+	* configure.in:
+	  Removed -DCSRG_BASED for CCOPTIONS of *BSD.
+	  Aggregated AC_CHECK_HEADERS and AC_CHECK_FUNCS parameter
+	  to reduce the size of configure a little.
+	  Cosmetic change in AC_CHECK_TYPES usage.
+	  Added RETSIGTYPE_VOID hack taken from EB Library.
+	  Suppress Makefile generation for each language when
+	  they are disabled.
+	  Add getdtablesize() check.
+	* config.h.in, configure: regenerate. (GNU Autoconf 2.53)
+	* Wnn/include/wnn_os.h:
+	  bzero/memset, strchr/index strrchr/rindex glue.
+	  SIGNALRETURNSINT replaced by RETSIGTYPE and RETSIGTYPE_VOID.
+	  Newly define WNN_NFD for temporal file descriptor number hack.
+	* Wnn/jlib/getopt.c, jl.c, js.c,
+	  Wnn/jserver/initjserv.c,
+	  Wnn/romkan/rk_header.h:
+	  Include config.h and wnn_os.h if not, and get rid of BSD42 macro.
+	* Wnn/jserver/de.c:
+	  Use WNN_NFD for temporal file descriptor number hack.
+	* Wnn/jserver/de_header.h, error.c,
+	  Wnn/uum/jhlp.c:
+	  Replace to RETSIGTYPE and RETSIGTYPE_VOID.
+	  Use WNN_NFD for temporal file descriptor number hack.
+	* Wnn/uum/sheader.h:
+	  A trivial change in comment.
+	* Wnn/uum/wnnrc_op.c:
+	  Get rid of BSD42 macro.
+
+Fri Jun 14 19:39:30 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Makefile.in: use $(RM) for remove command.
+
+Thu Jun 13 21:27:51 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* FreeWnn/Wnn/uum/jhlp.c, termio.c:
+	  Change own setenv() definition to not to print out error message
+	  and getting one more parameter for compatibility.
+	  Print out setenv() error message at the caller side.
+	* FreeWnn/Wnn/uum/termcap.c: curses header inclusion.
+	* FreeWnn/Wnn/uum/sheader.h: cleanup.
+
+Mon Jun 10 22:15:23 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* PubdicPlus/pod.c: Include config.h.
+
+Sun Jun 09 11:08:41 UTC 2002  Hiroaki Abe <h-abe@pc.highway.ne.jp>
+	* FreeWnn/configure.in:
+	  Add libbind.so check for BeOS R5.1.
+
+Mon May 27 16:33:52 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/pubdicplus/Makefile.in:
+	  Put $(TOP) to include path so that <config.h> can be included.
+
+Sat May 25 11:24:47 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* FreeWnn/PubdicPlus/ fzk.con, fzk.attr, fzk.jircon:
+	  Enhancement for verb ([wnn-users 973],[wnn-users 975] Y.Katayama).
+	  Enhancement for prefix ([wnn-users 978] Fe2+(T.Matsui)).
+
+Sat May 25 05:57:43 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/jserver/ MALLOC.c, malloc.c: Remove malloc() wrapper.
+
+Sun May 12 22:51:18 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/conv/cvt_key.c: Remove qualifier register.
+	* Wnn/uum/setutmp.c:
+	  Correct the parameter of setenv().
+	  Include necessary system headers.
+	* kWnn/jserver/Makefile.in, kWnn/include/Makefile.in,
+	  cWnn/jserver/Makefile.in, cWnn/include/Makefile.in,
+	  Wnn/jserver/Makefile.in:
+	  Remove wnn_malloc.h and malloc.c
+	* Wnn/etc/ msg.c, vasprintf.c,
+	  Wnn/jlib/ jl.c, js.c, kankana.c,
+	  Wnn/jlib.V3/jlv3.c,
+	  Wnn/jserver/ b_index.c, daibun_kai.c, de.c, dispatch.c,
+		  do_env.c, error.c, fzk.c, get_kaiarea.c,
+		  hinsi_list.c,initjserv.c, jikouho.c, jikouho_d.c,
+		  mknode0.c, mknode1.c, mknode2.c, readfile.c,
+	  Wnn/jutil/ atod.c, atorev.c, dtoa.c, ujisf.c, wddel.c,
+		  wdreg.c, wnnstat.c,
+	  Wnn/uum/ basic_op.c, history.c, prologue.c, screen.c,
+		  termcap.c, uif.c, wnnrc_op.c:
+	  Include stdlib.h (or malloc.h) for malloc() family.
+	  Remove prototype for malloc().
+	  Include some other system headers.
+	* Wnn/uum/sheader.h: Remove unnecessary prototypes.
+	* Makefile.in: Add removal of autoconf 2.53 generated
+		files in distclean.
+
+Sun May 12 01:01:47 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* CONTRIBUTEORS: update
+	* configure.in, configure, config.h.in:
+	  Check for bcopy/bzero/bcmp.
+	* Wnn/etc/bcopy.c:
+	  Check for bcopy/bzero/bcmp.
+	  Remove qualifier register.
+
 Sat May 11 13:03:37 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
-	* INSTALL INSTALL.en
-	  Update.
+	* INSTALL INSTALL.en: Update.
 
 Tue May 07 22:26:30 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	* Wnn/etc/msg.c:
