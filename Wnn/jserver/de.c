@@ -28,7 +28,7 @@
 /*
         Jserver         (Nihongo Daemon)
 */
-static char rcs_id[] = "$Id: de.c,v 1.31 2003-06-08 03:09:51 hiroo Exp $";
+static char rcs_id[] = "$Id: de.c,v 1.32 2003-06-18 11:10:45 aono Exp $";
 
 #if defined(HAVE_CONFIG_H)
 #  include <config.h>
@@ -343,6 +343,7 @@ daemon_main (void)
 {
   for (;;)
     {
+      c_c = NULL;	/* Added for logging: server section */
       sel_all ();
       new_client ();
       for (;;)
@@ -520,7 +521,11 @@ new_client (void)               /* NewClient */
       }
     read (sd, gomi, 1024);
     shutdown (sd, 2);
+#ifdef HAVE_CLOSESOCKET
+    closesocket (sd);
+#else
     close (sd);
+#endif
     return;
   }
 #endif /*  HAVE_LIBWRAP */
