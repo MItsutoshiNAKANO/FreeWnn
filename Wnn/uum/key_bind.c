@@ -1,5 +1,5 @@
 /*
- * $Id: key_bind.c,v 1.1.1.1 2000-01-16 05:07:51 ura Exp $
+ * $Id: key_bind.c,v 1.2 2000-01-16 06:37:19 ura Exp $
  */
 
 /*
@@ -53,7 +53,7 @@
 
 #include <stdio.h>
 #include "commonhd.h"
-#include "config.h"
+#include "wnn_config.h"
 #include "sdefine.h"
 #include "sheader.h"
 #define MADA NULL

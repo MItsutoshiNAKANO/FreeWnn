@@ -1,5 +1,5 @@
 /*
- * $Id: xutoj.c,v 1.1.1.2 2000-01-16 05:10:49 ura Exp $
+ * $Id: xutoj.c,v 1.2 2000-01-16 06:37:13 ura Exp $
  */
 
 /*
@@ -43,7 +43,7 @@
 #define	NEED_CR
 
 #include "commonhd.h"
-#include "config.h"
+#include "wnn_config.h"
 #include "wnn_os.h"
 
 #define ECNS_IS_UCNS 1	/* The trust CNS is CNS11643 based on ISO2022,
