@@ -1,5 +1,5 @@
 #
-#   $Id: INSTALL,v 1.4 2001-09-16 11:16:13 hiroo Exp $
+#  $Id: INSTALL,v 1.5 2002-05-11 13:03:35 hiroo Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000
+# Copyright FreeWnn Project 1999, 2000, 2002
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -38,7 +38,7 @@
 
         $ gzcat FreeWnn-*.tar.gz | tar xvf -
 
-        (注: * の部分はバージョンによって変わります)
+        注1: * の部分はバージョンによって変わります。
 
 2. FreeWnn-*/ に移ります
 
@@ -47,6 +47,9 @@
 3. configure を実行します
 
         $ ./configure
+
+	注2: configure のオプションについては、下記または
+	     ./configure --help を参照して下さい。
 
 4. make します
 
@@ -57,29 +60,27 @@
         $ su
         # make install
 
+	注3: 現在のところ、スーパーユーザー以外でのインストールはうまく行
+	     きません。
+
 6. マニュアルをインストールします
 
         # make install.man
 
-        (マニュアルが不要であれば省略して構いません)
+        注4: マニュアルが不要であれば省略して構いません。
 
 
-【インストールされるディレクトリを変える】
+【configure のオプション】
 
-デフォルトでは /usr/local 以下にインストールされます。
+ 	$ ./configure --help
 
-configure 時に --prefix オプションを指定すると、このディレクトリ指定を
-変えることができます。
+で、configure が受け付けるオプションの一覧が表示されます。
+例えば、デフォルトでは /usr/local 以下にインストールされますが、これを
+/opt/FreeWnn に変更する場合、--prefix オプションを指定します。
 
         $ ./configure --prefix=/opt/freewnn
 
-
-【その他】
-
-        $ ./configure --help
-
-で、configure が受け付けるオプションの一覧が表示されます。
-尚、主な FreeWnn 独自の configure option に以下のものがあります。
+FreeWnn 独自の configure option のうち、主なものは以下の通りです。
 
   default で有効なもの:
   --enable-libraries    FreeWnn のライブラリを作成及びインストールします。
@@ -91,11 +92,17 @@ configure 時に --prefix オプションを指定すると、このディレクトリ指定を
   default で無効なもの:
   --enable-ipv6         IPv6 を有効にします。
   --enable-unsafe-path  jserverdir 以外のディレクトリに jserver がファイル
-                        を作成するのを許可します。
+                        を作成するのを許可します。(注5)
+  --enable-client	uum を作成及びインストールします。(注6)
 
-[cjkt]server は、任意の host からの要求を受け付けてしまいます。
---enable-unsafe-path を有効にすると、任意の host から jserver 実行ユーザー
-の権限で、任意の path にファイルを作成することができてしまいます。
-従来、home directory など、lib/wnn/$LANG/dic/usr 以外に辞書ファイルをおいて
-運用しており、それを急には改められない場合以外は、このオプションを指定する
-べきではありません。
+注5: [cjkt]server は、任意の host からの要求を受け付けてしまいます。
+  --enable-unsafe-path を有効にすると、任意の host から jserver 実行ユーザー
+  の権限で、任意の path に Wnn の辞書ファイルを作成することができてしまい
+  ます。従来、home directory など、lib/wnn/$LANG/dic/usr 以外に辞書ファイ
+  ルをおいて運用しており、それを改められない場合以外は、このオプションを指
+  定しないことをお勧めします。
+  ただし、このオプションの有効無効に関わりなく、悪意あるユーザーが jserverdir
+  (通常は /usr/local/lib/wnn/$LANG/dic) 以下に辞書ファイルを作成することは
+  防げません。
+
+注6: cuum はまだ compile 出来ません。
