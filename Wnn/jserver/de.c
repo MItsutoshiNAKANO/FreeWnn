@@ -1,5 +1,5 @@
 /*
- * "$Id: de.c,v 1.1.1.2 2000-01-16 05:10:52 ura Exp $"
+ * "$Id: de.c,v 1.4 2000-01-16 07:27:11 ura Exp $"
  */
 
 /*
@@ -50,7 +50,7 @@
 #include <stdio.h>
 #include <signal.h>
 #include "commonhd.h"
-#include "config.h"
+#include "wnn_config.h"
 #include "jd_sock.h"
 #include "demcom.h"
 #include "wnn_malloc.h"
@@ -80,6 +80,7 @@ extern int errno;		/* Pure BSD */
 #include "msg.h"
 
 #ifdef BSD42
+#undef NOFILE
 #define NOFILE getdtablesize() 
 #endif
 
@@ -186,7 +187,7 @@ int get2_cur();
 char cmd_name[80];
 
 /* No arguments are used. Only options. */
-void
+int
 main(argc, argv)
 int argc;
 char **argv;
@@ -264,7 +265,7 @@ char **argv;
 	fclose(stdout);
 	if(!noisy){
 #if !(defined(BSD) && (BSD >= 199306)) /* !4.4BSD-Lite by Taoka */
-	    fclose(stderr);
+	  fclose(stderr);
 #else /* 4.4BSD-Lite */
 	    int fd = open("/dev/null", O_WRONLY);
 	    if (fd < 0) {
@@ -275,7 +276,7 @@ char **argv;
 #endif /* 4.4BSD-Lite */
 	}
 
-#if defined(hpux) || defined(SOLARIS)
+#if defined(hpux) || defined(SOLARIS) || defined(BEOS)
 	setpgrp();
 #else /* defined(hpux) || defined(SOLARIS) */
 # if !defined(TIOCNOTTY) && defined(SVR4)
@@ -416,9 +417,17 @@ new_client()	/* NewClient */
 
     if(full || sd >= nofile || clientp >= max_client) {
 	fprintf(stderr,"%s: no more client\n", cmd_name);
+#ifdef BEOS
+	recv(sd,gomi,1024, 0);
+#else
 	read(sd,gomi,1024);
+#endif
 	shutdown(sd, 2);
+#ifdef BEOS
+	closesocket(sd);
+#else
 	close(sd);
+#endif
 	return;
     }
 
@@ -437,7 +446,11 @@ del_client()
 {
 	disconnect_all_env_of_client();
 	sock_clr(all_socks,cblk[cur_clp].sd);
+#ifdef BEOS
+	closesocket(cblk[cur_clp].sd);
+#else
 	close(cblk[cur_clp].sd);
+#endif
 #ifndef IBM
 	cblk[cur_clp] = cblk[clientp - 1];
 	client[cur_clp] = client[clientp - 1];
@@ -470,9 +483,9 @@ demon_init()	/* initialize Demon */
 	    exit(1);
 	}
 #ifdef SRAND48
-	srand48(time((long *)0));
+	srand48(time(NULL));
 #else
-	srand((int)time((long *)0));
+	srand((int)time(NULL);
 #endif
 	clientp = 0;	/* V3.0 */
 	cur_clp = 0;	/* V3.0 */
@@ -494,6 +507,9 @@ demon_fin()
 #endif	/* AF_UNIX */
     struct sockaddr_in addr_in;
     int addrlen;
+#ifdef BEOS
+    int on = ~0;
+#endif
 
     /*
       accept all pending connection from new clients,
@@ -520,9 +536,13 @@ demon_fin()
 #endif	/* AF_UNIX */
 
 #ifndef SOLARIS
+#ifdef BEOS
+    setsockopt(sock_d_in, SOL_SOCKET, SO_NONBLOCK, &on, sizeof(int));
+#else
 #if defined(FIONBIO)
     ioctl(sock_d_in, FIONBIO, &trueFlag);
 #endif
+#endif /* BEOS */
 #else /* !SOLARIS */
     fcntl(sock_d_in, F_SETFL, F_UNLCK);
 #endif /* !SOLARIS */
@@ -532,8 +552,12 @@ demon_fin()
 	/* EWOULDBLOCK EXPECTED, but we don't check */
     }
     shutdown(sock_d_in, 2);
+#ifdef BEOS
+    closesocket(sock_d_in);
+#else
     close(sock_d_in);
 
+#endif
     for (fd = nofile-1; fd >= 0; fd--) {
 	if ((fd != sock_d_in) &&
 #ifdef AF_UNIX
@@ -541,7 +565,11 @@ demon_fin()
 #endif /* AF_UNIX */
 	    sock_tst(all_socks, fd)) {
 	    shutdown(fd, 2);
+#ifdef BEOS
+	    closesocket(fd);
+#else
 	    close(fd);
+#endif
 	}
     }
 }
@@ -605,7 +633,11 @@ int clp;	/**	clp=クライアント番号	**/
     register int cc = 0;
     while(cc <= 0) {
 	errno = 0;
+#ifdef BEOS
+	cc = recv(cblk[clp].sd, rcv_buf, S_BUF_SIZ, 0);
+#else
 	cc = read(cblk[clp].sd, rcv_buf, S_BUF_SIZ);
+#endif
 	if (cc <= 0) {
 	    if (ERRNO_CHECK(errno)) {
 		continue;
@@ -636,7 +668,11 @@ int clp, n;	/**	clp=クライアント番号, n= send n Bytes	**/
 #endif
     for(cc=0;cc<n;){
 	errno = 0;
+#ifdef BEOS
+	x = send(cblk[clp].sd, &snd_buf[cc], n-cc, 0);
+#else
 	x = write(cblk[clp].sd, &snd_buf[cc], n-cc);
+#endif
 	if (x < 0) {
 	    if (ERRNO_CHECK(errno) || errno == EINTR) {
 		errno = 0;

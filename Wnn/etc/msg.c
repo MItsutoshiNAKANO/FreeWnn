@@ -1,5 +1,5 @@
 /*
- * $Id: msg.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: msg.c,v 1.3 2000-01-16 06:37:13 ura Exp $
  */
 
 /*
@@ -59,6 +59,15 @@
 
 extern char *getenv();
 
+#ifdef hpux
+void *
+bsearch(ky, bs, nel, width, compar)
+const void *ky;
+const void *bs;
+size_t nel;
+size_t width;
+int (*compar)(const void *, const void *);
+#else
 static char *
 bsearch(ky, bs, nel, width, compar)
 char *ky;
@@ -66,6 +75,7 @@ char *bs;
 unsigned long nel;
 unsigned long width;
 int (*compar)();
+#endif /* hpux */
 {
     char *key = ky;
     char *base = bs;
@@ -364,7 +374,6 @@ char	*msg;
 register char	*lang;
 {
     register struct msg_cat *cd;
-    char ret[128];
     register char *msg_bd;
 
     if(catd == 0)
@@ -389,8 +398,11 @@ register char	*lang;
 error:
     if(msg != 0 && *msg != '\0')
 	return(msg);
-    sprintf(ret, "mes_id = %d: %s", id, DEF_MSG);
-    return(ret);
+    {
+      static char ret[128];
+      sprintf(ret, "mes_id = %d: %s", id, DEF_MSG);
+      return(ret);
+    }
 }
 
 void

@@ -1,5 +1,5 @@
 /*
- * $Id: error.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: error.c,v 1.2 2000-01-16 07:27:11 ura Exp $
  */
 
 /*
@@ -85,7 +85,7 @@ register char *x;
 /*  struct passed *getpwiuid();  */
 
   if(!noisy)return;
-  obakenoQ = time((long *)0);
+  obakenoQ = time(NULL);
   if(c_c){
 #ifdef SYSVR2
       fprintf(stderr , "client %s :	%s	%s	 errno =%d\n\n" ,
