@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.18 2001-09-24 08:36:12 hiroo Exp $
+dnl   $Id: configure.in,v 1.19 2002-03-03 12:53:56 hiroo Exp $
 dnl
 
 dnl
@@ -250,8 +250,8 @@ AC_SUBST(ipv6)
 AC_ARG_ENABLE(unsafe-path,
 [  --enable-unsafe-path    allow creating files in an arbitrary path [default=no]],
 [case "${enableval}" in
-   yes) unsafe_path = true;;
-   no)  unsafe_path = false;;
+   yes) unsafe_path=true;;
+   no)  unsafe_path=false;;
    *)   AC_MSG_ERROR(bad value for --enable-unsafe-path) ;;
 esac], unsafe_path=false)
 AC_SUBST(unsafe_path)
@@ -271,36 +271,20 @@ CDEBUGFLAGS=${CDEBUGFLAGS:-"-O"}
 case $host in
 *-*-linux*)
     CCOPTIONS="-Dlinux -D_POSIX_SOURCE -D_BSD_SOURCE"
-    if test $debug = true; then
-      CDEBUGFLAGS="-g2 -O2 -fno-strength-reduce"
-    else
-      CDEBUGFLAGS="-O2 -fno-strength-reduce"
-    fi
+    CDEBUGFLAGS="-O2 -fno-strength-reduce"
     ;;
 *-*-freebsd*|*-*-netbsd*|*-*-openbsd*)
     CCOPTIONS="-DCSRG_BASED"
-    if test $debug = true; then
-      CDEBUGFLAGS="-g2 -O2 -fno-strength-reduce -fstack-check"
-    else
-      CDEBUGFLAGS="-O2 -fno-strength-reduce"
-    fi
+    CDEBUGFLAGS="-O2 -fno-strength-reduce"
     ;;
 *-*-bsdi*)
     CCOPTIONS="-DCSRG_BASED"
-    if test $debug = true; then
-      CDEBUGFLAGS="-g2 -O2 -fno-strength-reduce"
-    else
-      CDEBUGFLAGS="-O2 -fno-strength-reduce"
-    fi
+    CDEBUGFLAGS="-O2 -fno-strength-reduce"
     ;;
 *-*-sunos*)
-      if test `basename $CC` = gcc; then
+      if test $GCC = yes; then
 	CCOPTIONS="-Dsun -Dsparc"
-        if test $debug = true; then
-          CDEBUGFLAGS="-g2 -O2"
-        else
-          CDEBUGFLAGS=-O2
-        fi
+        CDEBUGFLAGS=-O2
       else
         CCOPTIONS=""
         CDEBUGFLAGS=-O4
@@ -308,54 +292,32 @@ case $host in
       ;;
 *-*-solaris2.*)
     # Will 'solaris*' be OK?
-      if test `basename $CC` = gcc; then
+      if test $GCC = yes; then
         CCOPTIONS="-Dsun -D`uname -p` -DSVR4 -DSYSV"
-        if test $debug = true; then
-          CDEBUGFLAGS="-g2 -O2"
-        else
-          CDEBUGFLAGS=-O2
-        fi
+        CDEBUGFLAGS=-O2
       else
         CCOPTIONS="-Xc -xF -xcg92 -Dsun -D`uname -p` -DSVR4 -DSYSV"
-          CDEBUGFLAGS=-O4
+        CDEBUGFLAGS=-O4
       fi
     ;;
 *-*-hpux*)
-    if test `basename $CC` = gcc; then
+    if test $GCC = yes; then
         CCOPTIONS="-Dhpux -DSYSV"
-        if test $debug = true; then
-          CDEBUGFLAGS="-g2 -O2"
-        else
-          CDEBUGFLAGS=-O2
-        fi
+        CDEBUGFLAGS=-O2
     else
         CCOPTIONS="-Ae -Dhpux -DSYSV"
     fi
       ;;
 i[[34567]]86-pc-beos*)
 	CCOPTIONS="-DBEOS -D_POSIX_SOURCE -D_BSD_SOURCE"
-        if test $debug = true; then
-	  CDEBUGFLAGS="-g2 -O2 -fno-strength-reduce"
-        else
-	  CDEBUGFLAGS="-O2 -fno-strength-reduce"
-        fi
+	CDEBUGFLAGS="-O2 -fno-strength-reduce"
 	;;
 powerpc-*-beos*)
 	CCOPTIONS="-DBEOS -D_POSIX_SOURCE -D_BSD_SOURCE"
-        if test $debug = true; then
-	  CDEBUGFLAGS="-g2"
-        else
-	  CDEBUGFLAGS=""
-        fi
 	;;
 *-*-aix*)
-    if test `basename $CC` = gcc; then
+    if test $GCC = yes; then
       CDEBUGFLAGS=-O2
-        if test $debug = true; then
-	  CDEBUGFLAGS="-g2"
-        else
-	  CDEBUGFLAGS=""
-        fi
     else
       CDEBUGFLAGS=-O
     fi
@@ -366,6 +328,13 @@ powerpc-*-beos*)
     AC_MSG_WARN([(It may or may not work if you set CCOPTIONS properly.)])
     ;;
 esac
+
+dnl Checking if we use gcc or not
+if test $debug = true; then
+    if test $GCC = yes; then
+      CDEBUGFLAGS="-g2 -Wall -fstack-check $CDEBUGFLAGS"
+    fi
+fi
 
 if test ${debug} = true; then
      INSTPGMFLAGS=
