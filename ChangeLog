@@ -1,3 +1,55 @@
+Sat Mar  9 16:50:34 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+	* Makefile.in config.h.in configure configure.in
+	  Wnn/etc/gethinsi.c Wnn/jserver/Makefile.in
+	  cWnn/jserver/Makefile.in cWnn/include/Makefile.in
+	  kWnn/jserver/Makefile.in kWnn/include/Makefile.in
+	 + Wnn/etc/vasprintf.c Wnn/etc/mkdir.c が対応する関数がないプラッ
+	  トフォームでのみコンパイルされるように変更した。
+	  (AC_REPLACE_FUNCSマクロを自前でエミュレートしている)。
+	 + configure --disable-cWnn 時に cWnn/ ディレクトリ下の Makefile
+	  を生成しないように変更した。
+	  (experimental: cWnn以外も同じ処理をする必要がある)。
+
+	* Wnn/jserver/  de_header.h dispatch.c error.c :
+	    error.c 関連修正. (cf. [freewnn:00772])
+	 + error1()を廃止し、新たに可変引数関数 log_err() / log_debug()
+	  を新設した。
+	   error1() は log_debug() として扱うようにした。
+	 + jserver の -s オプション未指定時 (noisy == 0) にsyslogに出力
+	   するように変更した。
+	 + log{err,debug}() から呼ばれる vwrite_log()では従来1エントリ
+	   当たり3行に渡っていたログを1行に圧縮している。
+
+Fri Mar  8 20:07:13 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* 使用している関数 prototype 宣言を含む標準ヘッダを include する。
+	* Wnn/etc 以下で定義される関数の一部を wnn_os.h で pototype 宣言した。
+	* Wnn/etc/msg.c: bsearch() の実装を削除。
+
+Fri Mar  8 08:36:04 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+	* Wnn/jserver/de.c
+	  log ファイルを append モードで open する。
+	  daemon_init() で行なわれている、余分なシグナルハンドラの設定を削除。
+
+Tue Mar  5 09:23:50 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+        * vasprintf.c と ansidecl.h を libiberty (gcc-3.0.4 に同梱) から
+	  import した。(error.c 書き替えの為)。 
+	  修正に際して変更した点は下記のみ:
+            vasprintf.c: #include <libiberty.h> を削除。
+
+Mon Mar  4 04:01:55 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+        * Wnn/man/4.cmd/jserver/man
+	  オプション記述部分のフォーマット修正。 [freewnn:00759]
+
+Sun Mar  3 14:06:32 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/include/wnn_os.h et al.
+	  ISO C と K&R C の prototype を共存させるためのマクロを削除。
+
+Sun Mar  3 12:53:58 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* configure.in: [freewnn:00764] (青野さん) の指摘を修正。
+
+Sat Mar  2 11:19:21 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* wddel のマニュアルの typo を修正 ([freewnn:00797] Matui さん).
+
 Mon Sep 24 08:25:28 UTC 2001  Hiroo Ono <hiroo@oikumene.gcd.org>
 	* Fix for configure.in and Makefile.in ([freewnn:00753] 青野さん).
 

@@ -1,3 +1,58 @@
+Sat Mar  9 16:50:34 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+	* Makefile.in config.h.in configure configure.in
+	  Wnn/etc/gethinsi.c Wnn/jserver/Makefile.in
+	  cWnn/jserver/Makefile.in cWnn/include/Makefile.in
+	  kWnn/jserver/Makefile.in kWnn/include/Makefile.in :
+	 + Wnn/etc/vasprintf.c and Wnn/etc/mkdir.c are compiled on platforms
+	   which do not have equivalent functions.
+	  (emulating the AC_REPLACE_FUNCS macro by ourself).
+	 + If the configure option `--disable-cWnn' is specified, disable
+	  Makefile creation under cWnn directory.
+	  Note: It is an experimental feature and it should also be done
+	        for Wnn and kWnn.
+
+	* Wnn/jserver/  de_header.h dispatch.c error.c :
+	    error.c related changes . (cf. [freewnn:00772])
+         + Eliminate error1() and create new functions which takes variable
+	   arguments  log_err() and log_debug().
+	   error1() is defined to be log_debug().
+	 + If -s option of jserver is not specified (noisy == 0), prints
+	   log messages to syslog.
+	 + vwrite_log(), called from log{err,debug}(), puts log message in
+	   one line (i.e. it does not add extra new lines).
+	   Usually, at least 3 lines was printed.
+
+Fri Mar  8 20:07:13 2002  Hiroo Ono <hiroo@oikumene.gcd.org>     
+	* Include system headers which contains the function prototype used.
+	* Wnn/etc/wnn_os.h: Put the prototypes for functions defined in
+	  Wnn/etc.
+        * Wnn/etc/msg.c: removed bsearch() implimentation.
+
+Fri Mar  8 08:36:04 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+        * Wnn/jserver/de.c
+	  Open log (script) file in append mode.
+	  Delete duplicated signal handler setting in daemon_init().
+
+Tue Mar  5 09:23:50 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+	* Imported vasprintf.c and ansidecl.h from libiberty (bundled with
+	  gcc-3.0.4). Needed for error.c rewrite.
+	  Change from original version:
+	    vasprintf.c does not #include <libiberty.h>. 
+
+Mon Mar  4 04:01:55 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+	* Wnn/man/4.cmd/jserver/man
+	  Fixed option-description formatting for jserver. [freewnn:00759]
+
+Sun Mar  3 14:06:32 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+        * Wnn/include/wnn_os.h et al.
+	  Removed P_ macro for K&R C.
+
+Sun Mar  3 12:53:58 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+        * configure.in: Applied fix from [freewnn:00764] (T.Aono).
+
+Sat Mar  2 11:19:21 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+        * Fixed typo in the manual of wddel ([freewnn:00797] T.Matui).
+
 Mon Sep 24 08:25:28 UTC 2001  Hiroo Ono <hiroo@oikumene.gcd.org>
         * Fix for configure.in and Makefile.in ([freewnn:00753] by T.Aono).
 
