@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.9 2002-05-12 22:51:17 hiroo Exp $
+#   $Id: Makefile.in,v 1.10 2003-05-11 18:31:46 hiroo Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001, 2002
+# Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2003
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -34,22 +34,15 @@ top_builddir = ../..
 
 INSTALL      = @INSTALL@ $(INSTALLFLAGS)
 
-LINKS = commonhd.h wnn_config.h copyright.h demcom.h hinsi_file.h jd_sock.h  \
-        jdata.h jh.h jlib.h jllib.h jslib.h msg.h rk_spclval.h  \
-        wnn_string.h wnnerror.h cplib.h wnn_os.h hinsi.h ansidecl.h
+HEADERS = commonhd.h jllib.h jslib.h msg.h rk_spclval.h wnnerror.h cplib.h
+LINKS = wnn_config.h copyright.h demcom.h hinsi_file.h jd_sock.h  \
+        jdata.h jh.h jlib.h wnn_string.h wnn_os.h hinsi.h ansidecl.h
+LINKS2 = getopt.h
 
-HEADERS = \
-        jllib.h            \
- 	jslib.h            \
- 	rk_spclval.h       \
- 	wnnerror.h         \
- 	commonhd.h         \
- 	cplib.h            \
- 	msg.h
 
-all:: $(LINKS)
+all:: $(HEADERS) $(LINKS) $(LINKS2)
 
-includes:: $(LINKS)
+includes:: $(HEADERS) $(LINKS) $(LINKS2)
 
 commonhd.h:  $(WNNINCLUDESRC)/commonhd.h
 	$(RM) $@
@@ -59,9 +52,6 @@ includes:: commonhd.h
 
 depend:: commonhd.h
 
-clean::
-	$(RM) commonhd.h
-
 wnn_config.h:  $(WNNINCLUDESRC)/wnn_config.h
 	$(RM) $@
 	$(LN) $? $@
@@ -69,9 +59,6 @@ wnn_config.h:  $(WNNINCLUDESRC)/wnn_config.h
 includes:: wnn_config.h
 
 depend:: wnn_config.h
-
-clean::
-	$(RM) wnn_config.h
 
 copyright.h:  $(WNNINCLUDESRC)/copyright.h
 	$(RM) $@
@@ -81,9 +68,6 @@ includes:: copyright.h
 
 depend:: copyright.h
 
-clean::
-	$(RM) copyright.h
-
 demcom.h:  $(WNNINCLUDESRC)/demcom.h
 	$(RM) $@
 	$(LN) $? $@
@@ -91,9 +75,6 @@ demcom.h:  $(WNNINCLUDESRC)/demcom.h
 includes:: demcom.h
 
 depend:: demcom.h
-
-clean::
-	$(RM) demcom.h
 
 hinsi_file.h:  $(WNNINCLUDESRC)/hinsi_file.h
 	$(RM) $@
@@ -103,9 +84,6 @@ includes:: hinsi_file.h
 
 depend:: hinsi_file.h
 
-clean::
-	$(RM) hinsi_file.h
-
 jd_sock.h:  $(WNNINCLUDESRC)/jd_sock.h
 	$(RM) $@
 	$(LN) $? $@
@@ -113,9 +91,6 @@ jd_sock.h:  $(WNNINCLUDESRC)/jd_sock.h
 includes:: jd_sock.h
 
 depend:: jd_sock.h
-
-clean::
-	$(RM) jd_sock.h
 
 jdata.h:  $(WNNINCLUDESRC)/jdata.h
 	$(RM) $@
@@ -125,9 +100,6 @@ includes:: jdata.h
 
 depend:: jdata.h
 
-clean::
-	$(RM) jdata.h
-
 jh.h:  $(WNNINCLUDESRC)/jh.h
 	$(RM) $@
 	$(LN) $? $@
@@ -135,9 +107,6 @@ jh.h:  $(WNNINCLUDESRC)/jh.h
 includes:: jh.h
 
 depend:: jh.h
-
-clean::
-	$(RM) jh.h
 
 jlib.h:  $(WNNINCLUDESRC)/jlib.h
 	$(RM) $@
@@ -147,9 +116,6 @@ includes:: jlib.h
 
 depend:: jlib.h
 
-clean::
-	$(RM) jlib.h
-
 jllib.h:  $(WNNINCLUDESRC)/jllib.h
 	$(RM) $@
 	$(LN) $? $@
@@ -157,9 +123,6 @@ jllib.h:  $(WNNINCLUDESRC)/jllib.h
 includes:: jllib.h
 
 depend:: jllib.h
-
-clean::
-	$(RM) jllib.h
 
 jslib.h:  $(WNNINCLUDESRC)/jslib.h
 	$(RM) $@
@@ -169,9 +132,6 @@ includes:: jslib.h
 
 depend:: jslib.h
 
-clean::
-	$(RM) jslib.h
-
 msg.h:  $(WNNINCLUDESRC)/msg.h
 	$(RM) $@
 	$(LN) $? $@
@@ -179,9 +139,6 @@ msg.h:  $(WNNINCLUDESRC)/msg.h
 includes:: msg.h
 
 depend:: msg.h
-
-clean::
-	$(RM) msg.h
 
 rk_spclval.h:  $(WNNINCLUDESRC)/rk_spclval.h
 	$(RM) $@
@@ -191,9 +148,6 @@ includes:: rk_spclval.h
 
 depend:: rk_spclval.h
 
-clean::
-	$(RM) rk_spclval.h
-
 wnn_string.h:  $(WNNINCLUDESRC)/wnn_string.h
 	$(RM) $@
 	$(LN) $? $@
@@ -201,9 +155,6 @@ wnn_string.h:  $(WNNINCLUDESRC)/wnn_string.h
 includes:: wnn_string.h
 
 depend:: wnn_string.h
-
-clean::
-	$(RM) wnn_string.h
 
 wnnerror.h:  $(WNNINCLUDESRC)/wnnerror.h
 	$(RM) $@
@@ -213,9 +164,6 @@ includes:: wnnerror.h
 
 depend:: wnnerror.h
 
-clean::
-	$(RM) wnnerror.h
-
 cplib.h:  $(WNNINCLUDESRC)/cplib.h
 	$(RM) $@
 	$(LN) $? $@
@@ -223,9 +171,6 @@ cplib.h:  $(WNNINCLUDESRC)/cplib.h
 includes:: cplib.h
 
 depend:: cplib.h
-
-clean::
-	$(RM) cplib.h
 
 wnn_os.h:  $(WNNINCLUDESRC)/wnn_os.h
 	$(RM) $@
@@ -235,9 +180,6 @@ includes:: wnn_os.h
 
 depend:: wnn_os.h
 
-clean::
-	$(RM) wnn_os.h
-
 hinsi.h:  $(WNNINCLUDESRC)/hinsi.h
 	$(RM) $@
 	$(LN) $? $@
@@ -246,9 +188,6 @@ includes:: hinsi.h
 
 depend:: hinsi.h
 
-clean::
-	$(RM) hinsi.h
-
 ansidecl.h:  $(WNNINCLUDESRC)/ansidecl.h
 	$(RM) $@
 	$(LN) $? $@
@@ -256,6 +195,14 @@ ansidecl.h:  $(WNNINCLUDESRC)/ansidecl.h
 includes:: ansidecl.h
 
 depend:: ansidecl.h
+
+getopt.h: $(WNNINCLUDESRC)/getopt.h
+	$(RM) $@
+	$(LN) $? $@
+
+includes:: getopt.h
+
+depend:: getopt.h
 
 # 'clean' entry is not added because last 
 # 'clean' entry (action = '$(RM) $(LINKS)') does same thing. (aono)
@@ -274,4 +221,6 @@ install::  $(HEADERS)
 depend::
 
 clean::
+	$(RM) $(HEADERS)
 	$(RM) $(LINKS)
+	$(RM) $(LINKS2)

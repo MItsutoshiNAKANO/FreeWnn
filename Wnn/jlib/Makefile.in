@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.10 2001-08-14 13:43:21 hiroo Exp $
+#   $Id: Makefile.in,v 1.11 2003-05-11 18:31:43 hiroo Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001
+# Copyright FreeWnn Project 1999, 2000, 2001, 2003
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -32,8 +32,6 @@
 include @top_srcdir@/makerule.mk
 top_builddir = ../..
 
-LIB_MT_DEFINES = LibraryMTDefines
-
     JLIBDEFINES = -DWRITE_CHECK
        INCLUDES = -I$(WNNINCLUDESRC) -I$(TOP)
         DEFINES = $(WNNDEFINES) $(ALLLANGDEF) $(JLIBDEFINES)
@@ -41,12 +39,9 @@ LIB_MT_DEFINES = LibraryMTDefines
 
 INSTALL      = @INSTALL@ $(INSTALLFLAGS)
 
-SRC1= js.c 	wnnerrmsg.c 	jl.c
+SRC1= jl.c js.c wnnerrmsg.c
+OBJ1= jl.o js.o wnnerrmsg.o
 
-OBJ1= js.o 	wnnerrmsg.o 	jl.o
-
-SRC2= getopt.c
-OBJ2= getopt.o
 SRC3= $(WNNETCSRC)/msg.c
 OBJ3= msg.o
 SRC4= $(WNNETCSRC)/yincoding.c
@@ -85,24 +80,9 @@ clean::
 
 all:: $(OBJS) libwnn.la
 
-all:: libgetopt.a
-
-libgetopt.a: $(OBJ2) $(EXTRALIBRARYDEPS)
-	$(RM) $@
-	$(AR) $@ $(OBJ2)
-	$(RANLIB) $@
-
-lintlib:: llib-lgetopt.ln
-
-llib-lgetopt.ln: $(SRC2) $(EXTRALIBRARYDEPS)
-	$(RM) $@
-	$(LINT) $(LINTLIBFLAG)getopt $(LINTFLAGS) $(SRC2)
-
-js.o : js.c 	$(WNNETCSRC)/bdic.c 	$(WNNETCSRC)/pwd.c 	$(WNNETCSRC)/gethinsi.c
+js.o : js.c $(WNNETCSRC)/bdic.c $(WNNETCSRC)/pwd.c $(WNNETCSRC)/gethinsi.c
 
 lint:
-	$(LINT) $(LINTFLAGS) $(SRC2) $(LINTLIBS)
-lint1:
 	$(LINT) $(LINTFLAGS) $(FILE) $(LINTLIBS)
 
 kankana: kankana.o
@@ -152,7 +132,10 @@ $(OBJ9) : $(SRC9)
 	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
 
 $(LOCAL_RKOBJS) : $(LOCAL_RKSRCS)
-	@case '${MFLAGS}' in *[ik]*) set +e;; esac; 	cd $(WNNROMKANSRC); echo "making all in $(WNNROMKANSRC)"; 	$(MAKE) 'CDEBUGFLAGS=$(CDEBUGFLAGS)' $(MFLAGS)
+	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
+ 	cd $(WNNROMKANSRC); \
+	echo "making all in $(WNNROMKANSRC)"; \
+ 	$(MAKE) $(MFLAGS)
 
 depend:: .depend
 

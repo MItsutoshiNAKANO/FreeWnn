@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.9 2001-08-14 13:43:21 hiroo Exp $
+#   $Id: Makefile.in,v 1.10 2003-05-11 18:31:44 hiroo Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001
+# Copyright FreeWnn Project 1999, 2000, 2001, 2003
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -34,8 +34,6 @@ top_builddir = ../..
 
 INSTALL      = @INSTALL@ $(INSTALLFLAGS)
 
-LIB_MT_DEFINES = LibraryMTDefines
-
        INCLUDES = -I$(WNNINCLUDESRC) -I$(TOP)
         DEFINES = $(WNNDEFINES) $(WNNLANGDEF)
        LINTLIBS =
@@ -56,9 +54,9 @@ LOCAL_ETCSRCS= $(WNNETCSRC)/msg.c $(WNNETCSRC)/yincoding.c $(WNNETCSRC)/py_table
 
 LOCAL_ETCOBJS= $(WNNJLIBSRC)/msg.o $(WNNJLIBSRC)/yincoding.o $(WNNJLIBSRC)/py_table.o $(WNNJLIBSRC)/zy_table.o $(WNNJLIBSRC)/strings.o $(WNNJLIBSRC)/bcopy.o $(WNNJLIBSRC)/mkdir.o
 
-LOCAL_JLIBSRCS= $(WNNJLIBSRC)/js.c $(WNNJLIBSRC)/wnnerrmsg.c $(WNNJLIBSRC)/jl.c $(WNNJLIBSRC)/getopt.c
+LOCAL_JLIBSRCS= $(WNNJLIBSRC)/js.c $(WNNJLIBSRC)/wnnerrmsg.c $(WNNJLIBSRC)/jl.c
 
-LOCAL_JLIBOBJS= $(WNNJLIBSRC)/js.o $(WNNJLIBSRC)/wnnerrmsg.o $(WNNJLIBSRC)/jl.o $(WNNJLIBSRC)/getopt.o
+LOCAL_JLIBOBJS= $(WNNJLIBSRC)/js.o $(WNNJLIBSRC)/wnnerrmsg.o $(WNNJLIBSRC)/jl.o
 
 SRCS= $(SRC1) $(SRC2) $(SRC3) $(SRC4)
 OBJS= $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(LOCAL_ETCOBJS) $(LOCAL_RKOBJS) $(LOCAL_JLIBOBJS)
@@ -107,8 +105,7 @@ $(WNNJLIB)::
 	for i in $(WNNJLIBSRC) ;\
 	do \
 	echo "making" $(WNNJLIB) "in $(CURRENT_DIR)/$$i..."; \
-	(cd $$i && $(MAKE) $(MFLAGS) $(PARALLELMFLAGS) \
-	'CDEBUGFLAGS=$(CDEBUGFLAGS)' all); \
+	(cd $$i && $(MAKE) $(MFLAGS) $(PARALLELMFLAGS) all); \
 	done
 
 $(OBJ2) : $(SRC2)

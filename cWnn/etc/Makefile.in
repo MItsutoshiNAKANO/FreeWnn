@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.9 2001-08-14 13:43:22 hiroo Exp $
+#   $Id: Makefile.in,v 1.10 2003-05-11 18:31:45 hiroo Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001
+# Copyright FreeWnn Project 1999, 2000, 2001, 2003
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -32,14 +32,16 @@
 include @top_srcdir@/makerule.mk
 top_builddir = ../..
 
-LIB_MT_DEFINES = LibraryMTDefines
+INCLUDES = -I$(CWNNINCLUDESRC) -I$(TOP)
+DEFINES  = $(CWNNDEFINES) $(CWNNLANGDEF)
 
-       INCLUDES = -I$(CWNNINCLUDESRC) -I$(TOP)
-        DEFINES = $(CWNNDEFINES) $(CWNNLANGDEF)
+SRCS =	strings.c sstrings.c bdic.c hindo.c gethinsi.c revdic.c pwd.c bcopy.c \
+ 	xutoj.c dic_atojis.c msg.c yincoding.c py_table.c zy_table.c server_env.c
+SRCS2 = getopt.c getopt1.c
 
-SRCS= strings.c 	sstrings.c 	bdic.c 	hindo.c 	gethinsi.c 	revdic.c 	pwd.c 	bcopy.c 	xutoj.c 	dic_atojis.c 	msg.c 	yincoding.c 	py_table.c 	zy_table.c 	server_env.c mkdir.c
-
-OBJS= strings.o 	sstrings.o 	bdic.o 	hindo.o 	gethinsi.o 	revdic.o 	pwd.o 	bcopy.o 	xutoj.o 	dic_atojis.o 	msg.o 	yincoding.o 	py_table.o 	zy_table.o 	server_env.o mkdir.o
+OBJS =	strings.o sstrings.o bdic.o hindo.o gethinsi.o revdic.o pwd.o bcopy.o \
+ 	xutoj.o dic_atojis.o msg.o yincoding.o py_table.o zy_table.o server_env.o
+OBJS2 = getopt.o getopt1.o
 
 all::
 
@@ -51,7 +53,7 @@ includes::
 
 clean::
 
-all:: $(SRCS) $(OBJS)
+all:: $(SRCS) $(SRCS2) $(OBJS) $(OBJS2)
 
 includes:: $(SRCS)
 
@@ -63,9 +65,6 @@ includes:: strings.c
 
 depend:: strings.c
 
-clean::
-	$(RM) strings.c
-
 sstrings.c:  $(WNNETCSRC)/sstrings.c
 	$(RM) $@
 	$(LN) $? $@
@@ -73,9 +72,6 @@ sstrings.c:  $(WNNETCSRC)/sstrings.c
 includes:: sstrings.c
 
 depend:: sstrings.c
-
-clean::
-	$(RM) sstrings.c
 
 bdic.c:  $(WNNETCSRC)/bdic.c
 	$(RM) $@
@@ -85,9 +81,6 @@ includes:: bdic.c
 
 depend:: bdic.c
 
-clean::
-	$(RM) bdic.c
-
 hindo.c:  $(WNNETCSRC)/hindo.c
 	$(RM) $@
 	$(LN) $? $@
@@ -95,9 +88,6 @@ hindo.c:  $(WNNETCSRC)/hindo.c
 includes:: hindo.c
 
 depend:: hindo.c
-
-clean::
-	$(RM) hindo.c
 
 gethinsi.c:  $(WNNETCSRC)/gethinsi.c
 	$(RM) $@
@@ -107,9 +97,6 @@ includes:: gethinsi.c
 
 depend:: gethinsi.c
 
-clean::
-	$(RM) gethinsi.c
-
 revdic.c:  $(WNNETCSRC)/revdic.c
 	$(RM) $@
 	$(LN) $? $@
@@ -117,9 +104,6 @@ revdic.c:  $(WNNETCSRC)/revdic.c
 includes:: revdic.c
 
 depend:: revdic.c
-
-clean::
-	$(RM) revdic.c
 
 pwd.c:  $(WNNETCSRC)/pwd.c
 	$(RM) $@
@@ -129,9 +113,6 @@ includes:: pwd.c
 
 depend:: pwd.c
 
-clean::
-	$(RM) pwd.c
-
 bcopy.c:  $(WNNETCSRC)/bcopy.c
 	$(RM) $@
 	$(LN) $? $@
@@ -139,9 +120,6 @@ bcopy.c:  $(WNNETCSRC)/bcopy.c
 includes:: bcopy.c
 
 depend:: bcopy.c
-
-clean::
-	$(RM) bcopy.c
 
 xutoj.c:  $(WNNETCSRC)/xutoj.c
 	$(RM) $@
@@ -151,9 +129,6 @@ includes:: xutoj.c
 
 depend:: xutoj.c
 
-clean::
-	$(RM) xutoj.c
-
 dic_atojis.c:  $(WNNETCSRC)/dic_atojis.c
 	$(RM) $@
 	$(LN) $? $@
@@ -161,9 +136,6 @@ dic_atojis.c:  $(WNNETCSRC)/dic_atojis.c
 includes:: dic_atojis.c
 
 depend:: dic_atojis.c
-
-clean::
-	$(RM) dic_atojis.c
 
 msg.c:  $(WNNETCSRC)/msg.c
 	$(RM) $@
@@ -173,9 +145,6 @@ includes:: msg.c
 
 depend:: msg.c
 
-clean::
-	$(RM) msg.c
-
 yincoding.c:  $(WNNETCSRC)/yincoding.c
 	$(RM) $@
 	$(LN) $? $@
@@ -183,9 +152,6 @@ yincoding.c:  $(WNNETCSRC)/yincoding.c
 includes:: yincoding.c
 
 depend:: yincoding.c
-
-clean::
-	$(RM) yincoding.c
 
 py_table.c:  $(WNNETCSRC)/py_table.c
 	$(RM) $@
@@ -195,9 +161,6 @@ includes:: py_table.c
 
 depend:: py_table.c
 
-clean::
-	$(RM) py_table.c
-
 zy_table.c:  $(WNNETCSRC)/zy_table.c
 	$(RM) $@
 	$(LN) $? $@
@@ -205,9 +168,6 @@ zy_table.c:  $(WNNETCSRC)/zy_table.c
 includes:: zy_table.c
 
 depend:: zy_table.c
-
-clean::
-	$(RM) zy_table.c
 
 server_env.c:  $(WNNETCSRC)/server_env.c
 	$(RM) $@
@@ -217,21 +177,24 @@ includes:: server_env.c
 
 depend:: server_env.c
 
-clean::
-	$(RM) server_env.c
+depend:: .depend
 
-mkdir.c:  $(WNNETCSRC)/mkdir.c
+getopt.c: $(WNNETCSRC)/getopt.c
 	$(RM) $@
 	$(LN) $? $@
 
-includes:: mkdir.c
+includes:: getopt.c
 
-depend:: mkdir.c
+depend:: getopt.c
+
+getopt1.c: $(WNNETCSRC)/getopt1.c
+	$(RM) $@
+	$(LN) $? $@
+
+includes:: getopt1.c
+
+depend:: getopt1.c
 
 clean::
-	$(RM) mkdir.c
-
-depend:: .depend
-
-clean::
-	$(RM) $(SRCS)
+	-$(RM) $(SRCS) $(SRCS2)
+	-$(RM) $(OBJS) $(OBJS2)

@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.10 2001-08-14 13:43:22 hiroo Exp $
+#   $Id: Makefile.in,v 1.11 2003-05-11 18:31:45 hiroo Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001
+# Copyright FreeWnn Project 1999, 2000, 2001, 2003
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -32,22 +32,16 @@
 include @top_srcdir@/makerule.mk
 top_builddir = ../..
 
-LIB_MT_DEFINES = LibraryMTDefines
+LINKS = jl.c js.c wnnerrmsg.c
+JLIBDEFINES = -DWRITE_CHECK
+INCLUDES = -I$(CWNNINCLUDESRC) -I$(TOP)
+DEFINES  = $(CWNNDEFINES) $(CWNNLANGDEF) $(JLIBDEFINES)
+LINTLIBS =
+INSTALL  = @INSTALL@ $(INSTALLFLAGS)
 
-LINKS = getopt.c jl.c js.c kankana.c wnnerrmsg.c
-    JLIBDEFINES = -DWRITE_CHECK
-       INCLUDES = -I$(CWNNINCLUDESRC) -I$(TOP)
-        DEFINES = $(CWNNDEFINES) $(CWNNLANGDEF) $(JLIBDEFINES)
-       LINTLIBS =
+SRC1= jl.c js.c wnnerrmsg.c
+OBJ1= jl.o js.o wnnerrmsg.o
 
-INSTALL      = @INSTALL@ $(INSTALLFLAGS)
-
-SRC1= js.c 	wnnerrmsg.c 	jl.c
-
-OBJ1= js.o 	wnnerrmsg.o 	jl.o
-
-SRC2= getopt.c
-OBJ2= getopt.o
 SRC3= $(CWNNETCSRC)/msg.c
 OBJ3= msg.o
 SRC4= $(CWNNETCSRC)/yincoding.c
@@ -60,17 +54,17 @@ SRC7= $(CWNNETCSRC)/strings.c
 OBJ7= strings.o
 SRC8= $(CWNNETCSRC)/bcopy.c
 OBJ8= bcopy.o
-SRC9= $(CWNNETCSRC)/mkdir.c
-OBJ9= mkdir.o
 
 LOCAL_RKSRCS= $(CWNNROMKANSRC)/rk_bltinfn.c 	$(CWNNROMKANSRC)/rk_main.c 	$(CWNNROMKANSRC)/rk_modread.c 	$(CWNNROMKANSRC)/rk_read.c 	$(CWNNROMKANSRC)/rk_vars.c
 
 LOCAL_RKOBJS= $(CWNNROMKANSRC)/rk_bltinfn.o 	$(CWNNROMKANSRC)/rk_main.o 	$(CWNNROMKANSRC)/rk_modread.o 	$(CWNNROMKANSRC)/rk_read.o 	$(CWNNROMKANSRC)/rk_vars.o
 
-LOCAL_ETCSRCS = $(SRC4) $(SRC5) $(SRC6) $(SRC7) $(SRC8) $(SRC9)
-LOCAL_ETCOBJS = $(OBJ4) $(OBJ5) $(OBJ6) $(OBJ7) $(OBJ8) $(OBJ9)
-SRCS= $(SRC1) $(SRC3) $(LOCAL_ETCSRCS)
-OBJS= $(OBJ1) $(OBJ3) $(LOCAL_ETCOBJS) $(LOCAL_RKOBJS)
+LOCAL_ETCSRCS = $(SRC4) $(SRC5) $(SRC6) $(SRC7) $(SRC8)
+LOCAL_ETCOBJS = $(OBJ4) $(OBJ5) $(OBJ6) $(OBJ7) $(OBJ8)
+OTHER_SRCS = $(WNNETCSRC)/mkdir.c
+OTHER_OBJS = mkdir.o
+SRCS= $(SRC1) $(SRC3) $(LOCAL_ETCSRCS) $(OTHER_SRCS)
+OBJS= $(OBJ1) $(OBJ3) $(LOCAL_ETCOBJS) $(LOCAL_RKOBJS) $(mkdir.o)
 
 all::
 
@@ -88,17 +82,6 @@ all:: $(LINKS) $(OBJS) libcwnn.la
 
 includes:: $(LINKS)
 
-getopt.c:  $(WNNJLIBSRC)/getopt.c
-	$(RM) $@
-	$(LN) $? $@
-
-includes:: getopt.c
-
-depend:: getopt.c
-
-clean::
-	$(RM) getopt.c
-
 jl.c:  $(WNNJLIBSRC)/jl.c
 	$(RM) $@
 	$(LN) $? $@
@@ -106,9 +89,6 @@ jl.c:  $(WNNJLIBSRC)/jl.c
 includes:: jl.c
 
 depend:: jl.c
-
-clean::
-	$(RM) jl.c
 
 js.c:  $(WNNJLIBSRC)/js.c
 	$(RM) $@
@@ -118,20 +98,6 @@ includes:: js.c
 
 depend:: js.c
 
-clean::
-	$(RM) js.c
-
-kankana.c:  $(WNNJLIBSRC)/kankana.c
-	$(RM) $@
-	$(LN) $? $@
-
-includes:: kankana.c
-
-depend:: kankana.c
-
-clean::
-	$(RM) kankana.c
-
 wnnerrmsg.c:  $(WNNJLIBSRC)/wnnerrmsg.c
 	$(RM) $@
 	$(LN) $? $@
@@ -140,35 +106,12 @@ includes:: wnnerrmsg.c
 
 depend:: wnnerrmsg.c
 
-clean::
-	$(RM) wnnerrmsg.c
-
-all:: libgetopt.a
-
-libgetopt.a: $(OBJ2) $(EXTRALIBRARYDEPS)
-	$(RM) $@
-	$(AR) $@ $(OBJ2)
-	$(RANLIB) $@
-
-lintlib:: llib-lgetopt.ln
-
-llib-lgetopt.ln: $(SRC2) $(EXTRALIBRARYDEPS)
-	$(RM) $@
-	$(LINT) $(LINTLIBFLAG)getopt $(LINTFLAGS) $(SRC2)
-
 js.o : js.c 	$(CWNNETCSRC)/bdic.c 	$(CWNNETCSRC)/pwd.c 	$(CWNNETCSRC)/gethinsi.c
 
 lint:
 	$(LINT) $(LINTFLAGS) $(SRC2) $(LINTLIBS)
 lint1:
 	$(LINT) $(LINTFLAGS) $(FILE) $(LINTLIBS)
-
-kankana: kankana.o
-	$(RM) $@
-	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) kankana.o $(CWNNJLIB) @LIBS@
-
-clean::
-	$(RM) kankana
 
 all:: libcwnn.la
 
@@ -206,13 +149,16 @@ $(OBJ7) : $(SRC7)
 $(OBJ8) : $(SRC8)
 	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
 
-$(OBJ9) : $(SRC9)
-	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
+mkdir.o : $(WNNETCSRC)/mkdir.c
+	$(LIBTOOL) $(CC) -c $(CFLAGS) $@
 
 $(LOCAL_RKOBJS) : $(LOCAL_RKSRCS)
-	@case '${MFLAGS}' in *[ik]*) set +e;; esac; 	cd $(CWNNROMKANSRC); echo "making all in $(CWNNROMKANSRC)"; 	$(MAKE) 'CDEBUGFLAGS=$(CDEBUGFLAGS)' $(MFLAGS)
+	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
+ 	cd $(CWNNROMKANSRC); \
+	echo "making all in $(CWNNROMKANSRC)"; \
+	$(MAKE) $(MFLAGS)
 
 depend:: .depend
 
 clean::
-	$(RM) $(LINKS)
+	-$(RM) $(LINKS)
