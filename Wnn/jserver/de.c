@@ -28,7 +28,7 @@
 /*
         Jserver         (Nihongo Daemon)
 */
-static char rcs_id[] = "$Id: de.c,v 1.35 2003-11-20 10:31:59 aono Exp $";
+static char rcs_id[] = "$Id: de.c,v 1.36 2004-06-18 16:32:41 hiroo Exp $";
 
 #if defined(HAVE_CONFIG_H)
 #  include <config.h>
@@ -1247,14 +1247,17 @@ get_options (int argc, char **argv)
         case 'v':
           print_version();
           usage();
+	  break;
 
         case 'u':
 	  listen_proto &= ~PROTO_ALL;
 	  listen_proto |= PROTO_UN;
+	  break;
 
         case '4':
 	  listen_proto &= ~PROTO_ALL;
 	  listen_proto |= PROTO_INET;
+	  break;
 
 #ifdef INET6
         case '6':
