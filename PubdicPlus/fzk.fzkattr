@@ -79,7 +79,7 @@
 五段等未1
 #ifdef KOUGO
 五段等未1ん
-#endif KOUGO
+#endif /* KOUGO */
 五段等未
 形動,助動だ等未
 五段等促,撥
@@ -131,7 +131,7 @@
 準助の
 #ifdef KOUGO
 準助ん
-#endif KOUGO
+#endif /* KOUGO */
 接助ながら
 接助なり
 並助だり,たり
@@ -143,7 +143,7 @@
 接助と
 #ifdef KOUGO
 接助って
-#endif KOUGO
+#endif /* KOUGO */
 接助が
 接助ば
 接助し,格助詞って
@@ -160,7 +160,7 @@
 副助など,なぞ
 #ifdef KOUGO
 副助なんて
-#endif KOUGO
+#endif /* KOUGO */
 副助やら
 副助ずつ
 副助ぎり,きり
@@ -191,5 +191,5 @@
 間助よ
 間助ね,な
 連語じゃ
-#endif KOUGO
+#endif /* KOUGO */
 句読点
