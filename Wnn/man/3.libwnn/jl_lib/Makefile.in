@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.6 2001-06-14 17:55:41 ura Exp $
+#   $Id: Makefile.in,v 1.7 2001-08-14 13:43:21 hiroo Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000
+# Copyright FreeWnn Project 1999, 2000, 2001
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -30,8 +30,9 @@
 #
 
 include @top_srcdir@/makerule.mk
+top_builddir = ../../../..
 
-INSTALL         = @INSTALL@
+INSTALL         = @INSTALL@ $(INSTALLFLAGS)
 
 MANDIR = $(LIBMANDIR)
 MANSUFFIX = $(LIBMANSUFFIX)
@@ -40,7 +41,7 @@ install.man:: bun_suu.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_bun_suu.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) bun_suu.man \
+	$(INSTALL) $(INSTMANFLAGS) bun_suu.man \
  $(DESTDIR)$(MANDIR)/jl_bun_suu.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_bun_suu.$(MANSUFFIX)
 
@@ -48,7 +49,7 @@ install.man:: c_zenko.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_c_zenkouho.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) c_zenko.man \
+	$(INSTALL) $(INSTMANFLAGS) c_zenko.man \
  $(DESTDIR)$(MANDIR)/jl_c_zenkouho.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_c_zenkouho.$(MANSUFFIX)
 
@@ -56,7 +57,7 @@ install.man:: close.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_close.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) close.man \
+	$(INSTALL) $(INSTMANFLAGS) close.man \
  $(DESTDIR)$(MANDIR)/jl_close.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_close.$(MANSUFFIX)
 
@@ -64,7 +65,7 @@ install.man:: connect.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_connect.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) connect.man \
+	$(INSTALL) $(INSTMANFLAGS) connect.man \
  $(DESTDIR)$(MANDIR)/jl_connect.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_connect.$(MANSUFFIX)
 
@@ -72,7 +73,7 @@ install.man:: connect_l.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_connect_lang.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) connect_l.man \
+	$(INSTALL) $(INSTMANFLAGS) connect_l.man \
  $(DESTDIR)$(MANDIR)/jl_connect_lang.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_connect_lang.$(MANSUFFIX)
 
@@ -80,7 +81,7 @@ install.man:: dai_top.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_dai_top.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) dai_top.man \
+	$(INSTALL) $(INSTMANFLAGS) dai_top.man \
  $(DESTDIR)$(MANDIR)/jl_dai_top.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_dai_top.$(MANSUFFIX)
 
@@ -88,7 +89,7 @@ install.man:: dic_add.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_dic_add.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) dic_add.man \
+	$(INSTALL) $(INSTMANFLAGS) dic_add.man \
  $(DESTDIR)$(MANDIR)/jl_dic_add.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_dic_add.$(MANSUFFIX)
 
@@ -104,7 +105,7 @@ install.man:: dic_com_s.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_dic_comment_set.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) dic_com_s.man \
+	$(INSTALL) $(INSTMANFLAGS) dic_com_s.man \
  $(DESTDIR)$(MANDIR)/jl_dic_comment_set.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_dic_comment_set.$(MANSUFFIX)
 
@@ -120,7 +121,7 @@ install.man:: dic_del.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_dic_delete.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) dic_del.man \
+	$(INSTALL) $(INSTMANFLAGS) dic_del.man \
  $(DESTDIR)$(MANDIR)/jl_dic_delete.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_dic_delete.$(MANSUFFIX)
 
@@ -136,7 +137,7 @@ install.man:: dic_list.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_dic_list.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) dic_list.man \
+	$(INSTALL) $(INSTMANFLAGS) dic_list.man \
  $(DESTDIR)$(MANDIR)/jl_dic_list.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_dic_list.$(MANSUFFIX)
 
@@ -152,7 +153,7 @@ install.man:: dic_save.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_dic_save.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) dic_save.man \
+	$(INSTALL) $(INSTMANFLAGS) dic_save.man \
  $(DESTDIR)$(MANDIR)/jl_dic_save.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_dic_save.$(MANSUFFIX)
 
@@ -168,7 +169,7 @@ install.man:: dic_use.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_dic_use.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) dic_use.man \
+	$(INSTALL) $(INSTMANFLAGS) dic_use.man \
  $(DESTDIR)$(MANDIR)/jl_dic_use.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_dic_use.$(MANSUFFIX)
 
@@ -184,7 +185,7 @@ install.man:: disconn.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_disconnect.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) disconn.man \
+	$(INSTALL) $(INSTMANFLAGS) disconn.man \
  $(DESTDIR)$(MANDIR)/jl_disconnect.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_disconnect.$(MANSUFFIX)
 
@@ -192,7 +193,7 @@ install.man:: env.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_env.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) env.man \
+	$(INSTALL) $(INSTMANFLAGS) env.man \
  $(DESTDIR)$(MANDIR)/jl_env.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_env.$(MANSUFFIX)
 
@@ -200,7 +201,7 @@ install.man:: env_set.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_env_get.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) env_set.man \
+	$(INSTALL) $(INSTMANFLAGS) env_set.man \
  $(DESTDIR)$(MANDIR)/jl_env_get.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_env_get.$(MANSUFFIX)
 
@@ -216,7 +217,7 @@ install.man:: env_stick.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_env_sticky.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) env_stick.man \
+	$(INSTALL) $(INSTMANFLAGS) env_stick.man \
  $(DESTDIR)$(MANDIR)/jl_env_sticky.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_env_sticky.$(MANSUFFIX)
 
@@ -232,7 +233,7 @@ install.man:: fuz_get.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_fuzokugo_get.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) fuz_get.man \
+	$(INSTALL) $(INSTMANFLAGS) fuz_get.man \
  $(DESTDIR)$(MANDIR)/jl_fuzokugo_get.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_fuzokugo_get.$(MANSUFFIX)
 
@@ -248,7 +249,7 @@ install.man:: fuz_set.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_fuzokugo_set.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) fuz_set.man \
+	$(INSTALL) $(INSTMANFLAGS) fuz_set.man \
  $(DESTDIR)$(MANDIR)/jl_fuzokugo_set.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_fuzokugo_set.$(MANSUFFIX)
 
@@ -264,7 +265,7 @@ install.man:: get_kanji.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_get_kanji.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) get_kanji.man \
+	$(INSTALL) $(INSTMANFLAGS) get_kanji.man \
  $(DESTDIR)$(MANDIR)/jl_get_kanji.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_get_kanji.$(MANSUFFIX)
 
@@ -280,7 +281,7 @@ install.man:: get_zen_k.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_get_zenkouho_kanji.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) get_zen_k.man \
+	$(INSTALL) $(INSTMANFLAGS) get_zen_k.man \
  $(DESTDIR)$(MANDIR)/jl_get_zenkouho_kanji.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_get_zenkouho_kanji.$(MANSUFFIX)
 
@@ -288,7 +289,7 @@ install.man:: hinsi_dct.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_hinsi_dicts.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) hinsi_dct.man \
+	$(INSTALL) $(INSTMANFLAGS) hinsi_dct.man \
  $(DESTDIR)$(MANDIR)/jl_hinsi_dicts.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_hinsi_dicts.$(MANSUFFIX)
 
@@ -304,7 +305,7 @@ install.man:: hinsi_lst.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_hinsi_list.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) hinsi_lst.man \
+	$(INSTALL) $(INSTMANFLAGS) hinsi_lst.man \
  $(DESTDIR)$(MANDIR)/jl_hinsi_list.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_hinsi_list.$(MANSUFFIX)
 
@@ -320,7 +321,7 @@ install.man:: hinsi_nm.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_hinsi_name.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) hinsi_nm.man \
+	$(INSTALL) $(INSTMANFLAGS) hinsi_nm.man \
  $(DESTDIR)$(MANDIR)/jl_hinsi_name.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_hinsi_name.$(MANSUFFIX)
 
@@ -336,7 +337,7 @@ install.man:: hinsi_num.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_hinsi_number.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) hinsi_num.man \
+	$(INSTALL) $(INSTMANFLAGS) hinsi_num.man \
  $(DESTDIR)$(MANDIR)/jl_hinsi_number.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_hinsi_number.$(MANSUFFIX)
 
@@ -352,7 +353,7 @@ install.man:: inspect.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_inspect.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) inspect.man \
+	$(INSTALL) $(INSTMANFLAGS) inspect.man \
  $(DESTDIR)$(MANDIR)/jl_inspect.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_inspect.$(MANSUFFIX)
 
@@ -360,7 +361,7 @@ install.man:: isconnect.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_isconnect.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) isconnect.man \
+	$(INSTALL) $(INSTMANFLAGS) isconnect.man \
  $(DESTDIR)$(MANDIR)/jl_isconnect.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_isconnect.$(MANSUFFIX)
 
@@ -376,7 +377,7 @@ install.man:: jiri_len.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_jiri_len.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) jiri_len.man \
+	$(INSTALL) $(INSTMANFLAGS) jiri_len.man \
  $(DESTDIR)$(MANDIR)/jl_jiri_len.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_jiri_len.$(MANSUFFIX)
 
@@ -384,7 +385,7 @@ install.man:: kanji_len.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_kanji_len.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) kanji_len.man \
+	$(INSTALL) $(INSTMANFLAGS) kanji_len.man \
  $(DESTDIR)$(MANDIR)/jl_kanji_len.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_kanji_len.$(MANSUFFIX)
 
@@ -400,7 +401,7 @@ install.man:: kill.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_kill.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) kill.man \
+	$(INSTALL) $(INSTMANFLAGS) kill.man \
  $(DESTDIR)$(MANDIR)/jl_kill.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_kill.$(MANSUFFIX)
 
@@ -408,7 +409,7 @@ install.man:: next.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_next.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) next.man \
+	$(INSTALL) $(INSTMANFLAGS) next.man \
  $(DESTDIR)$(MANDIR)/jl_next.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_next.$(MANSUFFIX)
 
@@ -424,7 +425,7 @@ install.man:: nobi_conv.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_nobi_conv.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) nobi_conv.man \
+	$(INSTALL) $(INSTMANFLAGS) nobi_conv.man \
  $(DESTDIR)$(MANDIR)/jl_nobi_conv.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_nobi_conv.$(MANSUFFIX)
 
@@ -432,7 +433,7 @@ install.man:: open.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_open.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) open.man \
+	$(INSTALL) $(INSTMANFLAGS) open.man \
  $(DESTDIR)$(MANDIR)/jl_open.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_open.$(MANSUFFIX)
 
@@ -440,7 +441,7 @@ install.man:: open_lang.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_open_lang.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) open_lang.man \
+	$(INSTALL) $(INSTMANFLAGS) open_lang.man \
  $(DESTDIR)$(MANDIR)/jl_open_lang.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_open_lang.$(MANSUFFIX)
 
@@ -448,7 +449,7 @@ install.man:: param_get.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_param_get.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) param_get.man \
+	$(INSTALL) $(INSTMANFLAGS) param_get.man \
  $(DESTDIR)$(MANDIR)/jl_param_get.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_param_get.$(MANSUFFIX)
 
@@ -464,7 +465,7 @@ install.man:: ren_conv.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_ren_conv.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) ren_conv.man \
+	$(INSTALL) $(INSTMANFLAGS) ren_conv.man \
  $(DESTDIR)$(MANDIR)/jl_ren_conv.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_ren_conv.$(MANSUFFIX)
 
@@ -472,7 +473,7 @@ install.man:: set_env_w.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_set_env_wnnrc.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) set_env_w.man \
+	$(INSTALL) $(INSTMANFLAGS) set_env_w.man \
  $(DESTDIR)$(MANDIR)/jl_set_env_wnnrc.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_set_env_wnnrc.$(MANSUFFIX)
 
@@ -480,7 +481,7 @@ install.man:: set_jikou.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_set_jikouho.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) set_jikou.man \
+	$(INSTALL) $(INSTMANFLAGS) set_jikou.man \
  $(DESTDIR)$(MANDIR)/jl_set_jikouho.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_set_jikouho.$(MANSUFFIX)
 
@@ -496,7 +497,7 @@ install.man:: tan_conv.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_tan_conv.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) tan_conv.man \
+	$(INSTALL) $(INSTMANFLAGS) tan_conv.man \
  $(DESTDIR)$(MANDIR)/jl_tan_conv.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_tan_conv.$(MANSUFFIX)
 
@@ -504,7 +505,7 @@ install.man:: update_hd.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_update_hindo.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) update_hd.man \
+	$(INSTALL) $(INSTMANFLAGS) update_hd.man \
  $(DESTDIR)$(MANDIR)/jl_update_hindo.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_update_hindo.$(MANSUFFIX)
 
@@ -512,7 +513,7 @@ install.man:: word_add.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_word_add.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) word_add.man \
+	$(INSTALL) $(INSTMANFLAGS) word_add.man \
  $(DESTDIR)$(MANDIR)/jl_word_add.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_word_add.$(MANSUFFIX)
 
@@ -528,7 +529,7 @@ install.man:: word_cm_s.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_word_comment_set.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) word_cm_s.man \
+	$(INSTALL) $(INSTMANFLAGS) word_cm_s.man \
  $(DESTDIR)$(MANDIR)/jl_word_comment_set.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_word_comment_set.$(MANSUFFIX)
 
@@ -544,7 +545,7 @@ install.man:: word_del.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_word_delete.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) word_del.man \
+	$(INSTALL) $(INSTMANFLAGS) word_del.man \
  $(DESTDIR)$(MANDIR)/jl_word_delete.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_word_delete.$(MANSUFFIX)
 
@@ -560,7 +561,7 @@ install.man:: word_info.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_word_info.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) word_info.man \
+	$(INSTALL) $(INSTMANFLAGS) word_info.man \
  $(DESTDIR)$(MANDIR)/jl_word_info.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_word_info.$(MANSUFFIX)
 
@@ -576,7 +577,7 @@ install.man:: word_srch.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_word_search.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) word_srch.man \
+	$(INSTALL) $(INSTMANFLAGS) word_srch.man \
  $(DESTDIR)$(MANDIR)/jl_word_search.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_word_search.$(MANSUFFIX)
 
@@ -592,7 +593,7 @@ install.man:: word_use.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_word_use.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) word_use.man \
+	$(INSTALL) $(INSTMANFLAGS) word_use.man \
  $(DESTDIR)$(MANDIR)/jl_word_use.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_word_use.$(MANSUFFIX)
 
@@ -608,7 +609,7 @@ install.man:: zenko.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_zenkouho.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) zenko.man \
+	$(INSTALL) $(INSTMANFLAGS) zenko.man \
  $(DESTDIR)$(MANDIR)/jl_zenkouho.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_zenkouho.$(MANSUFFIX)
 
@@ -616,7 +617,7 @@ install.man:: zenko_bun.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_zenkouho_bun.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) zenko_bun.man \
+	$(INSTALL) $(INSTMANFLAGS) zenko_bun.man \
  $(DESTDIR)$(MANDIR)/jl_zenkouho_bun.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_zenkouho_bun.$(MANSUFFIX)
 
@@ -624,7 +625,7 @@ install.man:: zenko_da.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_zenkouho_dai.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) zenko_da.man \
+	$(INSTALL) $(INSTMANFLAGS) zenko_da.man \
  $(DESTDIR)$(MANDIR)/jl_zenkouho_dai.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_zenkouho_dai.$(MANSUFFIX)
 
@@ -632,7 +633,7 @@ install.man:: zenko_dap.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_zenkouho_daip.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) zenko_dap.man \
+	$(INSTALL) $(INSTMANFLAGS) zenko_dap.man \
  $(DESTDIR)$(MANDIR)/jl_zenkouho_daip.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_zenkouho_daip.$(MANSUFFIX)
 
@@ -640,6 +641,6 @@ install.man:: zenko_suu.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jl_zenkouho_suu.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) zenko_suu.man \
+	$(INSTALL) $(INSTMANFLAGS) zenko_suu.man \
  $(DESTDIR)$(MANDIR)/jl_zenkouho_suu.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jl_zenkouho_suu.$(MANSUFFIX)

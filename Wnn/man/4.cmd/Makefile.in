@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.6 2001-06-14 17:55:47 ura Exp $
+#   $Id: Makefile.in,v 1.7 2001-08-14 13:43:21 hiroo Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000
+# Copyright FreeWnn Project 1999, 2000, 2001
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -30,8 +30,9 @@
 #
 
 include @top_srcdir@/makerule.mk
+top_builddir = ../../..
 
-INSTALL         = @INSTALL@
+INSTALL         = @INSTALL@ $(INSTALLFLAGS)
 
 MANSUFFIX = 1
 
@@ -39,7 +40,7 @@ install.man:: jserver.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/jserver.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) jserver.man \
+	$(INSTALL) $(INSTMANFLAGS) jserver.man \
  $(DESTDIR)$(MANDIR)/jserver.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/jserver.$(MANSUFFIX)
 
@@ -47,7 +48,7 @@ install.man:: uum.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/uum.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) uum.man \
+	$(INSTALL) $(INSTMANFLAGS) uum.man \
  $(DESTDIR)$(MANDIR)/uum.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/uum.$(MANSUFFIX)
 
@@ -55,7 +56,7 @@ install.man:: wnnkill.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/wnnkill.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) wnnkill.man \
+	$(INSTALL) $(INSTMANFLAGS) wnnkill.man \
  $(DESTDIR)$(MANDIR)/wnnkill.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/wnnkill.$(MANSUFFIX)
 
@@ -63,6 +64,6 @@ install.man:: wnnstat.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/wnnstat.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) wnnstat.man \
+	$(INSTALL) $(INSTMANFLAGS) wnnstat.man \
  $(DESTDIR)$(MANDIR)/wnnstat.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/wnnstat.$(MANSUFFIX)

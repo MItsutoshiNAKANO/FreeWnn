@@ -3,8 +3,10 @@
 #
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright 1991, 1992 by Massachusetts Institute of Technology
+# Copyright FreeWnn Project 2001
 #
 # Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+# Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,8 +23,11 @@
 # Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include @top_srcdir@/makerule.mk
+top_builddir = ../..
 
-LOCAL_INSTFLAGS = $(INSTBINFLAGS) -o $(WNNOWNER)
+INSTALL         = @INSTALL@ $(INSTALLFLAGS)
+LOCAL_INSTFLAGS = -o $(WNNOWNER)
+
        INCLUDES = -I. $(XWNMOINCLUDES) -I$(XWNMOSRC)
 
         DEPLIBS = $(XWNMOJLIB)
@@ -110,13 +115,13 @@ clean::
 install:: xjutil
 	@if [ -d $(DESTDIR)$(BINDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(BINDIR)); fi
-	$(INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) xjutil $(DESTDIR)$(BINDIR)/xjutil
+	$(INSTALL) $(INSTPGMFLAGS) $(INSTBINFLAGS) $(LOCAL_INSTFLAGS) xjutil $(DESTDIR)$(BINDIR)/xjutil
 
 install.man:: xjutil.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/xjutil.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) xjutil.man \
+	$(INSTALL) $(INSTMANFLAGS) xjutil.man \
  $(DESTDIR)$(MANDIR)/xjutil.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/xjutil.$(MANSUFFIX)
 

@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.6 2001-06-14 17:55:46 ura Exp $
+#   $Id: Makefile.in,v 1.7 2001-08-14 13:43:21 hiroo Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000
+# Copyright FreeWnn Project 1999, 2000, 2001
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -30,8 +30,9 @@
 #
 
 include @top_srcdir@/makerule.mk
+top_builddir = ../../../..
 
-INSTALL         = @INSTALL@
+INSTALL         = @INSTALL@ $(INSTALLFLAGS)
 
 MANDIR = $(LIBMANDIR)
 MANSUFFIX = $(LIBMANSUFFIX)
@@ -40,7 +41,7 @@ install.man:: rk_clear.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/romkan_clear.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) rk_clear.man \
+	$(INSTALL) $(INSTMANFLAGS) rk_clear.man \
  $(DESTDIR)$(MANDIR)/romkan_clear.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/romkan_clear.$(MANSUFFIX)
 
@@ -48,7 +49,7 @@ install.man:: rk_dspmd.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/romkan_dispmode.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) rk_dspmd.man \
+	$(INSTALL) $(INSTMANFLAGS) rk_dspmd.man \
  $(DESTDIR)$(MANDIR)/romkan_dispmode.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/romkan_dispmode.$(MANSUFFIX)
 
@@ -56,7 +57,7 @@ install.man:: rk_getc.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/romkan_getc.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) rk_getc.man \
+	$(INSTALL) $(INSTMANFLAGS) rk_getc.man \
  $(DESTDIR)$(MANDIR)/romkan_getc.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/romkan_getc.$(MANSUFFIX)
 
@@ -64,7 +65,7 @@ install.man:: rk_init.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/romkan_init.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) rk_init.man \
+	$(INSTALL) $(INSTMANFLAGS) rk_init.man \
  $(DESTDIR)$(MANDIR)/romkan_init.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/romkan_init.$(MANSUFFIX)
 
@@ -72,7 +73,7 @@ install.man:: rk_next.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/romkan_next.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) rk_next.man \
+	$(INSTALL) $(INSTMANFLAGS) rk_next.man \
  $(DESTDIR)$(MANDIR)/romkan_next.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/romkan_next.$(MANSUFFIX)
 
@@ -80,6 +81,6 @@ install.man:: rk_ungetc.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/romkan_ungetc.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) rk_ungetc.man \
+	$(INSTALL) $(INSTMANFLAGS) rk_ungetc.man \
  $(DESTDIR)$(MANDIR)/romkan_ungetc.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/romkan_ungetc.$(MANSUFFIX)

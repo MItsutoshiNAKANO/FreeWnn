@@ -3,8 +3,10 @@
 #
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright 1991 by Massachusetts Institute of Technology
+# Copyright FreeWnn Project 2001
 #
 # Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+# Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,6 +27,7 @@
 #    CDEBUGFLAGS = -O -traditional
 
 include @top_srcdir@/makerule.mk
+top_builddir = ..
 
 SUBDIRS = jd cd ld kd td romkan_m jlib xwnmo xjutil
 

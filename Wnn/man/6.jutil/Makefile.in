@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.6 2001-06-14 17:55:48 ura Exp $
+#   $Id: Makefile.in,v 1.7 2001-08-14 13:43:21 hiroo Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000
+# Copyright FreeWnn Project 1999, 2000, 2001
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -30,8 +30,9 @@
 #
 
 include @top_srcdir@/makerule.mk
+top_builddir = ../../..
 
-INSTALL         = @INSTALL@
+INSTALL         = @INSTALL@ $(INSTALLFLAGS)
 
 MANSUFFIX = 1
 
@@ -39,7 +40,7 @@ install.man:: atod.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/atod.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) atod.man \
+	$(INSTALL) $(INSTMANFLAGS) atod.man \
  $(DESTDIR)$(MANDIR)/atod.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/atod.$(MANSUFFIX)
 
@@ -47,7 +48,7 @@ install.man:: atof.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/atof.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) atof.man \
+	$(INSTALL) $(INSTMANFLAGS) atof.man \
  $(DESTDIR)$(MANDIR)/atof.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/atof.$(MANSUFFIX)
 
@@ -55,7 +56,7 @@ install.man:: dtoa.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/dtoa.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) dtoa.man \
+	$(INSTALL) $(INSTMANFLAGS) dtoa.man \
  $(DESTDIR)$(MANDIR)/dtoa.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/dtoa.$(MANSUFFIX)
 
@@ -63,7 +64,7 @@ install.man:: wddel.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/wddel.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) wddel.man \
+	$(INSTALL) $(INSTMANFLAGS) wddel.man \
  $(DESTDIR)$(MANDIR)/wddel.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/wddel.$(MANSUFFIX)
 
@@ -71,7 +72,7 @@ install.man:: wdreg.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/wdreg.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) wdreg.man \
+	$(INSTALL) $(INSTMANFLAGS) wdreg.man \
  $(DESTDIR)$(MANDIR)/wdreg.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/wdreg.$(MANSUFFIX)
 
@@ -79,7 +80,7 @@ install.man:: wnntouch.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/wnntouch.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) wnntouch.man \
+	$(INSTALL) $(INSTMANFLAGS) wnntouch.man \
  $(DESTDIR)$(MANDIR)/wnntouch.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/wnntouch.$(MANSUFFIX)
 
@@ -87,6 +88,6 @@ install.man:: oldtonew.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/oldatonewa.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) oldtonew.man \
+	$(INSTALL) $(INSTMANFLAGS) oldtonew.man \
  $(DESTDIR)$(MANDIR)/oldatonewa.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/oldatonewa.$(MANSUFFIX)

@@ -1,5 +1,5 @@
 /*
- *  $Id: js.c,v 1.7 2001-06-18 09:09:37 ura Exp $
+ *  $Id: js.c,v 1.8 2001-08-14 13:43:21 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2001
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -129,7 +129,9 @@ static int _get_server_name ();
 static int writen ();
 static char *get_unixdomain_of_serv_defs (), *get_service_of_serv_defs ();
 static int get_port_num_of_serv_defs ();
-
+#if DEBUG
+void xerror ();
+#endif
 
 /*********      V4      *****************/
 /***
@@ -160,7 +162,7 @@ set_current_js (server)
 
 /**     デーモンが死んだ時のための後始末        **/
 static void
-demon_dead ()
+daemon_dead ()
 {
   current_js->js_dead = -1;
   wnn_errorno = WNN_JSERVER_DEAD;
@@ -187,7 +189,7 @@ demon_dead ()
                         (cdというのはコミュニケーションデバイスの名残)
 **/
 static int
-cd_open (lang)
+cd_open_un (lang)
      register char *lang;
 {
 #ifdef AF_UNIX
@@ -213,7 +215,7 @@ cd_open (lang)
   if ((sd = socket (AF_UNIX, SOCK_STREAM, 0)) == ERROR)
     {
 #if DEBUG
-      xerror ("jslib:Can't create socket.\n");
+      xerror ("jslib:Can't create unix domain socket.\n");
 #endif
       return -1;
     }
@@ -225,7 +227,7 @@ cd_open (lang)
     {
 
 #if DEBUG
-      xerror ("jslib:Can't connect socket.\n");
+      xerror ("jslib:Can't connect unix domain socket.\n");
 #endif
       close (sd);
       return -1;
@@ -243,9 +245,15 @@ cd_open_in (server, lang, timeout)
      register int timeout;
 {
   int sd;
+#ifdef INET6
+  struct addrinfo hints, *res, *res0;
+  int error;
+  char sport[6];
+#else
   struct sockaddr_in saddr_in;                  /** ソケット **/
-  struct servent *sp = NULL;
   register struct hostent *hp;
+#endif
+  struct servent *sp = NULL;
   int serverNO, port_num;
   int ret;
   char pserver[64];
@@ -291,6 +299,23 @@ cd_open_in (server, lang, timeout)
           serverNO += port_num;
         }
     }
+#ifdef INET6
+  memset(&hints, 0, sizeof(hints));
+  hints.ai_family = PF_UNSPEC;
+  hints.ai_socktype = SOCK_STREAM;
+  sprintf(sport, "%d", serverNO);
+  error = getaddrinfo(pserver, sport, &hints, &res0);
+  if (error)
+    {
+#if DEBUG
+      xerror (gai_strerror(error));
+#endif
+      return -1;
+    }
+  for (res = res0; res ; res = res->ai_next) {
+    if (res->ai_family == AF_INET || res->ai_family == AF_INET6){
+      if ((sd = socket(res->ai_family, res->ai_socktype, res->ai_protocol)) != ERROR){
+#else
   if ((hp = gethostbyname (pserver)) == NULL)
     {
       return -1;
@@ -302,17 +327,22 @@ cd_open_in (server, lang, timeout)
   if ((sd = socket (AF_INET, SOCK_STREAM, 0)) == ERROR)
     {
 #if DEBUG
-      xerror ("jslib:Can't create Inet socket.\n");
+      xerror ("jslib:Can't create inet socket.\n");
 #endif
       return -1;
     }
+#endif
 
   if (timeout != 0 && timeout > 0)
     {
       signal (SIGALRM, connect_timeout);
       alarm (timeout);
     }
+#ifdef INET6
+  ret = connect (sd, res->ai_addr, res->ai_addrlen);
+#else
   ret = connect (sd, (struct sockaddr *) &saddr_in, sizeof (saddr_in));
+#endif
   if (timeout != 0 && timeout > 0)
     {
       alarm (0);
@@ -321,12 +351,36 @@ cd_open_in (server, lang, timeout)
   if (ret == ERROR)
     {
 #if DEBUG
-      xerror ("jslib:Can't connect Inet socket.\n");
+#ifdef INET6
+      if (res->ai_family == AF_INET)
+	xerror ("jslib:Can't connect inet socket.\n");
+      else if (res->ai_family == AF_INET6)
+	xerror ("jslib:Can't connect inet6 socket.\n");
+#else
+      xerror ("jslib:Can't connect inet socket.\n");
+#endif
 #endif
 #ifdef HAVE_CLOSESOCKET
       closesocket (sd);
 #else
       close (sd);
+#endif
+#ifdef INET6
+	  sd = ERROR;
+	} else
+	  break;
+      } else {
+#if DEBUG
+      if (res->ai_family == AF_INET)
+	xerror ("jslib:Can't create inet socket.\n");
+      else if (res->ai_family == AF_INET6)
+	xerror ("jslib:Can't create inet6 socket.\n");
+#endif
+      }
+    }
+  }
+  freeaddrinfo(res0);
+  if (sd == ERROR) {
 #endif
       return -1;
     }
@@ -345,8 +399,27 @@ _get_server_name (server, pserver)
      char *pserver;
 {
   register char *p;
-  strcpy (pserver, server);
+#ifdef INET6
+  int len;
+
+  if (server[0] == '[') {
+    p = strchr(server++, ']');
+    if (p) {
+      len = p-server<64-1?p-server:64-1;
+      strncpy(pserver, server, len);
+      pserver[len] = '\0';
+    } else
+      pserver[0] = '\0';
+  } else {
+#endif
+  /* Workaround for pserver buffer overrun : Nov 11,1999 by T.Aono */
+  /* assumes pserver[64]. variable length string is not supported. */
+  strncpy(pserver, server, 64-1);
+  pserver[64-1] = '\0';
   p = pserver;
+#ifdef INET6
+  }
+#endif
   for (; *p && *p != ':'; p++);
   if (!*p)
     return (0);                 /* does not have a colon */
@@ -420,7 +493,7 @@ writen (n)
             }
           else
             {
-              demon_dead ();
+              daemon_dead ();
               return -1;
             }
         }
@@ -520,14 +593,14 @@ get1com ()
                 }
               else if (rbc == 0)
                 {
-                  demon_dead ();
+                  daemon_dead ();
                   return -1;
                 }
               else
                 {               /* cc == -1 */
                   if (errno != EINTR)
                     {
-                      demon_dead ();
+                      daemon_dead ();
                       return -1;
                     }
                   continue;
@@ -710,7 +783,7 @@ js_open_lang (server, lang, timeout)
   if (server == NULL || 0 == strcmp (server, "") || 0 == strcmp (server, "unix"))
     {
       strcpy (host, "unix");
-      if ((current_sd = cd_open (lang)) == -1)
+      if ((current_sd = cd_open_un (lang)) == -1)
         {
           wnn_errorno = WNN_SOCK_OPEN_FAIL;
           free ((char *) current_js);

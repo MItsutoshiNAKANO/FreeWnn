@@ -1,5 +1,5 @@
 /*
- *  $Id: de_vars.c,v 1.3 2001-06-14 18:16:00 ura Exp $
+ *  $Id: de_vars.c,v 1.4 2001-08-14 13:43:21 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2001
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -33,7 +33,7 @@
 #include "de_header.h"
 
 /*
-        external global variables of demon
+        external global variables of daemon
 */
 
 char SER_VERSION[] = _SERVER_VERSION;

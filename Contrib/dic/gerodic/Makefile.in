@@ -1,13 +1,15 @@
 #
-# $Id: Makefile.in,v 1.4 2000-01-16 07:30:00 ura Exp $
+# $Id: Makefile.in,v 1.5 2001-08-14 13:43:20 hiroo Exp $
 #
 
 # FreeWnn is a network-extensible Kana-to-Kanji conversion system.
 # This file is part of FreeWnn.
 #
 # Copyright Wnn Consortium. 1993
+# Copyright FreeWnn Project 2001
 #
 # Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+# Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,12 +35,15 @@
 #
 
 include @top_srcdir@/makerule.mk
+top_builddir = ../../..
 
 # Makefile for gerodic 1.00
 #
 #	Jun. 26th '93 Wnn Consortium
 
 
+INSTALL         = @INSTALL@ $(INSTALLFLAGS)
+LOCAL_INSTFLAGS = -o ${WNNOWNER}
 
 #ATOD=${JWNNBINDIR}/atod
 ATOD=${WNNJUTILSRC}/atod
@@ -63,7 +68,7 @@ install:: ${OBJ}
 	@if [ -d $(DESTDIR)$(GERODIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(GERODIR)); fi
 	chown ${WNNOWNER} $(DESTDIR)$(GERODIR)
-	@INSTALL@ $(INSTALLFLAGS) $(INSTDATFLAGS) -o ${WNNOWNER} ${OBJ} $(DESTDIR)$(GERODIR)
+	$(INSTALL) $(INSTDATFLAGS) $(LOCAL_INSTFLAGS) ${OBJ} $(DESTDIR)$(GERODIR)
 	${WNNTOUCH} $(DESTDIR)$(GERODIR)/${OBJ}
 
 clean::

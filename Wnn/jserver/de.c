@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.11 2001-06-18 09:09:40 ura Exp $
+ *  $Id: de.c,v 1.12 2001-08-14 13:43:21 hiroo Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 /*
-        Jserver         (Nihongo Demon)
+        Jserver         (Nihongo Daemon)
 */
 #if defined(HAVE_CONFIG_H)
 #include <config.h>
@@ -101,21 +101,18 @@ extern int errno;               /* Pure BSD */
 #endif
 
 /*      Accept Socket   */
+#ifdef INET6
+#define MAX_ACCEPTS     3
+#else
 #define MAX_ACCEPTS     2
+#endif
 #define UNIX_ACPT       0
 #define INET_ACPT       1
+#ifdef INET6
+#define INET6_ACPT      2
+#endif
 
 jmp_buf client_dead;
-
-#ifdef  AF_UNIX
-static struct sockaddr_un saddr_un;     /**     ソケット        **/
-#endif /* AF_UNIX */
-static struct sockaddr_in saddr_in;     /**     ソケット        **/
-
-#ifdef  AF_UNIX
-static int sock_d_un;                   /**     ソケットのfd    **/
-#endif /* AF_UNIX */
-static int sock_d_in;                   /**     ソケットのfd    **/
 
 static int port;
 static int serverNO = 0;
@@ -178,9 +175,9 @@ static int nofile;              /** No. of files **/
 struct msg_cat *wnn_msg_cat;
 struct msg_cat *js_msg_cat;
 
-static void demon_main (), sel_all (), new_client (), demon_init (), socket_init (), socket_init_in (), xerror (), get_options ();
-void demon_fin (), del_client (), put2_cur (), putc_cur ();
-static int get_client (), rcv_1_client (), socket_accept (), socket_accept_in ();
+static void daemon_main (), sel_all (), new_client (), daemon_init (), socket_init_un (), socket_init_in (), xerror (), get_options ();
+void daemon_fin (), daemon_fin_un (), daemon_fin_in (), del_client (), put2_cur (), putc_cur ();
+static int get_client (), rcv_1_client (), socket_accept_un (), socket_accept_in ();
 int get2_cur ();
 static void usage __P((void));
 
@@ -251,7 +248,7 @@ main (argc, argv)
 #endif /* SIGTSTP */
 #endif /* !NOTFORK */
   read_default ();
-  demon_init ();
+  daemon_init ();
 
   env_init ();
   file_init ();
@@ -298,13 +295,13 @@ main (argc, argv)
 #endif /* SETPGRP_VOID */
 #endif /* !NOTFORK */
 
-  demon_main ();
+  daemon_main ();
 
-  demon_fin ();
+  daemon_fin ();
 }
 
 static void
-demon_main ()
+daemon_main ()
 {
   for (;;)
     {
@@ -412,7 +409,16 @@ new_client ()                   /* NewClient */
     {
       sock_clr (ready_socks, accept_blk[UNIX_ACPT].sd);
       no_of_ready_socks--;
-      sd = socket_accept ();
+      sd = socket_accept_un ();
+    }
+  else
+#endif
+#ifdef INET6
+  if (sock_tst (ready_socks, accept_blk[INET6_ACPT].sd))
+    {
+      sock_clr (ready_socks, accept_blk[INET6_ACPT].sd);
+      no_of_ready_socks--;
+      sd = socket_accept_in (accept_blk[INET6_ACPT].sd);
     }
   else
 #endif
@@ -420,7 +426,7 @@ new_client ()                   /* NewClient */
     {
       sock_clr (ready_socks, accept_blk[INET_ACPT].sd);
       no_of_ready_socks--;
-      sd = socket_accept_in ();
+      sd = socket_accept_in (accept_blk[INET_ACPT].sd);
     }
   else
     {
@@ -493,7 +499,7 @@ del_client ()
 
 /**     サーバをイニシャライズする      **/
 static void
-demon_init ()                   /* initialize Demon */
+daemon_init ()                   /* initialize Daemon */
 {
   signal (SIGHUP, SIG_IGN);
   signal (SIGINT, SIG_IGN);
@@ -520,31 +526,20 @@ demon_init ()                   /* initialize Demon */
   socket_disc_init ();
   socket_init_in ();
 #ifdef  AF_UNIX
-  socket_init ();
+  socket_init_un ();
 #endif /* AF_UNIX */
 }
 
 /**     サーバを終わる  **/
+#ifdef  AF_UNIX
 void
-demon_fin ()
+daemon_fin_un (sock_d_un)
+     int sock_d_un;
 {
   int trueFlag = 1;
-  int fd;
-#ifdef  AF_UNIX
   struct sockaddr_un addr_un;
-#endif /* AF_UNIX */
-  struct sockaddr_in addr_in;
   socklen_t addrlen;
-#ifdef USE_SETSOCKOPT
-  int on = ~0;
-#endif
 
-  /*
-     accept all pending connection from new clients,
-     avoiding kernel hangup.
-   */
-
-#ifdef  AF_UNIX
   if (serverNO == 0)
     {
 #ifndef SOLARIS
@@ -564,7 +559,19 @@ demon_fin ()
       shutdown (sock_d_un, 2);
       close (sock_d_un);
     }
+}
 #endif /* AF_UNIX */
+
+void
+daemon_fin_in (sock_d_in)
+     int sock_d_in;
+{
+  int trueFlag = 1;
+  struct sockaddr_in addr_in;
+  socklen_t addrlen;
+#ifdef USE_SETSOCKOPT
+  int on = ~0;
+#endif
 
 #ifndef SOLARIS
 #ifdef USE_SETSOCKOPT
@@ -589,11 +596,39 @@ demon_fin ()
   closesocket (sock_d_in);
 #else
   close (sock_d_in);
-
 #endif
+}
+
+void
+daemon_fin ()
+{
+  int fd;
+#ifdef  AF_UNIX
+  int sock_d_un = accept_blk[UNIX_ACPT].sd;
+#endif /* AF_UNIX */
+  int sock_d_in = accept_blk[INET_ACPT].sd;
+#ifdef INET6
+  int sock_d_in6 = accept_blk[INET6_ACPT].sd;
+#endif
+
+  /*
+     accept all pending connection from new clients,
+     avoiding kernel hangup.
+   */
+#ifdef  AF_UNIX
+  daemon_fin_un (sock_d_un);
+#endif
+  daemon_fin_in (sock_d_in);
+#ifdef INET6
+  daemon_fin_in (sock_d_in6);
+#endif
+
   for (fd = nofile - 1; fd >= 0; fd--)
     {
       if ((fd != sock_d_in) &&
+#ifdef INET6
+          (fd != sock_d_in6) &&
+#endif
 #ifdef AF_UNIX
           (fd != sock_d_un) &&
 #endif /* AF_UNIX */
@@ -869,8 +904,10 @@ putc_purge ()
 /**     ソケットのイニシャライズ        **/
 #ifdef  AF_UNIX
 static void
-socket_init ()
+socket_init_un ()
 {
+  struct sockaddr_un saddr_un;
+  int sock_d_un;
   if (serverNO == 0)
     {
       saddr_un.sun_family = AF_UNIX;
@@ -913,6 +950,14 @@ socket_init_in ()
 #if !defined(SO_DONTLINGER) && defined(SO_LINGER)
   struct linger linger;
 #endif
+#ifdef INET6
+  struct addrinfo hints, *res, *res0;
+  int error;
+  char sport[6];
+#else
+  struct sockaddr_in saddr_in;
+#endif
+  int sock_d_in;
 
   if (port < 0)
     {
@@ -931,10 +976,26 @@ socket_init_in ()
 #if DEBUG
   error1 ("port=%x\n", port);
 #endif
+#ifdef INET6
+  memset(&hints, 0, sizeof(hints));
+  hints.ai_family = PF_UNSPEC;
+  hints.ai_socktype = SOCK_STREAM;
+  hints.ai_flags = AI_PASSIVE;
+  sprintf(sport, "%d", port);
+  error = getaddrinfo(NULL, sport, &hints, &res0);
+  if (error)
+    {
+      xerror (gai_strerror(error));
+    }
+  for (res = res0; res; res = res->ai_next) {
+    if (res->ai_family == AF_INET || res->ai_family == AF_INET6){
+      if ((sock_d_in = socket (res->ai_family, res->ai_socktype, res->ai_protocol)) == ERROR)
+#else
   saddr_in.sin_family = AF_INET;
   saddr_in.sin_port = port;
   saddr_in.sin_addr.s_addr = htonl (INADDR_ANY);
   if ((sock_d_in = socket (AF_INET, SOCK_STREAM, 0)) == ERROR)
+#endif
     {
       xerror ("can't create inet socket");
     }
@@ -949,7 +1010,11 @@ socket_init_in ()
 # endif /* SO_LINGER */
 #endif /* SO_DONTLINGER */
 
+#ifdef INET6
+  if (bind (sock_d_in, res->ai_addr, res->ai_addrlen) == ERROR)
+#else
   if (bind (sock_d_in, (struct sockaddr *) &saddr_in, sizeof (saddr_in)) == ERROR)
+#endif
     {
       shutdown (sock_d_in, 2);
       xerror ("can't bind inet socket");
@@ -962,32 +1027,43 @@ socket_init_in ()
 #if DEBUG
   error1 ("sock_d_in = %d\n", sock_d_in);
 #endif
-  accept_blk[INET_ACPT].sd = sock_d_in;
   sock_set (all_socks, sock_d_in);
+#ifdef INET6
+      if (res->ai_family == AF_INET)
+	accept_blk[INET_ACPT].sd = sock_d_in;
+      else if (res->ai_family == AF_INET6)
+	accept_blk[INET6_ACPT].sd = sock_d_in;
+    }
+  }
+  freeaddrinfo(res0);
+#else
+  accept_blk[INET_ACPT].sd = sock_d_in;
+#endif
 }
 
 
 /**     accept new client socket        **/
 #ifdef  AF_UNIX
 static int
-socket_accept ()
+socket_accept_un ()
 {
   struct sockaddr_un addr;
   socklen_t addrlen;
 
   addrlen = sizeof (addr);
-  return accept (sock_d_un, (struct sockaddr *) &addr, &addrlen);
+  return accept (accept_blk[UNIX_ACPT].sd, (struct sockaddr *) &addr, &addrlen);
 }
 #endif /* AF_UNIX */
 
 static int
-socket_accept_in ()
+socket_accept_in (fd)
+     int fd;
 {
   struct sockaddr_in addr;
   socklen_t addrlen;
 
   addrlen = sizeof (addr);
-  return accept (sock_d_in, (struct sockaddr *) &addr, &addrlen);
+  return accept (fd, (struct sockaddr *) &addr, &addrlen);
 }
 
 static void

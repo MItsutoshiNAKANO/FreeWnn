@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.9 2001-06-18 09:09:36 ura Exp $
+#   $Id: Makefile.in,v 1.10 2001-08-14 13:43:21 hiroo Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000
+# Copyright FreeWnn Project 1999, 2000, 2001
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -30,10 +30,7 @@
 #
 
 include @top_srcdir@/makerule.mk
-
-         CC = @CC@
-  CCOPTIONS = @CCOPTIONS@
-CDEBUGFLAGS = @CDEBUGFLAGS@
+top_builddir = ../..
 
 LIB_MT_DEFINES = LibraryMTDefines
 
@@ -42,8 +39,7 @@ LIB_MT_DEFINES = LibraryMTDefines
         DEFINES = $(WNNDEFINES) $(ALLLANGDEF) $(JLIBDEFINES)
        LINTLIBS =
 
-INSTALL      = @INSTALL@
-INSTALLFLAGS = $(INSTBINFLAGS)
+INSTALL      = @INSTALL@ $(INSTALLFLAGS)
 
 SRC1= js.c 	wnnerrmsg.c 	jl.c
 
@@ -111,7 +107,7 @@ lint1:
 
 kankana: kankana.o
 	$(RM) $@
-	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) kankana.o $(WNNJLIB)
+	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) kankana.o $(WNNJLIB) @LIBS@
 
 clean::
 	$(RM) kankana
@@ -119,7 +115,7 @@ clean::
 all:: libwnn.la
 
 libwnn.la: $(OBJS) $(EXTRALIBRARYDEPS)
-	$(LIBTOOL) $(CC) -o $@ $(OBJS:.o=.lo) -rpath $(DESTDIR)$(WNNLIBDIR) -version-info $(WNNJLIBVERSION)
+	$(LIBTOOL) $(CC) -o $@ $(OBJS:.o=.lo) -rpath $(WNNLIBDIR) -version-info $(WNNJLIBVERSION)
 
 lintlib:: llib-lwnn.ln
 
@@ -132,7 +128,7 @@ instlib:: install
 install:: libwnn.la
 	@if [ -d $(DESTDIR)$(WNNLIBDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(WNNLIBDIR)); fi
-	$(LIBTOOL) $(INSTALL) $(INSTALLFLAGS) $(INSTLIBFLAGS) libwnn.la $(DESTDIR)$(WNNLIBDIR)
+	$(LIBTOOL) $(INSTALL) $(INSTLIBFLAGS) libwnn.la $(DESTDIR)$(WNNLIBDIR)
 
 $(OBJ3) : $(SRC3)
 	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c

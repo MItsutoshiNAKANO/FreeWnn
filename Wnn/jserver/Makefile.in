@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.10 2001-06-18 09:09:40 ura Exp $
+#   $Id: Makefile.in,v 1.11 2001-08-14 13:43:21 hiroo Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000
+# Copyright FreeWnn Project 1999, 2000, 2001
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -30,13 +30,14 @@
 #
 
 include @top_srcdir@/makerule.mk
+top_builddir = ../..
 
-INSTALL         = @INSTALL@
+INSTALL         = @INSTALL@ $(INSTALLFLAGS)
+LOCAL_INSTFLAGS = -o $(WNNOWNER)
 
  JSERVERDEFINES = -DJSERVER -DWRITE_CHECK
        INCLUDES = -I$(WNNINCLUDESRC) -I$(TOP)
         DEFINES = $(WNNDEFINES) $(JSERVERDEFINES) $(WNNTERM)
-LOCAL_INSTFLAGS = $(INSTUIDFLAGS) -o $(WNNOWNER)
   SERVERINITDEF = -DSERVER_INIT_FILE=\"/$(JWNNLANG)/jserverrc\"
   HINSIDEFINES = -DHINSIDATA_FILE=\"/$(JWNNLANG)/hinsi.data\"
 
@@ -95,7 +96,7 @@ instserver:: install
 install:: jserver
 	@if [ -d $(DESTDIR)$(JWNNBINDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(JWNNBINDIR)); fi
-	$(LIBTOOL) $(INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) jserver $(DESTDIR)$(JWNNBINDIR)/jserver
+	$(LIBTOOL) $(INSTALL) $(INSTPGMFLAGS) $(INSTUIDFLAGS) $(LOCAL_INSTFLAGS) jserver $(DESTDIR)$(JWNNBINDIR)/jserver
 
 $(OBJ0) : $(SRC0)
 	$(CC) -c $(CFLAGS) $(SERVERINITDEF) $(FORKDEF) $(SOLINGERDEFS) ./`basename $@ .o`.c

@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.15 2001-06-18 09:09:20 ura Exp $
+dnl   $Id: configure.in,v 1.16 2001-08-14 13:43:20 hiroo Exp $
 dnl
 
 dnl
@@ -10,7 +10,7 @@ dnl Copyright Kyoto University Research Institute for Mathematical Sciences
 dnl                 1987, 1988, 1989, 1990, 1991, 1992
 dnl Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 dnl Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-dnl Copyright FreeWnn Project 1999, 2000
+dnl Copyright FreeWnn Project 1999, 2000, 2001
 dnl 
 dnl Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 dnl 
@@ -52,7 +52,8 @@ dnl ====================================================================
 dnl Check optional features
 dnl ====================================================================
 
-AM_PROG_LIBTOOL
+AC_CANONICAL_HOST
+dnl AM_PROG_LIBTOOL
 
 AC_ARG_ENABLE(sharedlib,
 [  --enable-sharedlib      build shared library using GNU libtool],
@@ -107,13 +108,13 @@ esac], Wnn="Wnn")
 AC_SUBST(Wnn)
 
 if test "$server" = true -a "$Wnn" = Wnn; then
-	JSERVER_SUBDIRS1="\$(JSERVER_SUBDIRS1)"
+#	JSERVER_SUBDIRS1="\$(JSERVER_SUBDIRS1)"
 	JSERVER_SUBDIRS2="\$(JSERVER_SUBDIRS2)"
 else
-	JSERVER_SUBDIRS1=""
+#	JSERVER_SUBDIRS1=""
 	JSERVER_SUBDIRS2=""
 fi
-AC_SUBST(JSERVER_SUBDIRS1)
+dnl AC_SUBST(JSERVER_SUBDIRS1)
 AC_SUBST(JSERVER_SUBDIRS2)
 
 AC_ARG_ENABLE(cWnn,
@@ -228,35 +229,38 @@ AC_SUBST(KWNNJLIB)
 AC_SUBST(DEPKWNNJLIB)
 AC_SUBST(KHINSI_DATA)
 
+AC_ARG_ENABLE(inet6,
+[  --enable-inet6          build and install inet6 [default=false]],
+[case "${enableval}" in
+   yes) inet6="-DINET6";;
+   no)  inet6="" ;;
+   *)   AC_MSG_ERROR(bad value for --enable-inet6) ;;
+esac], inet6="")
+AC_SUBST(inet6)
+
 dnl
 dnl Checks for cc and cpp.
 dnl
 AC_PROG_CC
-AC_MSG_CHECKING(for cpp)
-hosttype=`uname`
-CCOPTIONS=""
-CDEBUGFLAGS=-O
-case $hosttype in
-"Linux")
+
+dnl Use environment variable (if set). It will be overridden
+dnl in supported system though...
+# CCOPTIONS=""
+CDEBUGFLAGS=${CDEBUGFLAGS:-"-O"}
+case $host in
+*-*-linux*)
     CCOPTIONS="-Dlinux -D_POSIX_SOURCE -D_BSD_SOURCE"
     CDEBUGFLAGS="-O2 -fno-strength-reduce"
-    CPP=`$CC -print-prog-name=cpp`
     ;;
-"FreeBSD"|"NetBSD"|"OpenBSD")
+*-*-freebsd*|*-*-netbsd*|*-*-openbsd*)
     CCOPTIONS="-DCSRG_BASED"
     CDEBUGFLAGS="-O2 -fno-strength-reduce"
-    CPP=`$CC -print-prog-name=cpp`
     ;;
-"BSD/OS")
+*-*-bsdi*)
     CCOPTIONS="-DCSRG_BASED"
     CDEBUGFLAGS="-O2 -fno-strength-reduce"
-    if test -x /usr/bin/cpp; then
-        CPP=/usr/bin/cpp
-    fi
     ;;
-"SunOS")
-    case `uname -r` in
-    4.*)
+*-*-sunos*)
       if test $CC = gcc; then
         CDEBUGFLAGS=-O2
 	CCOPTIONS="-Dsun -Dsparc"
@@ -264,76 +268,53 @@ case $hosttype in
         CDEBUGFLAGS=-O4
         CCOPTIONS=""
       fi
-      CPP=/usr/lib/cpp
       ;;
-    5.*)
+*-*-solaris2.*)
+    # Will 'solaris*' be OK?
       if test $CC = gcc; then
           CDEBUGFLAGS=-O2
           CCOPTIONS="-Dsun -D`uname -p` -DSVR4 -DSYSV"
       else
           CCOPTIONS="-Xc -xF -xcg92 -Dsun -D`uname -p` -DSVR4 -DSYSV"
       fi
-      if test -x /usr/ccs/lib/cpp; then
-          CPP=/usr/ccs/lib/cpp
-      fi
-      ;;
-    *)
-      AC_MSG_WARN("It is not reported if FreeWnn works on this system.  But continuing...")
-      ;;
-    esac
     ;;
-"HP-UX")
+*-*-hpux*)
     if test $CC = gcc; then
         CDEBUGFLAGS=-O2
         CCOPTIONS="-Dhpux -DSYSV"
     else
         CCOPTIONS="-Ae -Dhpux -DSYSV"
     fi
-    case `uname -r` in
-    A.09.*)
-      if test -x /lib/cpp; then
-          CPP=/lib/cpp
-      fi
       ;;
-    B.10.*|B.11.*)
-      if test -x /opt/langtools/lbin/cpp; then
-          CPP=/opt/langtools/lbin/cpp
-      fi
-      ;;
-    *)
-      AC_MSG_WARN("It is not reported if FreeWnn works on this system.  But continuing...")
-      ;;
-    esac
-    ;;
-"BeOS")
-	case `uname -m` in
-    "BePC")
+i[[34567]]86-pc-beos*)
 	  CCOPTIONS="-DBEOS -D_POSIX_SOURCE -D_BSD_SOURCE"
 	  CDEBUGFLAGS="-O2 -fno-strength-reduce"
-	  CPP=`$CC -print-prog-name=cpp`
 	;;
-    "BeBox"|"BeMac")
+powerpc-*-beos*)
 	  CCOPTIONS="-DBEOS -D_POSIX_SOURCE -D_BSD_SOURCE"
-	  NON_GNU_CPP=/boot/apps/GeekGadgets/bin/cpp
 	;;
-    *)
-      { echo "configure: error: "This system is not supported."" 1>&2; exit 1; }
-      ;;
-    esac
-    ;;
-"AIX")
+*-*-aix*)
     if test $CC = gcc; then
       CDEBUGFLAGS=-O2
     else
       CDEBUGFLAGS=-O
     fi
     CCOPTIONS="-DSYSV"
-    CPP=/usr/lib/cpp
     ;;
 *)
     AC_MSG_WARN("It is not reported if FreeWnn works on this system.  But continuing...")
+    AC_MSG_WARN([(It may or may not work if you set CCOPTIONS properly.)])
     ;;
 esac
+
+echo "Set CDEBUGFLAGS and CCOPTIONS to following:"
+echo '  CDEBUGFLAGS="'"$CDEBUGFLAGS"'"'
+echo '    CCOPTIONS="'"$CCOPTIONS"'"'
+
+dnl 自動認識で決定されたくない場合はconfigure時に環境変数CPPを設定せよ。
+dnl この位置ならばまだシステム固有部分でCPPをオーバライドできるが、
+dnl 「CPP=${CPP:-"/usr/ccs/lib/cpp"}」のごとくユーザの意志を尊重した方が
+dnl よいと思われる。
 AC_PROG_CPP
 
 dnl
@@ -344,7 +325,8 @@ dnl ### AC_PROG_LEX
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
-AC_PROG_RANLIB
+AC_PROG_LIBTOOL
+AC_SUBST(LIBTOOL_DEPS)
 AC_SUBST(CCOPTIONS)
 AC_SUBST(CDEBUGFLAGS)
 

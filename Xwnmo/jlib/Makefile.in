@@ -5,8 +5,10 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
+# Copyright FreeWnn Project 2001
 #
 # Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+# Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,10 +25,7 @@
 # Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include @top_srcdir@/makerule.mk
-
-         CC = @CC@
-  CCOPTIONS = @CCOPTIONS@
-CDEBUGFLAGS = @CDEBUGFLAGS@
+top_builddir = ../..
 
 LIB_MT_DEFINES = LibraryMTDefines
 
@@ -35,7 +34,6 @@ LIB_MT_DEFINES = LibraryMTDefines
     JLIBDEFINES = -DWRITE_CHECK
        INCLUDES = -I$(WNNINCLUDESRC) -I$(TOP)
         DEFINES = $(WNNDEFINES) $(ALLLANGDEF) $(JLIBDEFINES)
-   INSTALLFLAGS = $(INSTLIBFLAGS)
        LINTLIBS =
 
 SRC1= js.c 	wnnerrmsg.c 	jl.c

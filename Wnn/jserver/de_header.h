@@ -1,5 +1,5 @@
 /*
- *  $Id: de_header.h,v 1.5 2001-06-14 18:28:53 ura Exp $
+ *  $Id: de_header.h,v 1.6 2001-08-14 13:43:21 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2001
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -29,7 +29,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#define DEMON
+#define DAEMON
 
 #include "jslib.h"
 #include "ddefine.h"
@@ -149,7 +149,7 @@ struct wnn_file
 
 
 /*
-        external variables of demon
+        external variables of daemon
 */
 
 extern char cmd_name[];
@@ -223,7 +223,7 @@ extern int ave_hyouka ();
 extern int cmp_hyouka ();
 /* de.c */
 extern void del_client ();
-extern void demon_fin ();
+extern void daemon_fin ();
 extern char *gets_cur __P ((char *buffer, size_t buffer_size));
 extern w_char *getws_cur __P ((w_char * buffer, size_t buffer_size));
 extern int get2_cur ();

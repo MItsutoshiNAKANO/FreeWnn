@@ -1,3 +1,8 @@
+Tue Aug 14 11:12:34 UTC 2001 Hiroo Ono <hiroo@oikumene.gcd.org>
+	* CPP + IPv6 patch ([freewnn:00673] 濱嶋さん)
+	* configure.in の BeOS 部分の修正。 ([freewnn:00677] 阿部さん)
+	* libtool-1.4 で libtoolize & aclocal やり直し
+
 Sun Jun 17 15:00:08 UTC 2001
 	* 英語 manpage を追加。([freewnn:00542] Francis Bond さん)
 	  atod.man, atof.man, dtoa.man

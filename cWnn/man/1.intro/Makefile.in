@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.6 2001-06-14 17:56:02 ura Exp $
+#   $Id: Makefile.in,v 1.7 2001-08-14 13:43:22 hiroo Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000
+# Copyright FreeWnn Project 1999, 2000, 2001
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -30,8 +30,9 @@
 #
 
 include @top_srcdir@/makerule.mk
+top_builddir = ../../..
 
-INSTALL      = @INSTALL@
+INSTALL      = @INSTALL@ $(INSTALLFLAGS)
 
 MANSUFFIX = 4
 
@@ -43,7 +44,7 @@ install.man:: cst_end.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/cst_end.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) cst_end.man \
+	$(INSTALL) $(INSTMANFLAGS) cst_end.man \
  $(DESTDIR)$(MANDIR)/cst_end.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/cst_end.$(MANSUFFIX)
 
@@ -51,6 +52,6 @@ install.man:: cwnn.man
 	@if [ -d $(DESTDIR)$(MANDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(MANDIR)); fi
 	$(RM) $(DESTDIR)$(MANDIR)/cwnn.$(MANSUFFIX)*
-	$(INSTALL) -c $(INSTMANFLAGS) cwnn.man \
+	$(INSTALL) $(INSTMANFLAGS) cwnn.man \
  $(DESTDIR)$(MANDIR)/cwnn.$(MANSUFFIX)
 	-$(COMPRESSMANCMD) $(DESTDIR)$(MANDIR)/cwnn.$(MANSUFFIX)

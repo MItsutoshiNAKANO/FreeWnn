@@ -3,8 +3,10 @@
 #
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright 1991 by Massachusetts Institute of Technology
+# Copyright FreeWnn Project 2001
 #
 # Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+# Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,8 +23,9 @@
 # Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include @top_srcdir@/makerule.mk
+top_builddir = ../..
 
-   INSTALLFLAGS = $(INSTDATFLAGS)
+INSTALL         = @INSTALL@ $(INSTALLFLAGS)
 
 XWNMOLANGJDS = uumrc.xim 	uumrc_p.xim 	uumrc_z.xim 	uumkey.xim 	uumkey_p.xim
 
@@ -46,7 +49,7 @@ install::  $(XWNMOLANGJDS)
 	@for flag in ${MAKEFLAGS} ''; do \
 	case "$$flag" in *=*) ;; *[i]*) set +e;; esac; done; \
 	for i in  $(XWNMOLANGJDS); do \
-	(set -x; $(INSTALL) $(INSTALLFLAGS) $(INSTDATFLAGS) $$i $(DESTDIR)$(CWNNWNNDIR)); \
+	(set -x; $(INSTALL) $(INSTDATFLAGS) $$i $(DESTDIR)$(CWNNWNNDIR)); \
 	done
 
 install::  $(XWNMOMSGS)
@@ -55,7 +58,7 @@ install::  $(XWNMOMSGS)
 	@for flag in ${MAKEFLAGS} ''; do \
 	case "$$flag" in *=*) ;; *[i]*) set +e;; esac; done; \
 	for i in  $(XWNMOMSGS); do \
-	(set -x; $(INSTALL) $(INSTALLFLAGS) $(INSTDATFLAGS) $$i $(DESTDIR)$(CWNNWNNDIR)); \
+	(set -x; $(INSTALL) $(INSTDATFLAGS) $$i $(DESTDIR)$(CWNNWNNDIR)); \
 	done
 
 depend::
