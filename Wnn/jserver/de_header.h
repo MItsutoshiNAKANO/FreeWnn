@@ -1,5 +1,5 @@
 /*
- *  $Id: de_header.h,v 1.12 2002-06-15 13:02:14 hiroo Exp $
+ *  $Id: de_header.h,v 1.13 2002-07-14 04:12:59 hiroo Exp $
  */
 
 /*
@@ -370,8 +370,8 @@ extern void init_work_areas ();
 extern void make_hinsi_list ();
 extern int hinsi_table_set ();
 /* initjserv.c */
-extern int read_default ();
-extern int read_default_files ();
+extern int read_default (void);
+extern int read_default_files (void);
 /* jbiki.c */
 extern int jishobiki ();
 extern int binary1 ();

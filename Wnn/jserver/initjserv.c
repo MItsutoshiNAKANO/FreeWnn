@@ -1,5 +1,5 @@
 /*
- *  $Id: initjserv.c,v 1.12 2002-06-15 13:02:14 hiroo Exp $
+ *  $Id: initjserv.c,v 1.13 2002-07-14 04:12:59 hiroo Exp $
  */
 
 /*
@@ -63,17 +63,17 @@ struct wnn_param default_para = {
 /* 数字 カナ 英数 記号 閉括弧 付属語 開括弧 */
 };
 
-static int read_default_file (), change_ascii_to_int (), get_bcksla ();
+static int read_default_file (char *buffer, size_t buffer_size);
 #ifndef CHINESE
-static int expand_argument ();
-#endif
+static int expand_argument (unsigned char*);
+static int get_bcksla (char*);
+#endif /* !CHINESE */
 
 static int
-expand_expr (s)
+expand_expr (char *s)
  /**    @LIBDIRの展開(但し、文字列の先頭のみ)。できない時は-1が
         返り、その場合sの中身は着々とそのまんま。sの長さ＜256と仮定してる。*/
  /**    @USR (env名、logname), @LANG の展開 */
-     char *s;
 {
   char tmp[EXPAND_PATH_LENGTH];
   register char *p, *s1;
@@ -141,9 +141,9 @@ expand_expr (s)
   return (noerr ? 0 : -1);
 }
 
-/* daemon initialize routin */
+/* daemon initialize routine */
 int
-read_default ()
+read_default (void)
 {
   FILE *fp, *fopen ();
   char data[EXPAND_PATH_LENGTH];
@@ -195,24 +195,23 @@ read_default ()
         }
       else if (strcmp (code, "def_param") == 0)
         {
-          change_ascii_to_int (s[0], &default_para.n);
-          change_ascii_to_int (s[1], &default_para.nsho);
-          change_ascii_to_int (s[2], &default_para.p1);
-          change_ascii_to_int (s[3], &default_para.p2);
-          change_ascii_to_int (s[4], &default_para.p3);
-          change_ascii_to_int (s[5], &default_para.p4);
-          change_ascii_to_int (s[6], &default_para.p5);
-          change_ascii_to_int (s[7], &default_para.p6);
-          change_ascii_to_int (s[8], &default_para.p7);
-          change_ascii_to_int (s[9], &default_para.p8);
-          change_ascii_to_int (s[10], &default_para.p9);
-
-          change_ascii_to_int (s[11], &default_para.p10);
-          change_ascii_to_int (s[12], &default_para.p11);
-          change_ascii_to_int (s[13], &default_para.p12);
-          change_ascii_to_int (s[14], &default_para.p13);
-          change_ascii_to_int (s[15], &default_para.p14);
-          change_ascii_to_int (s[16], &default_para.p15);
+	  default_para.n    = atoi(s[0]);
+	  default_para.nsho = atoi(s[1]);
+	  default_para.p1   = atoi(s[2]);
+	  default_para.p2   = atoi(s[3]);
+	  default_para.p3   = atoi(s[4]);
+	  default_para.p4   = atoi(s[5]);
+	  default_para.p5   = atoi(s[6]);
+	  default_para.p6   = atoi(s[7]);
+	  default_para.p7   = atoi(s[8]);
+	  default_para.p8   = atoi(s[9]);
+	  default_para.p9   = atoi(s[10]);
+	  default_para.p10  = atoi(s[11]);
+	  default_para.p11  = atoi(s[12]);
+	  default_para.p12  = atoi(s[13]);
+	  default_para.p13  = atoi(s[14]);
+	  default_para.p14  = atoi(s[15]);
+	  default_para.p15  = atoi(s[16]);
 #ifndef CHINESE
         }
       else if (strcmp (code, "set_giji_eisuu") == 0 && num >= 2)
@@ -233,7 +232,7 @@ read_default ()
 }
 
 int
-read_default_files ()
+read_default_files (void)
 {
   FILE *fp, *fopen ();
   char data[256];
@@ -274,9 +273,7 @@ dummy_env()
 */
 
 static int
-read_default_file (buffer, buffer_size)
-     char *buffer;
-     size_t buffer_size;
+read_default_file (char* buffer, size_t buffer_size)
 {
   int fid;
 
@@ -316,56 +313,9 @@ read_default_file (buffer, buffer_size)
   return (fid);
 }
 
-static int
-change_ascii_to_int (st, dp)
-     char *st;
-     int *dp;
-{
-  register int total, flag;
-
-  total = 0;
-  flag = 0;
-  while (*st != '\0')
-    {
-      if (isdigit (*st))
-        {
-          total = total * 10 + (*st - '0');
-        }
-      else if (*st == '+')
-        {
-          if (flag != 0)
-            {
-              return (-1);
-            }
-          flag = 1;
-        }
-      else if (*st == '-')
-        {
-          if (flag != 0)
-            {
-              return (-1);
-            }
-          flag = -1;
-        }
-      else
-        {
-          return (-1);
-        }
-      st++;
-    }
-  if (flag == 0)
-    {
-      flag = 1;
-    }
-  *dp = total * flag;
-  return (1);
-}
-
-
 #ifndef CHINESE
 static int
-expand_argument (st)
-     register unsigned char *st;
+expand_argument (unsigned char *st)
 {
   int num;
 
@@ -406,11 +356,9 @@ expand_argument (st)
       return (atoi (st));
     }
 }
-#endif
 
 static int
-get_bcksla (st)
-     register char *st;
+get_bcksla (char *st)
 {
   int num;
 
@@ -432,7 +380,7 @@ get_bcksla (st)
       return (num);
     case 'd':
     case 'D':
-      return (atoi (*(st + 1)));
+      return (atoi (st + 1));
     case 'o':
     case 'O':
       sscanf (st + 1, "%o", &num);
@@ -440,6 +388,7 @@ get_bcksla (st)
     }
   return (-1);
 }
+#endif /* !CHINESE */
 
 /*
 is_g_digit(c)
