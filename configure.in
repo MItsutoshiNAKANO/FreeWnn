@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.26 2002-05-12 01:01:46 hiroo Exp $
+dnl   $Id: configure.in,v 1.27 2002-06-09 11:08:40 h-abe Exp $
 dnl
 
 dnl
@@ -365,6 +365,7 @@ dnl ### AC_CHECK_LIB(curses, main)
 
 AC_CHECK_LIB(crypt, crypt)
 AC_CHECK_LIB(socket, connect)
+AC_CHECK_LIB(bind, getservbyname)
 AC_CHECK_LIB(nsl, gethostbyname)
 
 dnl
