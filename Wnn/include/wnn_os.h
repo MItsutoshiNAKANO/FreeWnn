@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_os.h,v 1.5 2001-09-16 11:46:54 hiroo Exp $
+ *  $Id: wnn_os.h,v 1.6 2002-03-03 14:06:29 hiroo Exp $
  */
 
 /*
@@ -83,15 +83,5 @@ typedef int intfntype;
 #define SIGNAL_RETURN   return(0)
 #endif
 typedef intfntype (*intfnptr) ();
-
-/* ISO C and K&R compatibility */
-#if !defined(P_)
-# if (defined(__STDC__) && (__STDC__)) || defined(_cplusplus)
-#  define P_(p) p
-# else
-#  define P_(p) ()
-# endif
-#endif
-
 
 #endif  /* WNN_OS_H */

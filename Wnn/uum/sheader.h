@@ -1,5 +1,5 @@
 /*
- *  $Id: sheader.h,v 1.4 2001-09-16 11:42:58 hiroo Exp $
+ *  $Id: sheader.h,v 1.5 2002-03-03 14:06:30 hiroo Exp $
  */
 
 /*
@@ -197,47 +197,47 @@ extern int (*default_code_trans[]) ();
 #include "rk_fundecl.h"
 #include "wnn_string.h"
 
-extern void b_s_off_raw P_((void));
-extern void b_s_on_raw P_((void));
-extern int backward P_((void));
-extern int buffer_in P_((void));
-extern int change_ascii_to_int P_((char*, int*));
+extern void b_s_off_raw (void);
+extern void b_s_on_raw (void);
+extern int backward (void);
+extern int buffer_in (void);
+extern int change_ascii_to_int (char*, int*);
 /* extern int change_mode (); */ /* not used? then remove it. */
-extern void change_to_empty_mode P_((void));
-extern void change_to_insert_mode P_((void));
+extern void change_to_empty_mode (void);
+extern void change_to_insert_mode (void);
 /* extern void chartowchar (); */ /* not used? then remove it. */
 extern void clr_end_screen ();
 extern void clr_line ();
 extern void clr_line_all ();
-extern int connect_jserver P_((int));
+extern int connect_jserver (int);
 extern int convert_getterm ();
 extern int convert_key_setup ();
-extern int cur_ichi P_((int, int));
-extern void cursor_invisible_raw P_((void));
-extern void cursor_normal_raw P_((void));
-extern int dai_end P_((struct wnn_buf *, int));
-extern int dai_top P_((struct wnn_buf *, int));
-extern int dic_nickname P_((int, char*));
-extern int disconnect_jserver P_((void));
-extern int disp_mode P_((void));
-extern void display_henkan_off_mode P_((void));
+extern int cur_ichi (int, int);
+extern void cursor_invisible_raw (void);
+extern void cursor_normal_raw (void);
+extern int dai_end (struct wnn_buf *, int);
+extern int dai_top (struct wnn_buf *, int);
+extern int dic_nickname (int, char*);
+extern int disconnect_jserver (void);
+extern int disp_mode (void);
+extern void display_henkan_off_mode (void);
 /* extern int dup (); */ /* it's from unistd.h */
-extern int empty_modep P_((void));
+extern int empty_modep (void);
 /* extern int endttyent (); */ /* 4.3BSD libc functions in ttyent.h */
-extern void epilogue P_((void));
-extern void epilogue_no_close P_((void));
-extern void err P_((char *));
-extern void errorkeyin P_((void));
-extern int eu_columlen P_((unsigned char *));
-extern int expand_argument P_((char *));
-extern int expand_expr P_((char *));
-extern void fill P_((char *, int));
-extern int find_dic_by_no P_((int));
-extern int find_end_of_tango P_((int));
-extern int find_entry P_((char *));
-extern void flushw_buf P_((void));
-extern int forward_char P_((void));
-extern int backward_char P_((void));
+extern void epilogue (void);
+extern void epilogue_no_close (void);
+extern void err (char *);
+extern void errorkeyin (void);
+extern int eu_columlen (unsigned char *);
+extern int expand_argument (char *);
+extern int expand_expr (char *);
+extern void fill (char *, int);
+extern int find_dic_by_no (int);
+extern int find_end_of_tango (int);
+extern int find_entry (char *);
+extern void flushw_buf (void);
+extern int forward_char (void);
+extern int backward_char (void);
 extern int getTermData ();
 extern void get_end_of_history ();
 extern void getfname ();

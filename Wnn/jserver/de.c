@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.14 2001-09-16 15:57:28 hiroo Exp $
+ *  $Id: de.c,v 1.15 2002-03-03 14:06:30 hiroo Exp $
  */
 
 /*
@@ -187,8 +187,8 @@ static void daemon_main (), sel_all (), new_client (), daemon_init (), socket_in
 void daemon_fin (), daemon_fin_un (), daemon_fin_in (), del_client (), put2_cur (), putc_cur ();
 static int get_client (), rcv_1_client (), socket_accept_un (), socket_accept_in ();
 int get2_cur ();
-static void usage P_((void));
-static void print_version P_((void));
+static void usage (void);
+static void print_version (void);
 #ifdef DEBUG
 static void dmp ();
 #endif
