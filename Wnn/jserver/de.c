@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.25 2002-08-12 16:25:46 hiroo Exp $
+ *  $Id: de.c,v 1.26 2002-08-15 10:31:03 aono Exp $
  */
 
 /*
@@ -493,15 +493,20 @@ del_client ()
 #else
   close (cblk[cur_clp].sd);
 #endif
+  /* logging here because c_c (used in log_debug) will be broken after
+     following section */
+  log_debug("Delete Client: cur_clp = %d\n", cur_clp);
 #ifndef IBM
   cblk[cur_clp] = cblk[clientp - 1];
   client[cur_clp] = client[clientp - 1];
 #else /* !IBM : IBM's compiler could not copy structure. */
   bcopy (&cblk[cur_clp], &cblk[clientp - 1], sizeof (COMS_BLOCK));
-  bcopy (&client[cur_clp], &client[clientp - 1], sizeof (CLINET));
+  bcopy (&client[cur_clp], &client[clientp - 1], sizeof (CLIENT));
 #endif /* !IBM */
+  /* Clear host/user name with zero - needed for logging */
+  client[clientp - 1].user_name[0] = '\0';	/* Should we use bzero()? */
+  client[clientp - 1].host_name[0] = '\0';
   clientp--;
-  error1 ("Delete Client: cur_clp = %d\n", cur_clp);
 }
 
 
