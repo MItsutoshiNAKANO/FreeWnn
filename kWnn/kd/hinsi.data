@@ -1,0 +1,76 @@
+;;;
+;;; $Id: hinsi.data,v 1.1.2.1 1999/02/08 05:42:11 yamasita Exp $
+;;;
+
+; FreeWnn is a network-extensible Kana-to-Kanji conversion system.
+; This file is part of FreeWnn.
+; 
+; Copyright Kyoto University Research Institute for Mathematical Sciences
+;                 1987, 1988, 1989, 1990, 1991, 1992
+; Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
+; Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
+;
+; Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+;
+; This program is free software; you can redistribute it and/or modify
+; it under the terms of the GNU General Public License as published by
+; the Free Software Foundation; either version 2, or (at your option)
+; any later version.
+;
+; This program is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; GNU General Public License for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with GNU Emacs; see the file COPYING.  If not, write to the
+; Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+;
+; Commentary:
+;
+; Change log:
+;
+; Last modified date: 8,Feb.1999
+;
+
+;;;	(Ç°»ç Á¤ÀÇ)		;ù¡ŞòïÒëù
+;;;
+
+;;;
+;;;	Ç°»ç			;ù¡Şò
+;;;
+
+/|ÜÅ÷×Ù£Şò/:Í³êóÙ£Şò/:Ó¤í®:ë÷ŞÄù¡Şò/
+
+ÜÅ÷×Ù£Şò/|Ù£Şò:â¦Şò
+Í³êóÙ£Şò/|ìÑÙ£:ò¢Ù£:ìÑÙ£&ò¢Ù£:Í³êóÙ£Şò
+ë÷ŞÄù¡Şò/|â¦í®:çÈâ¦:ÑÀûÜ:ÇÑ±Û:İ¾áÕåŞ
+
+;;;
+;;;	ë÷ŞÄù¡Şò
+;;;
+
+ğûÓ®	; Ùşï½ğûÓ®	;à»Ôé	;Ùşï½à»Ôé
+â¦í®
+ÇÑ±Û	; Hangul	;katakanago_no
+çÈâ¦
+ÑÀûÜ
+@		;toji_kakko_no
+İ¾áÕåŞ	;ºÎ¼Ó¾î	;fuzokugo_no
+@		;kai_kakko_no
+ë÷ŞÄ		;giji_no
+@
+@
+
+;;;
+;;;	ìéÚõù¡Şò
+;;;
+
+Ù£Şò
+ìÑÙ£
+ò¢Ù£
+ìÑÙ£&ò¢Ù£$ìÑÙ£:ò¢Ù£
+Í³êóÙ£Şò
+â¦Şò
+
+Ó¤í®

@@ -1,0 +1,54 @@
+;
+; $Id: wnnenvrc.rev,v 1.4.2.1 1999/02/08 02:58:27 yamasita Exp $
+;
+
+; FreeWnn is a network-extensible Kana-to-Kanji conversion system.
+; This file is part of FreeWnn.
+; 
+; Copyright Kyoto University Research Institute for Mathematical Sciences
+;                 1987, 1988, 1989, 1990, 1991, 1992
+; Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
+; Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
+;
+; Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+;
+; This program is free software; you can redistribute it and/or modify
+; it under the terms of the GNU General Public License as published by
+; the Free Software Foundation; either version 2, or (at your option)
+; any later version.
+;
+; This program is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; GNU General Public License for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with GNU Emacs; see the file COPYING.  If not, write to the
+; Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+;
+; Commentary:
+;
+; Change log:
+;
+; Last modified date: 8,Feb.1999
+;
+
+confirm1
+setfuzokugo pubdic/full.fzk
+setdic pubdic/kihon.dic !@WNN_DIC_DIR/pubdic/kihon.frq 5 1 0 - - 0
+setdic pubdic/setsuji.dic !@WNN_DIC_DIR/pubdic/setsuji.frq 5 1 0 - - 0
+setdic pubdic/koyuu.dic !@WNN_DIC_DIR/pubdic/koyuu.frq 1 1 0 - - 0
+setdic pubdic/chimei.dic !@WNN_DIC_DIR/pubdic/chimei.frq 1 1 0 - - 0
+setdic pubdic/jinmei.dic !@WNN_DIC_DIR/pubdic/jinmei.frq  1 1 0 - - 0
+setdic pubdic/special.dic !@WNN_DIC_DIR/pubdic/special.frq  5 1 0 - - 0
+setdic pubdic/computer.dic !@WNN_DIC_DIR/pubdic/computer.frq 5 1 0 - - 0
+setdic pubdic/symbol.dic !@WNN_DIC_DIR/pubdic/symbol.frq 1 1 0 - - 0
+setdic pubdic/tankan.dic !@WNN_DIC_DIR/pubdic/tankan.frq  1 1 1 - - 0
+setdic pubdic/bio.dic !@WNN_DIC_DIR/pubdic/bio.frq  1 1 0 - - 0
+setdic !@WNN_DIC_DIR/private - 5 0 0 - - 0
+
+;setdic wnncons/tankan2.dic !@WNN_DIC_DIR/wnncons/tankan2.frq  1 1 1 - - 0
+;setdic wnncons/tankan3.dic !@WNN_DIC_DIR/wnncons/tankan3.frq  1 1 1 - - 0
+
+;;       N nsho hindo len jiri flag jisho sbn dbn_len sbn_cnt suuji kana eisuu kigou toji_kakko fuzokogo kaikakko
+setparam 2 10   2     40  100  200  20    1   40      -40     40    -100 40    80    40         100      40

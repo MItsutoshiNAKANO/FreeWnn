@@ -1,0 +1,155 @@
+#
+# $Id: xj.msg.zh_TW,v 1.2.2.1 1999/02/08 07:43:38 yamasita Exp $
+#
+
+# FreeWnn is a network-extensible Kana-to-Kanji conversion system.
+# This file is part of FreeWnn.
+# 
+# Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
+# Copyright 1991 by Massachusetts Institute of Technology
+#
+# Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Emacs; see the file COPYING.  If not, write to the
+# Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+# Commentary:
+#
+# Change log:
+#
+# Last modified date: 8,Feb.1999
+#
+00	ÏÓÇßÐ©Óò
+01	ÐÂâ¤òÙðå
+02	 ÅäüÏÆüðÂ 
+03	 È¹  Ó÷ 
+04	 Ð©  Ó÷ 
+05	 ÑÒÎû 
+06	ÄâÑÒÎû
+07	¤Ï¤Ë¡´
+08	èÒÈç
+09	Ù¶í°üÈÊÕ
+10	æØÎµÅÆåçí°
+11	ÄÑÅÆåçÎûÞ²ÄËí°
+12	ó¢ÐùûâÔ«
+13	ÄÑÅÆåçÏÛûâÔ«
+14	ÈÜÇ¡ë£ÏÛûâÔ«
+15	Þ²ÏÔËðÆîÎíÎÓûâÔ«
+16	ÇóÌ¨óÀÐ©ÐùûâÔ«
+17	ÄÑÅÆåçÎûâ£ì¤Ô«ûâÔ«
+18	ÄËÅÆåçÏÛûâÔ«
+19	ÄÑÅÆåçí°ûâÔ«
+20	í°ÇóÎûó¢Ðù
+21	ØõÇØÎûó¢Ðù
+22	ÓÁí°Îûó¢Ðù
+23	Ø´æÀÎûó¢Ðù
+24	ÝðÑÄÍ¹Îûó¢Ðù
+25	Ïáúèë£Îûó¢Ðù
+26	âäÑÄÍ¹Îûó¢Ðù
+27	Ü¢ÇãËðÆî
+28	ÅÆåçæØÎµÎÎ¡¤
+29	ÆîÄïÄ½ÅÆåçæØÎµÎÎ ?
+30	Ü¢ÇãÎû
+31	ÑÒ
+32	
+33	ÄïÄ½ÕëÔ· ? 
+34	îùòÓÄ«í°Çó¡¤
+35	îùòÓÄ«ÆßÎûí°Çó¡¤
+36	ÇóÌ¨óô×Ä
+37	ÇóÌ¨Ö¼Øæ
+38	ËðÆî/ÄâËðÆî
+39	ÌÔÅï
+40	òÜðÚ¡£ÇóÌ¨Å´ÄË¡¤
+41	ÇóÌ¨Ä¡ûª
+42	ÇóÌ¨Ä¡Ô¶Ä¾ÊôÈ´¡¤
+43	ËðÆîÄã
+44	ÄãöËÄã
+45	Ïáúèë£üÈÊÕ
+46	îùòÓÄ«Ïáúèë£ÅÆÇµÇØ
+47	ÇóÌ¨ØÑÅû
+48	È¹Ä¡Ô¶
+49	îùòÓÄ«ä»ÎûÇóÌ¨ÇØ
+50	îùòÓÄ«ó¢ÐùÅÆÇµÇØ
+51	îùÑÀÌùÇóÌ¨ÎûóÀÇ¿ÐùÎûí°Çó
+52	ËðÆîÇóÌ¨ÊÕä»èõÈ¢ãÃ?
+53	ËðÆîó¢ÐùÊÕä»èõÈ¢ãÃ?
+54	No.
+55	Type
+56	ÎÃúË
+57	ÅÆÇµÇØ
+58	ó¢ÐùÅÆÇµÇØ
+59	â¤Û¾í°
+60	óÀÇ¿Ðù
+61	Æ«Åèàôòç
+62	ó¢ÐùÆ«ÅèÊÕä»
+63	ËðÆîÄããÃ
+64	àôòçpassword
+65	ó¢ÐùÊÕä»password
+66	 ÊôÈ´¡¤(Ñ«Ä½òÖ?)
+67	Ö¼Øæ
+68	ËðÆî/ÄâËðÆî
+69	óô×Ä
+70	ûôÌ½
+71	ÝÕê¡â¤ë£ÊôÈ´¡¤
+72	×ÍÒÜÎûuumkeyÜ¬Ú¦¡¤
+73	Äâ×äÕ­âä¡¤
+74	ÎûõïÄ¨ÓìÌùåø¡¤
+75	ÏÏßæÅ§¡¡Äâ×ämalloc¡¤
+76	ô¿èºüÈâØ¡ÖHOME¡×Ü¬Ú¦¡¤
+77	ÇóÌ¨
+78	Ö¼Øæ¡¤
+79	ÎûËðÆîÄãÅÏ¡¤
+80	Óìä»ËðÆî¡¤
+81	îùòÓÄ«ÌÔÅï¡¤
+82	ÌÖÌùÊ°È¢ÎûÇóÌ¨ÎûÛ¾ÆøÄâ×äÖ¼Øæ¡¤
+83	Æ·ûôÎûÇóÌ¨ÎûÛ¾ÆøÄâ×äÖ¼Øæ¡¤
+84	¡Ö
+85	¡×Ö¼ØæÄ§¡¤
+86	Æ·ûôÎûó¢ÐùÄâ×äüÈÊÕ¡¤
+87	¡×Óìä»ËðÆî¡¤
+88	¡×ÎûËðÆîÄãÅÏ¡¤
+89	ÌÖÌùÊ°È¢ÇóÌ¨ÎûÛ¾ÆøÎûÌÔÅïÄâ×äüÈÊÕ¡¤
+90	Æ·ûôÇóÌ¨ÎûÛ¾ÆøÎûÌÔÅïÄâ×äüÈÊÕ¡¤
+91	îùòÓÄ«ÌÔÅï¡¤
+92	ÇóÌ¨àôòç
+93	âäÌîàôòç:
+94	àôòçá¸ÊÖ:
+95	ûôÌ½:
+96	ÐÂâ¤:
+97	ÇóÌ¨:
+98	    ÇóÌ¨    
+99	àôòçÆ«×äÊ°È¢ÎûÇóÌ¨Ä¡Ô¶Ä¾ÊôÈ´¡¤
+100	àôòçÓ¶ÞØÏÛÐùâ¾ç´¡¤
+101	×ÍÒÜÎûuumrcÊôÈ´¡¤
+102	ÇóÌ¨ÅÆÇµ
+103	ÊôÈ´¡¤
+104	Þ¶Ðú?(Y/N)
+105	ó¢ÐùÅÆÇµ
+106	ÇóÌ¨ÌÏó¢Ðù
+107	ÎûðìÇÙÍÌÊôÈ´¡¤Ì±É¢?(Y/N)
+108	password_file
+109	Þ¶ÐúÄ§¡¤
+110	directry
+111	çñíºðÂòÙðå
+112	  õïòÙðå
+113	JISÅîî£òÓÄ«
+114	JISîùòÓÄ«Åîî£
+115	Ù´öµòÓÄ«
+116	îùòÓÄ«Ù´öµ
+117	Ù´
+118	Æ·ûôÎûó¢ÐùÄâ×äüÈÊÕ
+119	Ü¢ÇãÎûó¢Ðù
+120	üÈÊÕó¢ÐùÔ«
+121	Þ²ÏÔËðÆîBIT
+122	Ö¼ØæèÒÈç

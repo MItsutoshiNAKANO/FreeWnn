@@ -1,0 +1,166 @@
+XCOMM
+XCOMM $Id: Imakefile,v 1.1.1.1 2000-01-16 05:07:46 ura Exp $
+XCOMM
+
+XCOMM FreeWnn is a network-extensible Kana-to-Kanji conversion system.
+XCOMM This file is part of FreeWnn.
+XCOMM 
+XCOMM Copyright Kyoto University Research Institute for Mathematical Sciences
+XCOMM                 1987, 1988, 1989, 1990, 1991, 1992
+XCOMM Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
+XCOMM Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
+XCOMM
+XCOMM Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+XCOMM
+XCOMM This program is free software; you can redistribute it and/or modify
+XCOMM it under the terms of the GNU General Public License as published by
+XCOMM the Free Software Foundation; either version 2, or (at your option)
+XCOMM any later version.
+XCOMM
+XCOMM This program is distributed in the hope that it will be useful,
+XCOMM but WITHOUT ANY WARRANTY; without even the implied warranty of
+XCOMM MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+XCOMM GNU General Public License for more details.
+XCOMM
+XCOMM You should have received a copy of the GNU General Public License
+XCOMM along with GNU Emacs; see the file COPYING.  If not, write to the
+XCOMM Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+XCOMM
+XCOMM Commentary:
+XCOMM
+XCOMM Change log:
+XCOMM
+XCOMM Last modified date: 8,Feb.1999
+XCOMM
+MANDIR = $(LIBMANDIR)
+MANSUFFIX = $(LIBMANSUFFIX)
+
+all::
+
+depend::
+
+#if ExpandManNames
+InstallManPageLong(access,$(MANDIR),js_access)
+InstallManPageLong(close,$(MANDIR),js_close)
+InstallManPageLong(connect,$(MANDIR),js_connect)
+InstallManPageLong(dic_add,$(MANDIR),js_dic_add)
+InstallManPageLong(dic_cr,$(MANDIR),js_dic_file_create)
+InstallManPageLong(dic_cr_cl,$(MANDIR),js_dic_file_create_client)
+InstallManPageLong(dic_del,$(MANDIR),js_dic_delete)
+InstallManPageLong(dic_info,$(MANDIR),js_dic_info)
+InstallManPageLong(dic_lst,$(MANDIR),js_dic_list)
+InstallManPageLong(dic_lst_a,$(MANDIR),js_dic_list_all)
+InstallManPageLong(dic_use,$(MANDIR),js_dic_use)
+InstallManPageLong(disconn,$(MANDIR),js_disconnect)
+InstallManPageLong(env_exist,$(MANDIR),js_env_exist)
+InstallManPageLong(env_list,$(MANDIR),js_env_list)
+InstallManPageLong(env_stick,$(MANDIR),js_env_sticky)
+InstallManPageAliases(js_env_sticky,$(MANDIR),js_env_un_sticky)
+InstallManPageLong(fl_com_s,$(MANDIR),js_file_comment_set)
+InstallManPageLong(fl_disc,$(MANDIR),js_file_discard)
+InstallManPageLong(fl_info,$(MANDIR),js_file_info)
+InstallManPageLong(fl_list,$(MANDIR),js_file_list)
+InstallManPageLong(fl_list_a,$(MANDIR),js_file_list_all)
+InstallManPageLong(fl_load,$(MANDIR),js_file_loaded)
+InstallManPageLong(fl_load_l,$(MANDIR),js_file_loaded_local)
+InstallManPageLong(fl_pswd_s,$(MANDIR),js_file_password_set)
+InstallManPageLong(fl_read,$(MANDIR),js_file_read)
+InstallManPageLong(fl_recv,$(MANDIR),js_file_receive)
+InstallManPageLong(fl_rm,$(MANDIR),js_file_remove)
+InstallManPageLong(fl_rm_cl,$(MANDIR),js_file_remove_client)
+InstallManPageLong(fl_snd,$(MANDIR),js_file_send)
+InstallManPageLong(fl_stat,$(MANDIR),js_file_stat)
+InstallManPageLong(fl_wrt,$(MANDIR),js_file_write)
+InstallManPageLong(fuz_get,$(MANDIR),js_fuzokugo_get)
+InstallManPageLong(fuz_set,$(MANDIR),js_fuzokugo_set)
+InstallManPageLong(hd_cr,$(MANDIR),js_hindo_file_create)
+InstallManPageLong(hd_cr_cl,$(MANDIR),js_hindo_file_create_client)
+InstallManPageLong(hindo_set,$(MANDIR),js_hindo_set)
+InstallManPageLong(hinsi_dct,$(MANDIR),js_hinsi_dicts)
+InstallManPageLong(hinsi_lst,$(MANDIR),js_hinsi_list)
+InstallManPageLong(hinsi_nm,$(MANDIR),js_hinsi_name)
+InstallManPageLong(hinsi_num,$(MANDIR),js_hinsi_number)
+InstallManPageLong(hinsi_t_s,$(MANDIR),js_hinsi_table_set)
+InstallManPageLong(isconnect,$(MANDIR),js_isconnect)
+InstallManPageLong(kanren,$(MANDIR),js_kanren)
+InstallManPageLong(kantan_d,$(MANDIR),js_kantan_dai)
+InstallManPageLong(kantan_s,$(MANDIR),js_kantan_sho)
+InstallManPageLong(kanzen_d,$(MANDIR),js_kanzen_dai)
+InstallManPageLong(kanzen_s,$(MANDIR),js_kanzen_sho)
+InstallManPageLong(kill,$(MANDIR),js_kill)
+InstallManPageLong(mkdir,$(MANDIR),js_mkdir)
+InstallManPageLong(open,$(MANDIR),js_open)
+InstallManPageLong(open_lang,$(MANDIR),js_open_lang)
+InstallManPageLong(param_get,$(MANDIR),js_param_get)
+InstallManPageAliases(js_param_get,$(MANDIR),js_param_set)
+InstallManPageLong(set_lang,$(MANDIR),js_set_lang)
+InstallManPageAliases(js_set_lang,$(MANDIR),js_get_lang)
+InstallManPageLong(version,$(MANDIR),js_version)
+InstallManPageLong(who,$(MANDIR),js_who)
+InstallManPageLong(word_add,$(MANDIR),js_word_add)
+InstallManPageLong(word_cm_s,$(MANDIR),js_word_comment_set)
+InstallManPageLong(word_del,$(MANDIR),js_word_delete)
+InstallManPageLong(word_info,$(MANDIR),js_word_info)
+InstallManPageLong(word_srch,$(MANDIR),js_word_search)
+InstallManPageAliases(js_word_search,$(MANDIR),js_word_search_by_env)
+#else
+InstallManPage(access,$(MANDIR))
+InstallManPage(close,$(MANDIR))
+InstallManPage(connect,$(MANDIR))
+InstallManPage(dic_add,$(MANDIR))
+InstallManPage(dic_cr,$(MANDIR))
+InstallManPage(dic_cr_cl,$(MANDIR))
+InstallManPage(dic_del,$(MANDIR))
+InstallManPage(dic_info,$(MANDIR))
+InstallManPage(dic_lst,$(MANDIR))
+InstallManPage(dic_lst_a,$(MANDIR))
+InstallManPage(dic_use,$(MANDIR))
+InstallManPage(disconn,$(MANDIR))
+InstallManPage(env_exist,$(MANDIR))
+InstallManPage(env_list,$(MANDIR))
+InstallManPage(env_stick,$(MANDIR))
+InstallManPage(fl_com_s,$(MANDIR))
+InstallManPage(fl_disc,$(MANDIR))
+InstallManPage(fl_info,$(MANDIR))
+InstallManPage(fl_list,$(MANDIR))
+InstallManPage(fl_list_a,$(MANDIR))
+InstallManPage(fl_load,$(MANDIR))
+InstallManPage(fl_load_l,$(MANDIR))
+InstallManPage(fl_pswd_s,$(MANDIR))
+InstallManPage(fl_read,$(MANDIR))
+InstallManPage(fl_recv,$(MANDIR))
+InstallManPage(fl_rm,$(MANDIR))
+InstallManPage(fl_rm_cl,$(MANDIR))
+InstallManPage(fl_snd,$(MANDIR))
+InstallManPage(fl_stat,$(MANDIR))
+InstallManPage(fl_wrt,$(MANDIR))
+InstallManPage(fuz_get,$(MANDIR))
+InstallManPage(fuz_set,$(MANDIR))
+InstallManPage(hd_cr,$(MANDIR))
+InstallManPage(hd_cr_cl,$(MANDIR))
+InstallManPage(hindo_set,$(MANDIR))
+InstallManPage(hinsi_dct,$(MANDIR))
+InstallManPage(hinsi_lst,$(MANDIR))
+InstallManPage(hinsi_nm,$(MANDIR))
+InstallManPage(hinsi_num,$(MANDIR))
+InstallManPage(hinsi_t_s,$(MANDIR))
+InstallManPage(isconnect,$(MANDIR))
+InstallManPage(kanren,$(MANDIR))
+InstallManPage(kantan_d,$(MANDIR))
+InstallManPage(kantan_s,$(MANDIR))
+InstallManPage(kanzen_d,$(MANDIR))
+InstallManPage(kanzen_s,$(MANDIR))
+InstallManPage(kill,$(MANDIR))
+InstallManPage(mkdir,$(MANDIR))
+InstallManPage(open,$(MANDIR))
+InstallManPage(open_lang,$(MANDIR))
+InstallManPage(param_get,$(MANDIR))
+InstallManPage(set_lang,$(MANDIR))
+InstallManPage(version,$(MANDIR))
+InstallManPage(who,$(MANDIR))
+InstallManPage(word_add,$(MANDIR))
+InstallManPage(word_cm_s,$(MANDIR))
+InstallManPage(word_del,$(MANDIR))
+InstallManPage(word_info,$(MANDIR))
+InstallManPage(word_srch,$(MANDIR))
+#endif

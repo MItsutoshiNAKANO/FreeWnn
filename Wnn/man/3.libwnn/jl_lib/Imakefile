@@ -1,0 +1,170 @@
+XCOMM
+XCOMM $Id: Imakefile,v 1.1.1.1 2000-01-16 05:07:46 ura Exp $
+XCOMM
+
+XCOMM FreeWnn is a network-extensible Kana-to-Kanji conversion system.
+XCOMM This file is part of FreeWnn.
+XCOMM 
+XCOMM Copyright Kyoto University Research Institute for Mathematical Sciences
+XCOMM                 1987, 1988, 1989, 1990, 1991, 1992
+XCOMM Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
+XCOMM Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
+XCOMM
+XCOMM Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+XCOMM
+XCOMM This program is free software; you can redistribute it and/or modify
+XCOMM it under the terms of the GNU General Public License as published by
+XCOMM the Free Software Foundation; either version 2, or (at your option)
+XCOMM any later version.
+XCOMM
+XCOMM This program is distributed in the hope that it will be useful,
+XCOMM but WITHOUT ANY WARRANTY; without even the implied warranty of
+XCOMM MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+XCOMM GNU General Public License for more details.
+XCOMM
+XCOMM You should have received a copy of the GNU General Public License
+XCOMM along with GNU Emacs; see the file COPYING.  If not, write to the
+XCOMM Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+XCOMM
+XCOMM Commentary:
+XCOMM
+XCOMM Change log:
+XCOMM
+XCOMM Last modified date: 8,Feb.1999
+XCOMM
+MANDIR = $(LIBMANDIR)
+MANSUFFIX = $(LIBMANSUFFIX)
+
+all::
+
+depend::
+
+#if ExpandManNames
+InstallManPageLong(bun_suu,$(MANDIR),jl_bun_suu)
+InstallManPageLong(c_zenko,$(MANDIR),jl_c_zenkouho)
+InstallManPageLong(close,$(MANDIR),jl_close)
+InstallManPageLong(connect,$(MANDIR),jl_connect)
+InstallManPageLong(connect_l,$(MANDIR),jl_connect_lang)
+InstallManPageLong(dai_top,$(MANDIR),jl_dai_top)
+InstallManPageLong(dic_add,$(MANDIR),jl_dic_add)
+InstallManPageAliases(jl_dic_add,$(MANDIR),jl_dic_add_e)
+InstallManPageLong(dic_com_s,$(MANDIR),jl_dic_comment_set)
+InstallManPageAliases(jl_dic_comment_set,$(MANDIR),jl_dic_comment_set_e)
+InstallManPageLong(dic_del,$(MANDIR),jl_dic_delete)
+InstallManPageAliases(jl_dic_delete,$(MANDIR),jl_dic_delete_e)
+InstallManPageLong(dic_list,$(MANDIR),jl_dic_list)
+InstallManPageAliases(jl_dic_list,$(MANDIR),jl_dic_list_e)
+InstallManPageLong(dic_save,$(MANDIR),jl_dic_save)
+InstallManPageAliases(jl_dic_save,$(MANDIR),jl_dic_save_e jl_dic_save_all jl_dic_save_all_e)
+InstallManPageLong(dic_use,$(MANDIR),jl_dic_use)
+InstallManPageAliases(jl_dic_use,$(MANDIR),jl_dic_use_e)
+InstallManPageLong(disconn,$(MANDIR),jl_disconnect)
+InstallManPageLong(env,$(MANDIR),jl_env)
+InstallManPageLong(env_set,$(MANDIR),jl_env_get)
+InstallManPageAliases(jl_env_get,$(MANDIR),jl_env_set)
+InstallManPageLong(env_stick,$(MANDIR),jl_env_sticky)
+InstallManPageAliases(jl_env_sticky,$(MANDIR),jl_env_sticky_e jl_env_un_sticky jl_env_un_sticky_e)
+InstallManPageLong(fuz_get,$(MANDIR),jl_fuzokugo_get)
+InstallManPageAliases(jl_fuzokugo_get,$(MANDIR),jl_fuzokugo_get_e)
+InstallManPageLong(fuz_set,$(MANDIR),jl_fuzokugo_set)
+InstallManPageAliases(jl_fuzokugo_set,$(MANDIR),jl_fuzokugo_set_e)
+InstallManPageLong(get_kanji,$(MANDIR),jl_get_kanji)
+InstallManPageAliases(jl_get_kanji,$(MANDIR),jl_get_yomi)
+InstallManPageLong(get_zen_k,$(MANDIR),jl_get_zenkouho_kanji)
+InstallManPageLong(hinsi_dct,$(MANDIR),jl_hinsi_dicts)
+InstallManPageAliases(jl_hinsi_dicts,$(MANDIR),jl_hinsi_dicts_e)
+InstallManPageLong(hinsi_lst,$(MANDIR),jl_hinsi_list)
+InstallManPageAliases(jl_hinsi_list,$(MANDIR),jl_hinsi_list_e)
+InstallManPageLong(hinsi_nm,$(MANDIR),jl_hinsi_name)
+InstallManPageAliases(jl_hinsi_name,$(MANDIR),jl_hinsi_name_e)
+InstallManPageLong(hinsi_num,$(MANDIR),jl_hinsi_number)
+InstallManPageAliases(jl_hinsi_number,$(MANDIR),jl_hinsi_number_e)
+InstallManPageLong(inspect,$(MANDIR),jl_inspect)
+InstallManPageLong(isconnect,$(MANDIR),jl_isconnect)
+InstallManPageAliases(jl_isconnect,$(MANDIR),jl_isconnect_e)
+InstallManPageLong(jiri_len,$(MANDIR),jl_jiri_len)
+InstallManPageLong(kanji_len,$(MANDIR),jl_kanji_len)
+InstallManPageAliases(jl_kanji_len,$(MANDIR),jl_yomi_len)
+InstallManPageLong(kill,$(MANDIR),jl_kill)
+InstallManPageLong(next,$(MANDIR),jl_next)
+InstallManPageAliases(jl_next,$(MANDIR),jl_previous jl_next_dai jl_previous_dai)
+InstallManPageLong(nobi_conv,$(MANDIR),jl_nobi_conv)
+InstallManPageLong(open,$(MANDIR),jl_open)
+InstallManPageLong(open_lang,$(MANDIR),jl_open_lang)
+InstallManPageLong(param_get,$(MANDIR),jl_param_get)
+InstallManPageAliases(jl_param_get,$(MANDIR),jl_param_get_e jl_param_set jl_param_set_e)
+InstallManPageLong(ren_conv,$(MANDIR),jl_ren_conv)
+InstallManPageLong(set_env_w,$(MANDIR),jl_set_env_wnnrc)
+InstallManPageLong(set_jikou,$(MANDIR),jl_set_jikouho)
+InstallManPageAliases(jl_set_jikouho,$(MANDIR),jl_set_jikouho_dai)
+InstallManPageLong(tan_conv,$(MANDIR),jl_tan_conv)
+InstallManPageLong(update_hd,$(MANDIR),jl_update_hindo)
+InstallManPageLong(word_add,$(MANDIR),jl_word_add)
+InstallManPageAliases(jl_word_add,$(MANDIR),jl_word_add_e)
+InstallManPageLong(word_cm_s,$(MANDIR),jl_word_comment_set)
+InstallManPageAliases(jl_word_comment_set,$(MANDIR),jl_word_comment_set_e)
+InstallManPageLong(word_del,$(MANDIR),jl_word_delete)
+InstallManPageAliases(jl_word_delete,$(MANDIR),jl_word_delete_e)
+InstallManPageLong(word_info,$(MANDIR),jl_word_info)
+InstallManPageAliases(jl_word_info,$(MANDIR),jl_word_info_e)
+InstallManPageLong(word_srch,$(MANDIR),jl_word_search)
+InstallManPageAliases(jl_word_search,$(MANDIR),jl_word_search_e jl_word_search_by_env jl_word_search_by_env_e)
+InstallManPageLong(word_use,$(MANDIR),jl_word_use)
+InstallManPageAliases(jl_word_use,$(MANDIR),jl_word_use_e)
+InstallManPageLong(zenko,$(MANDIR),jl_zenkouho)
+InstallManPageLong(zenko_bun,$(MANDIR),jl_zenkouho_bun)
+InstallManPageLong(zenko_da,$(MANDIR),jl_zenkouho_dai)
+InstallManPageLong(zenko_dap,$(MANDIR),jl_zenkouho_daip)
+InstallManPageLong(zenko_suu,$(MANDIR),jl_zenkouho_suu)
+#else
+InstallManPage(bun_suu,$(MANDIR))
+InstallManPage(c_zenko,$(MANDIR))
+InstallManPage(close,$(MANDIR))
+InstallManPage(connect,$(MANDIR))
+InstallManPage(connect_l,$(MANDIR))
+InstallManPage(dai_top,$(MANDIR))
+InstallManPage(dic_add,$(MANDIR))
+InstallManPage(dic_com_s,$(MANDIR))
+InstallManPage(dic_del,$(MANDIR))
+InstallManPage(dic_list,$(MANDIR))
+InstallManPage(dic_save,$(MANDIR))
+InstallManPage(dic_use,$(MANDIR))
+InstallManPage(disconn,$(MANDIR))
+InstallManPage(env,$(MANDIR))
+InstallManPage(env_set,$(MANDIR))
+InstallManPage(env_stick,$(MANDIR))
+InstallManPage(fuz_get,$(MANDIR))
+InstallManPage(fuz_set,$(MANDIR))
+InstallManPage(get_kanji,$(MANDIR))
+InstallManPage(get_zen_k,$(MANDIR))
+InstallManPage(hinsi_dct,$(MANDIR))
+InstallManPage(hinsi_lst,$(MANDIR))
+InstallManPage(hinsi_nm,$(MANDIR))
+InstallManPage(hinsi_num,$(MANDIR))
+InstallManPage(inspect,$(MANDIR))
+InstallManPage(isconnect,$(MANDIR))
+InstallManPage(jiri_len,$(MANDIR))
+InstallManPage(kanji_len,$(MANDIR))
+InstallManPage(kill,$(MANDIR))
+InstallManPage(next,$(MANDIR))
+InstallManPage(nobi_conv,$(MANDIR))
+InstallManPage(open,$(MANDIR))
+InstallManPage(open_lang,$(MANDIR))
+InstallManPage(param_get,$(MANDIR))
+InstallManPage(ren_conv,$(MANDIR))
+InstallManPage(set_env_w,$(MANDIR))
+InstallManPage(set_jikou,$(MANDIR))
+InstallManPage(tan_conv,$(MANDIR))
+InstallManPage(update_hd,$(MANDIR))
+InstallManPage(word_add,$(MANDIR))
+InstallManPage(word_cm_s,$(MANDIR))
+InstallManPage(word_del,$(MANDIR))
+InstallManPage(word_info,$(MANDIR))
+InstallManPage(word_srch,$(MANDIR))
+InstallManPage(word_use,$(MANDIR))
+InstallManPage(zenko,$(MANDIR))
+InstallManPage(zenko_bun,$(MANDIR))
+InstallManPage(zenko_da,$(MANDIR))
+InstallManPage(zenko_dap,$(MANDIR))
+InstallManPage(zenko_suu,$(MANDIR))
+#endif
