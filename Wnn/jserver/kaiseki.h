@@ -1,5 +1,5 @@
 /*
- *  $Id: kaiseki.h,v 1.3 2001-06-14 18:16:02 ura Exp $
+ *  $Id: kaiseki.h,v 1.3.2.1 2001-07-08 06:39:08 iwao Exp $
  */
 
 /*
@@ -161,17 +161,6 @@ extern struct jdata ***jmtp;
 /********************************
  *      µ¿»÷¼«Î©¸ì¤ÎÉÊ»ì        *
  ********************************/
-#ifdef  nodef
-extern int sentou_no;
-extern int suuji_no;
-extern int katakanago_no;
-extern int eisuu_no;
-extern int kigou_no;
-extern int toji_kakko_no;
-extern int fuzokugo_no;
-extern int kai_kakko_no;
-extern int giji_no;
-#endif /* nodef */
 
 #define sentou_no       0
 #define suuji_no        1

@@ -1,5 +1,5 @@
 /*
- *  $Id: initjserv.c,v 1.7 2001-06-18 09:09:42 ura Exp $
+ *  $Id: initjserv.c,v 1.7.2.1 2001-07-08 06:39:08 iwao Exp $
  */
 
 /*
@@ -165,13 +165,7 @@ read_default ()
       num = sscanf (data,
                     "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s",
                     code, s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7], s[8], s[9], s[10], s[11], s[12], s[13], s[14], s[15], s[16], s[17], s[18], s[19]);
-/*
-        if(strcmp(code, "jt_len") == 0){
-            jt_len = atoi(s[0]);
-        }else if(strcmp(code, "hjt_len") == 0){
-            hjt_len = atoi(s[0]);
-        }
-*/
+
       if (strcmp (code, "max_client") == 0)
         {
           sscanf (data, "%s %d ", code, &max_client);
@@ -258,17 +252,6 @@ read_default_files ()
 
   return (0);
 }
-
-/*
-dummy_env()
-{
-    int i = 0;
-    struct cnv_env *ne;
-
-    if((ne= (struct cnv_env *)malloc(sizeof(struct cnv_env)))==0) return -1;
-    env[i]=ne; new_env(i,"dummy_env");
-}
-*/
 
 static int
 read_default_file (buffer, buffer_size)
@@ -438,22 +421,3 @@ get_bcksla (st)
   return (-1);
 }
 
-/*
-is_g_digit(c)
-w_char c;
-{
-    register int i;
-
-    if (isascii(c) && isdigit(c) || isjdigit(c)) {
-        return(YES);
-    } else {
-        for (i = 0; i < MAX_GIJI_CHAR; i++) {
-            if (giji_digit[i] == 0xffff)
-                return (NO);
-            else if (giji_digit[i] == c)
-                return(YES);
-        }
-    }
-    return(NO);
-}
-*/

@@ -1,5 +1,5 @@
 /*
- *  $Id: do_env.c,v 1.5 2001-06-14 18:28:54 ura Exp $
+ *  $Id: do_env.c,v 1.5.2.1 2001-07-08 06:39:08 iwao Exp $
  */
 
 /*
@@ -65,12 +65,7 @@ js_open ()
   gets_cur (tmp_buf, WNN_ENVNAME_LEN);
   strcpy (c_c->user_name, tmp_buf);
   error1 ("Inet user=%s@%s\n", c_c->user_name, c_c->host_name);
-  /* Moved to new_client, because del_client() will be called
-     by longjmp before this initialization. By Kuwari
-     for(i=0;i<WNN_MAX_ENV_OF_A_CLIENT;i++){
-     (c_c->env)[i]= -1;
-     }
-   */
+
   if (version != JLIB_VERSION)
     {
       wnn_errorno = WNN_BAD_VERSION;

@@ -1,5 +1,5 @@
 /*
- *  $Id: ddefine.h,v 1.4 2001-06-14 18:16:00 ura Exp $
+ *  $Id: ddefine.h,v 1.4.2.1 2001-07-08 06:39:08 iwao Exp $
  */
 
 /*
@@ -42,13 +42,6 @@
 #define KANGO_VECT_L (KANGO_HINSI_MX+8*4-1)/(8*4)       /* 幹語接続ベクタの長さ */
 #define FZKVECT_L       5       /* 付属語ベクタの長さ */
 #define VECT_L  KANGO_VECT_L + FZKVECT_L        /* 接続ベクタの長さ */
-#ifdef nodef                    /* This define doesn't need anymore, KUWARI */
-#ifdef  CHINESE
-#define KANGO_VECT_KOSUU        256     /* 幹語接続ベクタの最大数 */
-#else
-#define KANGO_VECT_KOSUU        20      /* 幹語接続ベクタの最大数 */
-#endif /* CHINESE */
-#endif /* nodef */
 
 struct fzkkouho
 {                               /* used in reffering to fuzokugo jouhou 
@@ -98,12 +91,7 @@ struct ICHBNP
 #define E_PAREN         0xa1db  /* 】 */
 # endif
 #endif /* CHINESE */
-/*
-#define isdigit(x)      ((unsigned)((x) - '0') <= ('9' - '0'))
-#define isalpha(x)      ((unsigned)((x) - 'A') <= ('Z' - 'A') || \
-                            (unsigned)((x) - 'a') <= ('z' - 'a'))
-#define isalnum(x)      (isalpha(x) || isdigit(x))
-*/
+
 #ifdef  isspace
 #       undef   isspace         /* ctype.h の isspace() は使わない */
 #endif
@@ -279,27 +267,6 @@ struct DSD_DBN
                                    DSD_SBNは、*sbn から sbncnt だけある */
   int v_jc;                     /* 大文節の評価値 */
 };
-
-#ifdef  nodef                   /* move to jslib.h */
-/* 疑似文節の直前に選択した候補 */
-#define HIRAGANA        -1      /* ひらがな */  /* 読みのまま */
-#define KATAKANA        -11     /* カタカナ */
-/* 数字 */
-#define NUM_HAN         -2      /* 半角数字 */  /* 読みのまま */
-#define NUM_ZEN         -12     /* 全角数字 */  /* １２３ */
-#define NUM_KAN         -13     /* 漢数字 */    /* 一二三 */
-#define NUM_KANSUUJI    -15     /* 漢数字 */    /* 百二十三 */
-#define NUM_KANOLD      -16     /* 漢数字 */    /* 壱百弐拾参 */
-#define NUM_HANCAN      -17     /* 半角数字 */  /* 1,234 */
-#define NUM_ZENCAN      -18     /* 全角数字 */  /* １，２３４ */
-/* 英数 */
-#define ALP_HAN         -4      /* 半角 */      /* 読みのまま */
-#define ALP_ZEN         -30     /* 全角 */
-/* 記号 */
-#define KIG_HAN         -5      /* 半角 */      /* 読みのまま */
-#define KIG_JIS         -40     /* 全角(JIS) */
-#define KIG_ASC         -41     /* 全角(ASC) */
-#endif
 
 #define YES             1
 #define NO              0

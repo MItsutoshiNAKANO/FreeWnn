@@ -1,5 +1,5 @@
 /*
- *  $Id: sstrings.c,v 1.3 2001-06-14 18:15:55 ura Exp $
+ *  $Id: sstrings.c,v 1.3.2.1 2001-07-08 06:39:08 iwao Exp $
  */
 
 /*
@@ -61,28 +61,6 @@ wnn_Sstrcpy (w, c)
   w[ret] = (w_char) 0;
   return (ret);
 }
-
-#ifdef nodef
-char *
-wnn_Stos (c)
-     w_char *c;
-{
-  char *c1 = (char *) c;
-  for (; *c; c++)
-    {
-      if (ASCIIP (*c))
-        {
-          *c1++ = *c;
-        }
-      else
-        {
-          *c1++ = (*c << 8);
-          *c1++ = *c;
-        }
-    }
-  return ((char *) c);
-}
-#endif
 
 char *
 wnn_sStrncpy (s1, s2, n)

@@ -1,5 +1,5 @@
 /*
- *  $Id: do_filecom.c,v 1.5 2001-06-18 09:09:41 ura Exp $
+ *  $Id: do_filecom.c,v 1.5.2.1 2001-07-08 06:39:08 iwao Exp $
  */
 
 /*
@@ -68,8 +68,6 @@ file_init ()
 /*      mkdir   */
 
 #define MODE (0000000 | 0000777)
-/* #define      MODE (0040000 | 0000731) */
-/* #define      MODE (0000000 | 0000733) */
 
 void
 js_mkdir ()
@@ -558,10 +556,6 @@ file_loaded_local ()
       fq.createhost[i] = getc_cur ();
     }
 
-/*
-fprintf(stderr,"js_file_loaded:ti=%x,dev=%x,inode=%x,%s\n",
-        fq.time,fq.dev,fq.inode,fq.createhost);
-*/
   x = find_file_by_uniq (&fq);
   if (x == -1)
     put4_cur (-1);

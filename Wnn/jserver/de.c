@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.11 2001-06-18 09:09:40 ura Exp $
+ *  $Id: de.c,v 1.11.2.1 2001-07-08 06:39:08 iwao Exp $
  */
 
 /*
@@ -47,7 +47,6 @@
 
 #include <ctype.h>
 #include <errno.h>
-extern int errno;               /* Pure BSD */
 
 #include <sys/ioctl.h>
 
@@ -119,6 +118,26 @@ static int sock_d_in;                   /**     ソケットのfd    **/
 
 static int port;
 static int serverNO = 0;
+
+char SER_VERSION[] = _SERVER_VERSION;
+
+int max_client = CL_MAX;
+CLIENT *client;                 /* ask about Mr. Takeoka */
+CLIENT *c_c;                /* this means current client */
+int cur_client;
+int clientp;
+
+int max_sticky_env = ST_MAX;
+struct cnv_env *c_env;          /* current env  */
+
+int wnn_errorno = 0;
+int noisy;
+
+char jserver_dir[128];
+char jserverrcfile[128];
+
+char *hinsi_file_name = NULL;
+char lang_dir[128];
 
 struct cmblk
 {
@@ -1018,29 +1037,6 @@ dmp (p, n)
     }
 }
 
-int
-niide (x)                       /* おまけだよ。niide(3);とコールしてね */
-     int x;
-{
-  switch (x)
-    {
-    case 0:
-      return 1;
-    case 1:
-      fprintf (stderr, "ゲッターロボは");
-      break;
-    case 2:
-      fprintf (stderr, "ゴレンジャーは");
-      break;
-    case 3:
-      fprintf (stderr, "ロードランナーシリーズは");
-      break;
-    default:
-      return x * niide (x - 1);
-    }
-  fprintf (stderr, "良い番組だ by 新出。\n");
-  return x * niide (x - 1);
-}
 #endif
 
 static void
@@ -1149,3 +1145,4 @@ usage ()
 	  cmd_name);
   exit (1);
 }
+

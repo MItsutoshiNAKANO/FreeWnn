@@ -1,5 +1,5 @@
 /*
- *  $Id: jikouho_d.c,v 1.3 2001-06-14 18:16:02 ura Exp $
+ *  $Id: jikouho_d.c,v 1.3.2.1 2001-07-08 06:39:08 iwao Exp $
  */
 
 /*
@@ -275,41 +275,6 @@ get_jkt_status (kangovect, beginvect, fzkchar, status)
 #endif /* NO_FZK */
                       status));
 }
-
-/*
-int
-get_dsd_status(kangovect, beginvect, fzkchar, status)
-int     kangovect;
-int     beginvect;
-w_char  *fzkchar;
-int     *status;
-{
-    if (zentan_able(kangovect, beginvect, fzkchar) == YES) {
-        if (beginvect == WNN_ALL_HINSI) {
-            if (kan_ckvt(sentou_no, kangovect) == WNN_CONNECT_BK) {
-                *status = WNN_SENTOU;
-            } else {
-                *status = WNN_NOT_CONNECT;
-                return (-1);
-            }
-        } else if (beginvect == WNN_BUN_SENTOU) {
-                *status = WNN_SENTOU;
-        } else {
-            if ((fzkchar == NULL || *fzkchar == NULL) && beginvect == sentou_no)
-                *status = WNN_SENTOU;
-            else
-                *status = WNN_CONNECT;
-                return (1);
-        }
-    } else if (kan_ckvt(sentou_no, kangovect) == WNN_CONNECT_BK) {
-            sb_one->status = WNN_SENTOU;
-    } else {
-            *status = WNN_NOT_CONNECT;
-            return (-1);
-    }
-    return(0);
-}
-*/
 
 /* 小文節の並び替え 長さとベクタでソートする */
 /* que の先頭を返す */

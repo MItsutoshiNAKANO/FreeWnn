@@ -1,5 +1,5 @@
 /*
- *  $Id: fzk.c,v 1.4 2001-06-14 18:16:01 ura Exp $
+ *  $Id: fzk.c,v 1.4.2.1 2001-07-08 06:39:08 iwao Exp $
  */
 
 /*
@@ -280,66 +280,9 @@ fzk_ld (fp)
       return (NULL);
     }
 
-  /* 疑似品詞番号を調べる */
-#ifdef  nodef
-  if ((sentou_no = wnn_find_hinsi_by_name (WNN_SENTOU_MEI)) == -1)
-    {
-      giji_hinsi_err (WNN_SENTOU_MEI);
-      return (NULL);
-    }
-  if ((suuji_no = wnn_find_hinsi_by_name (WNN_SUUJI_MEI)) == -1)
-    {
-      giji_hinsi_err ("SENTOU");
-      return (NULL);
-    }
-  if ((katakanago_no = wnn_find_hinsi_by_name (WNN_KANA_MEI)) == -1)
-    {
-      giji_hinsi_err ("KANA");
-      return (NULL);
-    }
-  if ((eisuu_no = wnn_find_hinsi_by_name (WNN_EISUU_MEI)) == -1)
-    {
-      giji_hinsi_err ("EISUU");
-      return (NULL);
-    }
-  if ((kigou_no = wnn_find_hinsi_by_name (WNN_KIGOU_MEI)) == -1)
-    {
-      giji_hinsi_err ("KIGOU");
-      return (NULL);
-    }
-  if ((toji_kakko_no = wnn_find_hinsi_by_name (WNN_TOJIKAKKO_MEI)) == -1)
-    {
-      giji_hinsi_err ("TOJI_KKAKO");
-      return (NULL);
-    }
-  if ((fuzokugo_no = wnn_find_hinsi_by_name (WNN_FUZOKUGO_MEI)) == -1)
-    {
-      giji_hinsi_err ("FUZOKUGO");
-      return (NULL);
-    }
-  if ((kai_kakko_no = wnn_find_hinsi_by_name (WNN_KAIKKAKO_MEI)) == -1)
-    {
-      giji_hinsi_err ("KAIKAKKO");
-      return (NULL);
-    }
-  if ((giji_no = wnn_find_hinsi_by_name (WNN_GIJI_MEI)) == -1)
-    {
-      giji_hinsi_err ("GIJI");
-      return (NULL);
-    }
-#endif /* nodef */
   return (fzk_tbl);
 }
 
-#ifdef  nodef
-void
-giji_hinsi_err (str)
-     char *str;
-{
-  wnn_errorno = WNN_GIJI_HINSI_ERR;
-  error1 ("GIJI hinsi (%s) is not defined in hinsi data file.\n", str);
-}
-#endif /* nodef */
 void
 fzk_discard (fzk_tbl)
      struct FT *fzk_tbl;
@@ -694,17 +637,6 @@ bittest (vector, no)
     return (-1);
 }
 
-/*
-int Strncmp(s1,s2,n)
-register w_char *s1;
-register w_char *s2;
-register int n;
-{
-  if(n == 0)return(0);
-  for (;n > 0 && *s1++ == *s2++;n--);
-  return (int)(*--s1 - *--s2);
-}
-*/
 #ifndef NO_FZK
 static struct fzkentry *
 bsrch (key_yomi)

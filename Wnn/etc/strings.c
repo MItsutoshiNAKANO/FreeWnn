@@ -1,5 +1,5 @@
 /*
- *  $Id: strings.c,v 1.4 2001-06-14 18:15:56 ura Exp $
+ *  $Id: strings.c,v 1.4.2.1 2001-07-08 06:39:08 iwao Exp $
  */
 
 /*
@@ -35,11 +35,6 @@
 #include <stdio.h>
 #include "commonhd.h"
 #include "wnn_string.h"
-
-#define is_half_width(c)        (! is_full_width(c))
-#define is_full_width(c)        (((c) & 0xff00))
-#define is_gaiji(c)             (is_full_width(c) && ! ((c) & 0x8080))
-#define is_jis_kanji(c)         (((c) & 0x8080) == 0x8080)
 
 w_char *
 wnn_Strcat (s1, s2)
@@ -85,7 +80,6 @@ wnn_Strcmp (s1, s2)
   if (*s1 == *s2)
     return 0;
   return (-1);
-/*  return (int)(*s1 - *s2);  Since w_char, it is always positive */
 }
 
 /* s1 is substr of s2?  then return 1*/
@@ -129,14 +123,6 @@ wnn_Strncpy (s1, s2, n)
      register w_char *s2;
      register int n;
 {
-/*
-        register w_char *d;
-
-        for (d = s1;n > 0;n--) {
-                *d++ = *s2++;
-        }
-        return s1;
-*/
   if (s2 > s1)
     {
       for (; n-- > 0;)
@@ -182,245 +168,3 @@ wnn_Sreverse (d, s)
   *d = 0;
 }
 
-#ifdef nodef
-w_char *
-wnn_Index (s, c)
-     register w_char *s;
-     register w_char c;
-{
-  while (*s != c)
-    {
-      if (*s++ == 0)
-        return 0;
-    }
-  return s;
-}
-
-w_char *
-wnn_Rindex (s, c)
-     register w_char *s;
-     register w_char c;
-{
-  register w_char *p = 0;
-
-  while (*s != 0)
-    {
-      if (*s++ == c)
-        p = s - 1;
-    }
-  return p;
-}
-
-w_char *
-wnn_Strpbrk (s1, s2)
-     register w_char *s1;
-     register w_char *s2;
-{
-  register w_char *p;
-
-  while (*s1 != 0)
-    {
-      for (p = s2; *p != 0; p++)
-        {
-          if (*s1++ == *p)
-            return s1 - 1;
-        }
-    }
-  return 0;
-}
-
-int
-wnn_Strspn (s1, s2)
-     register w_char *s1;
-     register w_char *s2;
-{
-  register w_char *p;
-  register int n;
-
-  while (*s1 != 0)
-    {
-      for (p = s2; *p != 0; p++)
-        {
-          if (*s1++ == *p)
-            {
-              n = 1;
-              while (*s1 != 0)
-                {
-                  for (p = s2; *p != 0; p++)
-                    {
-                      if (*s1++ == *p)
-                        {
-                          n++;
-                          break;
-                        }
-                    }
-                  if (*p == 0)
-                    {
-                      return n;
-                    }
-                }
-              return n;
-            }
-        }
-    }
-  return 0;
-}
-
-int
-wnn_Strcspn (s1, s2)
-     register w_char *s1;
-     register w_char *s2;
-{
-  register w_char *p;
-  register int n;
-
-  while (*s1 != 0)
-    {
-      for (p = s2; *p != 0; p++)
-        {
-          if (*s1++ != *p)
-            {
-              n = 1;
-              while (*s1 != 0)
-                {
-                  for (p = s2; *p != 0; p++)
-                    {
-                      if (*s1++ != *p)
-                        {
-                          n++;
-                          break;
-                        }
-                    }
-                  if (*p == 0)
-                    {
-                      return n;
-                    }
-                }
-              return n;
-            }
-        }
-    }
-  return 0;
-}
-
-w_char *
-wnn_Strtok (s1, s2)
-     register w_char *s1;
-     register w_char *s2;
-{
-  static w_char *p = 0, *s;
-  static w_char c;
-  register int i, j, n;
-
-  if (s1 == 0)
-    {
-      if (p == 0)
-        return 0;
-      *p = c;
-    }
-  else
-    {
-      p = s1;
-    }
-  n = wnn_Strlen (p) - (j = wnn_Strlen (s2));
-  for (i = 0; i <= n; i++)
-    {
-      if (wnn_Strncmp (p++, s2, j) == 0)
-        {
-          s = p + j - 1;
-          break;
-        }
-    }
-  if (i > n)
-    return 0;
-  for (; i <= n; i++)
-    {
-      if (wnn_Strncmp (p++, s2, j) == 0)
-        {
-          p--;
-          c = *p;
-          *p = 0;
-          break;
-        }
-    }
-  return s;
-}
-
-int
-wnn_Strwidth (buf)
-     w_char *buf;
-{
-  register int width;
-
-  for (width = 0; *buf != 0; buf++)
-    {
-      if (is_full_width (*buf))
-        {
-          width += 2;
-        }
-      else
-        {
-          width++;
-        }
-    }
-  return width;
-}
-
-int
-wnn_Strnwidth (buf, n)
-     w_char *buf;
-     int n;
-{
-  register int width, i;
-
-  for (width = 0, i = 0; i < n; buf++, i++)
-    {
-      if (is_full_width (*buf))
-        {
-          width += 2;
-        }
-      else
-        {
-          width++;
-        }
-    }
-  return width;
-}
-
-void
-wnn_delete_ss2 (s, n)
-     register unsigned int *s;
-     register int n;
-{
-  register unsigned int x;
-
-  for (; n != 0 && (x = *s); n--, s++)
-    {
-      if ((x & 0xff00) == 0x8e00)
-        *s &= ~0xff00;
-      if (x == 0xffffffff)
-        break;
-    }
-}
-
-void
-wnn_delete_w_ss2 (s, n)
-     register w_char *s;
-     register int n;
-{
-  register w_char x;
-
-  for (; n != 0 && (x = *s); n--, s++)
-    {
-      if ((x & 0xff00) == 0x8e00)
-        *s &= ~0xff00;
-    }
-}
-
-int
-wnn_byte_count (in)
-     register int in;
-{
-  return (((in <= 0xa0 && in != 0x00 && in != 0x8e) || in == 0xff) ? 1 : 2);
-}
-#endif /* nodef */

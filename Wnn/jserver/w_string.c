@@ -1,5 +1,5 @@
 /*
- *  $Id: w_string.c,v 1.3 2001-06-14 18:16:03 ura Exp $
+ *  $Id: w_string.c,v 1.3.2.1 2001-07-08 06:39:08 iwao Exp $
  */
 
 /*
@@ -92,46 +92,3 @@ Strlen (w)
   return (wnn_Strlen (w));
 }
 
-#ifdef nodef
-int
-wstrncmp (s1, s2, n)
-     register w_char *s1, *s2;
-     register int n;
-{
-  for (; *s1 != 0 && *s2 != 0;)
-    {
-      if (*s1 != *s2)
-        return (w_char_cmp (*s1, *s2));
-      s1++;
-      s2++;
-      n--;
-      if (n == 0)
-        return (0);
-    }
-  if (*s1 == 0 && *s2 == 0)
-    return (0);
-  if (*s1 == 0)
-    return (-1);
-  return (1);
-}
-
-w_char_cmp (s1, s2)
-     register w_char s1, s2;
-{
-  if (s1 == s2)
-    return (0);
-  if (s1 == TOUTEN_NUM)
-    {
-      if (s2 == KUTEN_NUM)
-        return (-1);
-      return (1);
-    }
-  if (s1 == KUTEN_NUM)
-    return (1);
-  if (s2 == TOUTEN_NUM || s2 == KUTEN_NUM)
-    return (-1);
-  if (s2 > s1)
-    return (-1);
-  return (1);
-}
-#endif

@@ -1,5 +1,5 @@
 /*
- *  $Id: hinsi_list.c,v 1.4 2001-06-14 18:16:01 ura Exp $
+ *  $Id: hinsi_list.c,v 1.4.2.1 2001-07-08 06:39:08 iwao Exp $
  */
 
 /*
@@ -183,10 +183,6 @@ hinsi_table_set (jtl, table)
      struct JT *jtl;
      w_char *table;
 {
-  /*
-     int len;
-   */
-
   free (jtl->node);
   free (jtl->hinsi_list);
 

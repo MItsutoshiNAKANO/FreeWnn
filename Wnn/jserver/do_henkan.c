@@ -1,5 +1,5 @@
 /*
- *  $Id: do_henkan.c,v 1.5 2001-06-18 09:09:41 ura Exp $
+ *  $Id: do_henkan.c,v 1.5.2.1 2001-07-08 06:39:08 iwao Exp $
  */
 
 /*
@@ -207,7 +207,7 @@ ret_sho_x (sho_list, cnt)
           put4_cur (sho_list->jentptr->serial + sho_list->t_jc);
           /* entry + t_jc */
           /* Internally, we use "kasou-hindo"
-           * so return kasou-hindo as hindo-value"*/
+           * so return kasou-hindo as hindo-value */
           hindo = *(sho_list->jentptr->hindo + sho_list->t_jc) & 0x7F;
           if (sho_list->jentptr->hindo_in)
             {

@@ -1,5 +1,5 @@
 /*
- *  $Id: readfile.c,v 1.5 2001-06-18 09:09:42 ura Exp $
+ *  $Id: readfile.c,v 1.5.2.1 2001-07-08 06:39:08 iwao Exp $
  */
 
 /*
@@ -539,9 +539,6 @@ rcv_file (wf, mode)
   FILE *fp;
   int x;
 
-/*    if(wf->localf == REMOTE){
-      }
-*/
   if (fopen_write_cur (wf->name) == NULL)
     {
       error1 ("receive_file:No file %s.\n", wf->name);
@@ -673,7 +670,6 @@ write_file_real (wf, fp, mode)
           }
         else
           {
-/*            if(writedict(wf->area,fp) == -1)goto ERROR_RET; */
             if (mode == 2)
               {
                 if (write_hindo_of_dict (wf->area, fp) == -1)
@@ -788,9 +784,6 @@ discardfile (wf)
       free_hindo (wf->area);
       break;
     case WNN_FT_FUZOKUGO_FILE:
-/*
-        fzk_discard(wf->area);
-*/
       break;
     }
   return (0);
@@ -1065,4 +1058,102 @@ check_and_change_pwd (pwd, old, new)
     }
   new_pwd (new, pwd);
   return (0);
+}
+
+static int fmode;
+ /* JS_FILE_SEND (server receives) */
+int
+fopen_read_cur (fn)
+     char *fn;
+{
+  fmode = 'r';
+  return 1;
+}
+
+/* JS_FILE_RECEIVE (server sends) */
+int
+fopen_write_cur (fn)
+     char *fn;
+{
+  fmode = 'w';
+  return 1;
+}
+
+/* JS_FILE_SEND (server recieves) */
+int
+fread_cur (p, size, nitems)
+     char *p;
+     register int size, nitems;
+{
+  register int i, j, xx;
+  for (i = 0; i < nitems; i++)
+    {
+      for (j = 0; j < size; j++)
+        {
+          *p++ = xx = xgetc_cur ();
+          if (xx == -1)
+            return i;
+        }
+    }
+  return nitems;
+}
+
+static int store = -1;
+
+int
+xgetc_cur ()
+{
+  register int x;
+  if (store != -1)
+    {
+      x = store;
+      store = -1;
+      return (x);
+    }
+  if ((x = getc_cur ()) != 0xFF)
+    return x;
+  if (getc_cur () == 0xFF)
+    return -1;                  /* EOF */
+  return 0xFF;
+}
+
+void
+xungetc_cur (x)                 /* H.T. */
+     int x;
+{
+  store = x;
+}
+
+/* JS_FILE_SRECEIVE (server sends) */
+void
+fwrite_cur (p, size, nitems)
+     unsigned char *p;
+     int size, nitems;
+{
+  register int i, x;
+  x = size * nitems;
+  for (i = 0; i < x; i++)
+    {
+      xputc_cur (*p++);
+    }
+}
+
+void
+xputc_cur (x)
+     unsigned char x;           /* H.T. */
+{
+  putc_cur (x);
+  if (x == 0xFF)
+    {
+      putc_cur (0x00);
+    }
+}
+
+void
+fclose_cur ()
+{
+  if (fmode != 'w')
+    return;
+  putc_cur (0xFF);
+  putc_cur (0xFF);              /* EOF */
 }
