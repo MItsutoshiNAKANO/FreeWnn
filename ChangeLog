@@ -1,3 +1,22 @@
+Mon, 30 Dec 2002 00:03:24  Hiroo Ono <hiroo oikumene.gcd.org>
+	* PubdicPlus/pubdic.p
+	  誤字修正 「とらわれる: 因われる→囚われる」。
+	  (藤井宏憲さん <fujii chi.its.hiroshima-cu.ac.jp> の指摘による)
+
+Fri,  8 Nov 2002 09:15:07  Katsuomi Hamajima <hamajima nagoya.ydc.co.jp>
+	* Wnn/jserver/de_header.h:
+	  UCHAR が未定義だったのを修正。
+
+Tue, 12 Nov 2002 10:25:02  Tomoki Aono <aono cc.osaka-kyoiku.ac.jp>
+	* Wnn/etc/revdic.c:
+	  Little endian の場合に atod が逆変換辞書の作成に失敗するバグを修正。
+          ([freewnn:00903] 亀井さん <zic-fw ontime.venus.to> の指摘による)
+	* Wnn/jutil/atod.c:
+	  usage に -U を追加。
+
+Sat Sep 07 11:33:53 UTC 2002  Hiroo Ono <hiroo oikumene.gcd.org>
+	* Contrib/dic/gerodic/g-jinmei.u:
+	  PubdicPlus/pubdic.p: 「常陸(ひたち)」「常磐(じょうばん)」の間違いを修正。
 
 Sun Sep 01 17:48:26 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	* configure.in: FD_SET() チェック及び AC_HEADER_TIME を追加。

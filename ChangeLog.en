@@ -1,3 +1,25 @@
+Mon, 30 Dec 2002 00:03:24  Hiroo Ono <hiroo oikumene.gcd.org>
+        * PubdicPlus/pubdic.p
+	  Fixed the word "torawareru".
+          (reported by Mr.Hironori Fujii <fujii chi.its.hiroshima-cu.ac.jp>)
+
+Fri,  8 Nov 2002 09:15:07  Katsuomi Hamajima <hamajima nagoya.ydc.co.jp>
+        * Wnn/jserver/de_header.h:
+	  Fix compile error by defining UCHAR.
+
+Tue, 12 Nov 2002 10:25:02  Tomoki Aono <aono cc.osaka-kyoiku.ac.jp>
+        * Wnn/etc/revdic.c:
+	  Fix bug on revdic against WNN_UD_DICT.
+	  atod -U creates wrong dictionary (and even crashes) on little-endian
+	  architecture.
+          (reported by Mr.Kamei <zic-fw ontime.venus.to> in [freewnn:00903]>)
+        * Wnn/jutil/atod.c:
+	  Add -U explanation in the usage.
+
+Sat Sep 07 11:33:53 UTC 2002  Hiroo Ono <hiroo oikumene.gcd.org>
+        * Contrib/dic/gerodic/g-jinmei.u:
+          PubdicPlus/pubdic.p:
+	  Fix the word "hitachi" and "jouban".
 
 Sun Sep 01 17:48:26 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	* configure.in: added check for FD_SET() and AC_HEADER_TIME.
