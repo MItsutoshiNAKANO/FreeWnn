@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.31 2002-06-22 13:15:25 hiroo Exp $
+dnl   $Id: configure.in,v 1.32 2002-09-01 17:48:19 hiroo Exp $
 dnl
 
 dnl
@@ -369,6 +369,7 @@ dnl
 AC_PATH_X
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
+AC_HEADER_TIME
 AC_CHECK_HEADERS(fcntl.h sgtty.h syslog.h unistd.h \
 	sys/file.h sys/ioctl.h sys/time.h sys/types.h sys/param.h \
 	malloc.h strings.h memory.h \
@@ -422,6 +423,7 @@ dnl AC_FUNC_WAIT3
 
 AC_CHECK_FUNCS(random drand48 fchmod getopt \
 	gethostname select socket closesocket setsockopt send recv \
+	FD_SET \
 	getdtablesize getrlimit syslog vsyslog setenv snprintf)
 dnl for bcopy/index -> memcpy/strchr conversion (preparation):
 AC_CHECK_FUNCS(bcopy bzero bcmp index rindex \
