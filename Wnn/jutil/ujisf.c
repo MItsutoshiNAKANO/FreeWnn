@@ -1,5 +1,5 @@
 /*
- *  $Id: ujisf.c,v 1.3 2001-06-14 18:16:04 ura Exp $
+ *  $Id: ujisf.c,v 1.3.2.1 2001-07-08 06:33:56 iwao Exp $
  */
 
 /*
@@ -83,15 +83,6 @@ static w_char *yomi_heap, *yhp, *yheapend;
 static struct je *je_heap, *jehp, *jeheapend;
 static FILE *ifpter;
 static int maxline;
-
-/* extern functions of this file are
-   ujis_header();
-   read_ujis(reversep, to_esc, which_dict);
-   reverse_yomi();
-   sort();
-   uniq_je(func);
-   output_ujis(opter, serial_out, esc_exp);
-   */
 
 int lc;
 
@@ -303,20 +294,7 @@ get_one_line (buffer, jep, rev, to_esc, which_dict)
     {
       toesc (ckanji, cyomi);
     }
-/*
-    if(strchr(ckanji, DIC_COMMENT_CHAR) || 
-       strchr(ckanji, DIC_YOMI_CHAR)){
-        fprintf(stderr, "Bad character in kanji\n");
-        return(-1);
-    }
-    if(which_dict){
-        if(strchr(cyomi, DIC_COMMENT_CHAR) || 
-           strchr(cyomi, DIC_YOMI_CHAR)){
-            fprintf(stderr, "Bad character in yomi\n");
-            return(-1);
-        }
-    }
-*/
+
   Kanjistradd (kanji,
 #ifdef CHINESE
                ((which_dict == CWNN_REV_DICT || which_dict == BWNN_REV_DICT) ? yincod_str : ((which_dict == WNN_REV_DICT) ? yomi : NULL)),
@@ -400,28 +378,7 @@ ujis_header ()
         continue;
       if (strcmp (str, COMMENT) == 0)
         {
-/*          for(;;){
-                if(get_line(buffer) == EOF){
-                goto EOF_EHAD;
-                }
-                if(buffer[0] == '\\'){
-                    unget_line(buffer);
-                    break;
-                }
-                if(wnn_Strlen(file_comment) + strlen(buffer)
-                    >= WNN_COMMENT_LEN){
-                    fprintf(stderr, "Too Long Comment.\n");
-                    exit1();
-                }
-                wnn_Sstrcpy(file_comment + wnn_Strlen(file_comment), buffer);
-            }
-*/
           get_string (str, c);
-/*
-            if(str[strlen(str) - 1] == '\n'){
-                c[strlen(str) - 1] = '\0';
-            }
-*/
           wnn_Sstrcpy (file_comment, str);
 #ifdef CHINESE
         }
@@ -539,32 +496,11 @@ print_je (jep, opter, serial_out, esc_exp)
      int serial_out;
      int esc_exp;
 {
-/*    if (jep->yomi != 0) { */
   if (jep->hinsi != SAKUJO_HINSI)
     {
       Print_entry (jep->yomi, jep->kan, jep->comm, jep->hindo, 0, jep->hinsi, serial_out ? jep->serial : -1, opter, esc_exp);
     }
 }
-
-#ifdef nodef
-kprint (fp, kpter)
-     register FILE *fp;
-     register w_char *kpter;
-{
-  char out_str[LENGTHKANJI];
-  register int out_len;
-  char tmp[LENGTHKANJI];
-
-  wnn_sStrcpy (tmp, kpter);
-  out_len = make_kanji_str (out_str, tmp);
-  fprintf (fp, "%s", out_str);
-  if (out_len < 8)
-    putc ('\t', fp);
-  if (out_len < 16)
-    putc ('\t', fp);
-  putc ('\t', fp);
-}
-#endif
 
 void
 output_ujis (opter, serial_out, esc_exp)
@@ -639,22 +575,6 @@ init_jeary ()
     }
 }
 
-/* test  program
-   main()
-   {
-   yhp = yomi_heap = (w_char *)malloc(100000);
-   jeary = (struct je *)malloc(100000);
-   
-   ifpter = stdin;
-   ujis_header();
-   read_ujis();
-   
-   sort();
-   uniq_je(func);
-   output_ujis(stdout, 0, 1);
-   }
-   */
-
 void
 exit1 ()
 {
@@ -681,9 +601,6 @@ bunpou_num (a, p)
     {
       *p = tmp;
     }
-#ifdef nodef
-  sscanf (a, "%d", p);
-#endif
 }
 
 #ifdef CHINESE
@@ -863,34 +780,6 @@ uniq_je (func)
   prev++;
   jt.maxserial = prev - &jeary[0];
 }
-
-#ifdef nodef
-make_kanji_str (o, c)
-     register UCHAR *o, *c;
-{
-  register UCHAR *o0 = o;
-
-  for (; *c; c++)
-    {
-      if (*c == '\\')
-        {
-          *o++ = '\\';
-          *o++ = '\\';
-        }
-      else if (*c > 0x20)
-        {
-          *o++ = *c;
-        }
-      else
-        {
-          sprintf (o, "\\0%o", *c);
-          for (; *o; o++);
-        }
-    }
-  *o = 0;
-  return (o - o0);
-}
-#endif
 
 static void
 read_kanji_str (c, o)

@@ -1,5 +1,5 @@
 /*
- *  $Id: wnnkill.c,v 1.5 2001-06-14 18:16:04 ura Exp $
+ *  $Id: wnnkill.c,v 1.5.2.1 2001-07-08 06:33:56 iwao Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: wnnkill.c,v 1.5 2001-06-14 18:16:04 ura Exp $";
+static char *rcs_id = "$Id: wnnkill.c,v 1.5.2.1 2001-07-08 06:33:56 iwao Exp $";
 #endif /* lint */
 
 #include <stdio.h>
@@ -72,23 +72,10 @@ main (argc, argv)
   static char lang[64] = { 0 };
   extern int optind;
   extern char *optarg;
-/*
-    char *p;
-*/
   char *server_env = NULL;
   char *prog = argv[0];
   extern char *_wnn_get_machine_of_serv_defs (), *get_server_env ();
 
-/*
-    if ((p = getenv("LANG")) != NULL) {
-        strcpy(lang, p);
-           lang[5] = '\0';
-    } else {
-        lang[0] = '\0';
-    }
-
-    if (*lang == '\0')
-*/
   strcpy (lang, WNN_DEFAULT_LANG);
 
 #ifdef JAPANESE

@@ -1,5 +1,5 @@
 /*
- *  $Id: utilbdic.c,v 1.3 2001-06-14 18:16:04 ura Exp $
+ *  $Id: utilbdic.c,v 1.3.2.1 2001-07-08 06:33:56 iwao Exp $
  */
 
 /*
@@ -61,11 +61,6 @@ output_hinsi (ofpter)
     {
       put_short (ofpter, jeary[i]->hinsi);
     }
-/*
-  if(i & 0x1){
-    put_short(ofpter,0);
-  }
-*/
 }
 
 input_hinsi (ifpter)
@@ -80,32 +75,7 @@ input_hinsi (ifpter)
         return (-1);
       jeary[i]->hinsi = s;
     }
-/*
-  if(i & 0x1){
-    get_short(ifpter);
-  }
-*/
+
   return (0);
 }
 
-#ifdef nodef
-revdic_jt (jtp, match, hostart, tary)
-     struct JT *jtp;
-     int match;
-     char *hostart;
-     struct uind1 *tary;
-{
-/* Must reverse hinsi?????? */
-
-  if (jtp->syurui == WNN_UD_DICT)
-    {
-      rev_ud_hontai (hostart, jtp->maxhontai, match);
-      rev_ud_table (tary, jtp->maxtable, match);
-    }
-  else
-    {
-      rev_sd_hontai (hostart, match);
-    }
-  return (0);
-}
-#endif

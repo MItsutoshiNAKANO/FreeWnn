@@ -1,5 +1,5 @@
 /*
- *  $Id: oldatonewa.c,v 1.4 2001-06-14 18:16:04 ura Exp $
+ *  $Id: oldatonewa.c,v 1.4.2.1 2001-07-08 06:33:56 iwao Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: oldatonewa.c,v 1.4 2001-06-14 18:16:04 ura Exp $";
+static char *rcs_id = "$Id: oldatonewa.c,v 1.4.2.1 2001-07-08 06:33:56 iwao Exp $";
 #endif /* lint */
 
 #include <stdio.h>
@@ -102,9 +102,6 @@ get_line1 (buffer)
   char tmp[LINE_SIZE];
   char kanji[LINE_SIZE];
   char yomi[LINE_SIZE];
-  /*
-     char comment[LINE_SIZE];
-   */
   w_char wyomi[LINE_SIZE];
   w_char wyomi1[LINE_SIZE];
   int hinsi;
@@ -161,9 +158,7 @@ get_string (str, buf)
      char *buf;
 {
   char *c = buf;
-  /*
-     int k;
-   */
+
   for (; *c == '\t' || *c == ' '; c++);
   if (*c == '\0' || *c == '\n')
     {

@@ -1,5 +1,5 @@
 /*
- *  $Id: atod.c,v 1.5 2001-06-14 18:16:03 ura Exp $
+ *  $Id: atod.c,v 1.5.2.1 2001-07-08 06:33:56 iwao Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ UJIS 形式を、辞書登録可能形式, 及び固定形式辞書に変換するプログラム。
 */
 
 #ifndef lint
-static char *rcs_id = "$Id: atod.c,v 1.5 2001-06-14 18:16:03 ura Exp $";
+static char *rcs_id = "$Id: atod.c,v 1.5.2.1 2001-07-08 06:33:56 iwao Exp $";
 #endif /* lint */
 
 #include <stdio.h>
@@ -206,7 +206,7 @@ alloc_area ()
 
 extern int sort_func_sdic ();
 extern int sort_func_je ();
-FILE *ofpter, *fopen ();
+FILE *ofpter;
 
 int
 main (argc, argv)
@@ -766,21 +766,6 @@ not_enough_area ()
   fprintf (stderr, "Sorry allocated area is exhausted.node_count = %d\n", node_count);
   fprintf (stderr, "Retry with option -S <dict_size>.\n");
   exit (1);
-
-/*
- * Only for Sdic 
- * Can't Realloc!! many pointeres exist on the stack!!
- */
-
-/*
-    fprintf(stderr, "Realloc.\n");
-    if((hostart = (char *)realloc(hostart, size)) == NULL){
-        fprintf(stderr, "Ralloc Failed\n");
-        exit(1);
-    }
-    hopter = hostart + (hopter - oldstart);
-    hoend = (char *)((char *)hostart + size);
-*/
 }
 
 

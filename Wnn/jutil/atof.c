@@ -1,5 +1,5 @@
 /*
- *  $Id: atof.c,v 1.4 2001-06-14 18:16:03 ura Exp $
+ *  $Id: atof.c,v 1.4.2.1 2001-07-08 06:33:56 iwao Exp $
  */
 
 /*
@@ -36,7 +36,7 @@
   */
 
 #ifndef lint
-static char *rcs_id = "$Id: atof.c,v 1.4 2001-06-14 18:16:03 ura Exp $";
+static char *rcs_id = "$Id: atof.c,v 1.4.2.1 2001-07-08 06:33:56 iwao Exp $";
 #endif /* lint */
 
 /*
@@ -759,7 +759,6 @@ read_a_vector (vect)
               error_format ("Unknown identifier in vector %s\n", buf);
             }
           v[id_num / (sizeof (int) * 8)] |= 1 << id_num % (sizeof (int) * 8);
-/*      1 << (((sizeof(int) * 8 - 1) - id_num % (sizeof(int) * 8))); */
         }
     }
   if (finish == 0)
@@ -772,15 +771,7 @@ static void
 read_syuutanv ()
 {
   int d;
-/*
-  int k,j;
-  for(k = 0 ; k < SYUUTANV_KOSUU;k++){
-    for(j = 0 ; j < OUT_INT_KOSUU ;j++){
-      syuutanv[k].sv[j] = 0;
-    }
-    syuutanv[k].tc = NULL;
-  }
-*/
+
   for (;;)
     {
       d = get_phrase (buf, SIZE);
@@ -976,75 +967,6 @@ count_yomi ()
   return (count);
 }
 #endif /* NO_FZK */
-
-/* reverse for char as w_char */
-#ifdef nodef
-static void
-reverse (d, s)
-     char *d, *s;
-{
-  int k;
-  int len = strlen (s);
-  if (len % 2)
-    {
-      error_format ("length of yomi string is odd\n");
-    }
-  len /= 2;
-  for (k = 0; k < len; k++)
-    {
-      d[k * 2] = s[(len - 1 - k) * 2];
-      d[k * 2 + 1] = s[(len - 1 - k) * 2 + 1];
-    }
-  d[len * 2] = 0;
-  d[len * 2 + 1] = 0;
-}
-
-
-static int
-w_str_cmp (a, b)
-     w_char *a, *b;
-{
-  w_char wa, wb;
-
-  for (; *a != 0 && *b != 0;)
-    {
-      wa = *a;
-      wb = *b;
-      if (wa != wb)
-        {
-          return (w_char_cmp (wa, wb));
-        }
-    }
-  if (*a == 0 && *b == 0)
-    return (0);
-  if (*a == 0)
-    return (-1);
-  return (1);
-
-}
-
-static int
-w_char_cmp (wa, wb)
-     unsigned short wa, wb;
-{
-  if (wa == wb)
-    return (0);
-  if (wa == UJIS_TEN)
-    {
-      if (wb == UJIS_MARU)
-        return (-1);
-      return (1);
-    }
-  if (wa == UJIS_MARU)
-    return (1);
-  if (wb == UJIS_MARU || wb == UJIS_TEN)
-    return (-1);
-
-  if (wb > wa)
-    return (-1);
-  return (1);
-}
-#endif
 
 #ifndef NO_FZK
 static void
@@ -1474,47 +1396,6 @@ is_same_jiritugov (n)
     }
   return (-1);                  /* 同じものがなかった */
 }
-
-/*
-static void
-classify_jiritugov()
-{
-  int k,j;
-  int mac;
-  for(k = 0 ; k < mhinsi; k++){
-    for(j = 0 ; j < mactjv; j++){
-      if(eqv(jiritugov[k].v.sv,actjv[j].sv)){
-        jiritugov[k].vnum = j;
-        break;
-      }
-    }
-    if(j == mactjv){
-      vcp(actjv[mactjv++].sv, jiritugov[k].v.sv);
-    }
-  }
-}
-
-static void
-eqv(a,b)
-int a[],b[];
-{
-  int k;
-  for(k = 0 ; k < OUT_INT_KOSUU; k++){
-    if(!(a[k] == b[k]))return(0);
-  }
-  return(1);
-}
-
-static void
-vcp(a,b)
-     int a[],b[];
-{
-  int k;
-  for(k = 0 ; k < OUT_INT_KOSUU; k++){
-    a[k] = b[k];
-  }
-}
-*/
 
 static void
 init (argc, argv)
