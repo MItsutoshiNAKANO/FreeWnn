@@ -1,5 +1,5 @@
 .\"
-.\"   $Id: jserver.man,v 1.5 2002-03-04 04:01:53 aono Exp $
+.\"   $Id: jserver.man,v 1.6 2002-05-04 17:15:21 aono Exp $
 .\"
 .\"
 .\" FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -27,7 +27,7 @@
 .\" along with this program; if not, write to the Free Software
 .\" Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 .\"
-.TH JSERVER \  "28 January 1992" 
+.TH JSERVER \  "16 Septermber 2001" 
 .SH Ì¾¾Î
 .sv 1
 .nf

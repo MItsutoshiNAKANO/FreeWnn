@@ -11,7 +11,8 @@ JSERVER( )          UNIX Programmer's Manual           JSERVER( )
 
 形式
 
-     /usr/local/bin/Wnn4/jserver [-f file] [-s file]
+     /usr/local/bin/Wnn4/jserver [-f file] [-s file] [-h file] [-N #]
+				 [-p port] [-u46]
 
 機能
 
@@ -39,6 +40,49 @@ JSERVER( )          UNIX Programmer's Manual           JSERVER( )
      -s file jserver のログファイルを取る。 file が、 "-" の時に
              は、標準エラー出力に出力される。
 
+     -h	file 品詞ファイル名を指定する。
+
+     -N	数字 serverNO  を 指 定	した数字に設定する。serverNO は、
+	     jserver を複数立ち上げた時に、それぞれを区別する番号
+	     で	ある。jserver を一つしか動かさない場合は serverNO
+	     の指定は不要で、デフォルト値として	0 が使われ る。	2
+	     つ	め 以降の jserver を起動する時は -N 1, -N 2, -N	3
+	     というように一つづつ serverNO を増やして立ち上げなけ
+	     ればならない。
+
+     -p	数字 ポート番号の基準値を指定した数字に設定する。serverNO
+	     を指定していない場合 (つまり jserver を一つしか動 か
+	     していない場合) は、この値がそのままポート番号として
+	     使われる。複数の jserver を動かしている場合は、実 際
+	     のポート番号はこの値に serverNO を足した値となる。こ
+	     のオプションを省略した場合はデフォルト値として  get-
+	     servbyname	 で 取得された値が使われる。getservbyname
+
+
+
+Printed 5/2/02           16 September 2001                      1
+
+
+
+
+
+
+JSERVER( )          UNIX Programmer's Manual           JSERVER( )
+
+
+
+	     で取得できない場合はヘッダファイル	jd_sock.h で定 義
+	     されている	WNN_PORT_IN の値が使われる。
+
+     -u	     unix domain socket	を使用する。
+
+     -4	     inet socket を使用する。
+
+     -6	     inet6 socket を使用する。
+
+     -u,  -4, -6 のいずれも指定しない場合は、全てのプロトコルが使
+     用される。
+
 ファイル
       /tmp/jd_sockV4
 
@@ -49,9 +93,31 @@ JSERVER( )          UNIX Programmer's Manual           JSERVER( )
 
      jserverrc(4)
 
+バグ
+     現在の jlib の実装は unix domain, inet, inet6 の全ての  port
+     で接続可能であることを要求しているため -u,-4,-6 の各オプショ
+     ンは現在は役に立たない。
 
 
-Printed 1/29/92          28 January 1992                        1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Printed 5/2/02           16 September 2001                      2
 
 
 
