@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.17 2003-06-04 14:12:12 hiroo Exp $
+#   $Id: Makefile.in,v 1.18 2004-05-21 16:39:32 aono Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2003
+# Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2003, 2004
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -29,19 +29,21 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-include @top_srcdir@/makerule.mk
-top_builddir = ../..
+include @top_builddir@/makerule.mk
+  top_srcdir = @top_srcdir@
+top_builddir = @top_builddir@
 
 INSTALL      = @INSTALL@ $(INSTALLFLAGS)
 
  JSERVERDEFINES = -DJSERVER -DWRITE_CHECK
-       INCLUDES = -I$(CWNNINCLUDESRC) -I$(TOP)
+       INCLUDES = -I$(CWNNINCLUDESRC) -I$(top_builddir)
         DEFINES = $(CWNNDEFINES) $(JSERVERDEFINES) $(WNNTERM) $(CWNNLANGDEF)
 LOCAL_INSTFLAGS = $(INSTUIDFLAGS) -o $(WNNOWNER)
   SERVERINITDEF = -DSERVER_INIT_FILE=\"/$(CWNNLANG)/cserverrc\"
     HINSIDEFINE = -DHINSIDATA_FILE=\"/$(CWNNLANG)/cixing.data\"
  TSERVERINITDEF = -DSERVER_INIT_FILE=\"/$(TWNNLANG)/tserverrc\"
    THINSIDEFINE = -DHINSIDATA_FILE=\"/$(TWNNLANG)/cixing.data\"
+        WRAPLIB = @WRAPLIB@
 
 HDRS = ddefine.h de_header.h fzk.h kaiseki.h
 
@@ -106,7 +108,7 @@ all:: $(HDRS) $(SRC0) $(SRC1) $(TSRCS) cserver tserver
 
 cserver: $(OBJS)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) @LIBS@
+	$(LIBTOOL) --mode=link $(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) @LIBS@ $(WRAPLIB)
 
 clean::
 	$(RM) cserver
@@ -115,7 +117,7 @@ clean::
 
 tserver: $(TOBJS)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(TOBJS) @LIBS@
+	$(LIBTOOL) --mode=link $(CCLINK) -o $@ $(LDOPTIONS) $(TOBJS) @LIBS@ $(WRAPLIB)
 
 clean::
 	$(RM) tserver
@@ -127,12 +129,12 @@ instserver:: install
 install:: cserver
 	@if [ -d $(DESTDIR)$(CWNNBINDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(CWNNBINDIR)); fi
-	$(LIBTOOL) $(INSTALL) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) cserver $(DESTDIR)$(CWNNBINDIR)/cserver
+	$(LIBTOOL) --mode=install $(INSTALL) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) cserver $(DESTDIR)$(CWNNBINDIR)/cserver
 
 install:: tserver
 	@if [ -d $(DESTDIR)$(CWNNBINDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(CWNNBINDIR)); fi
-	$(LIBTOOL) $(INSTALL) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) tserver $(DESTDIR)$(CWNNBINDIR)/tserver
+	$(LIBTOOL) --mode=install $(INSTALL) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) tserver $(DESTDIR)$(CWNNBINDIR)/tserver
 
 includes:: $(HDRS) $(SRC0) $(SRC1) $(TSRCS)
 

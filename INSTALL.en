@@ -1,5 +1,5 @@
 #
-#   $Id: INSTALL.en,v 1.3 2002-05-11 13:03:35 hiroo Exp $
+#   $Id: INSTALL.en,v 1.4 2004-05-21 16:39:31 aono Exp $
 #
 
 #
@@ -93,6 +93,8 @@ Below are the main configure option of FreeWnn.
   --enable-ipv6         enable IPv6 feature.
   --enable-unsafe-path  allow creating files in jserver_dir (*5).
   --enable-client	compile and install uum (*6).
+  --with-libwrap	use libwrap (in TCP wrapper) for jserver
+			to enable connection-based access control (*7).
 
 *5: If the option --enable-unsafe-path is enabled, the [cjkt]server
   daemons accept creation of an FreeWnn dictionary file in an arbitrary
@@ -103,3 +105,4 @@ Below are the main configure option of FreeWnn.
 
 *6: cuum cannot be compiled yet.
 
+*7: If you specify --enable-ipv6, libwrap need to support IPv6 also.

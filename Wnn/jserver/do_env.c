@@ -1,5 +1,5 @@
 /*
- *  $Id: do_env.c,v 1.8 2003-05-11 18:27:41 hiroo Exp $
+ *  $Id: do_env.c,v 1.9 2004-05-21 16:39:32 aono Exp $
  */
 
 /*
@@ -57,6 +57,7 @@ static int  disconnect_last_sticky (void);
 static int  find_env_by_name (char *);
 static int  find_env_in_client (int);
 static void new_env (int env_id, char *n);
+static int  escape_strncpy(char *dst, const char *src, size_t len);
 
 static int sticky_cnt = 0;
 static int sticky_time = 0;
@@ -75,13 +76,48 @@ js_open (void)
  register int i;
 */
   char tmp_buf[256];
+  char *ptr;
+  int valid;
 
   version = get4_cur ();
+  /* host_name */
   gets_cur (tmp_buf, WNN_HOSTLEN);
   strcpy (c_c->host_name, tmp_buf);
+  escape_strncpy(tmp_buf, c_c->host_name, sizeof(tmp_buf));
+  /* string validation: We should check more (ex. reverse host lookup)? */
+  valid = 1;
+  ptr = c_c->host_name;
+  for(; *ptr != '\0'; ptr++) {
+    /* Rough check: We should comply with some RFC ... */
+    if(! isalnum(*ptr) && strchr(".-_", *ptr) == NULL)
+      {
+	valid = 0;
+	*ptr = '_';
+      }
+  }
+  if(valid != 1)
+    {
+      log_err("JS_OPEN: Warning: Specified hostname (\"%s\") contains unwanted character. (Possible attack? but continue.)", tmp_buf);
+    }
+  /* user_name */
   gets_cur (tmp_buf, WNN_ENVNAME_LEN);
   strcpy (c_c->user_name, tmp_buf);
-  error1 ("Inet user=%s@%s\n", c_c->user_name, c_c->host_name);
+  escape_strncpy(tmp_buf, c_c->user_name, sizeof(tmp_buf));
+  /* string validation: We should check more? */
+  valid = 1;
+  ptr = c_c->user_name;
+  for(; *ptr != '\0'; ptr++) {
+    if(! isalnum(*ptr))
+      {
+	valid = 0;
+	*ptr = '_';
+      }
+  }
+  if(valid != 1)
+    {
+      log_err("JS_OPEN: Warning: Specified username (\"%s\") contains unwanted character. (Possible attack? but continue.)", tmp_buf);
+    }
+  log_debug("Inet user=%s@%s\n", c_c->user_name, c_c->host_name);
   /* Moved to new_client, because del_client() will be called
      by longjmp before this initialization. By Kuwari
      for(i=0;i<WNN_MAX_ENV_OF_A_CLIENT;i++){
@@ -157,11 +193,19 @@ js_env_un_sticky (void)
   putc_purge ();
 }
 
+/*
+  Security issue (ja): n について制御文字などが入った際の措置について
+  考慮する必要がある。今のところ n自体のチェックで拒否せず、ログの
+  記録にとどめている。悪用を防止するため、ログに出力する制御文字は
+  加工すること。
+ */
 static int
 conn1 (char *n)
 {
   register int eid;
   register struct cnv_env *ne;
+  char n_escaped[256];
+
   if ((eid = find_env_by_name (n)) != -1)
     {                           /* exist */
       if (find_env_in_client (eid) != -1)
@@ -190,9 +234,17 @@ new:
     {
       free (ne);
       env[eid] = NULL;
+      log_err("conn1: Cannot add new environment to client.");
       return -1;
     }
-  error1 ("new_env: Created , %s env_id=%d\n", n, eid);
+  escape_strncpy(n_escaped, n, sizeof(n_escaped));
+  /* (少なくともログの問題が解決するまで)そのままnを使ってはならない */
+  /* Quick check: Should we check n separately? */
+  if(strcmp(n, n_escaped) != 0)
+    {
+      log_err("conn1: Warning: Specified env string (\"%s\") contains unwanted character. (Possible attack? But continue.)", n_escaped);
+    }
+  log_debug("new_env: Created , %s env_id=%d\n", n_escaped, eid);
   return eid;
 }
 
@@ -571,4 +623,53 @@ envhandle (void)
   return (eid);
 #endif
   return (get4_cur ());
+}
+
+/*
+    strncpy with escaping undesirable (ex. control) character.
+    But destination string should be null-terminated in this function.
+    If it's neat, you should extern this function (and maybe
+    move to other file).
+    Return value: Not 0 if all char in src is not filled in dst.
+    FIXME: It may not be 8bit safe.
+ */
+static int
+escape_strncpy(char *dst, const char *src, size_t len)
+{
+  char *dstptr = dst;		/* ウォーニングをなくすためsrcはそのまま使用 */
+  char *dstend = dst + (len - 1);	/* Preserve last char (for '\0') */
+  int overrun = 0;
+
+  if(len == 0 || dst == NULL || src == NULL) return 0;
+  while(*src != '\0' && dstptr < dstend) {
+    if(*src == '\\') {
+      /* Escape backslash as '\\' */
+      if(dstptr + 2 > dstend) {
+	/* Buffer exceeded: Give up */
+	overrun = 1;
+	break;
+      } else {
+	*dstptr++ = '\\';
+	*dstptr++ = '\\';
+      }
+    } else if(isgraph(*src)) {
+      *dstptr++ = *src++;
+    } else {
+      /* Escape this char: like "\xFF" */
+      if (dstptr + 4 > dstend) {
+	/* Buffer exceeded: Give up */
+	overrun = 1;
+	break;
+      } else {
+	sprintf(dstptr, "\\x%02X", *src++); /* Take care of buffer length */
+	dstptr += 4;
+      }
+    }
+  }
+  if(*src != '\0') {
+    overrun = 1;
+  }
+  *dstptr = '\0';
+
+  return overrun;
 }

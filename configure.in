@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.40 2004-05-21 13:55:53 aono Exp $
+dnl   $Id: configure.in,v 1.41 2004-05-21 16:39:32 aono Exp $
 dnl
 
 dnl
@@ -10,7 +10,7 @@ dnl Copyright Kyoto University Research Institute for Mathematical Sciences
 dnl                 1987, 1988, 1989, 1990, 1991, 1992
 dnl Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 dnl Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-dnl Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2003
+dnl Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2003, 2004
 dnl 
 dnl Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 dnl 
@@ -38,6 +38,11 @@ AC_CONFIG_HEADER(config.h)
 dnl ====================================================================
 dnl Check optional features
 dnl ====================================================================
+
+# Quick and Dirty workaround for Autoconf-2.53 and Libtools-1.5 pair ...
+# not to use additional tagged configuration. (default: CXX F77)
+# NOTICE: Please remove next line if situation changes. (aono)
+tagnames=
 
 AC_CANONICAL_HOST
 
@@ -264,10 +269,14 @@ case $host in
     CCOPTIONS="-Dlinux -D_POSIX_SOURCE -D_BSD_SOURCE"
     ;;
 *-*-darwin*)
+    if test $GCC = yes; then
     # Unfortunately, autoconf (at least 2.57) does not recognize
     # proper CPP. (Normal cpp-precomp nor auto-retrying in basic mode does
     # not work with pubdic+ processing.) So define here ....
-    CPP=${CPP:-"gcc -E -no-cpp-precomp"}
+      # Note: It seems gcc-3.3 (or (probably) later) does not need this.
+      CPP=${CPP:-"$CC -E -no-cpp-precomp"}
+    fi
+    # Don't care other CC-s.
     ;;
 *-*-sunos*)
       if test $GCC = yes; then
@@ -423,53 +432,75 @@ AC_SUBST(JS_SUPPORTOBJS)
 dnl
 dnl TCP Wrapper.
 dnl
+WRAPLIB=
 AC_MSG_CHECKING(whether to use libwrap)
 AC_ARG_WITH(libwrap,
-	[  --with-libwrap[=PATH]   Compile in libwrap (tcp_wrappers) support.],
+	[  --with-libwrap[[=DIR]]    Compile in libwrap (tcp_wrappers) support [[default=try to find libwrap]]],
 	[ case "$withval" in
 	  no)
 	    AC_MSG_RESULT(no)
+	    WRAP_TRY=no
 	    ;;
 	  yes)
 	    AC_MSG_RESULT(yes)
-	    AC_CHECK_LIB(wrap, request_init, [
-	      LIBS="-lwrap $LIBS"
-	      AC_DEFINE(HAVE_LIBWRAP, 1,
-			[Define libwrap (TCP Wrapper) support.]) ])
-	    CFLAGS="-DHAVE_LIBWRAP $CFLAGS"
+	    WRAP_TRY=yes
 	    ;;
 	  *)
 	    AC_MSG_RESULT(yes)
+	    WRAP_TRY=yes
 	    if test -d "$withval"; then
 	      WRAPINCLUDES="-I$withval"
-	      WRAPLIBS="-L$withval -lwrap"
+	      if test -d $withval/include; then
+		WRAPINCLUDES="-I$withval/include $WRAPINCLUDES"
+	      fi
+	      WRAPLIB="-L$withval -lwrap"
+	      if test -d $withval/lib; then
+		WRAPLIB="-L$withval/lib $WRAPLIB"
+	      fi
 	    else
 	      WRAPINCLUDES="$withval"
 	    fi
-	    OLDLIBS="$LIBS"
-	    CFLAGS="-DHAVE_LIBWRAP $WRAPINCLUDES $CFLAGS"
-	    LIBS="$WRAPLIBS $LIBS"
-
-	    AC_TRY_LINK([ int allow_severity; int deny_severity; ],
-			[ hosts_access(); ],
-			[],
-			[ AC_MSG_ERROR(Could not find the $withval library. You must first install tcp_wrappers.) ])
 	    ;;
 	esac ],
-	AC_MSG_RESULT(no)
+	[AC_MSG_RESULT([try to find])
+	 WRAP_TRY=auto]
 )
+# Link test for libwrap
+if test "$WRAP_TRY" = yes -o "$WRAP_TRY" = auto; then
+    OLDCFLAGS="$CFLAGS"
+    CFLAGS="$WRAPINCLUDES $CFLAGS"
+    OLDLIBS="$LIBS"
+    WRAPLIB=${WRAPLIB:-"-lwrap"}
+    LIBS="$WRAPLIB $OLDLIBS"
+    AC_MSG_CHECKING([libwrap is working])
+    AC_TRY_LINK([ int allow_severity; int deny_severity; ],
+		[ hosts_access(); ],
+		[ AC_MSG_RESULT(yes)
+		  AC_DEFINE(HAVE_LIBWRAP, 1,
+		           [Define if you have libwrap (TCP wrapper) support.])
+		  AC_SUBST(WRAPLIB)],
+		[ AC_MSG_RESULT(no)
+		  if test "$WRAP_TRY" = yes; then
+		    AC_MSG_ERROR([Could not find libwrap. Please check config.log.])
+		  else
+		    # recover old flag / clear needless WRAPLIB and continue
+		    CFLAGS=$OLDCFLAGS
+		    WRAPLIB=
+		  fi] )
+    # only jserver needs libwrap, recover LIBS also
+    LIBS=$OLDLIBS
+fi
 
 
 dnl
 dnl Creating Makefiles.
 dnl
 # mkdir -p Contrib/dic/gerodic in case builddir != srcdir
-for dir in Contrib Contrib/dic Contrib/dic/gerodic; do
+dir=Contrib/dic/gerodic
   if test ! -d $dir; then
     echo "creating $dir ..."
-    mkdir $dir
+  $ac_install_sh -d $dir
   fi
-done
 
 dnl
 dnl Generate Makefiles

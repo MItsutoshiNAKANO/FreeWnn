@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.17 2003-06-04 14:12:12 hiroo Exp $
+#   $Id: Makefile.in,v 1.18 2004-05-21 16:39:32 aono Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2003
+# Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2003, 2004
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -29,17 +29,21 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-include ../../makerule.mk
-top_builddir = ../..
+include @top_builddir@/makerule.mk
+  top_srcdir = @top_srcdir@
+      srcdir = @srcdir@
+       VPATH = @srcdir@
+top_builddir = @top_builddir@
 
 INSTALL         = @INSTALL@ $(INSTALLFLAGS)
 LOCAL_INSTFLAGS = -o $(WNNOWNER)
 
  JSERVERDEFINES = -DJSERVER -DWRITE_CHECK
-       INCLUDES = -I$(WNNINCLUDESRC) -I$(TOP)
+       INCLUDES = -I$(WNNINCLUDESRC) -I$(top_builddir) -I$(srcdir)
         DEFINES = $(WNNDEFINES) $(JSERVERDEFINES) $(WNNTERM)
   SERVERINITDEF = -DSERVER_INIT_FILE=\"/$(JWNNLANG)/jserverrc\"
-  HINSIDEFINES = -DHINSIDATA_FILE=\"/$(JWNNLANG)/hinsi.data\"
+   HINSIDEFINES = -DHINSIDATA_FILE=\"/$(JWNNLANG)/hinsi.data\"
+        WRAPLIB = @WRAPLIB@
 
 SRC0= de.c
 SRC1= dispatch.c 	do_dic_env.c 	do_dic_no.c 	do_filecom.c 	error.c 	jbiki.c 	jbiki_b.c 	jishoop.c 	rd_jishoop.c 	readfile.c 	b_index.c 	jishosub.c 	jmt0.c 	mknode0.c 	mknode1.c 	mknode2.c 	renbn_kai.c 	bnsetu_kai.c 	daibn_kai.c 	jikouho.c 	jikouho_d.c 	fzk.c 	atojis.c 	get_kaiarea.c 	snd_rcv.c 	do_henkan.c 	do_henkan1.c 	do_env.c 	do_hindo_s.c 	initjserv.c 	hinsi_list.c 	sisheng.c 	w_string.c
@@ -88,7 +92,7 @@ all:: jserver
 
 jserver: $(OBJS)
 	$(RM) $@
-	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) @LIBS@
+	$(LIBTOOL) --mode=link $(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) @LIBS@ $(WRAPLIB)
 
 clean::
 	$(RM) jserver
@@ -100,10 +104,10 @@ instserver:: install
 install:: jserver
 	@if [ -d $(DESTDIR)$(JWNNBINDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(JWNNBINDIR)); fi
-	$(LIBTOOL) $(INSTALL) $(INSTPGMFLAGS) $(INSTUIDFLAGS) $(LOCAL_INSTFLAGS) jserver $(DESTDIR)$(JWNNBINDIR)/jserver
+	$(LIBTOOL) --mode=install $(INSTALL) $(INSTPGMFLAGS) $(INSTUIDFLAGS) $(LOCAL_INSTFLAGS) jserver $(DESTDIR)$(JWNNBINDIR)/jserver
 
 $(OBJ0) : $(SRC0)
-	$(CC) -c $(CFLAGS) $(SERVERINITDEF) $(SOLINGERDEFS) ./`basename $@ .o`.c
+	$(CC) -c $(CFLAGS) $(SERVERINITDEF) $(SOLINGERDEFS) $(srcdir)/`basename $@ .o`.c
 
 $(OBJ3) : $(SRC3)
 	$(CC) -c $(CFLAGS)  $(WNNJLIBSRC)/`basename $@ .o`.c

@@ -1004,15 +1004,15 @@ if test -n "$ac_init_help"; then
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-debug             enable debug options default=no
-  --enable-libraries      build and install libraries default=yes
-  --enable-server         build and install server default=yes
-  --enable-client         build and install clients default=no
-  --enable-Wnn         build and install Wnn default=yes
-  --enable-cWnn         build and install cWnn default=yes
-  --enable-kWnn         build and install kWnn default=yes
-  --enable-ipv6           build and install IPv6 default=no
-  --enable-unsafe-path    allow creating files in an arbitrary path default=no
+  --enable-debug          enable debug options [default=no]
+  --enable-libraries      build and install libraries [default=yes]
+  --enable-server         build and install server [default=yes]
+  --enable-client         build and install clients [default=no]
+  --enable-Wnn            build and install Wnn [default=yes]
+  --enable-cWnn           build and install cWnn [default=yes]
+  --enable-kWnn           build and install kWnn [default=yes]
+  --enable-ipv6           build and install IPv6 [default=no]
+  --enable-unsafe-path    allow creating files in an arbitrary path [default=no]
   --enable-shared[=PKGS]
                           build shared libraries [default=yes]
   --enable-static[=PKGS]
@@ -1024,22 +1024,22 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-libwnn               use installed Wnn library default=no
-  --with-wnn-includes=DIR  WNN include files are in DIR
-  --with-wnn-libraries=DIR Search for WNN libraries in DIRdefault=/usr/local/lib
-  --with-libcwnn               use installed cWnn library default=no
+  --with-libwnn             use installed Wnn library [default=no]
+  --with-wnn-includes=DIR   WNN include files are in DIR
+  --with-wnn-libraries=DIR  Search for WNN libraries in DIR [default=/usr/local/lib]
+  --with-libcwnn            use installed cWnn library [default=no]
   --with-cwnn-includes=DIR  CWNN include files are in DIR
-  --with-cwnn-libraries=DIR Search for CWNN libraries in DIRdefault=/usr/local/lib
-  --with-libkwnn               use installed kWnn library default=no
+  --with-cwnn-libraries=DIR Search for CWNN libraries in DIR [default=/usr/local/lib]
+  --with-libkwnn            use installed kWnn library [default=no]
   --with-kwnn-includes=DIR  KWNN include files are in DIR
-  --with-kwnn-libraries=DIR Search for KWNN libraries in DIRdefault=/usr/local/lib
+  --with-kwnn-libraries=DIR Search for KWNN libraries in DIR [default=/usr/local/lib]
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-pic              try to use only PIC/non-PIC objects [default=use
                           both]
   --with-tags[=TAGS]
                           include additional configurations [automatic]
   --with-x                use the X Window System
-  --with-libwrap=PATH   Compile in libwrap (tcp_wrappers) support.
+  --with-libwrap[=DIR]    Compile in libwrap (tcp_wrappers) support [default=try to find libwrap]
 
 Some influential environment variables:
   CC          C compiler command
@@ -1406,6 +1406,11 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 ac_config_headers="$ac_config_headers config.h"
 
 
+
+# Quick and Dirty workaround for Autoconf-2.53 and Libtools-1.5 pair ...
+# not to use additional tagged configuration. (default: CXX F77)
+# NOTICE: Please remove next line if situation changes. (aono)
+tagnames=
 
 ac_aux_dir=
 for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
@@ -2545,10 +2550,14 @@ case $host in
     CCOPTIONS="-Dlinux -D_POSIX_SOURCE -D_BSD_SOURCE"
     ;;
 *-*-darwin*)
+    if test $GCC = yes; then
     # Unfortunately, autoconf (at least 2.57) does not recognize
     # proper CPP. (Normal cpp-precomp nor auto-retrying in basic mode does
     # not work with pubdic+ processing.) So define here ....
-    CPP=${CPP:-"gcc -E -no-cpp-precomp"}
+      # Note: It seems gcc-3.3 (or (probably) later) does not need this.
+      CPP=${CPP:-"$CC -E -no-cpp-precomp"}
+    fi
+    # Don't care other CC-s.
     ;;
 *-*-sunos*)
       if test $GCC = yes; then
@@ -3482,7 +3491,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 3485 "configure"' > conftest.$ac_ext
+  echo '#line 3494 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -4560,7 +4569,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:4563:" \
+echo "$as_me:4572:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -5563,11 +5572,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:5566: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:5575: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:5570: \$? = $ac_status" >&5
+   echo "$as_me:5579: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -5795,11 +5804,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:5798: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:5807: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:5802: \$? = $ac_status" >&5
+   echo "$as_me:5811: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -5862,11 +5871,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:5865: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:5874: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:5869: \$? = $ac_status" >&5
+   echo "$as_me:5878: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -7865,7 +7874,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 7868 "configure"
+#line 7877 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -7963,7 +7972,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 7966 "configure"
+#line 7975 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10097,11 +10106,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10100: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10109: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:10104: \$? = $ac_status" >&5
+   echo "$as_me:10113: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -10164,11 +10173,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10167: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10176: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:10171: \$? = $ac_status" >&5
+   echo "$as_me:10180: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -11396,7 +11405,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11399 "configure"
+#line 11408 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11494,7 +11503,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11497 "configure"
+#line 11506 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12316,11 +12325,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12319: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12328: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12323: \$? = $ac_status" >&5
+   echo "$as_me:12332: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -12383,11 +12392,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12386: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12395: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:12390: \$? = $ac_status" >&5
+   echo "$as_me:12399: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -14321,11 +14330,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14324: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14333: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:14328: \$? = $ac_status" >&5
+   echo "$as_me:14337: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -14553,11 +14562,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14556: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14565: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:14560: \$? = $ac_status" >&5
+   echo "$as_me:14569: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -14620,11 +14629,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14623: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14632: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14627: \$? = $ac_status" >&5
+   echo "$as_me:14636: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16623,7 +16632,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 16626 "configure"
+#line 16635 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -16721,7 +16730,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 16724 "configure"
+#line 16733 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -19451,6 +19460,7 @@ done
 
 
 
+WRAPLIB=
 echo "$as_me:$LINENO: checking whether to use libwrap" >&5
 echo $ECHO_N "checking whether to use libwrap... $ECHO_C" >&6
 
@@ -19461,91 +19471,47 @@ if test "${with_libwrap+set}" = set; then
 	  no)
 	    echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
+	    WRAP_TRY=no
 	    ;;
 	  yes)
 	    echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-	    echo "$as_me:$LINENO: checking for request_init in -lwrap" >&5
-echo $ECHO_N "checking for request_init in -lwrap... $ECHO_C" >&6
-if test "${ac_cv_lib_wrap_request_init+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lwrap  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-#include "confdefs.h"
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char request_init ();
-#ifdef F77_DUMMY_MAIN
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-#endif
-int
-main ()
-{
-request_init ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_wrap_request_init=yes
-else
-  echo "$as_me: failed program was:" >&5
-cat conftest.$ac_ext >&5
-ac_cv_lib_wrap_request_init=no
-fi
-rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_wrap_request_init" >&5
-echo "${ECHO_T}$ac_cv_lib_wrap_request_init" >&6
-if test $ac_cv_lib_wrap_request_init = yes; then
-
-	      LIBS="-lwrap $LIBS"
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_LIBWRAP 1
-_ACEOF
-
-fi
-
-	    CFLAGS="-DHAVE_LIBWRAP $CFLAGS"
+	    WRAP_TRY=yes
 	    ;;
 	  *)
 	    echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
+	    WRAP_TRY=yes
 	    if test -d "$withval"; then
 	      WRAPINCLUDES="-I$withval"
-	      WRAPLIBS="-L$withval -lwrap"
+	      if test -d $withval/include; then
+		WRAPINCLUDES="-I$withval/include $WRAPINCLUDES"
+	      fi
+	      WRAPLIB="-L$withval -lwrap"
+	      if test -d $withval/lib; then
+		WRAPLIB="-L$withval/lib $WRAPLIB"
+	      fi
 	    else
 	      WRAPINCLUDES="$withval"
 	    fi
-	    OLDLIBS="$LIBS"
-	    CFLAGS="-DHAVE_LIBWRAP $WRAPINCLUDES $CFLAGS"
-	    LIBS="$WRAPLIBS $LIBS"
+	    ;;
+	esac
+else
+  echo "$as_me:$LINENO: result: try to find" >&5
+echo "${ECHO_T}try to find" >&6
+	 WRAP_TRY=auto
 
-	    cat >conftest.$ac_ext <<_ACEOF
+fi;
+# Link test for libwrap
+if test "$WRAP_TRY" = yes -o "$WRAP_TRY" = auto; then
+    OLDCFLAGS="$CFLAGS"
+    CFLAGS="$WRAPINCLUDES $CFLAGS"
+    OLDLIBS="$LIBS"
+    WRAPLIB=${WRAPLIB:-"-lwrap"}
+    LIBS="$WRAPLIB $OLDLIBS"
+    echo "$as_me:$LINENO: checking libwrap is working" >&5
+echo $ECHO_N "checking libwrap is working... $ECHO_C" >&6
+    cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 #include "confdefs.h"
  int allow_severity; int deny_severity;
@@ -19575,31 +19541,41 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  :
+   echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_LIBWRAP 1
+_ACEOF
+
+
 else
   echo "$as_me: failed program was:" >&5
 cat conftest.$ac_ext >&5
- { { echo "$as_me:$LINENO: error: Could not find the $withval library. You must first install tcp_wrappers." >&5
-echo "$as_me: error: Could not find the $withval library. You must first install tcp_wrappers." >&2;}
+ echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+		  if test "$WRAP_TRY" = yes; then
+		    { { echo "$as_me:$LINENO: error: Could not find libwrap. Please check config.log." >&5
+echo "$as_me: error: Could not find libwrap. Please check config.log." >&2;}
    { (exit 1); exit 1; }; }
+		  else
+		    # recover old flag / clear needless WRAPLIB and continue
+		    CFLAGS=$OLDCFLAGS
+		    WRAPLIB=
+		  fi
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-	    ;;
-	esac
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-
-fi;
+    # only jserver needs libwrap, recover LIBS also
+    LIBS=$OLDLIBS
+fi
 
 
 # mkdir -p Contrib/dic/gerodic in case builddir != srcdir
-for dir in Contrib Contrib/dic Contrib/dic/gerodic; do
+dir=Contrib/dic/gerodic
   if test ! -d $dir; then
     echo "creating $dir ..."
-    mkdir $dir
+  $ac_install_sh -d $dir
   fi
-done
 
 
 
@@ -20267,6 +20243,7 @@ s,@LIBTOOL@,$LIBTOOL,;t t
 s,@LIBTOOL_DEPS@,$LIBTOOL_DEPS,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@JS_SUPPORTOBJS@,$JS_SUPPORTOBJS,;t t
+s,@WRAPLIB@,$WRAPLIB,;t t
 CEOF
 
 _ACEOF

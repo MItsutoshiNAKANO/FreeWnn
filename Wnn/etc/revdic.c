@@ -1,5 +1,5 @@
 /*
- *  $Id: revdic.c,v 1.4 2002-11-12 10:25:01 aono Exp $
+ *  $Id: revdic.c,v 1.5 2004-05-21 16:39:32 aono Exp $
  */
 
 /*
@@ -51,21 +51,21 @@
 
 static int tmptmp;
 
-#define rev_int(x) (tmptmp = *(x), *(x) = (tmptmp >> 24) & 0xff | \
-                                      ((tmptmp >> 16) & 0xff) << 8 | \
-                                      ((tmptmp >> 8) & 0xff) << 16 | \
-                                      ((tmptmp & 0xff) << 24))
+#define rev_int(x) (tmptmp = *(x), *(x) = ((tmptmp >> 24) & 0xff) | \
+                                      (((tmptmp >> 16) & 0xff) << 8) | \
+                                      (((tmptmp >> 8) & 0xff) << 16) | \
+                                      (((tmptmp & 0xff) << 24)))
 
-#define rev_short(x) (tmptmp = *(x), *(x) = (tmptmp >> 8) & 0xff | \
-                                            (tmptmp & 0xff) << 8)
+#define rev_short(x) (tmptmp = *(x), *(x) = ((tmptmp >> 8) & 0xff) | \
+                                            ((tmptmp & 0xff) << 8))
 
-#define rev_int_org(x) (tmptmp = *(x), *(x) = (tmptmp >> 24) & 0xff | \
-                                      ((tmptmp >> 16) & 0xff) << 8 | \
-                                      ((tmptmp >> 8) & 0xff) << 16 | \
+#define rev_int_org(x) (tmptmp = *(x), *(x) = ((tmptmp >> 24) & 0xff) | \
+                                      (((tmptmp >> 16) & 0xff) << 8) | \
+                                      (((tmptmp >> 8) & 0xff) << 16) | \
                                       ((tmptmp & 0xff) << 24), tmptmp)
 
-#define rev_short_org(x) (tmptmp = *(x), *(x) = (tmptmp >> 8) & 0xff | \
-                                            (tmptmp & 0xff) << 8, tmptmp)
+#define rev_short_org(x) (tmptmp = *(x), *(x) = ((tmptmp >> 8) & 0xff) | \
+                                            ((tmptmp & 0xff) << 8), tmptmp)
 
 
 

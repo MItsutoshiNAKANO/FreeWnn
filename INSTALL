@@ -1,5 +1,5 @@
 #
-#  $Id: INSTALL,v 1.5 2002-05-11 13:03:35 hiroo Exp $
+#  $Id: INSTALL,v 1.6 2004-05-21 16:39:31 aono Exp $
 #
 
 #
@@ -94,6 +94,8 @@ FreeWnn 独自の configure option のうち、主なものは以下の通りです。
   --enable-unsafe-path  jserverdir 以外のディレクトリに jserver がファイル
                         を作成するのを許可します。(注5)
   --enable-client	uum を作成及びインストールします。(注6)
+  --with-libwrap	TCP wrapperのlibwrapを使用し、jserverの接続時点での
+			アクセス制限を可能にします。(注7)
 
 注5: [cjkt]server は、任意の host からの要求を受け付けてしまいます。
   --enable-unsafe-path を有効にすると、任意の host から jserver 実行ユーザー
@@ -106,3 +108,5 @@ FreeWnn 独自の configure option のうち、主なものは以下の通りです。
   防げません。
 
 注6: cuum はまだ compile 出来ません。
+
+注7: --enable-ipv6と同時に指定する場合、libwrapもIPv6対応である必要があります。

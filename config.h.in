@@ -72,7 +72,7 @@
 /* Define to 1 if you have the `socket' library (-lsocket). */
 #undef HAVE_LIBSOCKET
 
-/* Define libwrap (TCP Wrapper) support. */
+/* Define if you have libwrap (TCP wrapper) support. */
 #undef HAVE_LIBWRAP
 
 /* Define to 1 if you have the <malloc.h> header file. */
