@@ -1,5 +1,5 @@
 /*
- *  $Id: wnnkill.c,v 1.6 2002-03-07 17:11:45 hiroo Exp $
+ *  $Id: wnnkill.c,v 1.7 2002-03-26 18:54:54 hiroo Exp $
  */
 
 /*
@@ -30,11 +30,22 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: wnnkill.c,v 1.6 2002-03-07 17:11:45 hiroo Exp $";
+static char *rcs_id = "$Id: wnnkill.c,v 1.7 2002-03-26 18:54:54 hiroo Exp $";
 #endif /* lint */
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #include <stdio.h>
-#include <unistd.h>
+#if STDC_HEADERS
+#  include <string.h>
+#elif HAVE_STRINGS_H
+#  include <strings.h>
+#endif /* STDC_HEADERS */
+#if HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
 #include "jllib.h"
 #include "jslib.h"
 #include "jd_sock.h"
