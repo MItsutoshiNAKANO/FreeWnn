@@ -1,5 +1,5 @@
 /*
- *  $Id: js.c,v 1.14 2003-05-11 18:25:22 hiroo Exp $
+ *  $Id: js.c,v 1.15 2003-11-08 06:26:06 aono Exp $
  */
 
 /*
@@ -2949,7 +2949,7 @@ get_serv_defs (lang, cnt)
      int cnt;
 {
   FILE *fp;
-  static char s[6][EXPAND_PATH_LENGTH];
+  static char s[7][EXPAND_PATH_LENGTH];
   char serv_defs[EXPAND_PATH_LENGTH];
   char data[1024];
   int num;
