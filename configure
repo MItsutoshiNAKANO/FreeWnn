@@ -712,15 +712,32 @@ case $hosttype in
     fi
     ;;
 "SunOS")
-    if test $CC = gcc; then
+    case `uname -r` in
+    4.*)
+      if test $CC = gcc; then
         CDEBUGFLAGS=-O2
-        CCOPTIONS="-Dsun -Dsparc -DSVR4 -DSYSV"
-    else
-        CCOPTIONS="-Xc -xF -xcg92 -Dsun -Dsparc -DSVR4 -DSYSV"
-    fi
-    if test -x /usr/ccs/lib/cpp; then
-        CPP=/usr/ccs/lib/cpp
-    fi
+	CCOPTIONS="-Dsun -Dsparc"
+      else
+        CDEBUGFLAGS=-O4
+        CCOPTIONS=""
+      fi
+      CPP=/usr/lib/cpp
+      ;;
+    5.*)
+      if test $CC = gcc; then
+          CDEBUGFLAGS=-O2
+          CCOPTIONS="-Dsun -Dsparc -DSVR4 -DSYSV"
+      else
+          CCOPTIONS="-Xc -xF -xcg92 -Dsun -Dsparc -DSVR4 -DSYSV"
+      fi
+      if test -x /usr/ccs/lib/cpp; then
+          CPP=/usr/ccs/lib/cpp
+      fi
+      ;;
+    *)
+      { echo "configure: error: "This system is not supported."" 1>&2; exit 1; }
+      ;;
+    esac
     ;;
 *)
     { echo "configure: error: "This system is not supported."" 1>&2; exit 1; }

@@ -1,5 +1,5 @@
 /*
- * $Id: uif.c,v 1.1.1.1 2000-01-16 05:07:51 ura Exp $
+ * $Id: uif.c,v 1.2 2000-01-16 05:35:37 ura Exp $
  */
 
 /*
@@ -1172,11 +1172,6 @@ env_state()
 {
     char *p;
     char ret = '\0';
-#ifndef SYSVR2
-    extern char *index();
-#else
-    extern char *strchr();
-#endif
 
     if ((p = romkan_dispmode()) == NULL) return(ret);
 #ifndef SYSVR2
