@@ -1,5 +1,5 @@
 /*
- * $Id: bdic.c,v 1.1.1.1 2000-01-16 05:07:44 ura Exp $
+ * $Id: bdic.c,v 1.3 2000-01-16 07:15:50 ura Exp $
  */
 
 /*
@@ -281,7 +281,7 @@ register int n;
 static
 #endif
 int
-getnstr(ifpter, n, st)
+getnstring(ifpter, n, st)
 register FILE *ifpter;
 register int n;
 register char *st;
@@ -662,13 +662,13 @@ struct wnn_file_head *hp;
     char wnn_file_string[WNN_FILE_STRING_LEN + 1];
     int err = 0;
     
-    getnstr(ifpter, WNN_FILE_STRING_LEN, wnn_file_string);
+    getnstring(ifpter, WNN_FILE_STRING_LEN, wnn_file_string);
     if(strncmp(wnn_file_string, WNN_FILE_STRING, WNN_FILE_STRING_LEN))
 	err = -1;
     if(getint((&hp->file_type), ifpter) == -1) err = -1;
     if(input_file_uniq(&(hp->file_uniq), ifpter) == -1) err = -1;
     if(input_file_uniq(&(hp->file_uniq_org), ifpter) == -1) err = -1;
-    getnstr(ifpter, WNN_PASSWD_LEN, hp->file_passwd);
+    getnstring(ifpter, WNN_PASSWD_LEN, hp->file_passwd);
     getnull(ifpter, 36);
     return(err);
 }
@@ -715,7 +715,7 @@ FILE *ifpter;
        getint(&(funiq->time), ifpter) == -1 ||
        getint(&(funiq->dev), ifpter) == -1 ||
        getint(&(funiq->inode), ifpter) == -1 ||
-       getnstr(ifpter, WNN_HOSTLEN, funiq->createhost) == -1)
+       getnstring(ifpter, WNN_HOSTLEN, funiq->createhost) == -1)
 	return(-1);
     return(0);
 }
@@ -1144,7 +1144,7 @@ int which;
 #endif /* BDIC_WRITE_CHECK */
     }
 
-#ifdef	BSD42
+#if defined(BSD42)&& !defined(BEOS)
     fchmod(fileno(fp), 0664);
     fclose(fp);
 #else	/* SYSV */
@@ -1200,7 +1200,7 @@ int serial;
     putnull(fp, serial);
 #endif /* BDIC_WRITE_CHECK */
 
-#ifdef	BSD42
+#if defined(BSD42) && !defined(BEOS)
     fchmod(fileno(fp), 0664);
     fclose(fp);
 #else	/* SYSV */
@@ -1227,7 +1227,7 @@ struct JT *jt1;
        getint(&jt1->maxtable , ifpter) == -1 ||
        getint(&jt1->maxhontai , ifpter) == -1 ||
        getint(&jt1->gosuu , ifpter) == -1 ||
-       getnstr(ifpter, WNN_PASSWD_LEN, jt1->hpasswd) == -1 ||
+       getnstring(ifpter, WNN_PASSWD_LEN, jt1->hpasswd) == -1 ||
        getint(&jt1->total , ifpter) == -1 ||
        getint(&jt1->maxri1[D_YOMI] , ifpter) == -1 ||
        getint(&jt1->maxri1[D_KANJI] , ifpter) == -1 ||

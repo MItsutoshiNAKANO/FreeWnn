@@ -1,5 +1,5 @@
 #ifndef lint
-static char *rcs_id = "$Id: oldatonewa.c,v 1.1.1.1 2000-01-16 05:07:46 ura Exp $";
+static char *rcs_id = "$Id: oldatonewa.c,v 1.2 2000-01-16 05:48:53 ura Exp $";
 #endif /* lint */
 
 /*
@@ -84,7 +84,7 @@ extern int motoni2();
 static int get_line1();
 static char *get_string();
 
-void
+int
 main()
 {
   char buffer[LINE_SIZE];

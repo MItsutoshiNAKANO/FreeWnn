@@ -1,5 +1,5 @@
 /*
- * $Id: fzk.c,v 1.1.1.2 2000-01-16 05:10:52 ura Exp $
+ * $Id: fzk.c,v 1.2 2000-01-16 06:52:39 ura Exp $
  */
 
 /*
@@ -539,7 +539,7 @@ int
 fzk_ckvt(vector)
 register int	vector;
 {
-	return (fzk_ck_vector(((struct kangovect *) ft->kango_vect_area + vector)));
+	return vector >= 0 && fzk_ck_vector(&ft->kango_vect_area[vector]);
 }
 
 

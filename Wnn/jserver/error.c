@@ -1,5 +1,5 @@
 /*
- * $Id: error.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: error.c,v 1.3 2000-01-16 07:30:02 ura Exp $
  */
 
 /*
@@ -38,6 +38,8 @@
  */
 /*	Version 4.0
  */
+#include <config.h>
+
 #include <stdio.h>
 #include <time.h>
 #include <errno.h>
@@ -81,11 +83,11 @@ static void
 my_error(x)
 register char *x;
 {
-  long obakenoQ;
+  time_t obakenoQ;
 /*  struct passed *getpwiuid();  */
 
   if(!noisy)return;
-  obakenoQ = time((long *)0);
+  obakenoQ = time(NULL);
   if(c_c){
 #ifdef SYSVR2
       fprintf(stderr , "client %s :	%s	%s	 errno =%d\n\n" ,

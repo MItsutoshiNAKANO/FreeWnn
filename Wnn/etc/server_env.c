@@ -1,5 +1,5 @@
 /*
- * $Id: server_env.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: server_env.c,v 1.2 2000-01-16 06:37:13 ura Exp $
  */
 
 /*
@@ -37,7 +37,7 @@
 
 #include <stdio.h>
 #include "commonhd.h"
-#include "config.h"
+#include "wnn_config.h"
 #include "wnn_os.h"
 
 typedef struct _server_env_struct {

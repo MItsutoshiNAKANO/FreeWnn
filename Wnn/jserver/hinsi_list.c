@@ -1,5 +1,5 @@
 /*
- * $Id: hinsi_list.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: hinsi_list.c,v 1.2 2000-01-16 06:37:15 ura Exp $
  */
 
 /*
@@ -40,7 +40,7 @@
  */
 #include <stdio.h>
 #include "commonhd.h"
-#include "config.h"
+#include "wnn_config.h"
 #include "de_header.h"
 #include "wnnerror.h"
 #include "jslib.h"
