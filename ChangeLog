@@ -1,3 +1,37 @@
+Sun Sep 16 11:10:20 UTC 2001  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* configure に --enable-debug option を追加した。
+	  gcc の場合に、CDEBUGFLAGS に -g2 を追加し、
+	  INSTPGMFLAGS から -s を省いて strip されないようにする。
+	  gcc 以外の場合の configure.in の記述を募集中。
+
+Sat Sep 15 17:29:15 UTC 2001  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* jserver を動かしている user の権限で remote から任意のファイルを
+	  作成されてしまう問題への対策。
+	  jserver_dir 以外へのファイル作成を禁止する。
+	  ([freewnn:00699] うかい@debian さん via いしかわ@debian さん)
+	  運用によっては、問題がある場合が考えられるので、configure で
+	  OFF にできるようにした (その場合は、せめて ipfilter 等で想定して
+	  いない host からの接続を禁止すべきであろう)。
+	  将来的には、tcp_wrappers 対応、なんらかの認証機構等、もっとまし
+	  な security を実現すべきだが、この問題は KKTP そのものの設計の
+	  問題なので、よく考えて設計しなおすべきであろう。
+	  Manpower を言い訳にして、とりあえず課題として挙げるに留める。
+	* ISO C 対応を視野にいれ、P_ マクロ (in wnn_os.h) を定義した。
+	  (本当はもう少し前にいれてあったが)。
+	  徐々に、これを使って prototype 宣言を行なうように変更して行く予定。
+	  (議論の余地があるので、消す可能性あり)。
+	* uum patch ([freewnn:00676] いいじまさん)
+	  cuum, kuum, tuum については同様の変更を追加予定だが、今回は
+	  uum のみ。
+	* IPv6 patch 修正。
+	  Unix domain socket の permission を 0777 に設定。
+	  cmd_name を argv[0] に設定。
+	  ([freewnn:00716],[freewnn:00732] 濱嶋さん)
+	  jserver.man も修正した。
+	* Wnn/jserver/error.c の error1() で、"cmd_name:" を上書きしないよ
+	  うにする。([freewnn:00730] 青野さん)
+	* INSTALL ファイル修正。
+
 Tue Aug 14 11:12:34 UTC 2001 Hiroo Ono <hiroo@oikumene.gcd.org>
 	* CPP + IPv6 patch ([freewnn:00673] 濱嶋さん)
 	* configure.in の BeOS 部分の修正。 ([freewnn:00677] 阿部さん)

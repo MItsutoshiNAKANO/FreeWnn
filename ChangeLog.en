@@ -1,3 +1,37 @@
+Sun Sep 16 11:10:20 UTC 2001  Hiroo Ono <hiroo@oikumene.gcd.org>
+        * Added --enable-debug option to the configure script.
+	  it adds -g2 option to CDEBUGFLAGS if CC is GCC, and remove
+          -s from INSTPGMFLAGS not to strip the executable.
+          An update to the configure.in script for CC other than GCC is
+	  welcome.
+
+Sat Sep 15 17:29:15 UTC 2001  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Put workaround for remote vulnerability that allow to create 
+	  a file in an arbitrary path.
+	  ([freewnn:00699] by Mr.Ukai via Mr. M.Ishikawa).
+	  As it breaks the traditional feature (the problem itself!) of
+	  FreeWnn, this workaround can be turned off in the configure
+	  script. But if you want to do so, you should at least forbid
+	  accesses from unexpected hosts using ipfilter or its equivalent.
+	  More secure solutions like adding tcp_wrappers feature and
+	  some kind of authentication are needed, but as the problem came
+	  from the design of KKTP itself, we should be careful what
+	  solution we will take. Due to the poor manpower, this will take
+	  time.
+	* Added P_ macro in wnn_os.h to support ISO C (and current K&R
+	  style) in the future.
+	  I am planning to change prototypes to be written with the macro.
+	  (it may be backed out though).
+	* Uum support again ([freewnn:00676] by Mr. K.Iijima).
+	  There is no cuum, kuum, tuum support yet, but there will be.
+	* Fix IPv6 feature.
+	  Set the permission of Unix domain socket to 0766
+	  Set the variable cmd_name to argv[0].
+	  ([freewnn:00716],[freewnn:00732] by K. Hamajima).
+	* Do not ignore "cmd_name:" in error1() of Wnn/jserver/error.c
+	  ([freewnn:00730] by T.Aono)
+	* Modified INSTALL.en
+
 Tue Aug 14 11:12:34 UTC 2001 Hiroo Ono <hiroo@oikumene.gcd.org>
 	* CPP + IPv6 path ([freewnn:00673] Katsuomi Hamajima)
 	* fix to configure.in for beos ([freewnn:00677] Hiroaki Abe)
