@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.21 2002-03-21 01:19:50 hiroo Exp $
+dnl   $Id: configure.in,v 1.22 2002-03-21 04:32:23 hiroo Exp $
 dnl
 
 dnl
@@ -415,15 +415,16 @@ AC_PROG_GCC_TRADITIONAL
 AC_FUNC_MEMCMP
 AC_TYPE_SIGNAL
 AC_FUNC_WAIT3
-AC_CHECK_FUNCS(gethostname select socket strtol)
-AC_CHECK_FUNCS(drand48)
 AC_CHECK_FUNCS(perror)
-AC_CHECK_FUNCS(closesocket setsockopt send recv)
+AC_CHECK_FUNCS(drand48 strtol)
+AC_CHECK_FUNCS(fchmod)
 AC_CHECK_FUNC(setpgrp)
+AC_FUNC_SETPGRP
+AC_CHECK_FUNCS(gethostname select)
+AC_CHECK_FUNCS(socket closesocket setsockopt send recv)
 AC_CHECK_FUNCS(vsyslog)
 dnl for bcopy/index -> memcpy/strchr conversion (preparation):
 dnl AC_CHECK_FUNCS(strchr memcpy)
-AC_FUNC_SETPGRP
 
 dnl Check fallback functions for jserver (should use AC_REPLACE_FUNCS?)
 JS_SUPPORTOBJS=
