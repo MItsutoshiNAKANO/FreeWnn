@@ -1,5 +1,5 @@
 /*
- *  $Id: error.c,v 1.12 2002-06-15 13:02:14 hiroo Exp $
+ *  $Id: error.c,v 1.13 2002-06-22 13:25:45 hiroo Exp $
  */
 
 /*
@@ -116,7 +116,7 @@ write_log(const char *format, ...)
 static void
 vwrite_log(const char *format, va_list ap)
 {
-#ifdef SYSVR2
+#ifdef PRINT_ERRNO
   int saved_errno = errno;
 #endif
   FILE *fplog = stderr;
@@ -164,7 +164,7 @@ vwrite_log(const char *format, va_list ap)
     vfprintf(fplog, format, ap);
   }
 
-#ifdef SYSVR2			/* I don't know it's useful ... (aono) */
+#ifdef PRINT_ERRNO	/* I don't know it's useful ... (aono) */
   fprintf(fplog, " ,errno=%d", saved_errno);
 #endif
   fputc('\n', fplog);

@@ -1,5 +1,5 @@
 /*
- *  $Id: do_hindo_s.c,v 1.7 2002-05-02 15:18:53 hiroo Exp $
+ *  $Id: do_hindo_s.c,v 1.8 2002-06-22 13:25:45 hiroo Exp $
  */
 
 /*
@@ -115,14 +115,6 @@ hindo_set (dic_no, entry, imaop, hinop)
      int imaop;
      int hinop;
 {
-#ifdef HAVE_DRAND48
-#define RAND()  drand48()
-#else
-#ifndef HAVE_RAND_MAX
-#define RAND_MAX (((unsigned)1<<31) - 1)
-#endif
-#define RAND()  ((double)rand() / (double)RAND_MAX)
-#endif
   UCHAR *hst;
   int ima, hindo;
 
@@ -155,11 +147,11 @@ hindo_set (dic_no, entry, imaop, hinop)
     case WNN_HINDO_NOP:
       break;
     case WNN_HINDO_INC:
-      if ((hindo & 0x7e) != 0x7e && (RAND () < (double) 1 / ((hindo >> 2) + 1)))
+      if ((hindo & 0x7e) != 0x7e && (DRAND () < (double) 1 / ((hindo >> 2) + 1)))
         hindo++;
       break;
     case WNN_HINDO_DECL:
-      if (hindo > 0 && hindo <= 126 && (RAND () < (double) 1 / ((hindo >> 2) + 1)))
+      if (hindo > 0 && hindo <= 126 && (DRAND () < (double) 1 / ((hindo >> 2) + 1)))
         hindo--;
       break;
     case WNN_ENTRY_NO_USE:

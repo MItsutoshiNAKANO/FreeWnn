@@ -1,5 +1,5 @@
 /*
- *  $Id: do_henkan1.c,v 1.5 2001-06-18 09:09:42 ura Exp $
+ *  $Id: do_henkan1.c,v 1.6 2002-06-22 13:25:45 hiroo Exp $
  */
 
 /*
@@ -47,10 +47,6 @@
 #include "fzk.h"
 
 #include "kaiseki.h"
-
-#ifndef NULL
-#define NULL 0
-#endif
 
 #define FZK_L 256
 #ifdef  putwchar

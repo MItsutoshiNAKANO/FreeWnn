@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.23 2002-06-15 13:02:14 hiroo Exp $
+ *  $Id: de.c,v 1.24 2002-06-22 13:25:45 hiroo Exp $
  */
 
 /*
@@ -60,24 +60,17 @@
 #ifdef HAVE_FCNTL_H
 #  include <fcntl.h>
 #endif
+#if HAVE_SYS_PARAM_H
+#  include <sys/param.h>
+#endif
 
 #include "commonhd.h"
 #include "wnn_config.h"
 #include "jd_sock.h"
 #include "demcom.h"
 #include "wnn_os.h"
-
-#if defined(HAVE_SYS_PARAM_H)
-#  include <sys/param.h>
-#endif /* HAVE_SYS_PARAM_H */
-
-#ifdef SYSVR2
-#ifndef SIGCHLD
-#define SIGCHLD SIGCLD
-#endif
-#endif /* SYSVR2 */
-
 #include "de_header.h"
+
 #ifdef UX386
 #include <sys/termio.h>
 #undef  AF_UNIX
@@ -534,11 +527,7 @@ daemon_init ()                   /* initialize Daemon */
       perror ("Malloc for client");
       exit (1);
     }
-#ifdef HAVE_DRAND48
-  srand48 (time (NULL));
-#else
-  srand ((int) time (NULL));
-#endif
+  SDRAND (time (NULL));
   clientp = 0;                  /* V3.0 */
   cur_clp = 0;                  /* V3.0 */
   socket_disc_init ();
@@ -687,7 +676,7 @@ gets_cur (buffer, buffer_size)
   while (--buffer_size && (*b = getc_cur ()) != '\0')
     b++;
 
-  if (*b != '\0')
+  if (!buffer_size)
     {
       *b = '\0';
       while (getc_cur () != '\0')
@@ -713,7 +702,7 @@ getws_cur (buffer, buffer_size)
   while (--buffer_size && (*b = get2_cur ()) != 0)
     b++;
 
-  if (*b != 0)
+  if (!buffer_size)
     {
       *b = 0;
       while (getc_cur () != 0)
