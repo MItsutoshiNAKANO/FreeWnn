@@ -1,0 +1,45 @@
+
+        FreeWnn インストールのしかた
+
+
+【基本的なインストールの手順】
+
+1. ファイルを展開します
+
+        $ zcat FreeWnn-*.tar.gz | tar xvf -
+
+        (注: * の部分はバージョンによって変わります)
+
+2. FreeWnn-*/Xsi に移ります
+
+        $ cd FreeWnn-*/Xsi
+
+3. configure を実行します
+
+        $ ./configure
+
+4. make します
+
+        $ make
+
+5. スーパーユーザーになって make install します
+
+        $ su
+        # make install
+
+6. マニュアルをインストールします
+
+        # make install.man
+
+        (マニュアルが不要であれば省略して構いません)
+
+
+【インストールされるディレクトリを変える】
+
+デフォルトでは /usr/local 以下にインストールされます。
+
+configure 時に --prefix オプションを指定すると、このディレクトリ指定を
+変えることができます。
+
+        $ ./configure --prefix=/opt/freewnn
+

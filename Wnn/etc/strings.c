@@ -1,5 +1,5 @@
 /*
- * $Id: strings.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: strings.c,v 1.2 2000-01-16 07:30:01 ura Exp $
  */
 
 /*
@@ -44,8 +44,6 @@
 #include <stdio.h>
 #include "commonhd.h"
 #include "wnn_string.h"
-
-#define NULL	0
 
 #define is_half_width(c)	(! is_full_width(c))
 #define is_full_width(c)	(((c) & 0xff00))

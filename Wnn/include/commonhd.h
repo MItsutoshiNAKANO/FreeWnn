@@ -1,5 +1,5 @@
 /*
- * $Id: commonhd.h,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: commonhd.h,v 1.3 2000-01-16 07:30:01 ura Exp $
  */
 
 /*
@@ -42,7 +42,7 @@
  * Common header 
  ****************/
 #include <stdio.h>
-#ifdef linux
+#if defined(linux)|| defined(BEOS)
 #include <unistd.h>
 #endif
 #define	JSERVER_VERSION	0x4200	/* minor version */
@@ -143,9 +143,6 @@ typedef  unsigned char UCHAR;
 #endif /* sun */
 #endif /* luna */
 
-#if defined(SYSVR2) || defined(sun)
-# define SRAND48
-#endif
 #if defined(SVR4) || defined(hpux)
 #ifndef F_OK
 #define F_OK	0

@@ -1,5 +1,5 @@
 /*
- * $Id: wnn_malloc.h,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: wnn_malloc.h,v 1.2 2000-01-16 06:37:14 ura Exp $
  */
 
 /*
@@ -40,9 +40,15 @@
 #ifndef	WNN_MALLOC
 #define	WNN_MALLOC
 
+#ifdef hpux
+extern void *malloc0(size_t);
+extern void free0(void *);
+extern void *realloc0(void *, size_t);
+#else
 extern char *malloc0();
 extern void free0();
 extern char *realloc0();
+#endif /* hpux */
 
 #define	malloc(s)	malloc0(s)
 #define	free(p)		free0(p)

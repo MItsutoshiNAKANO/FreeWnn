@@ -1,0 +1,26 @@
+/* とりあえず空ファイル (^^;) */
+
+#define HAVE_UNISTD_H 0
+
+
+/* *_t が定義されているか? (定義されていればここでは undef になる) */
+#undef time_t
+#undef socklen_t
+
+
+/*
+ *   drand48() があるかどうかを調べる。あれば srand48() もあるはずなので
+ *   HAVE_SRAND48 は作らず、これで兼用させる。
+ */    
+#undef HAVE_DRAND48
+
+/*
+ *   RAND_MAX が定義されていればこれも定義される。ちなみにこれは rand() が
+ *   返す値の最大値である。
+ */
+#undef HAVE_RAND_MAX
+
+/*
+ *   perror() が定義されていればこれも定義される。
+ */
+#undef HAVE_PERROR

@@ -1,5 +1,5 @@
 /*
- * "$Id: de.c,v 1.1.1.2 2000-01-16 05:10:52 ura Exp $"
+ * "$Id: de.c,v 1.6 2000-01-16 07:34:04 ura Exp $"
  */
 
 /*
@@ -47,10 +47,12 @@
 /*
 	Jserver		(Nihongo Demon)
 */
+#include <config.h>
+
 #include <stdio.h>
 #include <signal.h>
 #include "commonhd.h"
-#include "config.h"
+#include "wnn_config.h"
 #include "jd_sock.h"
 #include "demcom.h"
 #include "wnn_malloc.h"
@@ -80,6 +82,7 @@ extern int errno;		/* Pure BSD */
 #include "msg.h"
 
 #ifdef BSD42
+#undef NOFILE
 #define NOFILE getdtablesize() 
 #endif
 
@@ -186,7 +189,7 @@ int get2_cur();
 char cmd_name[80];
 
 /* No arguments are used. Only options. */
-void
+int
 main(argc, argv)
 int argc;
 char **argv;
@@ -264,18 +267,18 @@ char **argv;
 	fclose(stdout);
 	if(!noisy){
 #if !(defined(BSD) && (BSD >= 199306)) /* !4.4BSD-Lite by Taoka */
-	    fclose(stderr);
+	  fclose(stderr);
 #else /* 4.4BSD-Lite */
 	    int fd = open("/dev/null", O_WRONLY);
 	    if (fd < 0) {
-		xerror("Cannot open /dev/null\n");
+		xerror("Cannot open /dev/null");
 	    }
 	    dup2(fd, 2);
 	    close(fd);
 #endif /* 4.4BSD-Lite */
 	}
 
-#if defined(hpux) || defined(SOLARIS)
+#if defined(hpux) || defined(SOLARIS) || defined(BEOS)
 	setpgrp();
 #else /* defined(hpux) || defined(SOLARIS) */
 # if !defined(TIOCNOTTY) && defined(SVR4)
@@ -416,9 +419,17 @@ new_client()	/* NewClient */
 
     if(full || sd >= nofile || clientp >= max_client) {
 	fprintf(stderr,"%s: no more client\n", cmd_name);
+#ifdef BEOS
+	recv(sd,gomi,1024, 0);
+#else
 	read(sd,gomi,1024);
+#endif
 	shutdown(sd, 2);
+#ifdef BEOS
+	closesocket(sd);
+#else
 	close(sd);
+#endif
 	return;
     }
 
@@ -437,7 +448,11 @@ del_client()
 {
 	disconnect_all_env_of_client();
 	sock_clr(all_socks,cblk[cur_clp].sd);
+#ifdef BEOS
+	closesocket(cblk[cur_clp].sd);
+#else
 	close(cblk[cur_clp].sd);
+#endif
 #ifndef IBM
 	cblk[cur_clp] = cblk[clientp - 1];
 	client[cur_clp] = client[clientp - 1];
@@ -469,10 +484,10 @@ demon_init()	/* initialize Demon */
 	    perror("Malloc for client");
 	    exit(1);
 	}
-#ifdef SRAND48
-	srand48(time((long *)0));
+#ifdef HAVE_DRAND48
+	srand48(time(NULL));
 #else
-	srand((int)time((long *)0));
+	srand((int)time(NULL));
 #endif
 	clientp = 0;	/* V3.0 */
 	cur_clp = 0;	/* V3.0 */
@@ -493,7 +508,10 @@ demon_fin()
     struct sockaddr_un addr_un;
 #endif	/* AF_UNIX */
     struct sockaddr_in addr_in;
-    int addrlen;
+    socklen_t addrlen;
+#ifdef BEOS
+    int on = ~0;
+#endif
 
     /*
       accept all pending connection from new clients,
@@ -511,7 +529,7 @@ demon_fin()
 #endif /* !SOLARIS */
 	for (;;) {
 	    addrlen = sizeof(addr_un);
-	    if (accept(sock_d_un, &addr_un, &addrlen) < 0) break;
+	    if (accept(sock_d_un, (struct sockaddr *) &addr_un, &addrlen) < 0) break;
 	    /* EWOULDBLOCK EXPECTED, but we don't check */
 	}
 	shutdown(sock_d_un, 2);
@@ -520,20 +538,28 @@ demon_fin()
 #endif	/* AF_UNIX */
 
 #ifndef SOLARIS
+#ifdef BEOS
+    setsockopt(sock_d_in, SOL_SOCKET, SO_NONBLOCK, &on, sizeof(int));
+#else
 #if defined(FIONBIO)
     ioctl(sock_d_in, FIONBIO, &trueFlag);
 #endif
+#endif /* BEOS */
 #else /* !SOLARIS */
     fcntl(sock_d_in, F_SETFL, F_UNLCK);
 #endif /* !SOLARIS */
     for (;;) {
 	addrlen = sizeof(addr_in);
-	if (accept(sock_d_in, &addr_in, &addrlen) < 0) break;
+	if (accept(sock_d_in, (struct sockaddr *) &addr_in, &addrlen) < 0) break;
 	/* EWOULDBLOCK EXPECTED, but we don't check */
     }
     shutdown(sock_d_in, 2);
+#ifdef BEOS
+    closesocket(sock_d_in);
+#else
     close(sock_d_in);
 
+#endif
     for (fd = nofile-1; fd >= 0; fd--) {
 	if ((fd != sock_d_in) &&
 #ifdef AF_UNIX
@@ -541,7 +567,11 @@ demon_fin()
 #endif /* AF_UNIX */
 	    sock_tst(all_socks, fd)) {
 	    shutdown(fd, 2);
+#ifdef BEOS
+	    closesocket(fd);
+#else
 	    close(fd);
+#endif
 	}
     }
 }
@@ -605,7 +635,11 @@ int clp;	/**	clp=クライアント番号	**/
     register int cc = 0;
     while(cc <= 0) {
 	errno = 0;
+#ifdef BEOS
+	cc = recv(cblk[clp].sd, rcv_buf, S_BUF_SIZ, 0);
+#else
 	cc = read(cblk[clp].sd, rcv_buf, S_BUF_SIZ);
+#endif
 	if (cc <= 0) {
 	    if (ERRNO_CHECK(errno)) {
 		continue;
@@ -636,7 +670,11 @@ int clp, n;	/**	clp=クライアント番号, n= send n Bytes	**/
 #endif
     for(cc=0;cc<n;){
 	errno = 0;
+#ifdef BEOS
+	x = send(cblk[clp].sd, &snd_buf[cc], n-cc, 0);
+#else
 	x = write(cblk[clp].sd, &snd_buf[cc], n-cc);
+#endif
 	if (x < 0) {
 	    if (ERRNO_CHECK(errno) || errno == EINTR) {
 		errno = 0;
@@ -748,17 +786,17 @@ socket_init()
 	unlink(sockname);
 	strcpy(saddr_un.sun_path, sockname);
 	if ((sock_d_un = socket(AF_UNIX, SOCK_STREAM, 0)) == ERROR) {
-		xerror("Can't create socket.\n");
+		xerror("Can't create unix domain socket.");
 	}
 	if (bind(sock_d_un, (struct sockaddr *)&saddr_un,
 		 strlen(saddr_un.sun_path) + 2)
 	    == ERROR) {
 		shutdown(sock_d_un, 2);
-		xerror("Can't bind socket.\n");
+		xerror("Can't bind unix domain socket.");
 	}
 	if (listen(sock_d_un, 5) == ERROR) {
 		shutdown(sock_d_un, 2);
-		xerror("Can't listen socket.\n");
+		xerror("Can't listen unix domain socket.");
 	}
 	signal(SIGPIPE, SIG_IGN);
 #ifdef DEBUG
@@ -802,7 +840,7 @@ socket_init_in()
     saddr_in.sin_port = port;
     saddr_in.sin_addr.s_addr = htonl(INADDR_ANY);
     if ((sock_d_in = socket(AF_INET,SOCK_STREAM, 0)) == ERROR) {
-	xerror("can't create inet-socket\n");
+	xerror("can't create inet socket");
     }
     setsockopt(sock_d_in, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(int));
 #ifdef SO_DONTLINGER
@@ -818,11 +856,11 @@ socket_init_in()
     if (bind(sock_d_in, (struct sockaddr *)&saddr_in,
 	     sizeof(saddr_in)) == ERROR) {
 	shutdown(sock_d_in, 2);
-	xerror("can't bind inet-socket\n");
+	xerror("can't bind inet socket");
     }
     if (listen(sock_d_in,5) == ERROR) {
 	shutdown(sock_d_in, 2);
-	xerror("can't listen inet-socket\n");
+	xerror("can't listen inet socket");
     }
 #if DEBUG
     error1("sock_d_in = %d\n", sock_d_in);
@@ -838,7 +876,7 @@ static int
 socket_accept()
 {
     struct sockaddr_un addr;
-    int addrlen;
+    socklen_t addrlen;
 
     addrlen = sizeof(addr);
     return accept(sock_d_un, (struct sockaddr *)&addr, &addrlen);
@@ -849,7 +887,7 @@ static int
 socket_accept_in()
 {
     struct sockaddr_in addr;
-    int addrlen;
+    socklen_t addrlen;
 
     addrlen = sizeof(addr);
     return accept(sock_d_in, (struct sockaddr *)&addr, &addrlen);
@@ -860,6 +898,9 @@ xerror(s)
 register char *s;
 {
     fprintf(stderr,"%s: %s\n", cmd_name, s);
+#ifdef HAVE_PERROR
+    perror(cmd_name);
+#endif
     exit(1);
 }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: do_hindo_s.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: do_hindo_s.c,v 1.3 2000-01-16 07:34:05 ura Exp $
  */
 
 /*
@@ -38,11 +38,17 @@
  */
 /*	Version 4.0
  */
+#include <config.h>
+
 #include "commonhd.h"
 #include "jslib.h"
 #include "kaiseki.h"
 #include "jdata.h"
 #include "de_header.h"
+
+#ifdef HAVE_DRAND48
+#include <stdlib.h>         /* drand48() */
+#endif
     
 static int hindo_set();
 
@@ -98,12 +104,13 @@ int entry;
 int imaop;
 int hinop;
 {
-#ifdef SRAND48
-    double drand48();
+#ifdef HAVE_DRAND48
 #define RAND()  drand48()
 #else
-    double drand();
-#define RAND()  ((double)rand() / (double)((1<<31) - 1))
+#ifndef HAVE_RAND_MAX
+#define RAND_MAX (((unsigned)1<<31) - 1)
+#endif
+#define RAND()  ((double)rand() / (double)RAND_MAX)
 #endif
     UCHAR *hst;
     int ima, hindo;
