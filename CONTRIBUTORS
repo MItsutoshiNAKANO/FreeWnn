@@ -1,5 +1,5 @@
 #
-#   $Id: CONTRIBUTORS,v 1.10 2002-05-12 00:41:13 hiroo Exp $
+#   $Id: CONTRIBUTORS,v 1.11 2002-06-22 13:13:25 hiroo Exp $
 #
 
 #
@@ -35,7 +35,7 @@ FreeWnn の開発にたずさわった人々のリストです。
 FreeWnn 1.1.1 (予定)
 
         古川竜雄 (リリース担当)
-	片山善夫
+	KATAYAMA Yoshio - 片山 善夫 <kate@pfu.fujitsu.com>
 	川幡太一
         前原恵太 (Debian Project)
 	YABUKI Youichi - 矢吹洋一 <yabuki@sranhm.sra.co.jp>
@@ -58,10 +58,13 @@ FreeWnn 1.1.1 (予定)
 	Fumitoshi Ukai - 鵜飼 文敏 <ukai@debian.org>
 	Matui Fe2+ Tetsushi <VED03370@nifty.ne.jp>
 	Keiji Wada - 和田@川崎 <keiji@hiemalis.org>
+	Kazuo ISHIDA - いしだ@NEC <ishidakz@hml.cl.nec.co.jp>
 
 Pubdic+ 部分
 	SUNAGAWA Keiki <kei_sun@ba2.so-net.ne.jp>
         Tetsuo Tsukamoto - 塚本 徹雄 <czkmt@remus.dti.ne.jp>
+	KATAYAMA Yoshio - 片山 善夫 <kate@pfu.fujitsu.com>
+	Matui Fe2+ Tetsushi <VED03370@nifty.ne.jp>
 
 
 # これより下の情報は FreeWnn の以前のソースコードから抜き出したものです 
