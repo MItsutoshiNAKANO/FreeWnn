@@ -1,3 +1,28 @@
+Tue Oct 19 01:07:40 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* 開発版 1.1.1-a013 として内部リリース
+
+Tue Oct 19 00:09:48 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/jserver/de.c: jserver がエラーで終了する時、perror() を呼ん
+	で「何が原因で異常終了したのか」を表示するようにした。
+	が出るため。([freewnn:00199])
+	
+Mon Oct 18 23:11:20 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/jserver/do_hindo_s.c: drand48() のプロトタイプ宣言を追加
+	(stdlib.h をインクルードする)。FreeBSD で jserver が死ぬのはこれが
+	原因だった。([freewnn:00195] 片山さんのパッチ)
+	
+	* Wnn/jserver/do_hindo_s.c: 1U → (unsigned)1 に変更。K&R でエラー
+	が出るため。([freewnn:00195] 片山さんのパッチ)
+	
+Sat Oct 16 00:47:38 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/jserver/de.c: accept の引数のキャストを行ない、warning をな
+	くした。
+	([freewnn:00140]: にしくさんのパッチ)
+
 Wed Sep 29 03:19:17 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
 
 	* 開発版 1.1.1-a012 として内部リリース
@@ -5,7 +30,7 @@ Wed Sep 29 03:19:17 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
 Wed Sep 29 02:13:56 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
 
 	* gerodic の Makefile.in が古いままだった。
-	([freewnn:00143]: 大森さんの指摘)
+	([freewnn:00143]: kaz / 大森保英さんの指摘)
 
 	* gerodic が make および make install の対象になるようにした。
 

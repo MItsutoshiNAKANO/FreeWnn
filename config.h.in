@@ -19,3 +19,8 @@
  *   返す値の最大値である。
  */
 #undef HAVE_RAND_MAX
+
+/*
+ *   perror() が定義されていればこれも定義される。
+ */
+#undef HAVE_PERROR

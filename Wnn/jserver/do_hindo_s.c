@@ -1,5 +1,5 @@
 /*
- * $Id: do_hindo_s.c,v 1.2 2000-01-16 07:30:02 ura Exp $
+ * $Id: do_hindo_s.c,v 1.3 2000-01-16 07:34:05 ura Exp $
  */
 
 /*
@@ -45,6 +45,10 @@
 #include "kaiseki.h"
 #include "jdata.h"
 #include "de_header.h"
+
+#ifdef HAVE_DRAND48
+#include <stdlib.h>         /* drand48() */
+#endif
     
 static int hindo_set();
 
@@ -104,7 +108,7 @@ int hinop;
 #define RAND()  drand48()
 #else
 #ifndef HAVE_RAND_MAX
-#define RAND_MAX ((1U<<31) - 1)
+#define RAND_MAX (((unsigned)1<<31) - 1)
 #endif
 #define RAND()  ((double)rand() / (double)RAND_MAX)
 #endif
