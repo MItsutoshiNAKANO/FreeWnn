@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.13 2002-08-26 09:27:21 aono Exp $
+ *  $Id: jhlp.c,v 1.14 2003-04-06 05:55:17 hiroo Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.13 2002-08-26 09:27:21 aono Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.14 2003-04-06 05:55:17 hiroo Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -43,6 +43,7 @@ static char *rcs_id = "$Id: jhlp.c,v 1.13 2002-08-26 09:27:21 aono Exp $";
 #if STDC_HEADERS
 #  include <stdlib.h>
 #  include <string.h>
+#  include <err.h>
 #else
 #  if HAVE_STRINGS_H
 #    include <strings.h>
@@ -396,7 +397,7 @@ main (argc, argv)
 
   if (j_term_init () == ERROR)
     {
-      err ("term initialize fault.");
+      uum_err ("term initialize fault.");
     }
 
   if (!jl_isconnect (bun_data_))
@@ -1343,7 +1344,7 @@ exec_cmd (argv)
       close (2);
       if (dup (ttypfd) != 0 || dup (ttypfd) != 1 || dup (ttypfd) != 2)
         {
-          err ("redirection fault.");
+          uum_err ("redirection fault.");
         }
 #endif /* linux */
       for (i = WNN_NFD - 1; i > 2; i--)
@@ -1374,7 +1375,7 @@ exec_cmd (argv)
       setuid (getuid ());
 #endif
       execvp (cmdnm, argv);
-      err ("exec fault.");
+      uum_err ("exec fault.");
     }
 }
 
@@ -1534,7 +1535,7 @@ open_ttyp ()
   if ((ttypfd = open (nmbuf, O_RDWR, 0)) == ERROR)
     {
 #endif
-      err ("Can't open ttyp.");
+      uum_err ("Can't open ttyp.");
     }
 #ifndef linux
   chown (nmbuf, getuid (), getgid ());
@@ -1671,7 +1672,7 @@ open_pty ()
   char *tty_name_buff;
   tty_name_buff = _getpty (&ptyfd, O_RDWR | O_NDELAY, 0600, 0);
   if (tty_name_buff == 0)
-    err ("Can't get pty.");
+    uum_err ("Can't get pty.");
   strcpy (ttypnm, tty_name_buff);
   return;
 
@@ -1707,13 +1708,13 @@ open_pty ()
           return;
         }
     }
-  err ("Can't get pty.");
+  uum_err ("Can't get pty.");
 }
 #endif
 
 /** エラーだよ。さようなら。 */
 void
-err (s)
+uum_err (s)
      char *s;
 {
   puts (s);

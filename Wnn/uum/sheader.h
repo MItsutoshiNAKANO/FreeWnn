@@ -1,5 +1,5 @@
 /*
- *  $Id: sheader.h,v 1.11 2002-06-22 13:26:21 hiroo Exp $
+ *  $Id: sheader.h,v 1.12 2003-04-06 05:55:17 hiroo Exp $
  */
 
 /*
@@ -200,7 +200,7 @@ extern int (*default_code_trans[]) ();
 #include "wnn_string.h"
 
 /* jhlp.c */
-extern void err (char *);
+extern void uum_err (char *);
 #if !(HAVE_SETENV)
   extern int setenv();
 #endif
