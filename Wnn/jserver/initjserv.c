@@ -1,5 +1,5 @@
 /*
- *  $Id: initjserv.c,v 1.9 2002-03-23 21:13:59 hiroo Exp $
+ *  $Id: initjserv.c,v 1.10 2002-03-24 22:54:16 hiroo Exp $
  */
 
 /*
@@ -37,7 +37,12 @@
 #include <ctype.h>
 #if STDC_HEADERS
 #  include <stdlib.h>
-#endif
+#  include <string.h>
+#else
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif /* HAVE_STRINGS_H */
+#endif /* STDC_HEADERS */
 #include <sys/types.h>
 
 #include "commonhd.h"

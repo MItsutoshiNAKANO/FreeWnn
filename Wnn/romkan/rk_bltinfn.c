@@ -1,5 +1,5 @@
 /*
- *  $Id: rk_bltinfn.c,v 1.4 2001-06-14 18:16:05 ura Exp $
+ *  $Id: rk_bltinfn.c,v 1.5 2002-03-24 22:54:17 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -36,8 +36,18 @@
         変換用の組み込み関数のうち複雑なものを定義してある。
         全角←→半角の変換が主体。
 ***********************************************************************/
-/*      Version 3.0
- */
+/*  Version 3.0  */
+
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
+#if STDC_HEADERS
+#  include <string.h>
+#elif HAVE_STRINGS_H
+#  include <strings.h>
+#endif /* STDC_HEADERS */
+
 #include "commonhd.h"
 #include "wnn_config.h"
 #include "rk_header.h"

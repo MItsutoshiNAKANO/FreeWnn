@@ -1,5 +1,5 @@
 /*
- *  $Id: rk_modread.c,v 1.5 2002-03-07 16:46:34 hiroo Exp $
+ *  $Id: rk_modread.c,v 1.6 2002-03-24 22:54:17 hiroo Exp $
  */
 
 /*
@@ -36,10 +36,21 @@
         モード定義表の読み込みを担当するプログラム。
 ***********************************************************************/
 /*  Version 3.0  */
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
+#if STDC_HEADERS
+#  include <string.h>
+#elif HAVE_STRINGS_H
+#  include <strings.h>
+#endif /* STDC_HEADERS */
 #include <sys/types.h>
-#include <unistd.h>
 #include <pwd.h>
+#if HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
+
 #include "rk_header.h"
 #include "rk_extvars.h"
 #ifdef WNNDEFAULT
@@ -50,10 +61,6 @@
 
 #define Terminator 0            /* intの列（naibu[]）の終止コード */
 
-char *getenv ();
-#if defined(uniosu)
-extern struct passwd *getpwnam ();
-#endif
 extern char *chrcat (), *strend (), *ename ();
 extern void romkan_clear ();
 char *modhyopath;

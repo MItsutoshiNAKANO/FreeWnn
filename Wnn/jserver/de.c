@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.18 2002-03-23 21:13:59 hiroo Exp $
+ *  $Id: de.c,v 1.19 2002-03-24 22:54:16 hiroo Exp $
  */
 
 /*
@@ -42,7 +42,12 @@
 #include <signal.h>
 #if STDC_HEADERS
 #  include <stdlib.h>
-#endif
+#  include <string.h>
+#else
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif
+#endif /* STDC_HEADERS */
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
