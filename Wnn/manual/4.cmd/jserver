@@ -13,6 +13,7 @@ JSERVER( )          UNIX Programmer's Manual           JSERVER( )
 
      /usr/local/bin/Wnn4/jserver [-f file] [-s file] [-h file] [-N #]
 				 [-p port] [-u46]
+     /usr/local/bin/Wnn4/jserver -v
 
 機能
 
@@ -56,11 +57,10 @@ JSERVER( )          UNIX Programmer's Manual           JSERVER( )
 	     使われる。複数の jserver を動かしている場合は、実 際
 	     のポート番号はこの値に serverNO を足した値となる。こ
 	     のオプションを省略した場合はデフォルト値として  get-
-	     servbyname	 で 取得された値が使われる。getservbyname
 
 
 
-Printed 5/2/02           16 September 2001                      1
+Printed 6/23/02             23 June 2002                        1
 
 
 
@@ -71,6 +71,7 @@ JSERVER( )          UNIX Programmer's Manual           JSERVER( )
 
 
 
+	     servbyname	 で 取得された値が使われる。getservbyname
 	     で取得できない場合はヘッダファイル	jd_sock.h で定 義
 	     されている	WNN_PORT_IN の値が使われる。
 
@@ -82,6 +83,9 @@ JSERVER( )          UNIX Programmer's Manual           JSERVER( )
 
      -u,  -4, -6 のいずれも指定しない場合は、全てのプロトコルが使
      用される。
+
+     -v	     jserverのバージョン(とヘルプ)を表示する。(サーバとし
+	     ては起動しない)
 
 ファイル
       /tmp/jd_sockV4
@@ -113,11 +117,7 @@ JSERVER( )          UNIX Programmer's Manual           JSERVER( )
 
 
 
-
-
-
-
-Printed 5/2/02           16 September 2001                      2
+Printed 6/23/02             23 June 2002                        2
 
 
 
