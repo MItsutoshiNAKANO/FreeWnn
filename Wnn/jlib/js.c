@@ -1,5 +1,5 @@
 /*
- *  $Id: js.c,v 1.10 2002-03-23 21:13:59 hiroo Exp $
+ *  $Id: js.c,v 1.11 2002-03-29 15:08:51 hiroo Exp $
  */
 
 /*
@@ -62,16 +62,17 @@ extern  Variables
 #if STDC_HEADERS
 # include <stdlib.h>
 #endif
-#ifdef UX386
-#include <X11/Xos.h>
-#else
-#include <fcntl.h>
-#include <sys/types.h>
+#if HAVE_FCNTL_H
+#  include <fcntl.h>
 #endif
 #include <pwd.h>
-#include <sys/stat.h>
 #if HAVE_UNISTD_H
 # include <unistd.h>
+#endif
+#include <sys/stat.h>
+#include <sys/types.h>
+#ifdef UX386
+#  include <X11/Xos.h>
 #endif
 
 #include "jd_sock.h"

@@ -1,5 +1,5 @@
 /*
- *  $Id: cvt_read.c,v 1.5 2002-03-21 06:59:20 hiroo Exp $
+ *  $Id: cvt_read.c,v 1.6 2002-03-29 15:08:50 hiroo Exp $
  */
 
 /*
@@ -49,16 +49,18 @@
 #elif HAVE_STRINGS_H
 #  include <strings.h>
 #endif /* STDC_HEADERS */
-
-#include "cvt_head.h"
+#if HAVE_FCNTL_H
+#  include <fcntl.h>
+#endif
 
 #ifdef SYSVR2
-#include <fcntl.h>
 #ifdef TERMINFO
 #include <curses.h>
 #endif /* TERMINFO */
 #include <term.h>
 #endif
+
+#include "cvt_head.h"
 
 #define ENTRY_LEN 10            /* コンバート表のエントリ名の最大長 */
 

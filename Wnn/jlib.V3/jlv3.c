@@ -1,5 +1,5 @@
 /*
- *  $Id: jlv3.c,v 1.5 2002-03-23 21:18:29 hiroo Exp $
+ *  $Id: jlv3.c,v 1.6 2002-03-29 15:08:51 hiroo Exp $
  */
 
 /*
@@ -59,12 +59,14 @@ extern  Variables
 #if STDC_HEADERS
 #  include <stdlib.h>
 #endif
-#include <fcntl.h>
+#if HAVE_FCNTL_H
+#  include <fcntl.h>
+#endif
 #include <pwd.h>
-#include <sys/types.h>
 #if HAVE_UNISTD_H
 #  include <unistd.h>
 #endif
+#include <sys/types.h>
 #ifdef  SYSVR2
 #include <malloc.h>
 #else

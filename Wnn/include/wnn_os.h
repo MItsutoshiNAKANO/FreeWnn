@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_os.h,v 1.8 2002-03-23 21:13:58 hiroo Exp $
+ *  $Id: wnn_os.h,v 1.9 2002-03-29 15:08:51 hiroo Exp $
  */
 
 /*
@@ -41,7 +41,6 @@
 #include <signal.h>
 
 #ifdef SYSVR2
-#include <fcntl.h>
 #include <string.h>
 #define index   strchr
 #ifndef re_signal
