@@ -1,5 +1,5 @@
 /*
- *  $Id: utilbdic.c,v 1.3 2001-06-14 18:16:04 ura Exp $
+ *  $Id: utilbdic.c,v 1.4 2004-07-19 18:24:26 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2004
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -52,10 +52,9 @@ struct wnn_file_head file_head;
 
 extern char *passwd;
 
-output_hinsi (ofpter)
-     register FILE *ofpter;
+output_hinsi (FILE* ofpter)
 {
-  register int i;
+  int i;
 
   for (i = 0; i < jt.maxserial; i++)
     {
@@ -68,10 +67,9 @@ output_hinsi (ofpter)
 */
 }
 
-input_hinsi (ifpter)
-     register FILE *ifpter;
+input_hinsi (FILE* ifpter)
 {
-  register int i;
+  int i;
   unsigned short s;
 
   for (i = 0; i < jt.maxserial; i++)
@@ -89,11 +87,7 @@ input_hinsi (ifpter)
 }
 
 #ifdef nodef
-revdic_jt (jtp, match, hostart, tary)
-     struct JT *jtp;
-     int match;
-     char *hostart;
-     struct uind1 *tary;
+revdic_jt (struct JT* jtp, int match, char* hostart, struct uind1* tary)
 {
 /* Must reverse hinsi?????? */
 

@@ -1,5 +1,5 @@
 /*
- *  $Id: sort.c,v 1.4 2001-06-14 18:16:04 ura Exp $
+ *  $Id: sort.c,v 1.5 2004-07-19 18:24:26 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2004
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -34,7 +34,7 @@ sort program
 */
 
 #ifndef lint
-static char *rcs_id = "$Id: sort.c,v 1.4 2001-06-14 18:16:04 ura Exp $";
+static char *rcs_id = "$Id: sort.c,v 1.5 2004-07-19 18:24:26 hiroo Exp $";
 #endif /* lint */
 
 #include <stdio.h>
@@ -43,6 +43,7 @@ static char *rcs_id = "$Id: sort.c,v 1.4 2001-06-14 18:16:04 ura Exp $";
 #include "jslib.h"
 #include "jh.h"
 #include "jdata.h"
+#include "getopt.h"	/* GNU getopt in the stock */
 
 extern int init_heap ();
 extern void ujis_header (), read_ujis (), reverse_yomi (), sort (), output_ujis ();
@@ -51,16 +52,12 @@ struct JT jt;
 struct wnn_file_head file_head;
 
 void
-main (argc, argv)
-     int argc;
-     char **argv;
+main (int argc, char** argv)
 {
   int c;
   char *cswidth_name;
   extern char *get_cswidth_name ();
   extern void set_cswidth ();
-  extern int optind;
-  extern char *optarg;
 
   if (cswidth_name = get_cswidth_name (WNN_DEFAULT_LANG))
     set_cswidth (create_cswidth (cswidth_name));

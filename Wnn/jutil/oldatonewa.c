@@ -1,5 +1,5 @@
 /*
- *  $Id: oldatonewa.c,v 1.5 2002-07-14 04:26:57 hiroo Exp $
+ *  $Id: oldatonewa.c,v 1.6 2004-07-19 18:24:26 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2004
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: oldatonewa.c,v 1.5 2002-07-14 04:26:57 hiroo Exp $";
+static char *rcs_id = "$Id: oldatonewa.c,v 1.6 2004-07-19 18:24:26 hiroo Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -87,11 +87,11 @@ static char *ohinsi[] = {
 #define LINE_SIZE 1024
 
 extern int motoni2 ();
-static int get_line1 ();
-static char *get_string ();
+static int get_line1 (char* buffer);
+static char* get_string (char* str, char* buf);
 
 int
-main ()
+main (void)
 {
   char buffer[LINE_SIZE];
 
@@ -105,10 +105,8 @@ main ()
 }
 
 static int
-get_line1 (buffer)
-     char *buffer;
+get_line1 (char* buffer)
 {
-  char *get_string ();
   char *c = buffer;
   char tmp[LINE_SIZE];
   char kanji[LINE_SIZE];
@@ -167,9 +165,7 @@ get_line1 (buffer)
 }
 
 static char *
-get_string (str, buf)
-     char *str;
-     char *buf;
+get_string (char* str, char* buf)
 {
   char *c = buf;
   /*

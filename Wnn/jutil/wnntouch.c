@@ -1,5 +1,5 @@
 /*
- *  $Id: wnntouch.c,v 1.7 2002-07-14 04:26:57 hiroo Exp $
+ *  $Id: wnntouch.c,v 1.8 2004-07-19 18:24:26 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2004
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -34,7 +34,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: wnntouch.c,v 1.7 2002-07-14 04:26:57 hiroo Exp $";
+static char *rcs_id = "$Id: wnntouch.c,v 1.8 2004-07-19 18:24:26 hiroo Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -50,21 +50,18 @@ static char *rcs_id = "$Id: wnntouch.c,v 1.7 2002-07-14 04:26:57 hiroo Exp $";
 #endif
 #include "jslib.h"
 #include "commonhd.h"
+#include "getopt.h"	/* GNU getopt in the stock */
 
 extern int input_file_header (), check_inode (), change_file_uniq ();
-static void usage ();
+static void usage (void);
 
 char *com_name;
 struct wnn_file_head fh;
 
 static void
-parse_options (argc, argv)
-     int argc;
-     char **argv;
+parse_options (int argc, char** argv)
 {
   int c;
-  extern int optind;
-  extern char *optarg;
 
   while ((c = getopt (argc, argv, "")) != EOF)
     {
@@ -82,16 +79,14 @@ parse_options (argc, argv)
 }
 
 static void
-usage ()
+usage (void)
 {
   fprintf (stderr, "Usage: %s Wnn_file_name* \n", com_name);
   exit (1);
 }
 
 int
-main (argc, argv)
-     int argc;
-     char **argv;
+main (int argc, char** argv)
 {
   FILE *ifpter;
   int k;

@@ -1,5 +1,5 @@
 /*
- *  $Id: atorev.c,v 1.6 2002-05-12 22:51:17 hiroo Exp $
+ *  $Id: atorev.c,v 1.7 2004-07-19 18:24:26 hiroo Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ extern void sort_if_not_sorted (), uniq_je (), output_dic_data (), sort_kanji ()
 struct je **ptmp;
 
 void
-create_rev_dict ()
+create_rev_dict (void)
 {
   r_alloc ();
   sort_if_not_sorted ();
@@ -78,11 +78,12 @@ create_rev_dict ()
 }
 
 static void
-r_alloc ()
+r_alloc (void)
 {
-  if ((jt.ri2 = (struct rind2 *) malloc ((jt.maxserial) * sizeof (struct rind2))) == NULL ||
-      (jt.ri1[D_YOMI] = (struct rind1 *) malloc (jt.maxserial * sizeof (struct rind1))) == NULL ||
-      (jt.ri1[D_KANJI] = (struct rind1 *) malloc (jt.maxserial * sizeof (struct rind1))) == NULL || (ptmp = (struct je **) malloc (jt.maxserial * sizeof (struct je *))) == NULL)
+  if ((jt.ri2 = (struct rind2 *) malloc ((jt.maxserial) * sizeof (struct rind2))) == NULL
+      || (jt.ri1[D_YOMI] = (struct rind1 *) malloc (jt.maxserial * sizeof (struct rind1))) == NULL
+      || (jt.ri1[D_KANJI] = (struct rind1 *) malloc (jt.maxserial * sizeof (struct rind1))) == NULL
+      || (ptmp = (struct je **) malloc (jt.maxserial * sizeof (struct je *))) == NULL)
     {
       fprintf (stderr, "Malloc Failed\n");
       exit (1);
@@ -90,9 +91,9 @@ r_alloc ()
 }
 
 static void
-make_ri2 ()
+make_ri2 (void)
 {
-  register int s;
+  int s;
 
   for (s = 0; s < jt.maxserial; s++)
     {
@@ -103,13 +104,12 @@ make_ri2 ()
 }
 
 static void
-make_ri1 (which)
-     int which;
+make_ri1 (int which)
 {
-  register w_char *yomi;
+  w_char *yomi;
   w_char dummy = 0;             /* 2 byte yomi */
   w_char *pyomi;                /* maeno tangono yomi */
-  register int s, t;
+  int s, t;
 
   yomi = &dummy;
 
@@ -140,11 +140,10 @@ make_ri1 (which)
 }
 
 static void
-set_rpter1 (which)
-     int which;
+set_rpter1 (int which)
 {
-  register int k;
-  register int len;
+  int k;
+  int len;
   w_char *oyomi, *nyomi;
   /* May be a little slow, but simple! */
   int lasts[LENGTHYOMI];        /* pter_to */
@@ -177,8 +176,7 @@ set_rpter1 (which)
 }
 
 void
-output_ri (ofpter)
-     FILE *ofpter;
+output_ri (FILE* ofpter)
 {
   fwrite (jt.ri1[D_YOMI], sizeof (struct rind1), jt.maxri1[D_YOMI], ofpter);
   fwrite (jt.ri1[D_KANJI], sizeof (struct rind1), jt.maxri1[D_KANJI], ofpter);

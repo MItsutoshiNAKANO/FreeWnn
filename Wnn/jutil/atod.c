@@ -1,5 +1,5 @@
 /*
- *  $Id: atod.c,v 1.11 2002-11-12 10:25:01 aono Exp $
+ *  $Id: atod.c,v 1.12 2004-07-19 18:24:26 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2004
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -34,7 +34,7 @@ UJIS 形式を、辞書登録可能形式, 及び固定形式辞書に変換するプログラム。
 */
 
 #ifndef lint
-static char *rcs_id = "$Id: atod.c,v 1.11 2002-11-12 10:25:01 aono Exp $";
+static char *rcs_id = "$Id: atod.c,v 1.12 2004-07-19 18:24:26 hiroo Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -66,6 +66,7 @@ static char *rcs_id = "$Id: atod.c,v 1.11 2002-11-12 10:25:01 aono Exp $";
 #ifdef CHINESE
 #include "cplib.h"
 #endif
+#include "getopt.h"	/* GNU getopt in the stock */
 #include "wnn_string.h"
 #include "wnn_os.h"
 
@@ -118,12 +119,8 @@ char *hinsi_file_name = NULL;
 
 
 void
-init (argc, argv)
-     int argc;
-     char **argv;
+init (int argc, char **argv)
 {
-  extern int optind;
-  extern char *optarg;
   int c;
 
   maxserial = MAX_ENTRIES;
@@ -186,7 +183,7 @@ init (argc, argv)
       usage ();
       exit (1);
     }
-  strcpy (outfile, argv[1]);
+  strlcpy (outfile, argv[1], LINE_SIZE);
   if (wnn_loadhinsi (hinsi_file_name) != 0)
     {
       fprintf (stderr, "Can't Open hinsi_file.\n");
@@ -197,7 +194,7 @@ init (argc, argv)
 }
 
 void
-alloc_area ()
+alloc_area (void)
 {
   if (which_dict == WNN_STATIC_DICT)
     {
@@ -225,12 +222,10 @@ alloc_area ()
 
 extern int sort_func_sdic ();
 extern int sort_func_je ();
-FILE *ofpter, *fopen ();
+FILE *ofpter;
 
 int
-main (argc, argv)
-     int argc;
-     char **argv;
+main (int argc, char** argv)
 {
   char *cswidth_name;
   extern char *get_cswidth_name ();
@@ -307,11 +302,8 @@ main (argc, argv)
 
 
 w_char *
-addyomient (tn, yomi)
-     register int tn;
-     register w_char *yomi;
+addyomient (int tn, w_char* yomi)
 {
-
   int len = wnn_Strlen (yomi);
   tary[tn].yomi2 = 0;
   tary[tn].yomi1 = yomi[0] << 16;
@@ -338,13 +330,13 @@ addyomient (tn, yomi)
 }
 
 static void
-ujistoud ()
+ujistoud (void)
 {
-  register w_char *yomi;
+  w_char *yomi;
   w_char dummy = 0;             /* 2 byte yomi */
   w_char *pyomi;                /* maeno tangono yomi */
   w_char *wcp;
-  register int serial_count;
+  int serial_count;
   w_char *kosuup = NULL;
 
   *(int *) hostart = 0;
@@ -378,17 +370,16 @@ ujistoud ()
 }
 
 void
-upd_kanjicount (k)
-     int k;
+upd_kanjicount (int k)
 {
   kanjicount += *jeary[k]->kanji;
 }
 
 static void
-set_pter1 ()
+set_pter1 (void)
 {
-  register int k;
-  register int len;
+  int k;
+  int len;
   w_char oyomi[LENGTHYOMI], nyomi[LENGTHYOMI];
   /* May be a little slow, but simple! */
   int lasts[LENGTHYOMI];        /* pter_to */
@@ -421,7 +412,7 @@ set_pter1 ()
 }
 
 void
-output_dic_data ()
+output_dic_data (void)
 {
 
   fprintf (stderr, "%d words are in this dictionary\n", jt.maxserial);
@@ -446,7 +437,7 @@ output_dic_data ()
 }
 
 static void
-output_dic_index ()
+output_dic_index (void)
 {
   if (which_dict == WNN_UD_DICT)
     {
@@ -518,7 +509,7 @@ output_dic_index ()
 
 
 static void
-usage ()
+usage (void)
 {
   fprintf (stderr, "Usage : %s [-r -R -S -U -e -s maximum word count(default %d) -P passwd (or -N) -p hindo_passwd (or -n) -h hinsi_file_name] <dictonary filename>\n", com_name, MAX_ENTRIES);
   fprintf (stderr, "Input the ascii dictionary from stdin\n");
@@ -533,8 +524,7 @@ usage ()
 /* SD commands */
 
 int
-yStrcmp (a, b)
-     register w_char *a, *b;
+yStrcmp (w_char* a, w_char*b)
 {
   register int c, d;
   for (; *a && *a == *b; a++, b++);
@@ -554,11 +544,10 @@ yStrcmp (a, b)
 }
 
 int
-sort_func_sdic (a, b)
-     char *a, *b;
+sort_func_sdic (char* a, char* b)
 {
-  register int tmp;
-  register struct je *pa, *pb;
+  int tmp;
+  struct je *pa, *pb;
   pa = *((struct je **) a);
   pb = *((struct je **) b);
   tmp = yStrcmp (pa->yomi, pb->yomi);
@@ -575,7 +564,7 @@ sort_func_sdic (a, b)
 
 
 static void
-sdic_sort ()
+sdic_sort (void)
 {
   if (!Sorted ((char *) jeary, (int) jt.maxserial, sizeof (struct je *), sort_func_sdic))
     {
@@ -590,16 +579,15 @@ static w_char *numtable = numtable1 + 1;
 static int endt = 0;
 
 int
-analize_size (start_je, level, statep, end_jep, mid_jep)
-     int start_je, level;
-     int *statep, *end_jep, *mid_jep;
+analize_size (int start_je, int level,
+	      int* statep, int* end_jep, int* mid_jep)
 {
   w_char *c = jeary[start_je]->yomi;
-  register int je;
+  int je;
   int level1 = level + 1;
   int end_je, mid_je;
-  register w_char y1, y2;
-  register int je1, je2;
+  w_char y1, y2;
+  int je1, je2;
 
   for (; endt-- > 0;)
     {
@@ -661,9 +649,7 @@ analize_size (start_je, level, statep, end_jep, mid_jep)
 
 
 static void
-ujistosd (start_je, level)
-     int start_je;
-     int level;
+ujistosd (int start_je, int level)
 {
   int state;
   int tsize;
@@ -671,8 +657,8 @@ ujistosd (start_je, level)
   w_char *sumst;
   int *ptrst;
   int mid_je, end_je;
-  register int je;
-  register int k;
+  int je;
+  int k;
 
   node_count++;
 
@@ -777,7 +763,7 @@ ujistosd (start_je, level)
 #define INCR_HO 150
 
 static void
-not_enough_area ()
+not_enough_area (void)
 {
   /*
      UCHAR *oldstart = hostart;
@@ -805,8 +791,7 @@ not_enough_area ()
 
 
 static void
-get_pwd (fname, cripted)
-     char *fname, *cripted;
+get_pwd (char* fname, char* crypted)
 {
   char pwd[WNN_PASSWD_LEN];
   FILE *fp;
@@ -818,27 +803,24 @@ get_pwd (fname, cripted)
     }
   fgets (pwd, WNN_PASSWD_LEN, fp);
   fclose (fp);
-  new_pwd (pwd, cripted);
+  new_pwd (pwd, crypted);
 }
 
 /* output dict routine's */
 static void
-output_comment (fp)
-     register FILE *fp;
+output_comment (FILE* fp)
 {
   put_n_EU_str (fp, file_comment, jt.maxcomment);
 }
 
 static void
-output_hinsi_list (fp)
-     register FILE *fp;
+output_hinsi_list (FILE* fp)
 {
   put_n_EU_str (fp, hinsi_list, jt.maxhinsi_list);
 }
 
 static void
-output_hindo (ofpter)
-     register FILE *ofpter;
+output_hindo (FILE* ofpter)
 {
   register int i;
   for (i = 0; i < jt.maxserial; i++)
@@ -848,12 +830,11 @@ output_hindo (ofpter)
 }
 
 static void
-output_hinsi (ofpter)
-     register FILE *ofpter;
+output_hinsi (FILE* ofpter)
 {
-  register int i;
+  int i;
   short k;
-  register int little_endianp = little_endian ();
+  int little_endianp = little_endian ();
   /* hinsi ha koko de hikkuri kaesu */
 
   for (i = 0; i < jt.maxserial; i++)
@@ -868,10 +849,9 @@ output_hinsi (ofpter)
 }
 
 static void
-output_kanji (ofpter)
-     register FILE *ofpter;
+output_kanji (FILE* ofpter)
 {
-  register int i;
+  int i;
 
   for (i = 0; i < jt.maxserial; i++)
     {
@@ -880,7 +860,7 @@ output_kanji (ofpter)
 }
 
 static void
-rev_dic_data ()
+rev_dic_data (void)
 {
   int i;
 
@@ -895,10 +875,9 @@ rev_dic_data ()
 extern void put_short ();
 
 static void
-output_sisheng (ofpter)
-     register FILE *ofpter;
+output_sisheng (FILE* ofpter)
 {
-  register int i;
+  int i;
 
   for (i = 0; i < jt.maxserial; i++)
     {

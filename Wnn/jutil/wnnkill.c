@@ -1,5 +1,5 @@
 /*
- *  $Id: wnnkill.c,v 1.7 2002-03-26 18:54:54 hiroo Exp $
+ *  $Id: wnnkill.c,v 1.8 2004-07-19 18:24:26 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2004
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: wnnkill.c,v 1.7 2002-03-26 18:54:54 hiroo Exp $";
+static char *rcs_id = "$Id: wnnkill.c,v 1.8 2004-07-19 18:24:26 hiroo Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -39,6 +39,7 @@ static char *rcs_id = "$Id: wnnkill.c,v 1.7 2002-03-26 18:54:54 hiroo Exp $";
 
 #include <stdio.h>
 #if STDC_HEADERS
+#  include <stdlib.h>
 #  include <string.h>
 #elif HAVE_STRINGS_H
 #  include <strings.h>
@@ -53,10 +54,9 @@ static char *rcs_id = "$Id: wnnkill.c,v 1.7 2002-03-26 18:54:54 hiroo Exp $";
 #include "wnn_config.h"
 #include "wnn_os.h"
 
-static void out ();
-
 WNN_JSERVER_ID *js;
 struct wnn_ret_buf rb = { 0, NULL };
+#define BUFSTRLEN 1024
 
 #ifdef JAPANESE
 int ocode = TTY_KCODE;
@@ -73,25 +73,20 @@ int ocode = TTY_HCODE;
 #endif
 
 int
-main (argc, argv)
-     int argc;
-     char **argv;
+main (int argc, char** argv)
 {
-  extern char *getenv ();
   int c;
   char *serv;
   int x;
   static char lang[64] = { 0 };
-  extern int optind;
-  extern char *optarg;
-/*
-    char *p;
-*/
   char *server_env = NULL;
   char *prog = argv[0];
+  char buf[BUFSTRLEN];
   extern char *_wnn_get_machine_of_serv_defs (), *get_server_env ();
 
 /*
+  char* p;
+
     if ((p = getenv("LANG")) != NULL) {
         strcpy(lang, p);
            lang[5] = '\0';
@@ -183,34 +178,36 @@ main (argc, argv)
     }
   if (js == NULL && (js = js_open_lang (serv, lang, WNN_TIMEOUT)) == NULL)
     {
-      out ("%s:", prog);
+      snprintf (buf, BUFSTRLEN, "%s:", prog);
+      out (buf);
       if (serv && *serv)
         out (serv);
-      out ("%s\n", wnn_perror_lang (lang));
+      snprintf (buf, BUFSTRLEN, "%s\n", wnn_perror_lang (lang));
+      out (buf);
 /*      fprintf(stderr, "Can't connect to jserver.\n"); */
       exit (255);
     }
   if ((x = js_kill (js)) > 0)
     {
       if (x == 1)
-        {
-          out ("%d User Exists.\n", x);
-        }
+	snprintf (buf, BUFSTRLEN, "%d User Exists.\n", x);
       else
-        {
-          out ("%d Users Exist.\n", x);
-        }
-      out ("%s Not Killed.\n", server_env);
+	snprintf (buf, BUFSTRLEN, "%d Users Exists.\n", x);
+      out (buf);
+      snprintf (buf, BUFSTRLEN, "%s Not Killed.\n", server_env);
+      out (buf);
       exit (1);
     }
   else if (x == 0)
     {
-      out ("%s Terminated\n", server_env);
+      snprintf (buf, BUFSTRLEN, "%s Terminated\n", server_env);
+      out (buf);
       exit (0);
     }
   else
     {
-      out ("%s Terminated\n", server_env);
+      snprintf (buf, BUFSTRLEN, "%s Terminated\n", server_env);
+      out (buf);
       exit (2);
     }
   exit (0);
@@ -224,15 +221,11 @@ extern int ecns_to_big5 ();
 #endif
 
 static void
-out (a1, a2, a3, a4, a5, a6, a7, a8)
-     char *a1, *a2, *a3, *a4, *a5, *a6, *a7, *a8;
+out (const char* buf)
 {
-  int len;
-  char buf[1024];
-  char jbuf[1024];
-  sprintf (buf, a1, a2, a3, a4, a5, a6, a7, a8);
+  int len = strlen (buf);
+  char jbuf[BUFSTRLEN];
 
-  len = strlen (buf);
   switch (ocode)
     {
 #ifdef JAPANESE

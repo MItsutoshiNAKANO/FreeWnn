@@ -1,5 +1,5 @@
 /*
- *  $Id: dic_head.c,v 1.4 2001-06-14 18:28:55 ura Exp $
+ *  $Id: dic_head.c,v 1.5 2004-07-19 18:24:26 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2004
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -38,10 +38,7 @@
 extern int create_file_header (), output_header_jt (), input_file_header (), input_header_jt (), input_header_hjt ();
 
 int
-output_header (ofpter, jtp, fhp)
-     FILE *ofpter;
-     struct JT *jtp;
-     struct wnn_file_head *fhp;
+output_header (FILE* ofpter, struct JT* jtp, struct wnn_file_head* fhp)
 {
   create_file_header (ofpter, WNN_FT_DICT_FILE, fhp->file_passwd);
   output_header_jt (ofpter, jtp);
@@ -49,10 +46,7 @@ output_header (ofpter, jtp, fhp)
 }
 
 int
-input_header (ifpter, jtp, fhp)
-     FILE *ifpter;
-     struct JT *jtp;
-     struct wnn_file_head *fhp;
+input_header (FILE* ifpter, struct JT* jtp, struct wnn_file_head* fhp)
 {
 
   if (input_file_header (ifpter, fhp) == -1 || input_header_jt (ifpter, jtp) == -1)
@@ -64,10 +58,7 @@ input_header (ifpter, jtp, fhp)
 }
 
 int
-input_hindo_header (ifpter, hjtp, fhp)
-     FILE *ifpter;
-     struct wnn_file_head *fhp;
-     struct HJT *hjtp;
+input_hindo_header (FILE* ifpter, struct HJT* hjtp, struct wnn_file_head* fhp)
 {
   if (input_file_header (ifpter, fhp) == -1 || input_header_hjt (ifpter, hjtp) == -1)
     {
