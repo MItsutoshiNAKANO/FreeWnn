@@ -18731,6 +18731,10 @@ else
   cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 #include "confdefs.h"
+
+#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
 #include <sys/socket.h>
 
 #ifdef F77_DUMMY_MAIN
