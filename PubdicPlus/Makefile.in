@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.1 2000-01-16 07:06:08 ura Exp $
+# $Id: Makefile.in,v 1.2 2000-01-16 07:18:30 ura Exp $
 #
 
 # FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -32,6 +32,8 @@
 #
 # Last modified date: 8,Feb.1999
 #
+
+include @top_srcdir@/makerule.mk
 
 #
 #   Do simply 'make' for normal cases.
@@ -105,20 +107,20 @@ TARGETS = pod ctopd wtopd
 PUBDICS = pubdic.p special.p
 WNNDICS = bio.u chimei.u computer.u jinmei.u kihon.u koyuu.u setsuji.u symbol.u tankan.u
 
-all:   $(TARGETS) wnn
+all::   $(TARGETS) wnn
 canna: iroha.t
 wnn:   $(WNNDICS)
 sj3:   visual.dic
 
 
 pod: pod.o
-	gcc -o $@ pod.o
+	$(CC) $(CFLAGS) -o $@ pod.o
 
 ctopd: ctopd.o
-	gcc -o $@ ctopd.o
+	$(CC) $(CFLAGS) -o $@ ctopd.o
 
 wtopd: wtopd.o
-	gcc -o $@ wtopd.o
+	$(CC) $(CFLAGS) -o $@ wtopd.o
 
 
 
@@ -161,5 +163,3 @@ clean::
 	$(RM) $(WNNDICS) iroha.t visual.dic
 	$(RM) $(TARGETS)
 	$(RM) pod.o ctopd.o wtopd.o
-
-install:
