@@ -5,7 +5,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 2001
+# Copyright FreeWnn Project 2001, 2004
 #
 # Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
@@ -24,17 +24,18 @@
 # along with GNU Emacs; see the file COPYING.  If not, write to the
 # Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-include @top_srcdir@/makerule.mk
-top_builddir = ../..
-
+include @top_builddir@/makerule.mk
+  top_srcdir = @top_srcdir@
       srcdir = @srcdir@
+top_builddir = @top_builddir@
+KWNNJUTILOBJ = $(top_builddir)/kWnn/jutil
 
 INSTALL      = @INSTALL@
 INSTALLFLAGS = -o $(WNNOWNER)
 
-        ATOD = $(KWNNJUTILSRC)/katod
-        ATOF = $(KWNNJUTILSRC)/katof
-    WNNTOUCH = $(KWNNJUTILSRC)/kwnntouch
+        ATOD = $(KWNNJUTILOBJ)/katod
+        ATOF = $(KWNNJUTILOBJ)/katof
+    WNNTOUCH = $(KWNNJUTILOBJ)/kwnntouch
        HINSI = @KHINSI_DATA@
     FZK_FLAG =
 
@@ -60,7 +61,7 @@ all:: $(ALLTGT)
 $(DICS): $(HINSI)
 
 $(FULL):: $(FZK_SRCS) fzk.master-.c
-	$(CPP) -I$(srcdir) $(FZK_FLAG) fzk.master-.c | egrep -v '^(# |#line |$$)' | $(ATOF) -h $(HINSI) $@
+	$(CPP) -I$(srcdir) $(FZK_FLAG) fzk.master-.c | egrep -v '^(# |#line |#pragma |$$)' | $(ATOF) -h $(HINSI) $@
 
 # To avoid circular dependency, we don't use 'fzk.master.c'
 fzk.master-.c: fzk.master
