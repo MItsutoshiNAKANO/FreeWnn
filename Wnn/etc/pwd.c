@@ -1,5 +1,5 @@
 /*
- *  $Id: pwd.c,v 1.4 2002-03-24 01:25:13 hiroo Exp $
+ *  $Id: pwd.c,v 1.5 2002-03-24 02:01:20 hiroo Exp $
  */
 
 /*
@@ -32,6 +32,10 @@
 /*
   eval(crypt(PWD, "HA")) routine.
 */
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #ifndef JS
 #include <stdio.h>
 #if STDC_HEADERS
