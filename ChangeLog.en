@@ -1,3 +1,90 @@
+Sat May 11 13:03:37 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* INSTALL INSTALL.en
+	  Update.
+
+Tue May 07 22:26:30 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/etc/msg.c:
+	  Corrected _search(). ([freewnn:00847] by K.Wada)
+
+Sun May 05 05:13:10 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/include/commonhd.h:
+	  Updated _SERVER_VERSION to pl20.
+	  Removed unistd.h inclusion.
+
+Sat May 04 17:15:24 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp> 
+	* Wnn/manual/4.cmd/jserver man/4.cmd/jserver.man:
+	  Update.
+
+Thu May 02 15:18:55 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/jserver/do_hindo_s.c:
+	  Corrected inclusion of stdlib.h.
+
+Wed May 01 21:05:10 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* configure.in config.h.in configure:
+	  Added checking for syslog(), syslog.h and setenv() that are not
+	  in C89 or POSIX 1,2.
+	* */jserver/Makefile.in:
+	  Removed JS_SUPPORTLIB. We do not use syslog()/libbe in the BeOS.
+	* Wnn/jserver/error.c:
+	  Skip syslog() when it is not found.
+	* Wnn/uum/jhlp.c sheader.h:
+	  Use system's setenv() function. As it is not in C89 or POSIX 1,2
+	  standards, use our own definition when it is not found.
+	  However, it should be rewritten to meet other specification, and
+	  it assumes environment variables are in the variable char **environ.
+
+Tue Apr 02 04:16:21 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+	* Wnn/jserver/de.c: include fcntl.h.
+	* Wnn/conv/cvt_read.c: Change include point of cvt_head.h.
+
+Sun Mar 31 11:30:23 UTC 2002  Hiroaki Abe <h-abe@pc.highway.ne.jp>
+	* Wnn/include/commonhd.h:
+	  Remoke unitsd.h inclusion for BeOS.
+	* */jserver/Makefile.in configure.in configure:
+	  BeOS requires to link libbe.so when using syslog function.
+	  Add JS_SUPPORTLIBS to set libraries when building [jckt]server.
+
+Sun Mar 31 06:26:54 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/jserver/de.c de_header.h:
+	  Changed the value of cmd_name[] from argv[0] to "[cjkt]server".
+	  Style and error message fix.
+
+Sat Mar 30 13:44:22 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/romkan/rk_modread.c: Include stdlib.h
+
+Sat Mar 30 09:34:48 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+	* (Wnn/cWnn/kWnn)/romkan/Makefile.in:
+	  Added -I$(TOP) to INCLUDES.
+	  Removed LIB_MT_DEFINES. It is not used anywhere.
+	  Preliminary change for enabling build when builddir != srcdir.
+
+Sat Mar 30 02:35:22 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/etc/yincoding.c: Style fix.
+	* files below Wnn/:
+	  Added header files (string.h/strings.h unistd.h and so on) inclusion
+	  according to STDC_HEADERS and HAVE_*_H.
+	  Add config.h inclusion if necessary.
+	* configure.in config.h.in configure:
+	  Remove limits.h check. We see STDC_HEADERS.
+	  Add memory.h check for future bcopy/index -> memmove/strchr change.
+
+Sat Mar 23 21:18:32 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	files under Wnn directory:
+	* See STDC_HEADERS for stdlib.h and string.h.
+	* Include strings.h if no STDC_HEADERS and it exists.
+	* Include config.h if necessary.
+
+Thu Mar 21 06:59:22 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* configure.in: Removed unecessary comments.
+	* cvt_head.h: Removed commented out codes.
+	* cvt_read.c, bdic.c, yincoding.c:
+	    get rid of BSD42 and SYSVR2 macros and add check by configure.
+	* config.h.in, configure.in, configure:
+	    add fchmod() check.
+
+Sun Mar 10 10:43:47 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* pubdic.p: Fixed typo. ([freewnn:00812] by Fe2+)
+
 Sat Mar  9 16:50:34 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
 	* Makefile.in config.h.in configure configure.in
 	  Wnn/etc/gethinsi.c Wnn/jserver/Makefile.in

@@ -1,3 +1,94 @@
+Sat May 11 13:03:37 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* INSTALL INSTALL.en
+	  Update.
+
+Tue May 07 22:26:30 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/etc/msg.c:
+	  _search() 修正。 ([freewnn:00847] 和田さん)
+
+Sun May 05 05:13:10 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/include/commonhd.h:
+	  _SERVER_VERSION を pl20 に上げた。
+	  unistd.h の include を削除した。
+
+Sat May 04 17:15:24 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+	* Wnn/manual/4.cmd/jserver man/4.cmd/jserver.man:
+	  Update.
+
+Thu May 02 15:18:55  UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/jserver/do_hindo_s.c:
+	  stdlib.h の include の仕方を修正。
+
+Wed May 01 21:05:10  UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* configure.in config.h.in configure:
+	  C89, POSIX 1,2 にない関数の存在確認を追加した。
+	  syslog() と syslog.h 及び、setenv().
+	* */jserver/Makefile.in:
+	  JS_SUPPORTLIB の削除。(BeOS では syslog()/libbe を利用しない)。
+	* Wnn/jserver/error.c:
+	  syslog() が存在しない場合は、その処理をとばすように変更した。
+	* Wnn/uum/jhlp.c sheader.h:
+	  システムの setenv() 関数を利用するように変更。
+	  setenv() は C89, POSIX 1,2 にない為、見つからない場合はもとの
+	  setenv() の定義を利用する。ただし、一般的な仕様と異なるので変更
+	  が必要である。また、char **environ に環境変数が格納されている
+	  ことを前提としている。
+	  
+Tue Apr 02 04:16:21 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+	* Wnn/jserver/de.c: include fcntl.h.
+	* Wnn/conv/cvt_read.c: cvt_head.h の include 位置修正。
+
+Sun Mar 31 11:30:23 UTC 2002  Hiroaki Abe <h-abe@pc.highway.ne.jp>
+	* Wnn/include/commonhd.h:
+	  BeOS が unistd.h をここで include しないようにした。
+	* */jserver/Makefile.in configure.in configure:
+	  BeOS は、libbe.so に syslog 関数を持っているため、JS_SUPPORTLIBS
+	  を追加して libbe.so を link するようにした。
+
+Sun Mar 31 06:26:54 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/jserver/de.c de_header.h:
+	  cmd_name[] の値を argv[0] から [cjkt]server 決め打ちに変更。
+	  スタイル、エラーメッセージ等修正。
+
+Sat Mar 30 13:44:22 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/romkan/rk_modread.c:
+	  stdlib.h を include した。
+
+Sat Mar 30 09:34:48 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
+	* (Wnn/cWnn/kWnn)/romkan/Makefile.in:
+	  INCLUDES に -I$(TOP) を追加。
+	  LIB_MT_DEFINES は使用されていないため削除。
+	  builddir != srcdir で build 出来るようにするための予備的な修正。
+
+Sat Mar 30 02:35:22 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/etc/yincoding.c: スタイル修正。
+	* Wnn/ 以下:
+	  STDC_HEADERS HAVE_*_H を見て、string.h/strings.h unistd.h 等の
+	  ヘッダの include を追加した。
+	  必要に応じて config.h の include も追加した。
+	* configure.in config.h.in configure:
+	  limits.h の確認を省略 (STDC_HEADERS に含まれると期待されるため)。
+	  memory.h の確認を追加 (将来の bcopy/index → memmove/strchr 移行のため)。
+
+Sat Mar 23 21:18:32 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	Wnn 以下:
+	* STDC_HEADERS を見て stdlib.h と string.h を include するように変更。
+	* STDC_HEADERS がない場合に strings.h の有無を調べて include。
+	  BSD42 マクロは削除。
+	* 必要に応じて config.h を include するようにした。
+
+Thu Mar 21 06:59:22 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* configure.in: 不要なコメントを削除した。
+	* cvt_head.h: コメントアウトされた部分を削除した。
+	* cvt_read.c, bdic.c, yincoding.c:
+	   BSD42 および SYSVR2 マクロを削除し、configure による判別を行な
+	   うように変更した。
+	* config.h.in, configure.in, configure:
+	   fchmod() の存在チェックを追加。
+
+Sun Mar 10 10:43:47 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* pubdic.p: 誤記訂正 ([freewnn:00812] Fe2+ さん)。
+
 Sat Mar  9 16:50:34 UTC 2002  Tomoki AONO <aono@cc.osaka-kyoiku.ac.jp>
 	* Makefile.in config.h.in configure configure.in
 	  Wnn/etc/gethinsi.c Wnn/jserver/Makefile.in

@@ -1,5 +1,5 @@
 #
-#   $Id: CONTRIBUTORS,v 1.9 2002-03-03 12:54:42 hiroo Exp $
+#   $Id: CONTRIBUTORS,v 1.10 2002-05-12 00:41:13 hiroo Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001
+# Copyright FreeWnn Project 1999, 2000, 2001, 2002
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -57,6 +57,7 @@ FreeWnn 1.1.1 (ÕΩƒÍ)
 	Tomoki AONO - ¿ƒÃÓ √“º˘ <aono@cc.osaka-kyoiku.ac.jp>
 	Fumitoshi Ukai - ±≠ªÙ  ∏…“ <ukai@debian.org>
 	Matui Fe2+ Tetsushi <VED03370@nifty.ne.jp>
+	Keiji Wada - œ¬≈ƒ@¿Ó∫Í <keiji@hiemalis.org>
 
 Pubdic+ …Ù ¨
 	SUNAGAWA Keiki <kei_sun@ba2.so-net.ne.jp>
