@@ -1,5 +1,5 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
-/* $Id: config.h.in,v 1.12 2002-05-01 20:27:16 hiroo Exp $ */
+/* $Id: config.h.in,v 1.13 2002-05-12 01:01:46 hiroo Exp $ */
 
 /* Define to `long' if <sys/types.h> does not define.  */
 #undef time_t
@@ -15,6 +15,15 @@
  * which is the traditional feature.
  */
 #undef WNN_ALLOW_UNSAFE_PATH
+
+/* Define to 1 if you have the `bcmp' function. */
+#undef HAVE_BCMP
+
+/* Define to 1 if you have the `bcopy' function. */
+#undef HAVE_BCOPY
+
+/* Define to 1 if you have the `bzero' function. */
+#undef HAVE_BZERO
 
 /* Define to 1 if you have the `closesocket' function. */
 #undef HAVE_CLOSESOCKET

@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.25 2002-05-01 20:27:16 hiroo Exp $
+dnl   $Id: configure.in,v 1.26 2002-05-12 01:01:46 hiroo Exp $
 dnl
 
 dnl
@@ -426,6 +426,7 @@ AC_CHECK_FUNCS(gethostname select)
 AC_CHECK_FUNCS(socket closesocket setsockopt send recv)
 AC_CHECK_FUNCS(syslog vsyslog setenv)
 dnl for bcopy/index -> memcpy/strchr conversion (preparation):
+AC_CHECK_FUNCS(bcopy bzero bcmp)
 dnl AC_CHECK_FUNCS(strchr memcpy)
 
 dnl Check fallback functions for jserver (should use AC_REPLACE_FUNCS?)
