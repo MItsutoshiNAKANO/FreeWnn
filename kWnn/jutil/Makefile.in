@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.10 2001-08-14 13:43:22 hiroo Exp $
+#   $Id: Makefile.in,v 1.11 2004-08-15 09:38:23 aono Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001
+# Copyright FreeWnn Project 1999, 2000, 2001, 2004
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -29,14 +29,17 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-include @top_srcdir@/makerule.mk
-top_builddir = ../..
+include @top_builddir@/makerule.mk 
+  top_srcdir = @top_srcdir@
+top_builddir = @top_builddir@
 
-INSTALL      = @INSTALL@
+INSTALL         = @INSTALL@ $(INSTALLFLAGS)
+LT_INSTALL      = $(LIBTOOL) --mode=install $(INSTALL)
+LT_LD           = $(LIBTOOL) --mode=link $(CCLINK)
 
-       INCLUDES = -I$(KWNNINCLUDESRC) -I$(TOP)
+       INCLUDES = -I$(KWNNINCLUDESRC) -I$(top_builddir)
         DEFINES = $(KWNNDEFINES) $(KWNNLANGDEF)
-   INSTALLFLAGS = -o $(WNNOWNER)
+LOCAL_INSTFLAGS = -o $(WNNOWNER)
     HINSIDEFINE = -DHINSIDATA_FILE=\"/$(KWNNLANG)/hinsi.data\"
 
 CLIENTPROGRAMS = kwnnstat kwnnkill kwddel kwdreg
@@ -112,63 +115,63 @@ clean::
 
 katod: $(OBJATOD)
 	$(RM) $@
-	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOD) @LIBS@
+	$(LT_LD) -o $@ $(LDOPTIONS) $(OBJATOD) @LIBS@
 
 clean::
 	$(RM) katod
 
 katof: $(OBJATOF)
 	$(RM) $@
-	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) $(OBJATOF) @LIBS@
+	$(LT_LD) -o $@ $(LDOPTIONS) $(OBJATOF) @LIBS@
 
 clean::
 	$(RM) katof
 
 kwnntouch: $(OBJTOUCH)
 	$(RM) $@
-	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) $(OBJTOUCH) @LIBS@
+	$(LT_LD) -o $@ $(LDOPTIONS) $(OBJTOUCH) @LIBS@
 
 clean::
 	$(RM) kwnntouch
 
 kdicsort: $(OBJSORT)
 	$(RM) $@
-	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) $(OBJSORT)
+	$(LT_LD) -o $@ $(LDOPTIONS) $(OBJSORT)
 
 clean::
 	$(RM) kdicsort
 
 kdtoa: $(OBJDTOA)
 	$(RM) $@
-	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) $(OBJDTOA) @LIBS@
+	$(LT_LD) -o $@ $(LDOPTIONS) $(OBJDTOA) @LIBS@
 
 clean::
 	$(RM) kdtoa
 
 kwnnstat: $(OBJSTAT) @DEPKWNNJLIB@
 	$(RM) $@
-	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) $(OBJSTAT) $(KWNNJLIB) @LIBS@
+	$(LT_LD) -o $@ $(LDOPTIONS) $(OBJSTAT) $(KWNNJLIB) @LIBS@
 
 clean::
 	$(RM) kwnnstat
 
 kwnnkill: $(OBJKILL) @DEPKWNNJLIB@
 	$(RM) $@
-	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) $(OBJKILL) $(KWNNJLIB) @LIBS@
+	$(LT_LD) -o $@ $(LDOPTIONS) $(OBJKILL) $(KWNNJLIB) @LIBS@
 
 clean::
 	$(RM) kwnnkill
 
 kwddel: $(OBJWDDEL) @DEPKWNNJLIB@
 	$(RM) $@
-	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDDEL) $(KWNNJLIB) @LIBS@
+	$(LT_LD) -o $@ $(LDOPTIONS) $(OBJWDDEL) $(KWNNJLIB) @LIBS@
 
 clean::
 	$(RM) kwddel
 
 kwdreg: $(OBJWDREG) @DEPKWNNJLIB@
 	$(RM) $@
-	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) $(OBJWDREG) $(KWNNJLIB) @LIBS@
+	$(LT_LD) -o $@ $(LDOPTIONS) $(OBJWDREG) $(KWNNJLIB) @LIBS@
 
 clean::
 	$(RM) kwdreg
@@ -326,7 +329,7 @@ install:: $(PROGRAMS)
 	@for flag in ${MAKEFLAGS} ''; do \
 	case "$$flag" in *=*) ;; *[i]*) set +e;; esac; done; \
 	for i in $(PROGRAMS); do \
-	(set -x; $(LIBTOOL) $(INSTALL) $(INSTALLFLAGS) $(INSTBINFLAGS) $(INSTPGMFLAGS) $$i $(DESTDIR)$(KWNNBINDIR)); \
+	(set -x; $(LT_INSTALL) $(INSTBINFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) $$i $(DESTDIR)$(KWNNBINDIR)); \
 	done
 
 $(OBJ1) : $(SRC1)
