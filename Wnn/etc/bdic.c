@@ -1,5 +1,5 @@
 /*
- * $Id: bdic.c,v 1.1.1.1 2000-01-16 05:07:44 ura Exp $
+ * $Id: bdic.c,v 1.2 2000-01-16 06:37:13 ura Exp $
  */
 
 /*
@@ -1144,7 +1144,7 @@ int which;
 #endif /* BDIC_WRITE_CHECK */
     }
 
-#ifdef	BSD42
+#if defined(BSD42)&& !defined(BEOS)
     fchmod(fileno(fp), 0664);
     fclose(fp);
 #else	/* SYSV */
@@ -1200,7 +1200,7 @@ int serial;
     putnull(fp, serial);
 #endif /* BDIC_WRITE_CHECK */
 
-#ifdef	BSD42
+#if defined(BSD42) && !defined(BEOS)
     fchmod(fileno(fp), 0664);
     fclose(fp);
 #else	/* SYSV */

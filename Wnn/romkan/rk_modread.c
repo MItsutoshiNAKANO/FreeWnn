@@ -1,5 +1,5 @@
 /*
- * $Id: rk_modread.c,v 1.1.1.1 2000-01-16 05:07:50 ura Exp $
+ * $Id: rk_modread.c,v 1.2 2000-01-16 06:37:19 ura Exp $
  */
 
 /*
@@ -47,7 +47,7 @@
 #include "rk_header.h"
 #include "rk_extvars.h"
 #ifdef WNNDEFAULT
-#  include "config.h"
+#  include "wnn_config.h"
  /* マクロLIBDIRの定義（のためだけ）。コンパイル時は、ヘッダファイルの
     サーチパスに、Wnnのインクルードファイルのありかを設定しておくこと。*/
 #endif

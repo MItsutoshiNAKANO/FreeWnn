@@ -1,5 +1,5 @@
 #ifndef lint
-static char *rcs_id = "$Id: atod.c,v 1.1.1.1 2000-01-16 05:07:46 ura Exp $";
+static char *rcs_id = "$Id: atod.c,v 1.3 2000-01-16 06:37:15 ura Exp $";
 #endif /* lint */
 
 /*
@@ -45,7 +45,7 @@ UJIS 形式を、辞書登録可能形式, 及び固定形式辞書に変換するプログラム。
 #include <stdio.h>
 #include <ctype.h>
 #include "commonhd.h"
-#include "config.h"
+#include "wnn_config.h"
 #include "jslib.h"
 #include "jh.h"
 #include "jdata.h"
@@ -209,7 +209,7 @@ extern int sort_func_sdic();
 extern int sort_func_je();
 FILE *ofpter , *fopen();
 
-void
+int
 main(argc,argv)
      int argc ;
      char **argv;
