@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.35 2003-06-07 02:19:03 hiroo Exp $
+dnl   $Id: configure.in,v 1.36 2003-06-07 13:04:31 hiroo Exp $
 dnl
 
 dnl
@@ -411,8 +411,6 @@ AC_CHECK_FUNCS(random drand48 fchmod getopt \
 dnl for bcopy/index -> memcpy/strchr conversion (preparation):
 AC_CHECK_FUNCS(bcopy bzero bcmp index rindex \
 	memcpy memmove memset strchr strrchr)
-dnl utmp functions for uum.
-AC_CHECK_FUNCS(saveutmp)
 
 dnl Check fallback functions for jserver (should use AC_REPLACE_FUNCS?)
 JS_SUPPORTOBJS=
