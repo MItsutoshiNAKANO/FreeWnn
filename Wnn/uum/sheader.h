@@ -1,5 +1,5 @@
 /*
- *  $Id: sheader.h,v 1.6 2002-03-30 01:45:41 hiroo Exp $
+ *  $Id: sheader.h,v 1.7 2002-05-01 21:05:08 hiroo Exp $
  */
 
 /*
@@ -321,7 +321,6 @@ extern void set_screen_vars_default ();
 extern void set_keypad_on ();
 extern void set_keypad_off ();
 extern void set_scroll_region ();
-extern void setenv ();
 extern int setutmp ();
 extern int st_colum ();
 extern void t_cont_line_note_delete ();

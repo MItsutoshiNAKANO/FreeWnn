@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.7 2002-03-30 01:45:41 hiroo Exp $
+ *  $Id: jhlp.c,v 1.8 2002-05-01 21:05:08 hiroo Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.7 2002-03-30 01:45:41 hiroo Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.8 2002-05-01 21:05:08 hiroo Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -46,6 +46,9 @@ static char *rcs_id = "$Id: jhlp.c,v 1.7 2002-03-30 01:45:41 hiroo Exp $";
 #else
 #  if HAVE_STRINGS_H
 #    include <strings.h>
+#  endif
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
 #  endif
 #endif /* STDC_HEADERS */
 #include <sys/errno.h>
@@ -125,11 +128,10 @@ char *cmdnm = "csh";            /* char *cmdnm = "csh"; */
 int child_id;
 char *prog;
 
-extern int errno;
 extern char *optarg;
 extern int optind;
 
-extern char *ttyname (), *malloc (), *getenv ();
+extern char *ttyname ();
 
 static void save_signals ();
 static void restore_signals ();
@@ -257,7 +259,7 @@ main (argc, argv)
 
   if ((p = getenv (WNN_COUNTDOWN_ENV)) == NULL)
     {
-      setenv (WNN_COUNTDOWN_ENV, "0");
+      setenv (WNN_COUNTDOWN_ENV, "0", 1);
     }
   else if (atoi (p) <= 0)
     {
@@ -270,7 +272,7 @@ main (argc, argv)
   else
     {
       sprintf (p, "%d", atoi (p) - 1);
-      setenv (WNN_COUNTDOWN_ENV, p);
+      setenv (WNN_COUNTDOWN_ENV, p, 1);
     }
 
   if ((tname = getenv ("TERM")) == NULL)
@@ -1360,11 +1362,13 @@ exec_cmd (argv)
     }
 }
 
+#if !(HAVE_SETENV)
 /** 環境変数のセット */
 void
-setenv (var, value)
+setenv (var, value, overwrite)
      char *var;
      char *value;
+     int  overwrite;
 {
   extern char **environ;
   char *malloc ();
@@ -1402,6 +1406,7 @@ setenv (var, value)
   strcat (environ[i], "=");
   strcat (environ[i], value);
 }
+#endif /* !HAVE_SETENV */
 
 #ifdef SVR4
 static int
