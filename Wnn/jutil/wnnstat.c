@@ -1,6 +1,6 @@
-#ifndef lint
-static char *rcs_id = "$Id: wnnstat.c,v 1.3 2000-01-16 06:37:15 ura Exp $";
-#endif /* lint */
+/*
+ *  $Id: wnnstat.c,v 1.4 2001-06-14 17:55:37 ura Exp $
+ */
 
 /*
  * FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -10,13 +10,14 @@ static char *rcs_id = "$Id: wnnstat.c,v 1.3 2000-01-16 06:37:15 ura Exp $";
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
+ * Copyright FreeWnn Project 1999, 2000
  *
- * Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+ * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -24,26 +25,14 @@ static char *rcs_id = "$Id: wnnstat.c,v 1.3 2000-01-16 06:37:15 ura Exp $";
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with GNU Emacs; see the file COPYING.  If not, write to the
- * Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Commentary:
- *
- * Change log:
- *	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
- *		スペルミス（JAPANSE）。
- *		ISO-2022-JP-2 エンコーディングでの韓国語のサポート。
- *	'99/04/19       TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
- *		コマンド引数の修正。
- *		usage メッセージの訂正。
- *
- * Last modified date: 19,Apr.1999
- *
- * Code:
- *
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-/*	Version 4.0
- */
+
+#ifndef lint
+static char *rcs_id = "$Id: wnnstat.c,v 1.4 2001-06-14 17:55:37 ura Exp $";
+#endif /* lint */
+
 #include <stdio.h>
 #include "jslib.h"
 #include "jllib.h"

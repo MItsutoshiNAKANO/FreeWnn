@@ -1,5 +1,5 @@
 /*
- * $Id: setutmp.c,v 1.1.1.1 2000-01-16 05:07:51 ura Exp $
+ *  $Id: setutmp.c,v 1.2 2001-06-14 17:55:51 ura Exp $
  */
 
 /*
@@ -10,13 +10,14 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
+ * Copyright FreeWnn Project 1999, 2000
  *
- * Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+ * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -24,20 +25,10 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with GNU Emacs; see the file COPYING.  If not, write to the
- * Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Commentary:
- *
- * Change log:
- *
- * Last modified date: 8,Feb.1999
- *
- * Code:
- *
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-/*	Version 4.0
- */
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <utmp.h>
