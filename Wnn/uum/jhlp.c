@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.6 2001-09-16 11:42:58 hiroo Exp $
+ *  $Id: jhlp.c,v 1.7 2002-03-30 01:45:41 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -30,55 +30,51 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.6 2001-09-16 11:42:58 hiroo Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.7 2002-03-30 01:45:41 hiroo Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include <stdio.h>
+#include <setjmp.h>
 #include <signal.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#  include <string.h>
+#else
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif
+#endif /* STDC_HEADERS */
+#include <sys/errno.h>
+#include <sys/ioctl.h>
+#ifdef HAVE_SYS_PARAM_H
+#  include <sys/param.h>
+#endif
+#include <sys/time.h>
+#include <sys/types.h>
+#if HAVE_FCNTL_H
+#  include <fcntl.h>
+#endif
+#include <pwd.h>
+#ifdef HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
+#ifdef UX386
+#include <sys/kdef.h>
+#endif
+
 #include "jllib.h"
 #include "commonhd.h"
 #include "sdefine.h"
 #include "sheader.h"
 #include "wnn_config.h"
 
-#include <sys/types.h>
-#include <sys/ioctl.h>
-
-#ifdef HAVE_UNISTD_H
-# include <unistd.h>
-#else
-  extern int dup _P((int));
-#endif
-
-#ifndef SYSVR2
-#include <fcntl.h>
-#endif /* !SYSVR2 */
-#include <sys/errno.h>
-#include <pwd.h>
-#include <sys/time.h>
-#ifdef UX386
-#include <sys/kdef.h>
-#endif
-
-/*
-struct passwd *getpwuid();
-*/
-
-#ifdef SYSVR2
-#       include <setjmp.h>
-/*      don't define bcopy!!!!          */
-#endif /* SYSVR2 */
-/* jlib.hの中でsetjmp.hがincludeされている!! */
 
 jmp_buf kk_env;
 
-#if defined(HAVE_SYS_PARAM_H)
-#include <sys/param.h>
-#endif
 
 #ifdef HAVE_WAIT3
 #       include <sys/wait.h>

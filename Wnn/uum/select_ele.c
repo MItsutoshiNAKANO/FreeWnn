@@ -1,5 +1,5 @@
 /*
- *  $Id: select_ele.c,v 1.3 2001-06-14 18:16:08 ura Exp $
+ *  $Id: select_ele.c,v 1.4 2002-03-30 01:45:41 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -30,10 +30,19 @@
  */
 
 /* 一つの要素をユーザーに取り出してもらうためのルーチン */
+#if HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
 #define DD_MAX 512
 
 #include <stdio.h>
+#if STDC_HEADERS
+#  include <string.h>
+#elif HAVE_STRINGS_H
+#  include <strings.h>
+#endif /* STDC_HEADERS */
+
 #include "commonhd.h"
 #include "sdefine.h"
 #include "sheader.h"

@@ -1,5 +1,5 @@
 /*
- *  $Id: termcap.c,v 1.3 2001-06-14 18:16:08 ura Exp $
+ *  $Id: termcap.c,v 1.4 2002-03-30 01:45:41 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -28,22 +28,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
 #include <stdio.h>
 #include <ctype.h>
+#if STDC_HEADERS
+#  include <string.h>
+#else
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif
+#endif /* STDC_HEADERS */
 #include <sys/errno.h>
+#include <sys/ioctl.h>
 #include "commonhd.h"
 
 #include "sdefine.h"
 #include "sheader.h"
-
-#ifdef DGUX                     /* copied from JLS5.4.2 */
-#include <sys/ioctl.h>
-#endif /* DGUX */
-#ifdef putchar
-#undef putchar
-#endif
-extern int putchar ();
 
 #undef DEFAULT_KKCAP
 /* declaration about terminal */

@@ -1,5 +1,5 @@
 /*
- *  $Id: sheader.h,v 1.5 2002-03-03 14:06:30 hiroo Exp $
+ *  $Id: sheader.h,v 1.6 2002-03-30 01:45:41 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *

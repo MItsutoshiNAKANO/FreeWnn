@@ -1,5 +1,5 @@
 /*
- *  $Id: key_bind.c,v 1.4 2001-06-14 18:16:07 ura Exp $
+ *  $Id: key_bind.c,v 1.5 2002-03-30 01:45:41 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -41,8 +41,20 @@
     8: 辞書検索のモード
     9:インスペクトのモード
 */
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
 #include <stdio.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#  include <string.h>
+#else
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif
+#endif /* STDC_HEADERS */
+
 #include "commonhd.h"
 #include "wnn_config.h"
 #include "sdefine.h"

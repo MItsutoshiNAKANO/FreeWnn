@@ -1,5 +1,5 @@
 /*
- *  $Id: uif.c,v 1.5 2001-06-14 18:16:08 ura Exp $
+ *  $Id: uif.c,v 1.6 2002-03-30 01:45:41 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -36,8 +36,16 @@ buffer_inを用いているので、そちらの方も参照して下さい。
 みる事により、分かると思います。
 モードが存在します(henkan_mode)が、あまり利用しないように務めています。
 */
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
 #include <stdio.h>
+#include <sys/types.h>
+#if HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
+
 #include "commonhd.h"
 #include "wnn_config.h"
 #include "jllib.h"

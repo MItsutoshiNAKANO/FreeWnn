@@ -1,5 +1,5 @@
 /*
- *  $Id: setutmp.c,v 1.3 2001-06-14 18:16:08 ura Exp $
+ *  $Id: setutmp.c,v 1.4 2002-03-30 01:45:41 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -28,18 +28,29 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
 #include <stdio.h>
+#if STDC_HEADERS
+#  include <string.h>
+#else
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif
+#  ifdef SYSVR2 /* should be converted to HAVE_MEMORY_H */
+#    include <memory.h>
+#  endif /* SYSVR2 */
+#endif /* STDC_HEADERS */
 #include <sys/types.h>
-#include <utmp.h>
+#if HAVE_FCNTL_H
+#  include <fcntl.h>
+#endif
 #include <pwd.h>
+#include <utmp.h>
+
 #include "commonhd.h"
-#ifdef SYSVR2
-#include <memory.h>
-#endif /* SYSVR2 */
-#ifdef BSD42
-#include <fcntl.h>
-#endif /* BSD42 */
 
 #define public
 

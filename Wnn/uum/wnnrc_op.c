@@ -1,5 +1,5 @@
 /*
- *  $Id: wnnrc_op.c,v 1.6 2002-03-23 21:18:29 hiroo Exp $
+ *  $Id: wnnrc_op.c,v 1.7 2002-03-30 01:45:41 hiroo Exp $
  */
 
 /*
@@ -30,14 +30,20 @@
  */
 
 /* uumrc operations */
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
 #include <stdio.h>
 #include <ctype.h>
 #include <errno.h>
 #if STDC_HEADERS
+#  include <stdlib.h>
 #  include <string.h>
-#elif HAVE_STRINGS_H
-#  include <strings.h>
+#else
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif
 #endif /* STDC_HEADERS */
 #include <pwd.h>
 
@@ -49,8 +55,6 @@
 #include "sdefine.h"
 #include "sheader.h"
 
-extern char *getenv ();
-extern FILE *fopen ();
 extern int conv_keyin ();
 extern int keyin2 ();
 
