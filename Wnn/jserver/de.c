@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.13 2001-09-16 11:50:47 hiroo Exp $
+ *  $Id: de.c,v 1.14 2001-09-16 15:57:28 hiroo Exp $
  */
 
 /*
@@ -1278,9 +1278,9 @@ usage ()
 void
 print_version ()
 {
-#ifdef  CHINESE
+#if  defined(CHINESE)
   printf ("%s (%s) Chinese Multi Client Server\n", cmd_name, SER_VERSION);
-#elsif  KOREAN
+#elif  defined(KOREAN)
   printf ("%s (%s) Korean Multi Client Server\n", cmd_name, SER_VERSION);
 #else
   printf ("%s (%s) Nihongo Multi Client Server\n", cmd_name, SER_VERSION);
