@@ -1,5 +1,5 @@
 /*
- *  $Id: w_string.c,v 1.3 2001-06-14 18:16:03 ura Exp $
+ *  $Id: w_string.c,v 1.4 2003-05-11 18:43:16 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -92,46 +92,3 @@ Strlen (w)
   return (wnn_Strlen (w));
 }
 
-#ifdef nodef
-int
-wstrncmp (s1, s2, n)
-     register w_char *s1, *s2;
-     register int n;
-{
-  for (; *s1 != 0 && *s2 != 0;)
-    {
-      if (*s1 != *s2)
-        return (w_char_cmp (*s1, *s2));
-      s1++;
-      s2++;
-      n--;
-      if (n == 0)
-        return (0);
-    }
-  if (*s1 == 0 && *s2 == 0)
-    return (0);
-  if (*s1 == 0)
-    return (-1);
-  return (1);
-}
-
-w_char_cmp (s1, s2)
-     register w_char s1, s2;
-{
-  if (s1 == s2)
-    return (0);
-  if (s1 == TOUTEN_NUM)
-    {
-      if (s2 == KUTEN_NUM)
-        return (-1);
-      return (1);
-    }
-  if (s1 == KUTEN_NUM)
-    return (1);
-  if (s2 == TOUTEN_NUM || s2 == KUTEN_NUM)
-    return (-1);
-  if (s2 > s1)
-    return (-1);
-  return (1);
-}
-#endif

@@ -6,7 +6,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -25,7 +25,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-static char rcs_id[] = "$Id: initjserv.c,v 1.15 2002-09-01 16:16:49 hiroo Exp $";
+static char rcs_id[] = "$Id: initjserv.c,v 1.16 2003-05-11 18:43:15 hiroo Exp $";
 
 #if defined(HAVE_CONFIG_H)
 #include <config.h>
@@ -428,22 +428,3 @@ get_bcksla (char *st)
 }
 #endif /* !CHINESE */
 
-/*
-is_g_digit(c)
-w_char c;
-{
-    register int i;
-
-    if (isascii(c) && isdigit(c) || isjdigit(c)) {
-        return(YES);
-    } else {
-        for (i = 0; i < MAX_GIJI_CHAR; i++) {
-            if (giji_digit[i] == 0xffff)
-                return (NO);
-            else if (giji_digit[i] == c)
-                return(YES);
-        }
-    }
-    return(NO);
-}
-*/

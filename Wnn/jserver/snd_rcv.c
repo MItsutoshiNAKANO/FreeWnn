@@ -1,5 +1,5 @@
 /*
- *  $Id: snd_rcv.c,v 1.3 2001-06-14 18:16:03 ura Exp $
+ *  $Id: snd_rcv.c,v 1.4 2003-05-11 18:43:16 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -48,11 +48,6 @@ fopen_write_cur (fn)
      char *fn;
 {
   fmode = 'w';
-/*
-        puts_cur(fn);putc_purge();
-        if(get4_cur()== -1) return NULL;
-        else return 1;
-*/
   return 1;
 }
 
