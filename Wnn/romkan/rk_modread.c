@@ -1,5 +1,5 @@
 /*
- *  $Id: rk_modread.c,v 1.6 2002-03-24 22:54:17 hiroo Exp $
+ *  $Id: rk_modread.c,v 1.7 2002-03-30 13:44:20 hiroo Exp $
  */
 
 /*
@@ -41,6 +41,7 @@
 #endif
 
 #if STDC_HEADERS
+#  include <stdlib.h>
 #  include <string.h>
 #elif HAVE_STRINGS_H
 #  include <strings.h>
@@ -119,7 +120,8 @@ kwdsrc (hyo, wd)
     if (!mystrcmp (hyo[i].name, wd))
       return (i);
   ERRMOD (9);
- /*NOTREACHED*/}
+ /*NOTREACHED*/
+}
 
  /** モード表の読み込み */
 void
