@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.22 2002-03-21 04:32:23 hiroo Exp $
+dnl   $Id: configure.in,v 1.23 2002-03-30 02:35:20 hiroo Exp $
 dnl
 
 dnl
@@ -373,8 +373,9 @@ dnl
 AC_PATH_X
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS(fcntl.h limits.h malloc.h sgtty.h strings.h termio.h unistd.h)
+AC_CHECK_HEADERS(fcntl.h sgtty.h termio.h unistd.h)
 AC_CHECK_HEADERS(sys/file.h sys/ioctl.h sys/time.h sys/types.h sys/param.h)
+AC_CHECK_HEADERS(malloc.h strings.h memory.h)
 dnl If you don't use ansidecl.h, use this (and modify Wnn/jserver/error.c)
 dnl AC_CHECK_HEADERS(stdarg.h varargs.h, break)
 
