@@ -20,7 +20,7 @@ Sun Sep 01 17:48:26 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 
 Mon Aug 26 09:27:23 UTC 2002  Tomoki Aono <aono@cc.osaka-kyoiku.ac.jp>
 	* Wnn/uum/jhlp.c:
-	  <sys/error.h> ではなく、<error.h> を読み込み。
+	  <sys/errno.h> ではなく、<errno.h> を読み込み。
 
 Sat Aug 24 18:11:53 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	* Wnn/jserver/de.c:
