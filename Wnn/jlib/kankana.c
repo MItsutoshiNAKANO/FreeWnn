@@ -1,5 +1,5 @@
 /*
- *  $Id: kankana.c,v 1.4 2002-05-12 22:51:16 hiroo Exp $
+ *  $Id: kankana.c,v 1.5 2003-05-11 18:27:34 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: kankana.c,v 1.4 2002-05-12 22:51:16 hiroo Exp $";
+static char *rcs_id = "$Id: kankana.c,v 1.5 2003-05-11 18:27:34 hiroo Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -51,6 +51,13 @@ static char *rcs_id = "$Id: kankana.c,v 1.4 2002-05-12 22:51:16 hiroo Exp $";
 #define KIHON_DIC "pubdic/kihon.dic"
 #define SETTO_DIC "pubdic/setsuji.dic"
 
+void err (void);
+void henkan (void);
+void p_set (struct wnn_env *env1);
+void print_kanji (struct wnn_dai_bunsetsu *dlist, int cnt);
+void putws (unsigned short *s);
+void strtows (w_char *u, unsigned char *e);
+
 WNN_JSERVER_ID *js;
 struct wnn_env *env, *rev_env;
 static struct wnn_ret_buf rb = { 0, NULL };
@@ -63,9 +70,8 @@ char kanji[5000];
 int kihon_file, setto_file, rev_file, fzk_file, rev_setto_file;
 int kihon_dic_no, setto_dic_no, rev_dic_no, rev_setto_dic_no;
 
-main (argc, argv)
-     int argc;
-     char **argv;
+int
+main (int argc, char **argv)
 {
   char *mname = "";
   rb.buf = (char *) malloc ((unsigned) (rb.size = 0));
@@ -121,7 +127,8 @@ main (argc, argv)
   js_close (js);
 }
 
-henkan ()
+void
+henkan (void)
 {
   w_char u[1024];
   struct wnn_env *c_env = env;
@@ -155,9 +162,8 @@ henkan ()
     }
 }
 
-print_kanji (dlist, cnt)
-     struct wnn_dai_bunsetsu *dlist;
-     int cnt;
+void
+print_kanji (struct wnn_dai_bunsetsu *dlist, int cnt)
 {
   int i;
   struct wnn_sho_bunsetsu *sbn;
@@ -182,8 +188,8 @@ print_kanji (dlist, cnt)
   fflush (stdout);
 }
 
-p_set (env1)
-     struct wnn_env *env1;
+void
+p_set (struct wnn_env *env1)
 {
   struct wnn_param pa;
   pa.n = 2;                     /* n_bun */
@@ -201,24 +207,22 @@ p_set (env1)
   js_param_set (env1, &pa);
 }
 
-
-putwchar (x)
-     unsigned short x;
+void
+putwchar (unsigned short x)
 {
   putchar (x >> 8);
   putchar (x);
 }
 
-putws (s)
-     unsigned short *s;
+void
+putws (unsigned short *s)
 {
   while (*s)
     putwchar (*s++);
 }
 
-strtows (u, e)
-     w_char *u;
-     unsigned char *e;
+void
+strtows (w_char *u, unsigned char *e)
 {
   int x;
   for (; *e;)
@@ -231,9 +235,11 @@ strtows (u, e)
   *u = 0;
 }
 
-err ()
+void
+err (void)
 {
   printf (wnn_perror ());
   printf ("\n bye.\n");
   exit (1);
 }
+

@@ -1,5 +1,5 @@
 /*
- *  $Id: do_filecom.c,v 1.10 2002-08-12 16:25:46 hiroo Exp $
+ *  $Id: do_filecom.c,v 1.11 2003-05-11 18:27:42 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -56,13 +56,18 @@
 #include "de_header.h"
 #include "jdata.h"
 
-static int file_discard (), file_loaded_local (), find_file_by_uniq (), x_file_already_read (), add_fid_to_env (), del_fid_from_env (), new_fid_in_env (), file_remove ();
-static void file_already_read ();
-extern struct cnv_env *env[];
-struct wnn_file files[MAX_FILES];
+static int  add_fid_to_env (int, int);
+static int  del_fid_from_env (int, int);
+static void file_already_read (int, int);
+static int  file_discard (int, int);
+static int  file_loaded_local (void);
+static int  file_remove (char*, char*);
+static int  find_file_by_uniq (struct wnn_file_uniq *);
+static int  new_fid_in_env (int, int);
+static int  x_file_already_read (int, int);
 
 void
-file_init ()
+file_init (void)
 {
   int i;
   for (i = 0; i < MAX_FILES; i++)
@@ -83,7 +88,7 @@ file_init ()
 #define      MODE (0000000 | 0000755)
 
 void
-js_mkdir ()
+js_mkdir (void)
 {
   char path[FILENAME];
   int x;
@@ -111,7 +116,7 @@ js_mkdir ()
 
 /*      access  */
 void
-js_access ()
+js_access (void)
 {
   char path[FILENAME];
   int amode;
@@ -129,7 +134,7 @@ js_access ()
 
 /*      js_file_list_all        */
 void
-js_file_list_all ()
+js_file_list_all (void)
 {
   int i, c;
 
@@ -155,7 +160,7 @@ js_file_list_all ()
 
 /*      js_file_list    */
 void
-js_file_list ()
+js_file_list (void)
 {
   int i, c, env_id, fid;
 
@@ -183,7 +188,7 @@ js_file_list ()
 
 /*      file info       */
 void
-js_file_info ()
+js_file_info (void)
 {
   int env_id, fid;
   env_id = envhandle ();
@@ -205,7 +210,7 @@ js_file_info ()
 
 /*      file stat       */
 void
-js_file_stat ()
+js_file_stat (void)
 {
   char n[FILENAME];
 
@@ -217,8 +222,7 @@ js_file_stat ()
 }
 
 int
-file_stat (file_name)
-     char *file_name;
+file_stat (char *file_name)
 {
   FILE *fp;
   struct wnn_file_head fh;
@@ -286,7 +290,7 @@ end:
 
 /*      js_file_discard */
 void
-js_file_discard ()
+js_file_discard (void)
 {
   int x;
   int env_id, fid;
@@ -310,8 +314,7 @@ js_file_discard ()
 }
 
 static int
-file_discard (env_id, fid)
-     int env_id, fid;
+file_discard (int env_id, int fid)
 {
   if (del_fid_from_env (env_id, fid) == -1)
     {                           /* invalid */
@@ -329,8 +332,7 @@ file_discard (env_id, fid)
 }
 
 void
-del_all_file_in_env (env_id)
-     int env_id;
+del_all_file_in_env (int env_id)
 {
   int i, fid;
 
@@ -350,7 +352,7 @@ del_all_file_in_env (env_id)
 
 /*      js_hindo_file_create    */
 void
-js_hindo_file_create ()
+js_hindo_file_create (void)
 {
   int env_id, fid;
   char fn[FILE_NAME_L];
@@ -390,7 +392,7 @@ js_hindo_file_create ()
 
 /*      js_hindo_file_create_client     */
 void
-js_hindo_file_create_client ()
+js_hindo_file_create_client (void)
 {
   int env_id, fid, i;
   struct wnn_file_uniq *funiq;
@@ -426,12 +428,9 @@ js_hindo_file_create_client ()
 }
 
 
-
-
-
 /*      js_dic_file_create      */
 void
-js_dic_file_create ()
+js_dic_file_create (void)
 {
   int type, x;
   char fn[FILE_NAME_L];
@@ -471,7 +470,7 @@ js_dic_file_create ()
 }
 
 void
-js_file_comment_set ()
+js_file_comment_set (void)
 {
   int fid, envi;
   w_char comment[WNN_COMMENT_LEN];
@@ -516,11 +515,8 @@ ERR_RET:
 }
 
 
-
-
 static FILE *
-xFopen (n, mode)
-     char *n, *mode;
+xFopen (char *n, char *mode)
 {
   FILE *f;
   if (n == NULL)
@@ -537,8 +533,7 @@ xFopen (n, mode)
 }
 
 static void
-xFclose (f)
-     FILE *f;
+xFclose (FILE *f)
 {
   if (f == NULL)
     return;
@@ -547,7 +542,7 @@ xFclose (f)
 
 /*      js_file_loaded_local (in client machine)        */
 void
-js_file_loaded_local ()
+js_file_loaded_local (void)
 {
 
 /* get4_cur();   env_id */
@@ -556,7 +551,7 @@ js_file_loaded_local ()
 }
 
 static int
-file_loaded_local ()
+file_loaded_local (void)
 {
   int x, i;
   struct wnn_file_uniq fq;
@@ -584,7 +579,7 @@ fprintf(stderr,"js_file_loaded:ti=%x,dev=%x,inode=%x,%s\n",
 
 /*      js_file_loaded (in jserver machine)     */
 void
-js_file_loaded ()
+js_file_loaded (void)
 {
   char n[FILE_NAME_L];
   int x;
@@ -600,8 +595,7 @@ js_file_loaded ()
 }
 
 int
-file_loaded (n)
-     char *n;
+file_loaded (char *n)
 {
   int x;
   FILE *f;
@@ -665,8 +659,7 @@ file_loaded (n)
 }
 
 static int
-find_file_by_uniq (uniq)
-     struct wnn_file_uniq *uniq;
+find_file_by_uniq (struct wnn_file_uniq *uniq)
 {
   int i;
   for (i = 1; i < MAX_FILES; i++)
@@ -682,7 +675,7 @@ find_file_by_uniq (uniq)
 
 /*      js_file_send (from Client to Jserver)   */
 void
-js_file_send ()
+js_file_send (void)
 {
   char n[FILE_NAME_L];
   int env_id, fid;
@@ -740,7 +733,7 @@ js_file_send ()
 
 /*      js_file_read    */
 void
-js_file_read ()
+js_file_read (void)
 {
   char n[FILE_NAME_L];
   int env_id, fid;
@@ -786,8 +779,7 @@ js_file_read ()
 }
 
 static void
-file_already_read (env_id, fid)
-     int env_id, fid;
+file_already_read (int env_id, int fid)
 {
   if (-1 != find_fid_in_env (env_id, fid))
     {                           /* already exists in env */
@@ -805,8 +797,7 @@ file_already_read (env_id, fid)
 }
 
 static int
-x_file_already_read (env_id, fid)
-     int env_id, fid;
+x_file_already_read (int env_id, int fid)
 {
   if (-1 != find_fid_in_env (env_id, fid))
     {                           /* already exists in env */
@@ -822,7 +813,7 @@ x_file_already_read (env_id, fid)
 
 /*      js_file_write   */
 void
-js_file_write ()
+js_file_write (void)
 {
   int env_id, fid;
   char n[FILE_NAME_L];
@@ -859,7 +850,7 @@ js_file_write ()
 
 /*      js_file_receive (from Jserver to Client) */
 void
-js_file_receive ()
+js_file_receive (void)
 {
   int env_id, fid;
   struct wnn_file_uniq fq;
@@ -942,7 +933,7 @@ js_file_receive ()
 
 /*      */
 int
-get_new_fid ()
+get_new_fid (void)
 {
   int fid;
   for (fid = 1; fid < MAX_FILES; fid++)
@@ -958,8 +949,7 @@ get_new_fid ()
 */
 
 static int
-add_fid_to_env (env_id, fid)
-     int env_id, fid;
+add_fid_to_env (int env_id, int fid)
 {
   int i;
   if ((i = new_fid_in_env (env_id, -1)) == -1)
@@ -972,8 +962,7 @@ add_fid_to_env (env_id, fid)
 }
 
 static int
-del_fid_from_env (env_id, fid)
-     int env_id, fid;
+del_fid_from_env (int env_id, int fid)
 {
   int i;
   if ((i = find_fid_in_env (env_id, fid)) == -1)
@@ -986,11 +975,8 @@ del_fid_from_env (env_id, fid)
 }
 
 
-
-
 int
-find_fid_in_env (env_id, fid)
-     register int env_id, fid;
+find_fid_in_env (int env_id, int fid)
 {
   register int i;
   register int *file = env[env_id]->file;
@@ -1007,8 +993,7 @@ find_fid_in_env (env_id, fid)
 }
 
 static int
-new_fid_in_env (env_id, fid)
-     int env_id, fid;
+new_fid_in_env (int env_id, int fid)
 {
   int i;
   for (i = 0; i < WNN_MAX_FILE_OF_AN_ENV; i++)
@@ -1023,7 +1008,7 @@ new_fid_in_env (env_id, fid)
 
 /*      js_file_remove  (remove file from UNIX file system) H.T. */
 void
-js_file_remove ()
+js_file_remove (void)
 {
   char n[FILE_NAME_L];
   char passwd[WNN_PASSWD_LEN];
@@ -1045,8 +1030,7 @@ js_file_remove ()
 }
 
 static int
-file_remove (n, passwd)
-     char *n, *passwd;
+file_remove (char *n, char *passwd)
 {
   int fid;
   FILE *fp;
@@ -1091,7 +1075,7 @@ file_remove (n, passwd)
 
 
 void
-js_file_password_set ()
+js_file_password_set (void)
 {
   int fid, envi, which;
   char old[WNN_PASSWD_LEN];

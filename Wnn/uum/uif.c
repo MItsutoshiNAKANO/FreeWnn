@@ -1,5 +1,5 @@
 /*
- *  $Id: uif.c,v 1.8 2002-06-22 13:26:21 hiroo Exp $
+ *  $Id: uif.c,v 1.9 2003-05-11 18:27:42 hiroo Exp $
  */
 
 /*
@@ -73,6 +73,8 @@ static int henkan_mode;
     2: bunsetu_nobasi
     3: kara
 */
+static int send_ascii_char_quote = 0;
+
 
 int
 redraw_nisemono_c ()
@@ -183,7 +185,6 @@ int
 insert_char_and_change_to_insert_mode (c)
      int c;
 {
-  extern send_ascii_char_quote;
   if (c != -1)
     {
       insert_char (c);
@@ -1051,8 +1052,6 @@ pop_send_ascii ()
   send_ascii_char = send_ascii_stack;
   return (0);
 }
-
-int send_ascii_char_quote = 0;
 
 static void
 quote_send_ascii ()

@@ -1,5 +1,5 @@
 /*
- *  $Id: jl.c,v 1.12 2002-06-22 13:24:31 hiroo Exp $
+ *  $Id: jl.c,v 1.13 2003-05-11 18:27:27 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -1709,7 +1709,7 @@ create_pwd_file (env, pwd_file, error_handler, message_handler)
       return (-1);
     }
   SRAND (time (0) + getuid ());
-  fprintf (fp, "%d\n", RAND ());
+  fprintf (fp, "%d\n", (int) RAND ());
   fclose (fp);
 #define MODE_PWD (0000000 | 0000400)
   chmod (pwd_file, MODE_PWD);
@@ -2264,7 +2264,14 @@ insert_dai (buf, zenp, bun_no, bun_no2, dp, dcnt, uniq_level)
 
   if (bun_no == -1)
     {
-      bun_no = bun_no2 = (zenp == BUN) ? buf->bun_suu : buf->zenkouho_suu;
+      if (zenp == BUN)
+	{
+	  bun_no = bun_no2 = buf->bun_suu;
+	}
+      else
+	{
+	  bun_no = bun_no2 = buf->zenkouho_suu;
+	}
     }
 
   for (k = 0; k < dcnt; k++)
@@ -2274,7 +2281,14 @@ insert_dai (buf, zenp, bun_no, bun_no2, dp, dcnt, uniq_level)
   make_space_for (buf, zenp, bun_no, bun_no2, cnt);
   /* zenkouho_dai_suu must not be initialized */
 
-  b = ((zenp == BUN) ? buf->bun : buf->zenkouho) + bun_no;
+  if (zenp == BUN)
+    {
+      b = buf->bun + bun_no;
+    }
+  else
+    {
+      b =  buf->zenkouho + bun_no;
+    }
 
   for (k = 0, m = buf->zenkouho_dai_suu; k < dcnt; k++)
     {
@@ -2290,31 +2304,31 @@ insert_dai (buf, zenp, bun_no, bun_no2, dp, dcnt, uniq_level)
         }
       b0 = b;
       sp1 = sp;
-      for (l = 0; l < dp[k].sbncnt; l++)
+      for (l = 0; l < dp[k].sbncnt; l++, b++, sp++)
         {
           *b = get_sho (buf, sp, zenp, DAI);
           if (zenp == ZENKOUHO)
             {
-              if (l == dp[k].sbncnt - 1)
+              if ((l == dp[k].sbncnt - 1)
+		  && (buf->zenkouho_endvect != -1)
+		  && (sp->status_bkwd != WNN_CONNECT_BK))
                 {
-                  if (buf->zenkouho_endvect != -1)
-                    {
-                      (*b)->dai_end = (sp->status_bkwd == WNN_CONNECT_BK) ? 0 : 1;
-                    }
-                  else
-                    {
-                      (*b)->dai_end = 0;
-                    }
+		  (*b)->dai_end = 1;
                 }
-              else
-                {
-                  (*b)->dai_end = 0;
-                }
+	      else
+		{
+		  (*b)->dai_end = 0;
+		}
             }
-          *b++;
-          sp++;
         }
-      (*b0)->dai_top = (sp1->status == WNN_CONNECT) ? 0 : 1;
+      if (sp1->status == WNN_CONNECT)
+	{
+	  (*b0)->dai_top = 0;
+	}
+      else
+	{
+	  (*b0)->dai_top = 1;
+	}
       (*b0)->daihyoka = dp[k].hyoka;
     }
   if (zenp == ZENKOUHO)

@@ -1,5 +1,5 @@
 /*
- *  $Id: do_env.c,v 1.7 2002-05-12 22:51:16 hiroo Exp $
+ *  $Id: do_env.c,v 1.8 2003-05-11 18:27:41 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -49,22 +49,26 @@
 #include "commonhd.h"
 #include "de_header.h"
 
-void new_env ();
-static void disconnect (), del_env_from_client ();
-static int conn1 (), add_env_to_client (), find_env_by_name (), disconnect_last_sticky (), find_env_in_client ();
-
-struct cnv_env *env[MAX_ENV];
+static int  add_env_to_client (int);
+static int  conn1 (char*);
+static void del_env_from_client (int);
+static void disconnect (int);
+static int  disconnect_last_sticky (void);
+static int  find_env_by_name (char *);
+static int  find_env_in_client (int);
+static void new_env (int env_id, char *n);
 
 static int sticky_cnt = 0;
 static int sticky_time = 0;
-
+/* used only in initjserv.c and do_env.c */
+extern struct wnn_param default_para;
 
 /*
         client routines
  */
 
 void
-js_open ()
+js_open (void)
 {
   register int version;
 /*
@@ -95,7 +99,7 @@ js_open ()
 }
 
 void
-js_close ()
+js_close (void)
 {
   put4_cur (0);
   putc_purge ();
@@ -107,7 +111,7 @@ js_close ()
  */
 
 void
-env_init ()
+env_init (void)
 {
   register int i;
   for (i = 0; i < MAX_ENV; i++)
@@ -118,7 +122,7 @@ env_init ()
 
 /*      connect */
 void
-js_connect ()
+js_connect (void)
 {
   char n[256];
   register int x;
@@ -134,7 +138,7 @@ js_connect ()
 }
 
 void
-js_env_sticky ()
+js_env_sticky (void)
 {
   register int eid;
   eid = get4_cur ();
@@ -144,7 +148,7 @@ js_env_sticky ()
 }
 
 void
-js_env_un_sticky ()
+js_env_un_sticky (void)
 {
   register int eid;
   eid = get4_cur ();
@@ -154,8 +158,7 @@ js_env_un_sticky ()
 }
 
 static int
-conn1 (n)
-     register char *n;
+conn1 (char *n)
 {
   register int eid;
   register struct cnv_env *ne;
@@ -194,7 +197,7 @@ new:
 }
 
 void
-js_env_exist ()
+js_env_exist (void)
 {
   char n[256];
 
@@ -211,8 +214,7 @@ js_env_exist ()
 }
 
 static int
-add_env_to_client (eid)
-     int eid;
+add_env_to_client (int eid)
 {
   register int j;
   for (j = 0; j < WNN_MAX_ENV_OF_A_CLIENT; j++)
@@ -227,8 +229,7 @@ add_env_to_client (eid)
 }
 
 static int
-find_env_by_name (n)
-     register char *n;
+find_env_by_name (char *n)
 {
   register int i;
 
@@ -246,12 +247,8 @@ find_env_by_name (n)
   return -1;
 }
 
-extern struct wnn_param default_para;
-
 void
-new_env (env_id, n)
-     register int env_id;
-     register char *n;
+new_env (int env_id, char *n)
 {
   register int i;
   struct cnv_env *e = env[env_id];
@@ -309,7 +306,7 @@ new_env (env_id, n)
 
 /*      disconnect all env of current client (socket)   */
 void
-disconnect_all_env_of_client ()
+disconnect_all_env_of_client (void)
 {
   register int i, eid;
   for (i = 0; i < WNN_MAX_ENV_OF_A_CLIENT; i++)
@@ -323,7 +320,7 @@ disconnect_all_env_of_client ()
 
 /*      disconnect      */
 void
-js_disconnect ()
+js_disconnect (void)
 {
   register int eid, j;
   eid = get4_cur ();
@@ -342,8 +339,7 @@ js_disconnect ()
 }
 
 static void
-disconnect (eid)
-     int eid;
+disconnect (int eid)
 {
   if (env[eid]->ref_count && (--(env[eid]->ref_count)) != 0)
     return;
@@ -362,7 +358,7 @@ disconnect (eid)
 }
 
 static int
-disconnect_last_sticky ()
+disconnect_last_sticky (void)
 {
   register int i;
 
@@ -395,15 +391,13 @@ disconnect_last_sticky ()
 
 /* */
 static void
-del_env_from_client (e)
-     int e;
+del_env_from_client (int e)
 {
   (c_c->env)[e] = -1;
 }
 
 static int
-find_env_in_client (eid)
-     int eid;
+find_env_in_client (int eid)
 {
   register int j;
   for (j = 0; j < WNN_MAX_ENV_OF_A_CLIENT; j++)
@@ -416,7 +410,7 @@ find_env_in_client (eid)
 
 /*      env_list        */
 void
-js_env_list ()
+js_env_list (void)
 {
   register int i, c, j;
   for (c = i = 0; i < MAX_ENV; i++)
@@ -452,7 +446,7 @@ js_env_list ()
  */
 
 void
-js_param_set ()
+js_param_set (void)
 {
   register int eid;
   register int ret = 0;
@@ -518,7 +512,7 @@ js_param_set ()
 
 
 void
-js_param_get ()
+js_param_get (void)
 {
   register int eid;
   if ((eid = envhandle ()) == -1)
@@ -563,7 +557,7 @@ js_param_get ()
 }
 
 int
-envhandle ()
+envhandle (void)
 {
 #ifdef nodef
   register int eid;
