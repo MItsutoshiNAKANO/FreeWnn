@@ -1,4 +1,162 @@
 
+Sun Sep 01 17:48:26 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* configure.in: added check for FD_SET() and AC_HEADER_TIME.
+	* configure:
+	  config.h.in: regenerate.
+	* Wnn/jserver/initjserv.c:
+	  small style fix.
+	* Wnn/jserver/de.c:
+	  Change prototypes to C89 style, modify error message.
+	  Use the type fd_set and functions FD_* for select(2) parameters.
+	* Wnn/jserver/de_header.h:
+	  Change some prototypes to C89 format.
+	  Change struct wnn_file->area type to void*.
+	* Wnn/jserver/renbn_kai.c:
+	  Change prototypes to C89 style,
+	  error1 -> log_err/log_debug conversion.
+	* Wnn/jserver/readfile.c:
+	  Change prototypes to C89 style,
+	  error1 -> log_err/log_debug conversion.
+
+Mon Aug 26 09:27:23 UTC 2002  Tomoki Aono <aono@cc.osaka-kyoiku.ac.jp>
+	* Wnn/uum/jhlp.c:
+	  #include <error.h> instead of <sys/error.h>.
+
+Sat Aug 24 18:11:53 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/jserver/de.c:
+	  Change prototypes to C89 style.
+	  Remove commented out function.
+
+Fri Aug 16 17:30:29 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/jserver/b_index.c:
+	  Change prototypes to C89 style.
+	  error1 -> log_err/debug conversion.
+
+Thu Aug 15 10:31:04 UTC 2002  Tomoki Aono <aono@cc.osaka-kyoiku.ac.jp>
+	* Wnn/jserver/de.c:
+	  Clear user_name and host_name of deleted client struct
+	 to display username correctly in log_debug()/log_error().
+	  Possible typo fix for IBM compilers (CLINET -> CLIENT).
+
+Mon Aug 12 16:25:48 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* jserver/de_header.h:
+	  Permit double inclusion.
+	  Add option_flag variable.
+	* jserver/ddefine.h:
+	  jserver/fzk.h:
+	  jserver/kaiseki.h:
+	   Permit double inclusion.
+	* jserver/de.c:
+	  Include <sys/time.h>
+	  Change DOFORK macro to option_flag variable.
+	  error1() -> log_debug() change.
+	* jserver/de_vars.c:
+	  Add option_flag variable.
+	* jserver/do_filecom.c:
+	  Remove fopen() prototype.
+	* jserver/error.c:
+	  Avoid printing garbage when c_c->user_name has invalid value.
+	* jserver/initjserv.c:
+	  Rearrange prototypes.
+	  Change read_default() implementation to a little more sofisticated
+	  way using strtok(). (at least I do think so).
+	  Add debug messages to read_default().
+	  Change read_default_files() buffer size to EXPAND_PATH_LENGTH+1.
+	  Remove commented out function.
+
+Sun Jul 14 04:19:54 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* PubdicPlus/fzk.con:
+	  PubdicPlus/fzk.fzkattr:
+	  PubdicPlus/fzk.shuutan:
+	  Comment out identifier trailing to #endif.
+	* Wnn/jserver/de_header.h:
+	  Change the prototypes of functions defined in intjserv.c
+	  in C89 style.
+	* Wnn/jserver/initjserv.c:
+	  Replace change_ascii_to_int() to atoi() in standard library.
+	  Corrected the parameter for atoi() in get_bcksla().
+	* Wnn/jutil/atod.c:
+	  Wnn/jutil/atof.c:
+	  Wnn/jutil/oldatonewa.c:
+	  Wnn/jutil/ujisf.c:
+	  Wnn/jutil/wnntouch.c:
+	  Wnn/jserver/do_filecom.c:
+	  Wnn/jserver/error.c:
+	  Wnn/jserver/sisheng.c:
+	  Wnn/jlib.V3/jlv3.c:
+	  Wnn/etc/dic_atojis.c:
+	  Wnn/etc/msg.c:
+	  Wnn/etc/sstrings.c:
+	  PubdicPlus/pod.c:     Include string(s).h. 
+
+Sat Jun 22 17:58:58 UTC 2002  Tomoki Aono <aono@cc.osaka-kyoiku.ac.jp>
+	* Wnn/manual/4.cmd/jserver:
+	  Wnn/man/4.cmd/jserver.man:
+	  Added description about jserver -v option.
+
+Sat Jun 22 13:26:22 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* CONTRIBUTORS:
+	  List the contributors for pubdic+ enhancement (from wnn-users).
+	  Added Mr.Ishida for the fix in Wnn/jserver/de.c [freewnn:00383].
+	* acconfig.h:
+	  Remove HAVE_RAND_MAX, which is superfluous.
+	* configure.in:
+	  Remove HAVE_RAND_MAX, which is superfluous.
+	  check `random()'.
+	* configure, config.h.in: Regenerate.
+	* Wnn/jserver/de.c:
+	  Buffer overflow fix. (by Mr.Ishida, [freewnn:00383]).
+	  Use SDRAND defined in wnn_os.h.
+	* Wnn/jserver/do_henkan1.c:
+	  Remove needless NULL macro.
+	* Wnn/jserver/do_hindo_s.c:
+	  Remove RAND() macro and use DRAND() defined in wnn_os.h.
+	* Wnn/jserver/error.c:
+	  Comment out errono printing.
+	* Wnn/etc/bdic.c:
+	  Replace index to strchr (OS dependency is dealt in wnn_os.h).
+	* Wnn/include/wnn_os.h:
+	  Anternate strchr/strrchr/bcopy if they are not found.
+	  Select pseudo-random number generation method.
+	  standard rand() is too bad and BSD decendants seem to have random().
+	* Wnn/jlib/jl.c:
+	  Use RAND() defined in wnn_os.h.
+	* Wnn/jlib.V3/jlv3.c:
+	  Remove bzero macro. it is defined in wnn_os.h if needed.
+	* Xwnmo/xjutil/jutil.c:
+	  Include appropriate headers.
+	* Wnn/uum/Makefile.in:
+	  Remove the macro SIGNAL_DEFINES which is not used.
+	* Wnn/uum/jhlp.c:
+	  Remove OS dependency check for strchr/index. It is in wnn_os.h now.
+	* Wnn/uum/screen.c:
+	  Remove OS dependency check for strchr/index. It is in wnn_os.h now.
+	* Wnn/uum/setutmp.c:
+	  Replace rindex to strrchr (OS dependency is dealt in wnn_os.h).
+	  Include sdefine.h, sheader.h, and remove prototypes.
+	* Wnn/uum/sheader.h:
+	  Add prototype for ttyfdslot() in ttyfdslot.c.
+	* Wnn/uum/ttyfdslot.c:
+	  Include appropriate headers and remove prototypes.
+	* Wnn/uum/uif.c:
+	  Remove OS dependency check for strchr/index. It is in wnn_os.h now.
+	* Wnn/uum/wnnrc_op.c:
+	  Remove prototype for system library function.
+
+Fri Jun 21 19:39:47 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/include/wnn_malloc.h: Removed.
+
+Mon Jun 17 17:28:54 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* configure.in:
+	  Passes autoconf 2.13 again. (cf.[freewnn:00872])
+	  Look for getopt().
+	* config.h.in:
+	  configure: Regenerate by GNU Autoconf 2.53.
+	* Wnn/include/wnn_os.h:
+	  Add #endif forgotten in rev.1.10 (cf.[freewnn:00874]).
+	* Wnn/jlib/getopt.c:
+	  Enable only when the system do not have getopt()(cf.[freewnn:00874]).
+
 Sat Jun 15 13:11:45 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	* acconfig.h:
 	  Added RETSIGTYPE_VOID hack taken from EB Library

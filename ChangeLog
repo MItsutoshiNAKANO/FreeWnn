@@ -1,4 +1,160 @@
 
+Sun Sep 01 17:48:26 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* configure.in: FD_SET() チェック及び AC_HEADER_TIME を追加。
+	* configure:
+	  config.h.in:	再生成。
+	* Wnn/jserver/initjserv.c:
+	  small style fix.
+	* Wnn/jserver/de.c:
+	  プロトタイプを C89 式に変更し、エラーメッセージを一部変更。
+	  select(2) 周りで fd_set 型と FD_* を使用。
+	* Wnn/jserver/de_header.h:
+	  プロトタイプを C89 式に変更。
+	  struct wnn_file->area の型を void* に変更。
+	* Wnn/jserver/renbn_kai.c:
+	  プロトタイプを C89 式に変更。
+	  error1 を log_err/log_debug に変更。
+	* Wnn/jserver/readfile.c:
+	  プロトタイプを C89 式に変更。
+	  error1 を log_err/log_debug に変更。
+
+Mon Aug 26 09:27:23 UTC 2002  Tomoki Aono <aono@cc.osaka-kyoiku.ac.jp>
+	* Wnn/uum/jhlp.c:
+	  <sys/error.h> ではなく、<error.h> を読み込み。
+
+Sat Aug 24 18:11:53 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/jserver/de.c:
+	  プロトタイプを C89 形式に変更。
+	  コメントアウトされた関数を削除。
+
+Fri Aug 16 17:30:29 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/jserver/b_index.c:
+	  プロトタイプを C89 のものに修正。
+          error1 を log_err/debug に変更。
+
+Thu Aug 15 10:31:04 UTC 2002  Tomoki Aono <aono@cc.osaka-kyoiku.ac.jp>
+	* Wnn/jserver/de.c:
+	  struct client の user_name, host_name を初期化して、
+	  log_debug()/log_error() で正しく出力されるようにする。
+          Possible typo fix for IBM compilers (CLINET -> CLIENT).
+
+Mon Aug 12 16:25:48 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* jserver/de_header.h:
+	  二重読み込みを許可。
+          option_flag 変数を追加。
+	* jserver/ddefine.h:
+	  jserver/fzk.h:
+	  jserver/kaiseki.h:
+	   二重読み込みを許可。
+	* jserver/de.c:
+	  <sys/time.h> を include.
+	  DOFORK macro を option_flag 変数で置き換え。
+	  error1() を log_debug() に置き換え。
+	* jserver/de_vars.c:
+	  option_flag 追加。
+	* jserver/do_filecom.c:
+	  fopen() のプロトタイプを削除。
+	* jserver/error.c:
+	  c_c->user_name にごみが入っている場合に出力を抑制する。
+	* jserver/initjserv.c:
+	  プロトタイプ宣言修正。
+	  read_default() を strtok() を使って少し変更し、デバッグ出力を追加。
+	  read_default_files() のバッファサイズを EXPAND_PATH_LENGTH+1 に修正。
+	  コメントアウトされた関数を削除。
+
+Sun Jul 14 04:19:54 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* PubdicPlus/fzk.con:
+	  PubdicPlus/fzk.fzkattr:
+	  PubdicPlus/fzk.shuutan:
+	  #endif に続く識別子をコメントアウト。
+	* Wnn/jserver/de_header.h:
+	  initjserv.c の関数を C89 スタイルに変更。
+	* Wnn/jserver/initjserv.c:
+	  change_ascii_to_int() を atoi() で置き換え。
+	  get_bcksla(): atoi() の引数を修正。
+	* Wnn/jutil/atod.c:
+	  Wnn/jutil/atof.c:
+	  Wnn/jutil/oldatonewa.c:
+	  Wnn/jutil/ujisf.c:
+	  Wnn/jutil/wnntouch.c:
+	  Wnn/jserver/do_filecom.c:
+	  Wnn/jserver/error.c:
+	  Wnn/jserver/sisheng.c:
+	  Wnn/jlib.V3/jlv3.c:
+	  Wnn/etc/dic_atojis.c:
+	  Wnn/etc/msg.c:
+	  Wnn/etc/sstrings.c:
+	  PubdicPlus/pod.c:	Include string(s).h.
+
+Sat Jun 22 17:58:58 UTC 2002  Tomoki Aono <aono@cc.osaka-kyoiku.ac.jp>
+	* Wnn/manual/4.cmd/jserver:
+	  Wnn/man/4.cmd/jserver.man:
+	  jserver の -v オプションを追加。
+
+Sat Jun 22 13:26:22 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* CONTRIBUTORS:
+	  pubdic+ の拡張 patch を提供した方々をリストアップ。
+	  いしださんを追加 (Wnn/jserver/de.c [freewnn:00383]).
+	* acconfig.h:
+	  無駄な HAVE_RAND_MAX を削除。
+	* configure.in:
+	  無駄な HAVE_RAND_MAX を削除。
+	  ramdom() のチェックを追加。
+	* configure, config.h.in: Regenerate.
+	* Wnn/jserver/de.c:
+	  バッファオーバーフロー修正。 (いしださん [freewnn:00383])
+	  wnn_os.h で定義した SDRAND を使用。
+	* Wnn/jserver/do_henkan1.c:
+	  NULL macro の定義は不要なので削除。
+	* Wnn/jserver/do_hindo_s.c:
+	  RAND macro の変わりに、wnn_os.h で定義した SDRAND を使用。
+	* Wnn/jserver/error.c:
+	  errono の出力部分をコメントアウト。
+	* Wnn/etc/bdic.c:
+	  index を strchr におきかえ。(OS 依存性は wnn_os.h で吸収している)
+	* Wnn/include/wnn_os.h:
+	  strchr/strrchr/bcopy がみつからない場合は、置き換える。
+	  疑似乱数発生関数の選択を変更。標準の rand() 関数は推奨されない。
+	  また、BSD 由来の random() 関数も存在する。
+	* Wnn/jlib/jl.c:
+	  wnn_os.h で定義した RAND を使用。
+	* Wnn/jlib.V3/jlv3.c:
+	  bzero macro を削除。wnn_os.h で定義されている為。
+	* Xwnmo/xjutil/jutil.c:
+	  適切なシステムヘッダを include する。
+	* Wnn/uum/Makefile.in:
+	  使われていない SIGNAL_DEFINES macro を削除。
+	* Wnn/uum/jhlp.c:
+	  strchr/index の OS による使い分けを削除。(wnn_os.h に移動)
+	* Wnn/uum/screen.c:
+	  strchr/index の OS による使い分けを削除。(wnn_os.h に移動)
+	* Wnn/uum/setutmp.c:
+	  strrchr/rindex の OS による使い分けを削除。(wnn_os.h に移動)
+	  sdefine.h, sheader.h を include してプロトタイプを削除。
+	* Wnn/uum/sheader.h:
+	  ttyfdslot.c の ttyfdslot() のプロトタイプを追加。
+	* Wnn/uum/ttyfdslot.c:
+	  適切なシステムヘッダを include して、プロトタイプを削除。
+	* Wnn/uum/uif.c:
+	  strchr/index の OS による使い分けを削除。(wnn_os.h に移動)
+	* Wnn/uum/wnnrc_op.c:
+	  システムライブラリにある関数のプロトタイプを削除。
+
+Fri Jun 21 19:39:47 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* Wnn/include/wnn_malloc.h: 削除。
+
+Mon Jun 17 17:28:54 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
+	* configure.in:
+	  Autoconf 2.13 で処理可能なように修正。(cf.[freewnn:00872])
+          getopt() のチェックを追加。
+	* config.h.in:
+	  configure: GNU Autoconf 2.53 により再生成。
+	* Wnn/include/wnn_os.h:
+	  rev.1.10 で忘れた #endif を追加。 (cf.[freewnn:00874])
+	* Wnn/jlib/getopt.c:                                              
+	  System に getopt() がない場合のみ自前の getopt() を使用。
+	  (cf.[freewnn:00874])
+
 Sat Jun 15 13:11:45 UTC 2002  Hiroo Ono <hiroo@oikumene.gcd.org>
 	* acconfig.h:
 	  EB Library <URI:http://www.sra.co.jp/people/m-kasahr/eb/>.
