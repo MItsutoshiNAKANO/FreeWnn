@@ -1,5 +1,5 @@
 /*
- *  $Id: error.c,v 1.15 2002-08-12 16:25:46 hiroo Exp $
+ *  $Id: error.c,v 1.16 2003-06-08 03:09:51 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2001, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -35,7 +35,6 @@
 
 #include <stdio.h>
 #include <ctype.h>
-#include <time.h>
 #include <errno.h>
 #include <signal.h>
 #if STDC_HEADERS
@@ -50,6 +49,16 @@
 #    include <strings.h>
 #  endif
 #endif /* STDC_HEADERS */
+#if TIME_WITH_SYS_TIME
+#  include <sys/time.h>
+#  include <time.h>
+#else
+#  if HAVE_SYS_TIME_H
+#    include <sys/time.h>
+#  else
+#    include <time.h>
+#  endif /* HAVE_SYS_TIME_H */
+#endif /* TIME_WITH_SYS_TIME */
 #if HAVE_SYSLOG_H
 #  include <syslog.h>
 #endif

@@ -1,5 +1,8 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
 
+/* Define to 1 if the `getpgrp' function requires zero arguments. */
+#undef GETPGRP_VOID
+
 /* Define to 1 if you have the `bcmp' function. */
 #undef HAVE_BCMP
 
@@ -39,6 +42,12 @@
 /* Define to 1 if you have the `getopt' function. */
 #undef HAVE_GETOPT
 
+/* Define to 1 if you have the `getpgid' function. */
+#undef HAVE_GETPGID
+
+/* Define to 1 if you have the `getpgrp' function. */
+#undef HAVE_GETPGRP
+
 /* Define to 1 if you have the `getrlimit' function. */
 #undef HAVE_GETRLIMIT
 
@@ -47,6 +56,9 @@
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the `killpg' function. */
+#undef HAVE_KILLPG
 
 /* Define to 1 if you have the `bind' library (-lbind). */
 #undef HAVE_LIBBIND
@@ -59,6 +71,9 @@
 
 /* Define to 1 if you have the `socket' library (-lsocket). */
 #undef HAVE_LIBSOCKET
+
+/* Define libwrap (TCP Wrapper) support. */
+#undef HAVE_LIBWRAP
 
 /* Define to 1 if you have the <malloc.h> header file. */
 #undef HAVE_MALLOC_H
@@ -162,17 +177,23 @@
 /* Define to 1 if you have <sys/wait.h> that is POSIX.1 compatible. */
 #undef HAVE_SYS_WAIT_H
 
+/* Define to 1 if you have the <termios.h> header file. */
+#undef HAVE_TERMIOS_H
+
 /* Define to 1 if you have the <termio.h> header file. */
 #undef HAVE_TERMIO_H
 
 /* Define to 1 if you have the <term.h> header file. */
 #undef HAVE_TERM_H
 
-/* Define to 1 if the system has the type `time_t'. */
-#undef HAVE_TIME_T
-
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
+
+/* Define to 1 if you have the <utmpx.h> header file. */
+#undef HAVE_UTMPX_H
+
+/* Define to 1 if you have the <utmp.h> header file. */
+#undef HAVE_UTMP_H
 
 /* Define to 1 if you have the `vasprintf' function. */
 #undef HAVE_VASPRINTF
@@ -221,6 +242,3 @@
 
 /* Define missing socklen_t. */
 #undef socklen_t
-
-/* Define missing time_t. */
-#undef time_t

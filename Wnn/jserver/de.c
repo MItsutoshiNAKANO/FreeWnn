@@ -28,7 +28,7 @@
 /*
         Jserver         (Nihongo Daemon)
 */
-static char rcs_id[] = "$Id: de.c,v 1.30 2003-06-07 02:20:55 hiroo Exp $";
+static char rcs_id[] = "$Id: de.c,v 1.31 2003-06-08 03:09:51 hiroo Exp $";
 
 #if defined(HAVE_CONFIG_H)
 #  include <config.h>
@@ -52,9 +52,18 @@ static char rcs_id[] = "$Id: de.c,v 1.30 2003-06-07 02:20:55 hiroo Exp $";
 #endif /* STDC_HEADERS */
 #include <sys/ioctl.h>
 #include <sys/stat.h>
-#include <sys/time.h>
-#include <sys/types.h>
+#if TIME_WITH_SIS_TIME
+#  include <sys/time.h>
+#  include <time.h>
+#else
+#  if HAVE_SYS_TIME_H
+#    include <sys/time.h>
+#  else
+#    include <time.h>
+#  endif /* HAVE_SYS_TIME_H */
+#endif /* TIME_WITH_SIS_TIME */
 #if HAVE_UNISTD_H
+#  include <sys/types.h>
 #  include <unistd.h>
 #endif
 #ifdef HAVE_FCNTL_H
@@ -166,33 +175,8 @@ static fd_set *all_socks;	/** ビットパターン
 static fd_set *ready_socks;	/** データのきているソケットの
 				    ビットパターンを保持 **/
 static fd_set *dummy1_socks, *dummy2_socks;
-
 static int no_of_ready_socks;
-
 static int nofile;              /** No. of files **/
-
-/*
- * It may be needless and had better be removed, however,
- * Wnn4 did not take it for granted that the system provided
- * FD_SET and other feature that SUS v.2 determines.
- * So I left Wnn4's own definition with a little modification
- * in case the system did not provide the feature.
- * I borrowed some code from FreeBSD.
- */
-#if !(HAVE_FD_ZERO || defined (FD_ZERO))
-typedef unsigned long fd_mask;
-#define BINTSIZE		(sizeof(unsigend long) *8)
-#define FD_SETSIZE		WNN_NFD
-#define FD_SET_WIDTH		((FD_SETSIZE) + (BINTSIZE - 1U) / (BINTSIZE))
-typedef struct fd_set {
-  fd_mask fds_bits[FD_SET_WIDTH];
-}
-#define FD_SET(pos,array)	(array[pos/BINTSIZE] |= (1<<(pos%BINTSIZE)))
-#define FD_CLR(pos,array)	(array[pos/BINTSIZE] &= ~(1<<(pos%BINTSIZE)))
-#define FD_ISSET(pos,array)	(array[pos/BINTSIZE] &  (1<<(pos%BINTSIZE)))
-#define FD_ZERO(array)		(bzero (array, FD_SET_WIDTH))
-#endif /* !(HAVE_FD_ZERO || defined (FD_ZERO)) */
-
 struct msg_cat *wnn_msg_cat;
 struct msg_cat *js_msg_cat;
 
@@ -219,8 +203,14 @@ static void print_version (void);
 static void dmp (char*, int);
 #endif
 
-
 static char cmd_name[16];
+
+#if defined(HAVE_LIBWRAP)
+int allow_severity;
+int deny_severity;
+#  include <syslog.h>
+#  include <tcpd.h>
+#endif /* HAVE_LIBWRAP */
 
 /* No arguments are used. Only options. */
 int
@@ -269,6 +259,12 @@ main (int argc, char *argv[])
 	  pause ();
 	}
     }
+
+#if defined(HAVE_LIBWRAP)
+  allow_severity = LOG_INFO;
+  deny_severity = LOG_WARNING;
+  /*  hosts_access_verbose = 2; */
+#endif /* HAVE_LIBWRAP */
 
   signal (SIGHUP, signal_hand);
   signal (SIGINT, signal_hand);
@@ -445,6 +441,10 @@ new_client (void)               /* NewClient */
   int full, i;
   FILE *f[3];
   char gomi[1024];
+#ifdef  HAVE_LIBWRAP
+  int is_internet_socket;
+  struct request_info tcpd_request;
+#endif /* HAVE_LIBWRAP */
 #ifdef  AF_UNIX
   if ((serverNO == 0) &&
       (FD_ISSET (accept_blk[UNIX_ACPT].sd, ready_socks)))
@@ -452,6 +452,7 @@ new_client (void)               /* NewClient */
       FD_CLR (accept_blk[UNIX_ACPT].sd, ready_socks);
       no_of_ready_socks--;
       sd = socket_accept_un ();
+      is_internet_socket = 0;
     }
   else
 #endif
@@ -461,6 +462,7 @@ new_client (void)               /* NewClient */
       FD_CLR (accept_blk[INET6_ACPT].sd, ready_socks);
       no_of_ready_socks--;
       sd = socket_accept_in (accept_blk[INET6_ACPT].sd);
+      is_internet_socket = 1;
     }
   else
 #endif
@@ -469,6 +471,7 @@ new_client (void)               /* NewClient */
       FD_CLR (accept_blk[INET_ACPT].sd, ready_socks);
       no_of_ready_socks--;
       sd = socket_accept_in (accept_blk[INET_ACPT].sd);
+      is_internet_socket = 1;
     }
   else
     {
@@ -505,6 +508,22 @@ new_client (void)               /* NewClient */
 #endif
       return;
     }
+
+#ifdef HAVE_LIBWRAP
+  if (is_internet_socket) {
+    request_init (&tcpd_request,RQ_DAEMON, WNN_DAEMON_NAME,
+		  RQ_FILE, sd, NULL);
+    fromhost (&tcpd_request);
+    if (!hosts_access (&tcpd_request))
+      {
+	log_err ("%s: reject client.", cmd_name); /* should be log_info? */
+      }
+    read (sd, gomi, 1024);
+    shutdown (sd, 2);
+    close (sd);
+    return;
+  }
+#endif /*  HAVE_LIBWRAP */
 
   cblk[clientp].sd = sd;
   FD_SET (sd, all_socks);
