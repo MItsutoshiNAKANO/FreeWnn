@@ -1,3 +1,32 @@
+\comment
+\comment FreeWnn is a network-extensible Kana-to-Kanji conversion system.
+\comment This file is part of FreeWnn.
+\comment 
+\comment Copyright Wnn Consortium. 1993
+\comment
+\comment Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+\comment
+\comment This program is free software; you can redistribute it and/or modify
+\comment it under the terms of the GNU General Public License as published by
+\comment the Free Software Foundation; either version 2, or (at your option)
+\comment any later version.
+\comment
+\comment This program is distributed in the hope that it will be useful,
+\comment but WITHOUT ANY WARRANTY; without even the implied warranty of
+\comment MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+\comment GNU General Public License for more details.
+\comment
+\comment You should have received a copy of the GNU General Public License
+\comment along with GNU Emacs; see the file COPYING.  If not, write to the
+\comment Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+\comment
+\comment Commentary:
+\comment
+\comment Change log:
+\comment
+\comment Last modified date: 8,Feb.1999
+\comment
+\comment 
 \comment	 		
 \total	0 		
 \cixing	 		
@@ -2274,38 +2303,38 @@
 幮庣庡幠	蔺 尢求	0	
 幮庣庡幠	 尢求	0	
 幮庣庡幠	坨 尢求	0	
-幮庤幜	讼 尢求	0	
-幮庤幜	靓 尢求	0	
-幮庤幜	晚 尢求	0	
-幮庤幜	物 尢求	0	
-幮庤幜	猪 尢求	0	
-幮庤幜	廷 尢求	0	
-幮庤幜	稂 尢求	0	
-幮庤幜	疸 尢求	0	
-幮庤幜	蜥 尢求	0	
-幮庤幜	源 尢求	0	
-幮庤幜	赔 尢求	0	
-幮庤幝	政 尢求	0	
-幮庤幝	徼 尢求	0	
-幮庤幝	升 尢求	0	
-幮庤幟	膛 尢求	0	
-幮庤幟	蛀 尢求	0	
-幮庤幟	酲 尢求	10	
-幮庤幟	卧 尢求	0	
-幮庤幠	卧 尢求	0	
-幮庤幠	晖 尢求	10	
-幮庤幠	蛙 尢求	0	
-幮庤幠	疸 尢求	10	
-幮庤幠	迫 尢求	0	
-幮庤幠	苔 尢求	0	
-幮庤幠	饬 尢求	0	
-幮庤幠	锢 尢求	0	
-幮庤幠	蜥 尢求	0	
-幮庤幠	源 尢求	0	
-幮庤幠	 尢求	0	
-幮庤幠	业 尢求	0	
-幮庤幠	飒 尢求	10	
-幮庤幠	苹 庳秦猡-	47	
+幮庨幜	讼 尢求	0	
+幮庨幜	靓 尢求	0	
+幮庨幜	晚 尢求	0	
+幮庨幜	物 尢求	0	
+幮庨幜	猪 尢求	0	
+幮庨幜	廷 尢求	0	
+幮庨幜	稂 尢求	0	
+幮庨幜	疸 尢求	0	
+幮庨幜	蜥 尢求	0	
+幮庨幜	源 尢求	0	
+幮庨幜	赔 尢求	0	
+幮庨幝	政 尢求	0	
+幮庨幝	徼 尢求	0	
+幮庨幝	升 尢求	0	
+幮庨幟	膛 尢求	0	
+幮庨幟	蛀 尢求	0	
+幮庨幟	酲 尢求	10	
+幮庨幟	卧 尢求	0	
+幮庨幠	卧 尢求	0	
+幮庨幠	晖 尢求	10	
+幮庨幠	蛙 尢求	0	
+幮庨幠	疸 尢求	10	
+幮庨幠	迫 尢求	0	
+幮庨幠	苔 尢求	0	
+幮庨幠	饬 尢求	0	
+幮庨幠	锢 尢求	0	
+幮庨幠	蜥 尢求	0	
+幮庨幠	源 尢求	0	
+幮庨幠	 尢求	0	
+幮庨幠	业 尢求	0	
+幮庨幠	飒 尢求	10	
+幮庨幠	苹 庳秦猡-	47	
 幮庨庉幝	 尢求	0	
 幮庨庉幝	姒 尢求	0	
 幮庨庉幝	伺 尢求	0	
@@ -2484,21 +2513,21 @@
 幯庣庡幟	铢 损棚侬	29	
 幯庣庡幠	煦 尢求	0	
 幯庣庡幠幚	虻 尢求	0	
-幯庤幜	踟 尢求	0	
-幯庤幜	莜 尢求	0	
-幯庤幜	炔 尢求	0	
-幯庤幜	魇 尢求	0	
-幯庤幜	汀 尢求	0	
-幯庤幜	 尢求	0	
-幯庤幜	颧 尢求	0	
-幯庤幜	俅 咣葑秦	29	
-幯庤幝	嗖 尢求	0	
-幯庤幟	炔 尢求	0	
-幯庤幟	探 尢求	0	
-幯庤幟	俎 尢求	0	
-幯庤幟	 尢求	0	
-幯庤幠	锓 尢求	0	
-幯庤幠	篇 暖戊侬」	398	
+幯庨幜	踟 尢求	0	
+幯庨幜	莜 尢求	0	
+幯庨幜	炔 尢求	0	
+幯庨幜	魇 尢求	0	
+幯庨幜	汀 尢求	0	
+幯庨幜	 尢求	0	
+幯庨幜	颧 尢求	0	
+幯庨幜	俅 咣葑秦	29	
+幯庨幝	嗖 尢求	0	
+幯庨幟	炔 尢求	0	
+幯庨幟	探 尢求	0	
+幯庨幟	俎 尢求	0	
+幯庨幟	 尢求	0	
+幯庨幠	锓 尢求	0	
+幯庨幠	篇 暖戊侬」	398	
 幯庨庉幜	淄 如页侬	0	
 幯庨庉幝	袼 尢求	0	
 幯庨庉幠	 尢求	0	
@@ -2709,27 +2738,27 @@
 幰庣庡幠	吞 尢求	2	
 幰庣庡幠	吞 咣葑秦	52	
 幰庣庡幠	田 田秦猡-	29	
-幰庤幜	炖 尢求	0	
-幰庤幜	颧 尢求	0	
-幰庤幜	腈 尢求	10	
-幰庤幜	狃 尢求	10	
-幰庤幜	旄 尢求	0	
-幰庤幜	恻 尢求	0	
-幰庤幜	窃 尢求	0	
-幰庤幝	樟 人榨田」	16	
-幰庤幟	萋 人榨田」	4	
-幰庤幟	萋 拟暖戊侬」	4	
-幰庤幠	赀 尢求	0	
-幰庤幠	蓁 尢求	0	
-幰庤幠	邙 尢求	0	
-幰庤幠	缺 尢求	0	
-幰庤幠	施 尢求	0	
-幰庤幠	皱 尢求	0	
-幰庤幠	讯 尢求	0	
-幰庤幠	峒 尢求	0	
-幰庤幠	掮 尢求	0	
-幰庤幠	昱 尢求	0	
-幰庤幠	 尢求	0	
+幰庨幜	炖 尢求	0	
+幰庨幜	颧 尢求	0	
+幰庨幜	腈 尢求	10	
+幰庨幜	狃 尢求	10	
+幰庨幜	旄 尢求	0	
+幰庨幜	恻 尢求	0	
+幰庨幜	窃 尢求	0	
+幰庨幝	樟 人榨田」	16	
+幰庨幟	萋 人榨田」	4	
+幰庨幟	萋 拟暖戊侬」	4	
+幰庨幠	赀 尢求	0	
+幰庨幠	蓁 尢求	0	
+幰庨幠	邙 尢求	0	
+幰庨幠	缺 尢求	0	
+幰庨幠	施 尢求	0	
+幰庨幠	皱 尢求	0	
+幰庨幠	讯 尢求	0	
+幰庨幠	峒 尢求	0	
+幰庨幠	掮 尢求	0	
+幰庨幠	昱 尢求	0	
+幰庨幠	 尢求	0	
 幰庨庉幜	楔 尢求	0	
 幰庨庉幜	巛 尢求	0	
 幰庨庉幜	醣 尢求	0	
@@ -5132,18 +5161,18 @@
 幮庣庡幟	酸 尢求	0	
 幮庣庡幟	祚 尢求	0	
 幮庣庡幠	葺 尢求	0	
-幮庤幜	陂 尢求	0	
-幮庤幝	瘌 尢求	0	
-幮庤幟	茳 尢求	0	
-幮庤幟	谚 尢求	0	
-幮庤幟	 尢求	0	
-幮庤幠	猿 尢求	0	
-幮庤幠	痈 尢求	0	
-幮庤幠	蹉 尢求	0	
-幮庤幠	笤 尢求	0	
-幮庤幠	雯 尢求	0	
-幮庤幠	缣 尢求	0	
-幮庤幠	鲰 尢求	0	
+幮庨幜	陂 尢求	0	
+幮庨幝	瘌 尢求	0	
+幮庨幟	茳 尢求	0	
+幮庨幟	谚 尢求	0	
+幮庨幟	 尢求	0	
+幮庨幠	猿 尢求	0	
+幮庨幠	痈 尢求	0	
+幮庨幠	蹉 尢求	0	
+幮庨幠	笤 尢求	0	
+幮庨幠	雯 尢求	0	
+幮庨幠	缣 尢求	0	
+幮庨幠	鲰 尢求	0	
 幮庨庉幜	憧 尢求	0	
 幮庨庉幝	藜 尢求	0	
 幮庨庉幝	瑁 尢求	0	
@@ -5217,14 +5246,14 @@
 幯庣庡幝	篼 尢求	0	
 幯庣庡幠	裾 尢求	0	
 幯庣庡幠	趑 尢求	0	
-幯庤幜	柃 尢求	0	
-幯庤幜	狩 尢求	0	
-幯庤幜	 尢求	0	
-幯庤幝	晒 尢求	0	
-幯庤幝	 尢求	0	
-幯庤幝	艟 尢求	0	
-幯庤幝	鲰 尢求	0	
-幯庤幟	痈 尢求	0	
+幯庨幜	柃 尢求	0	
+幯庨幜	狩 尢求	0	
+幯庨幜	 尢求	0	
+幯庨幝	晒 尢求	0	
+幯庨幝	 尢求	0	
+幯庨幝	艟 尢求	0	
+幯庨幝	鲰 尢求	0	
+幯庨幟	痈 尢求	0	
 幯庨庉幜	麽 尢求	0	
 幯庨庉幠	觖 尢求	0	
 幯庨庉幠	麽 尢求	0	
@@ -5292,13 +5321,13 @@
 幰庣庡幝	冂 尢求	0	
 幰庣庡幝	芸 尢求	0	
 幰庣庡幠	谄 尢求	0	
-幰庤幜	晴 尢求	0	
-幰庤幜	钸 尢求	0	
-幰庤幜	玮 尢求	0	
-幰庤幜	莹 尢求	0	
-幰庤幟	帧 尢求	0	
-幰庤幠	冶 尢求	0	
-幰庤幠	潼 尢求	0	
+幰庨幜	晴 尢求	0	
+幰庨幜	钸 尢求	0	
+幰庨幜	玮 尢求	0	
+幰庨幜	莹 尢求	0	
+幰庨幟	帧 尢求	0	
+幰庨幠	冶 尢求	0	
+幰庨幠	潼 尢求	0	
 幰庨庉幝	鹉 尢求	0	
 幰庨庘幜	蚱 尢求	0	
 幰庨庘幜	姘 尢求	0	

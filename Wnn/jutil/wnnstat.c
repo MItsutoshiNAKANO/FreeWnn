@@ -1,5 +1,5 @@
 #ifndef lint
-static char *rcs_id = "$Id: wnnstat.c,v 1.1.1.1 2000-01-16 05:07:46 ura Exp $";
+static char *rcs_id = "$Id: wnnstat.c,v 1.1.1.2 2000-01-16 05:10:53 ura Exp $";
 #endif /* lint */
 
 /*
@@ -30,8 +30,14 @@ static char *rcs_id = "$Id: wnnstat.c,v 1.1.1.1 2000-01-16 05:07:46 ura Exp $";
  * Commentary:
  *
  * Change log:
+ *	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+ *		スペルミス（JAPANSE）。
+ *		ISO-2022-JP-2 エンコーディングでの韓国語のサポート。
+ *	'99/04/19       TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
+ *		コマンド引数の修正。
+ *		usage メッセージの訂正。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 19,Apr.1999
  *
  * Code:
  *
@@ -59,7 +65,7 @@ struct wnn_ret_buf rb = {0, NULL};
 #define W_DIC_ALL 5
 #define W_VERSION 6
 
-#ifdef JAPANSE
+#ifdef JAPANESE
 extern  int eujis_to_jis8(), eujis_to_sjis();
 #endif
 #ifdef CHINESE
@@ -75,7 +81,11 @@ int ocode = (TTY_TCODE + 6);
 int ocode = (TTY_CCODE + 4);
 #endif	/* TAIWANESE */
 #else	/* CHINESE */
+#ifdef	KOREAN
+int ocode = TTY_HCODE;
+#else	/* KOREAN */
 int ocode = TTY_KCODE;
+#endif	/* KOREAN */
 #endif	/* CHINESE */
 
 int com = W_WHO;
@@ -115,13 +125,13 @@ char **argv;
 	strcpy(lang, WNN_DEFAULT_LANG);
 
 #ifdef JAPANESE
-    while ((c = getopt(argc,argv,"EewdDfFUSJVL:K")) != EOF) {
+    while ((c = getopt(argc,argv,"weEdDfFUSJVL:")) != EOF) {
 #endif
 #ifdef  CHINESE
-    while ((c = getopt(argc,argv,"EewdDfFUBCVL:K")) != EOF) {
+    while ((c = getopt(argc,argv,"weEdDfFUBCVL:")) != EOF) {
 #endif
 # ifdef KOREAN
-    while ((c = getopt(argc,argv,"EewdDfFUVL:K")) != EOF) {
+    while ((c = getopt(argc,argv,"weEdDfFUKVL:")) != EOF) {
 #endif
 	switch(c){
 	case 'w':
@@ -155,6 +165,9 @@ char **argv;
 #endif
 #ifdef KOREAN
 	    ocode = K_EUKSC;
+	    break;
+	case 'K':
+	    ocode = K_KSC;
 #endif
 	    break;
 #ifdef JAPANESE
@@ -300,13 +313,13 @@ static void
 usage()
 {
 #ifdef JAPANESE
-    fprintf(stderr, "wnnstat [-weEdDfFKSUJ] [-L lang_name] [server_name]\n");
+    fprintf(stderr, "wnnstat [-weEdDfFUSJV] [-L lang_name] [server_name]\n");
 #endif	/* JAPANESE */
 #ifdef	CHINESE
-    fprintf(stderr, "wnnstat [-weEdDfFSUJBC] [-L lang_name] [server_name]\n");
+    fprintf(stderr, "cwnnstat [-weEdDfFUBCV] [-L lang_name] [server_name]\n");
 #endif	/* CHINESE */
 #ifdef KOREAN
-    fprintf(stderr, "kwnnstat [-weEdDfFKU] [-L lang_name] [server_name]\n");
+    fprintf(stderr, "kwnnstat [-weEdDfFUKV] [-L lang_name] [server_name]\n");
 #endif	/* KOREAN */
     exit(-1);
 }
@@ -505,6 +518,11 @@ char *a1, *a2, *a3, *a4, *a5, *a6, *a7, *a8, *a9, *a10, *a11, *a12, *a13;
 	ecns_to_big5(jbuf, buf, len + 1);
 	break;
 #endif	/* CHINESE */
+#ifdef	KOREAN
+    case K_KSC:
+	euksc_to_ksc(jbuf, buf, len + 1);
+	break;
+#endif	/* KOREAN */
     }
     printf("%s", jbuf);
 }

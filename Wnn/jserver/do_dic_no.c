@@ -1,5 +1,5 @@
 /*
- * $Id: do_dic_no.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: do_dic_no.c,v 1.1.1.2 2000-01-16 05:10:52 ura Exp $
  */
 
 /*
@@ -30,8 +30,11 @@
  * Commentary:
  *
  * Change log:
+ *	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+ *		暗号化されたパスワードが 16文字の時、
+ *		異常に長い文字列がクライアントに送られるバグの修正。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 20,Mar.1999
  *
  * Code:
  *
@@ -109,9 +112,9 @@ int dic_no;
     puts_cur(files[fid].name);
     if(hfid >= 0) puts_cur(files[hfid].name);
     else puts_cur("");
-    puts_cur(files[fid].passwd);
-    if(hfid >= 0) puts_cur(files[hfid].passwd);
-    else puts_cur(jtl->hpasswd);
+    puts_n_cur(files[fid].passwd, WNN_PASSWD_LEN);
+    if(hfid >= 0) puts_n_cur(files[hfid].passwd, WNN_PASSWD_LEN);
+    else puts_n_cur(jtl->hpasswd, WNN_PASSWD_LEN);
     put4_cur(jtl->syurui);
     put4_cur(jtl->gosuu);
     put4_cur(files[fid].localf);

@@ -1,7 +1,7 @@
 #
-# $Id: libwnn.msg,v 1.1.2.1 1999/02/08 05:34:39 yamasita Exp $
+# $Id: libwnn.msg,v 1.1.2.3 1999/04/01 05:47:52 nakanisi Exp $
 #
-
+#
 ### FreeWnn is a network-extensible Kana-to-Kanji conversion system.
 ### This file is part of FreeWnn.
 ### 
@@ -28,11 +28,15 @@
 ###
 ### Commentary:
 ###
-### Change log:
+### Change log:(in Japanese)
+###	'99/03/20	ÊÒ»³¡÷£Ğ£Æ£Õ <kate@pfu.co.jp>
+###		.msg ¥Õ¥¡¥¤¥ë¤Ë¶õ¹Ô¤¬¤¢¤ë¤È¡¢msg_open ¤Ç»à¤Ì¡£FreeWnn ¤Ç enbug :-)
+###		ÉÊ»ì¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëÌ¾¤ÎÄûÀµ¡Êhinsi.data ¢ª cixing.data¡Ë¡£
+###		¹ÔËö¤Î¶õÇò¤òºï½ü¡£
 ###
-### Last modified date: 8,Feb.1999
+### Last modified date: 20,Mar.1999
 ###
-
+#
 ###	massage file for libwnn.a
 ### wnnerrmsg.c
 #0	no_error 0
@@ -60,7 +64,7 @@
 #22	no_error 22
 #23	no_error 23
 24	ÅÆÎÎÅÆÇµÎûÄùÕ©ÄâÆßíı
-25	áğóéâ¤ÍÌæÀî£Ü¬Ú¦hinsi.dataÄâÆßíı¡¤
+25	áğóéâ¤ÍÌæÀî£Ü¬Ú¦cixing.dataÄâÆßíı¡¤
 26	ÆÜÌùåøÎûâ¤ÍÌ¡£ÌùåøÄ§Ğ©ê¦â¤ÍÌ¡¤
 27	ÅÆÎÎÅÆÇµÄâ×äûôÌ½¡¤
 #28	no_error 28
@@ -70,7 +74,7 @@
 32	Ïáúèë£æØÎµÙÑÄâÙÜ¡¤
 #33	no_error 33
 34	È¹ÏìæĞÙÑÄâÙÜ¡¤
-35	ÏìæĞ 1Ô¶Ä¾ÊôÈ´ 
+35	ÏìæĞ 1Ô¶Ä¾ÊôÈ´
 #36	no_error 36
 #37	no_error 37
 #38	no_error 38
@@ -130,8 +134,8 @@
 92	ÄâÑÒ¤İ¤ñ¤è¤èÆîÅÂÆ«ûôÌ½ÎûÅÆÇµ¡¤
 93	ÅèÄ¸ÎûÅÆÇµÄâ×äûôÌ½¡¤
 94	passwordÄâè×¡¤
-95	ÅÆÇµÆßÇãûôÌ½¡¤ 
-96	ÅÆÇµÄâ×äÖ¼Øæ¡¤ 
+95	ÅÆÇµÆßÇãûôÌ½¡¤
+96	ÅÆÇµÄâ×äÖ¼Øæ¡¤
 97	ÅÆÇµÊôÈ´Ş¶ĞúÅøËô¡¤
 98	ÄâÑÒ¤Ã¤×¤è¤èÎûÅÆÇµ¡¤
 99	ÅÆÇµÎûI-nodeÌÏFILE_UNIQÄâ×äÄ¡Ó³¡¤

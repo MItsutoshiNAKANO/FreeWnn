@@ -1,5 +1,5 @@
 XCOMM
-XCOMM $Id: Project.tmpl,v 1.6.2.1 1999/02/08 05:47:02 yamasita Exp $
+XCOMM $Id: Project.tmpl,v 1.6.2.2 1999/03/23 10:07:26 nakanisi Exp $
 XCOMM
 
 XCOMM FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -29,8 +29,13 @@ XCOMM
 XCOMM Commentary:
 XCOMM
 XCOMM Change log:
+XCOMM	片山＠ＰＦＵ <kate@pfu.co.jp>
+XCOMM		for 文の変数名の訂正。dirs というディレクトリーをソースディレクトリーに作ってしまう。
+XCOMM		makefile.R5inst 対応。
+XCOMM		kWnn をデフォールトで make するようにする。
+XCOMM		JWNNLANG、CWNNLANG、KWNNLANG、TWNNLANG、LWNNLANG を定義。
 XCOMM
-XCOMM Last modified date: 8,Feb.1999
+XCOMM Last modified date: 20,Mar.1999
 XCOMM
 XCOMM -------------------------------------------------------------------------
 XCOMM X Window System Build Parameters
@@ -825,7 +830,7 @@ obj : depends							@@\
 #define WnnMakeDirectories(step,dir)					@@\
 step::									@@\
 	@case '${MFLAGS}' in *[i]*) set +e;; esac;			@@\
-	DirFailPrefix@for i in dirs; do if [ -d $(DESTDIR)$$i ]; then \	@@\
+	DirFailPrefix@for i in dir; do if [ -d $(DESTDIR)$$i ]; then \	@@\
 		set +x; else (set -x; $(MKDIRHIER) $(DESTDIR)$$i; \	@@\
 		chown $(WNNOWNER) $(DESTDIR)$$i); fi \			@@\
 	done
@@ -879,7 +884,7 @@ target::								@@\
 #endif 
 
 #ifdef UseInstalled
-#define ImakeSubCmdHelper $(IMAKE_CMD)
+#define ImakeSubCmdHelper $(IMAKE) -DUseInstalled -I$$newtop$(IMIRULESRC) -I$$imaketop$(NEWTOP)$(IRULESRC) -DIMROOT=$$newtop$(IMTOP) $(IMAKE_DEFINES)
 #else
 #define ImakeSubCmdHelper $$imaketop$(NEWTOP)$(IMAKE) -I$$imaketop$(NEWTOP)$(IMIRULESRC) -I$$imaketop$(NEWTOP)$(IRULESRC) $(IMAKE_DEFINES)
 #endif
@@ -900,6 +905,9 @@ install:: list								@@\
 #endif
 #ifndef BuildCWnn
 #define BuildCWnn	YES
+#endif
+#ifndef BuildKWnn
+#define BuildKWnn	YES
 #endif
 #ifndef BuildXwnmo
 #define BuildXwnmo	YES
@@ -989,7 +997,11 @@ install:: list								@@\
  */
 
        WNNOWNER = wnn
+#ifdef UseInstalled
+          IMTOP = IMROOT
+#else
           IMTOP = $(CONTRIBSRC)/im/Xsi
+#endif
       WNNWNNDIR = /usr/local/lib/wnn
       WNNBINDIR = /usr/local/bin
       WNNINCDIR = $(INCROOT)
@@ -1000,7 +1012,8 @@ install:: list								@@\
   WNNCONSDICSRC = $(IMTOP)/Wnn-consortium/dic
 
          WNNTOP = $(IMTOP)/Wnn
-     JWNNWNNDIR = $(WNNWNNDIR)/ja_JP
+       JWNNLANG = ja_JP
+     JWNNWNNDIR = $(WNNWNNDIR)/$(JWNNLANG)
      JWNNBINDIR = $(WNNBINDIR)/Wnn4
      JWNNINCDIR = $(WNNINCDIR)/wnn
      JWNNDICDIR = $(JWNNWNNDIR)/dic
@@ -1028,7 +1041,8 @@ WNNWNNCONSDICSRC = $(WNNWNNCONSSRC)/dic
      WNNCONVLIB = $(WNNCONVSRC)/libconvkey.a
 
         CWNNTOP = $(IMTOP)/cWnn
-     CWNNWNNDIR = $(WNNWNNDIR)/zh_CN
+       CWNNLANG = zh_CN
+     CWNNWNNDIR = $(WNNWNNDIR)/$(CWNNLANG)
      CWNNINCDIR = $(WNNINCDIR)/cwnn
      CWNNBINDIR = $(WNNBINDIR)/cWnn4
      CWNNDICDIR = $(CWNNWNNDIR)/dic
@@ -1050,7 +1064,8 @@ WNNWNNCONSDICSRC = $(WNNWNNCONSSRC)/dic
     CWNNCONVLIB = $(CWNNCONVSRC)/libconvkey.a
 
         KWNNTOP = $(IMTOP)/kWnn
-     KWNNWNNDIR = $(WNNWNNDIR)/ko_KR
+       KWNNLANG = ko_KR
+     KWNNWNNDIR = $(WNNWNNDIR)/$(KWNNLANG)
      KWNNINCDIR = $(WNNINCDIR)/kwnn
      KWNNBINDIR = $(WNNBINDIR)/kWnn4
      KWNNDICDIR = $(KWNNWNNDIR)/dic
@@ -1071,15 +1086,15 @@ WNNWNNCONSDICSRC = $(WNNWNNCONSSRC)/dic
        KWNNJLIB = $(KWNNJLIBSRC)/libkwnn.a
     KWNNCONVLIB = $(KWNNCONVSRC)/libconvkey.a
 
-     TWNNWNNDIR = $(WNNWNNDIR)/zh_TW
+       TWNNLANG = zh_TW
+     TWNNWNNDIR = $(WNNWNNDIR)/$(TWNNLANG)
      TWNNDICDIR = $(TWNNWNNDIR)/dic
   TWNNSYSDICDIR = $(TWNNDICDIR)/sys
       TWNNTDSRC = $(CWNNTOP)/td
     TWNNTDICSRC = $(CWNNTOP)/tdic
 
-     LWNNWNNDIR = $(WNNWNNDIR)/lt_LN
-
-     TWNNWNNDIR = $(WNNWNNDIR)/zh_TW
+       LWNNLANG = lt_LN
+     LWNNWNNDIR = $(WNNWNNDIR)/$(LWNNLANG)
 
      WNNLANGDEF = -DJAPANESE
     CWNNLANGDEF = -DCHINESE
@@ -1095,7 +1110,11 @@ WNNWNNCONSDICSRC = $(WNNWNNCONSSRC)/dic
    XWNMOJLIBSRC = $(XWNMOTOP)/jlib
      XWNMOJDSRC = $(XWNMOTOP)/jd
 XWNMOROMKANMSRC = $(XWNMOTOP)/romkan_m
+#ifdef UseInstalled
+  XWNMOXLIBINC  = -I$(TOP)/include/X11/mit
+#else
   XWNMOXLIBINC  = -I$(XLIBSRC)
+#endif
   XWNMOINCLUDES = -I$(XWNMOROMKANMSRC) -I$(WNNINCLUDESRC) $(XWNMOXLIBINC)
       XWNMOJLIB = $(XWNMOJLIBSRC)/libwnn_m.a
  XWNMOLIBRARIES = $(XWNMOJLIB)
@@ -1103,5 +1122,11 @@ XWNMOROMKANMSRC = $(XWNMOTOP)/romkan_m
        XWNMODEF = -DX11R5
 
      IMIRULESRC = $(IMTOP)/configR5
+
+#ifdef UseInstalled
+      IMAKE_CMD = $(NEWTOP)$(IMAKE) -DUseInstalled -I$(NEWTOP)$(IMIRULESRC) \
+			-I$(NEWTOP)$(IRULESRC) -DIMROOT=$(IMTOP) $(IMAKE_DEFINES)
+#else
       IMAKE_CMD = $(NEWTOP)$(IMAKE) -I$(NEWTOP)$(IMIRULESRC) \
 			-I$(NEWTOP)$(IRULESRC) $(IMAKE_DEFINES)
+#endif

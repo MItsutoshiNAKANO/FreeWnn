@@ -1,5 +1,5 @@
 ;
-; $Id: 2Z_ZhuYin,v 1.1.2.1 1999/02/08 05:21:44 yamasita Exp $
+; $Id: 2Z_ZhuYin,v 1.1.2.3 1999/04/01 05:41:22 nakanisi Exp $
 ;
 
 ; FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -29,8 +29,11 @@
 ; Commentary:
 ;
 ; Change log:
+;	'99/03/20	ÊÒ»³¡÷£Ð£Æ£Õ <kate@pfu.co.jp>
+;		Í­¸ú¤Ê²»Àá Cei ¤òÄÉ²Ã¡£
+;		Ìµ¸ú¤Ê²»Àá Nia ¤òºï½ü¡£
 ;
-; Last modified date: 8,Feb.1999
+; Last modified date: 20,Mar.1999
 ;
 
 ;;  Comments:	      B C D F G H J K L M N P Q R S T  X  Z Zh Ch Sh i u Ž¹
@@ -41,12 +44,12 @@
 (defvar AO  	(list ŽÅ ŽØ ŽÉ   ŽÍ ŽÏ   ŽÎ ŽÌ ŽÇ ŽË ŽÆ   ŽÖ ŽÙ ŽÊ     Ž×  ŽÓ  ŽÔ  ŽÕ Žç      ))
 (defvar E  	(list   ŽØ ŽÉ   ŽÍ ŽÏ   ŽÎ ŽÌ ŽÇ ŽË     ŽÖ ŽÙ ŽÊ     Ž×  ŽÓ  ŽÔ  ŽÕ        ))
 (defvar E1	(list                                                Žç   Žé  ))
-(defvar EI  	(list ŽÅ   ŽÉ ŽÈ ŽÍ ŽÏ   ŽÎ ŽÌ ŽÇ ŽË ŽÆ             Ž×  ŽÓ     ŽÕ   Žè    ))
+(defvar EI  	(list ŽÅ ŽØ ŽÉ ŽÈ ŽÍ ŽÏ   ŽÎ ŽÌ ŽÇ ŽË ŽÆ             Ž×  ŽÓ     ŽÕ   Žè    ))
 (defvar EN  	(list ŽÅ ŽØ ŽÉ ŽÈ ŽÍ ŽÏ   ŽÎ   ŽÇ ŽË ŽÆ   ŽÖ ŽÙ       Ž×  ŽÓ  ŽÔ  ŽÕ Žç Žè Žé  ))
 (defvar ENG  	(list ŽÅ ŽØ ŽÉ ŽÈ ŽÍ ŽÏ   ŽÎ ŽÌ ŽÇ ŽË ŽÆ   ŽÖ ŽÙ ŽÊ     Ž×  ŽÓ  ŽÔ  ŽÕ Žç Žè Žé  ))
 (defvar I0  	(list   ŽØ                       ŽÖ ŽÙ       Ž×  ŽÓ  ŽÔ  ŽÕ Žç Žè Žé  ))
 (defvar I1  	(list ŽÅ   ŽÉ       ŽÐ   ŽÌ ŽÇ ŽË ŽÆ ŽÑ     ŽÊ  ŽÒ                    ))
-(defvar IA  	(list     ŽÉ       ŽÐ   ŽÌ   ŽË   ŽÑ        ŽÒ                    ))
+(defvar IA  	(list     ŽÉ       ŽÐ   ŽÌ       ŽÑ        ŽÒ                    ))
 (defvar IAN  	(list ŽÅ   ŽÉ       ŽÐ   ŽÌ ŽÇ ŽË ŽÆ ŽÑ     ŽÊ  ŽÒ                    ))
 (defvar IANG  	(list             ŽÐ   ŽÌ   ŽË   ŽÑ        ŽÒ                    ))
 (defvar IAO	(list ŽÅ   ŽÉ       ŽÐ   ŽÌ ŽÇ ŽË ŽÆ ŽÑ     ŽÊ  ŽÒ                    )) 

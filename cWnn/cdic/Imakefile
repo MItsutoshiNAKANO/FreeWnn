@@ -1,5 +1,5 @@
 XCOMM
-XCOMM $Id: Imakefile,v 1.1.1.1 2000-01-16 05:08:02 ura Exp $
+XCOMM $Id: Imakefile,v 1.1.1.2 2000-01-16 05:11:16 ura Exp $
 XCOMM
 
 XCOMM FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -28,9 +28,11 @@ XCOMM Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 XCOMM
 XCOMM Commentary:
 XCOMM
-XCOMM Change log:
+XCOMM Change log:(in Japanese)
+XCOMM	'99/04/19	FreeBSD ports & ÊÒ»³¡÷£Ð£Æ£Õ <kate@pfu.co.jp>
+XCOMM		WnnInstallDicForcibly ¤Ë¤è¤ë #if ¤ÎÄÉ²Ã¡£
 XCOMM
-XCOMM Last modified date: 8,Feb.1999
+XCOMM Last modified date: 19,Apr.1999
 XCOMM
 INSTALLFLAGS = $(INSTLIBFLAGS) -o $(WNNOWNER)
         ATOD = $(CWNNJUTILSRC)/catod
@@ -86,6 +88,12 @@ $(FULLR):: $(FZK_SRCS)
 instserver:: install
 
 WnnMakeDirectories(install,$(CWNNDICDIR))
+/*
+ * Bugfix.
+ * Because "NO" is same to "YES"!!
+ * And some additional bugfix.
+ */
+#if (WnnInstallDicForcibly == YES)
 InstallMultiple($(ALLTGT),$(CWNNSYSDICDIR))
 
 install::
@@ -93,6 +101,9 @@ install::
 	do \
 		$(WNNTOUCH) $(DESTDIR)$(CWNNSYSDICDIR)/$$i ;\
 	done
+#else
+WnnInstallDicMultiple($(ALLTGT),$(CWNNSYSDICDIR))
+#endif
 
 depend::
 	@echo "skipping make in my dir"

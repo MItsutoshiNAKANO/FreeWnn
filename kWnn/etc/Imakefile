@@ -1,5 +1,5 @@
 XCOMM
-XCOMM $Id: Imakefile,v 1.1.1.1 2000-01-16 05:08:05 ura Exp $
+XCOMM $Id: Imakefile,v 1.1.1.2 2000-01-16 05:11:26 ura Exp $
 XCOMM
 
 XCOMM FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -29,8 +29,10 @@ XCOMM
 XCOMM Commentary:
 XCOMM
 XCOMM Change log:
+XCOMM	'99/04/19	TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
+XCOMM		yincoding.o、py_table.o、zy_table.o をアーカイブに追加。
 XCOMM
-XCOMM Last modified date: 8,Feb.1999
+XCOMM Last modified date: 19,Apr.1999
 XCOMM
 #define DoNormalLib YES
 
@@ -50,6 +52,9 @@ SRCS= strings.c \
 	xutoj.c \
 	dic_atojis.c \
 	msg.c \
+	yincoding.c \
+	py_table.c \
+	zy_table.c \
 	server_env.c
 
 OBJS= strings.o \
@@ -63,6 +68,9 @@ OBJS= strings.o \
 	xutoj.o \
 	dic_atojis.o \
 	msg.o \
+	yincoding.o \
+	py_table.o \
+	zy_table.o \
 	server_env.o
 
 LibraryObjectRule()
@@ -82,6 +90,9 @@ LinkSourceFile(bcopy.c,$(WNNETCSRC))
 LinkSourceFile(xutoj.c,$(WNNETCSRC))
 LinkSourceFile(dic_atojis.c,$(WNNETCSRC))
 LinkSourceFile(msg.c,$(WNNETCSRC))
+LinkSourceFile(yincoding.c,$(WNNETCSRC))
+LinkSourceFile(py_table.c,$(WNNETCSRC))
+LinkSourceFile(zy_table.c,$(WNNETCSRC))
 LinkSourceFile(server_env.c,$(WNNETCSRC))
 
 DependTarget()

@@ -1,5 +1,5 @@
 #ifndef	lint
-static char rcs_id[] = "$Id: jhlp.c,v 1.1.1.1 2000-01-16 05:07:56 ura Exp $";
+static char rcs_id[] = "$Id: jhlp.c,v 1.1.1.2 2000-01-16 05:11:09 ura Exp $";
 #endif	/* lint */
 
 /*
@@ -31,8 +31,10 @@ static char rcs_id[] = "$Id: jhlp.c,v 1.1.1.1 2000-01-16 05:07:56 ura Exp $";
  * Commentary:
  *
  * Change log:
+ *	'99/04/19	TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
+ *		index() の宣言をコメントアウト。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 19,Apr.1999
  *
  * Code:
  *
@@ -375,7 +377,7 @@ char **argv;
     XLCd xlc;
 #endif /* X11R5 */
     extern char *get_server_env();
-    extern char *index();
+/*    extern char *index(); */
 
     prgname = argv[0];
     if (create_arg_string(argv, argc) == -1) exit(1);

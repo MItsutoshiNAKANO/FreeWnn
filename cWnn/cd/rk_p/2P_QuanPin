@@ -1,5 +1,5 @@
 ;
-; $Id: 2P_QuanPin,v 1.1.2.1 1999/02/08 05:21:33 yamasita Exp $
+; $Id: 2P_QuanPin,v 1.1.2.3 1999/04/01 05:39:05 nakanisi Exp $
 ;
 
 ; FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -28,18 +28,25 @@
 ;
 ; Commentary:
 ;
-; Change log:
+; Change log:(in Japanese)
+;	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+;		無効な音節 Wao を削除。
+;		有効な音節 Be を追加。
+;		有効な音節 Den を追加。
+;		有効な音節 Chua を追加して、Chua、Shua、Zhua を統合。
+;		有効な音節 Eng を追加。
+;		有効な音節 Hm を追加。
 ;
-; Last modified date: 8,Feb.1999
+; Last modified date: 20,Mar.1999
 ;
 
 (defvar A  	(list B C D F G H   K L M N P     S T W   Y Z  ))
 (defvar AI  	(list B C D   G H   K L M N P     S T W     Z  ))
 (defvar AN  	(list B C D F G H   K L M N P   R S T W   Y Z  )) ;ANG
-(defvar AO  	(list B C D   G H   K L M N P   R S T W   Y Z  ))
+(defvar AO  	(list B C D   G H   K L M N P   R S T     Y Z  ))
 (defvar E  	(list   C D   G H   K L M N     R S T     Y Z  ))
 (defvar EI  	(list B C D F G H   K L M N P       T W     Z  ))
-(defvar EN  	(list B C   F G H   K   M N P   R S   W     Z  )) ;den;
+(defvar EN  	(list B C D F G H   K   M N P   R S   W     Z  ))
 (defvar ENG  	(list B C D F G H   K L M N P   R S T W     Z  ))
 (defvar I  	(list B C D       J   L M N P Q R S T   X Y Z  ))
 (defvar IA  	(list     D       J   L       Q         X      )) ;nia;
@@ -157,6 +164,11 @@
 (CSZ)HU2	(CSZ)hｲﾀ
 (CSZ)HU3	(CSZ)hｳﾀ
 (CSZ)HU4	(CSZ)hｴﾀ
+(CSZ)HUA	(CSZ)huaﾀ
+(CSZ)HUA1	(CSZ)hu｡ﾀ
+(CSZ)HUA2	(CSZ)hu｢ﾀ
+(CSZ)HUA3	(CSZ)hu｣ﾀ
+(CSZ)HUA4	(CSZ)hu､ﾀ
 (CSZ)HUAI	(CSZ)huaiﾀ
 (CSZ)HUAI1	(CSZ)hu｡iﾀ
 (CSZ)HUAI2	(CSZ)hu｢iﾀ
@@ -372,11 +384,11 @@ EN1		･nﾀ
 EN2		ｦnﾀ
 EN3		ｧnﾀ
 EN4		ｨnﾀ
-;ENG		engﾀ
-;ENG1		･ngﾀ
-;ENG2		ｦngﾀ
-;ENG3		ｧngﾀ
-;ENG4		ｨngﾀ
+ENG		engﾀ
+ENG1		･ngﾀ
+ENG2		ｦngﾀ
+ENG3		ｧngﾀ
+ENG4		ｨngﾀ
 ER		erﾀ
 ER1		･rﾀ
 ER2		ｦrﾀ
@@ -397,11 +409,6 @@ SHEI1		Sh･iﾀ
 SHEI2		Shｦiﾀ
 SHEI3		Shｧiﾀ
 SHEI4		Shｨiﾀ
-SHUA		Shuaﾀ
-SHUA1		Shu｡ﾀ
-SHUA2		Shu｢ﾀ
-SHUA3		Shu｣ﾀ
-SHUA4		Shu､ﾀ
 ZHEI		Zheiﾀ
 ZHEI1		Zh･iﾀ
 ZHEI2		Zhｦiﾀ
@@ -412,13 +419,8 @@ ZHONG1		Zhｭngﾀ
 ZHONG2		Zhｮngﾀ
 ZHONG3		Zhｯngﾀ
 ZHONG4		Zhｰngﾀ
-ZHUA		Zhuaﾀ
-ZHUA1		Zhu｡ﾀ
-ZHUA2		Zhu｢ﾀ
-ZHUA3		Zhu｣ﾀ
-ZHUA4		Zhu､ﾀ
 ;;;;			-----------Special PinYin-------------
-;HM		Hmﾀ
+HM		Hmﾀ
 HNG		Hngﾀ
 NG		ngﾀ
 M		mﾀ

@@ -1,7 +1,6 @@
 #
-# $Id: xj.msg.zh_TW,v 1.2.2.1 1999/02/08 07:43:38 yamasita Exp $
+# $Id: xj.msg.zh_TW,v 1.2.2.3 1999/04/01 05:32:38 nakanisi Exp $
 #
-
 # FreeWnn is a network-extensible Kana-to-Kanji conversion system.
 # This file is part of FreeWnn.
 # 
@@ -26,9 +25,11 @@
 #
 # Commentary:
 #
-# Change log:
+# Change log:(in Japanese)
+#	'/99/03/20	ÊÒ»³¡÷£Ð£Æ£Õ <kate@pfu.co.jp>
+#		.msg ¥Õ¥¡¥¤¥ë¤Ë¶õ¹Ô¤¬¤¢¤ë¤È¡¢msg_open ¤Ç»à¤Ì¡£FreeWnn ¤Ç enbug :-)
 #
-# Last modified date: 8,Feb.1999
+# Last modified date: 20,Mar.1999
 #
 00	ÏÓÇßÐ©Óò
 01	ÐÂâ¤òÙðå

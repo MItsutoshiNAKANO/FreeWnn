@@ -1,5 +1,5 @@
 /*
- * $Id: js.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: js.c,v 1.1.1.2 2000-01-16 05:10:51 ura Exp $
  */
 
 /*
@@ -30,8 +30,17 @@
  * Commentary:
  *
  * Change log:
+ *	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+ *		サーバーが受信バッファーをクリアーするのを待つ。
+ *		これがないと、書き込みエラーを検出した時クライアントがハングする。
+ *	'99/04/06	Hidekazu Kuroki - 黒木 秀和(hidekazu@cs.titech.ac.jp)
+ *		connect(2) の引数変更。
  *
- * Last modified date: 8,Feb.1999
+ *	'99/05/14	Toshiaki Nakanisi <nakanisi@rd.kyoto.omronsoft.co.jp>
+ *		connect() の引数のキャストを caddr_t から struct sockaddr
+ *		に変更( RedHat Linux などでコンパイルエラーになるため)。
+ *
+ * Last modified date: 06,Apr.1999
  *
  * Code:
  *
@@ -211,7 +220,11 @@ register char *lang;
 #endif
 	return -1;
     }
-    if (connect(sd,(caddr_t)&saddr,strlen(saddr.sun_path)+sizeof(saddr.sun_family)) == ERROR) {
+#if !(defined(BSD) && (BSD >= 199306)) /* !4.4BSD-Lite */
+    if (connect(sd,(struct sockaddr *)&saddr,strlen(saddr.sun_path)+sizeof(saddr.sun_family)) == ERROR) {
+#else /* 4.4BSD-Lite */
+    if (connect(sd,(struct sockaddr *)&saddr,SUN_LEN(&saddr)) == ERROR) {
+#endif /* 4.4BSD-Lite */
 
 #if DEBUG
 	xerror("jslib:Can't connect socket.\n");
@@ -284,7 +297,7 @@ register int timeout;
 	signal(SIGALRM, connect_timeout);
 	alarm(timeout);
     }
-    ret = connect(sd, (caddr_t)&saddr_in, sizeof(saddr_in));
+    ret = connect(sd, (struct sockaddr *)&saddr_in, sizeof(saddr_in));
     if (timeout != 0 && timeout > 0) {
 	alarm(0);
 	signal(SIGALRM, SIG_IGN);
@@ -1280,6 +1293,7 @@ char	*fn;
 	 wnn_errorno=WNN_NOT_A_FILE;
 	 fclose(f);
 	 put4com(-1);snd_flush();
+	 sleep(1);  /* enssure handshake */
 	 return(-1);
      }
      fclose(f);
@@ -1309,6 +1323,7 @@ char	*fn;
 #endif /* WRITE_CHECK */
 	 wnn_errorno=WNN_FILE_WRITE_ERROR;
 	 put4com(-1);snd_flush();
+	 sleep(1);  /* enssure handshake */
 	 return(-1);
      }
  }else if(mode == 2){
@@ -1321,6 +1336,7 @@ char	*fn;
 #endif /* WRITE_CHECK */
 	 wnn_errorno=WNN_FILE_WRITE_ERROR;
 	 put4com(-1);snd_flush();
+	 sleep(1);  /* enssure handshake */
 	 return(-1);
      }
  }
@@ -2252,6 +2268,7 @@ char *n, *pwd;
     }
     if(input_file_header(fp, &fh) == -1){
 	fclose(fp);
+	wnn_errorno = WNN_NOT_A_FILE;
 	return(-1);
     }
     fclose(fp);

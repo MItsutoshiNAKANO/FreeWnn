@@ -1,7 +1,7 @@
 #
-# $Id: libwnn.msg,v 1.2.2.1 1999/02/08 05:21:04 yamasita Exp $
+# $Id: libwnn.msg,v 1.2.2.3 1999/04/01 05:43:18 nakanisi Exp $
 #
-
+#
 ### FreeWnn is a network-extensible Kana-to-Kanji conversion system.
 ### This file is part of FreeWnn.
 ### 
@@ -28,11 +28,16 @@
 ###
 ### Commentary:
 ###
-### Change log:
+### Change log:(in Japanese)
+###	'99/03/20	室怀△ＰＦＵ <kate@pfu.co.jp>
+###		.msg ファイルに鄂乖があると、msg_open で秽ぬ。FreeWnn で enbug :-)
+###		Wnn/jd/libwnn.msg の１戎誊の恃构に票じ。
+###		墒混デ〖タファイル叹の柠赖∈hinsi.data ⅹ cixing.data∷。
+###		乖琐の鄂球を猴近。
 ###
-### Last modified date: 8,Feb.1999
+### Last modified date: 20,Mar.1999
 ###
-
+#
 ###	massage file for libwnn.a
 ### wnnerrmsg.c
 #0	no_error 0
@@ -60,7 +65,7 @@
 #22	no_error 22
 #23	no_error 23
 24	文法文件的内容不正确
-25	虚拟词性号码异常hinsi.data不正确。
+25	虚拟词性号码异常cixing.data不正确。
 26	未定义的词性、定义了前端词性。
 27	文法文件不能读取。
 #28	no_error 28
@@ -70,7 +75,7 @@
 32	附属语解析域不够。
 #33	no_error 33
 34	次侯补域不够。
-35	侯补 1个也没有 
+35	侯补 1个也没有
 #36	no_error 36
 #37	no_error 37
 #38	no_error 38
@@ -130,8 +135,8 @@
 92	不是ｃＷｎｎ用户可读取的文件。
 93	以上的文件不能读取。
 94	password不对。
-95	文件正在读取。 
-96	文件不能消除。 
+95	文件正在读取。
+96	文件不能消除。
 97	文件没有创建出来。
 98	不是ｃＷｎｎ的文件。
 99	文件的I-node和FILE_UNIQ不能一致。

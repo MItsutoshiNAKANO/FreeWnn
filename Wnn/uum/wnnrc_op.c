@@ -1,5 +1,5 @@
 /*
- * $Id: wnnrc_op.c,v 1.1.1.1 2000-01-16 05:07:51 ura Exp $
+ * $Id: wnnrc_op.c,v 1.1.1.2 2000-01-16 05:11:05 ura Exp $
  */
 
 /*
@@ -30,8 +30,11 @@
  * Commentary:
  *
  * Change log:
+ *	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+ *		uumrc の sticky の構文解析ミスの訂正。
+ *		malloc(3) の引数の訂正（1 バイト分少ない足りない）。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 20,Mar.1999
  *
  * Code:
  *
@@ -259,7 +262,7 @@ int *dn;
 	    get_new_env(0);
 	    /* setconvenv*/
 	    if(num > 2) {
-		if(!(strcmp(s[num - 1], "sticky"))) {
+		if(!(strcmp(s[num - 2], "sticky"))) {
 		    normal_sticky = 1;
 		    num--;
 		}
@@ -268,17 +271,17 @@ int *dn;
 	    else {
 		s0or1 = s[1];
 		if (def_servername && *def_servername) {
-		    servername = (char *)malloc(strlen(def_servername));
+		    servername = (char *)malloc(strlen(def_servername) + 1);
 		    strcpy(servername, def_servername);
 		} else {
-		    servername = (char *)malloc(strlen(s[0]));
+		    servername = (char *)malloc(strlen(s[0]) + 1);
 		    strcpy(servername, s[0]);
 		}
 	    }
 	    if(expand_expr(s0or1) != 0){
 		fprintf(stderr , "Can't expand %s.\r\n", s0or1);
 	    }
-	    envrcname= (char *)malloc(strlen(s0or1));
+	    envrcname= (char *)malloc(strlen(s0or1) + 1);
 	    strcpy(envrcname, s0or1);
 	}
     } else if(strcmp(code , "setkankanaenv") == 0){
@@ -286,7 +289,7 @@ int *dn;
 	    get_new_env(1);
 	    /* setkankanaenv */
 	    if(num > 2) {
-		if(!(strcmp(s[num - 1], "sticky"))){
+		if(!(strcmp(s[num - 2], "sticky"))){
 		    reverse_sticky = 1;
 		    num--;
 		}
@@ -296,23 +299,23 @@ int *dn;
 		s0or1 = s[1];
 		if (def_reverse_servername && *def_reverse_servername) {
 		    reverse_servername =
-		      (char *)malloc(strlen(def_reverse_servername));
+		      (char *)malloc(strlen(def_reverse_servername) + 1);
 		    strcpy(reverse_servername, def_reverse_servername);
 		} else {
-		    reverse_servername = (char *)malloc(strlen(s[0]));
+		    reverse_servername = (char *)malloc(strlen(s[0]) + 1);
 		    strcpy(reverse_servername, s[0]);
 		}
 	    }
 	    if(expand_expr(s0or1) != 0){
 		fprintf(stderr , "Can't expand %s.\r\n", s0or1);
 	    }
-	    reverse_envrcname= (char *)malloc(strlen(s0or1));
+	    reverse_envrcname= (char *)malloc(strlen(s0or1) + 1);
 	    strcpy(reverse_envrcname, s0or1);
 	}
     } else if(strcmp(code , "setenv") == 0) {
             if(num > 2) {
                 get_new_env(0);
-		if(!(strcmp(s[num - 3], "sticky"))) {
+		if(!(strcmp(s[num - 2], "sticky"))) {
 		    normal_sticky = 1;
 		    num--;
 		}
@@ -320,24 +323,24 @@ int *dn;
                 else {
                     s0or1 = s[2];
 		    if (def_servername && *def_servername) {
-			servername = (char *)malloc(strlen(def_servername));
+			servername = (char *)malloc(strlen(def_servername) + 1);
 			strcpy(servername, def_servername);
 		    } else {
-			servername = (char *)malloc(strlen(s[1]));
+			servername = (char *)malloc(strlen(s[1]) + 1);
 			strcpy(servername, s[1]);
 		    }
                 }
                 if(expand_expr(s0or1) != 0) {
 		    fprintf(stderr , "Can't expand %s.\r\n", s0or1);
                 }
-		envrcname = (char *)malloc(strlen(s0or1));
+		envrcname = (char *)malloc(strlen(s0or1) + 1);
 		strcpy(envrcname, s0or1);
 		strcpy(env_name_s, s[0]);
             }
         } else if(strcmp(code , "setenv_R") == 0) {
             if(num > 2) {
                 get_new_env(1);
-		if(!(strcmp(s[num - 1], "sticky"))) {
+		if(!(strcmp(s[num - 2], "sticky"))) {
 		    reverse_sticky = 1;
 		    num--;
 		}
@@ -346,17 +349,17 @@ int *dn;
                     s0or1 = s[2];
 		    if (def_reverse_servername && *def_reverse_servername) {
 			reverse_servername =
-			  (char *)malloc(strlen(def_reverse_servername));
+			  (char *)malloc(strlen(def_reverse_servername) + 1);
 			strcpy(reverse_servername, def_reverse_servername);
 		    } else {
-			reverse_servername = (char *)malloc(strlen(s[1]));
+			reverse_servername = (char *)malloc(strlen(s[1]) + 1);
 			strcpy(reverse_servername, s[1]);
 		    }
                 }
                 if(expand_expr(s0or1) != 0) {
 		    fprintf(stderr , "Can't expand %s.\r\n", s0or1);
                 }
-		reverse_envrcname = (char *)malloc(strlen(s0or1));
+		reverse_envrcname = (char *)malloc(strlen(s0or1) + 1);
 		strcpy(reverse_envrcname, s0or1);
 		strcpy(reverse_env_name_s, s[0]);
             }

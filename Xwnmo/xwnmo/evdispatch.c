@@ -1,5 +1,5 @@
 /*
- * $Id: evdispatch.c,v 1.1.1.1 2000-01-16 05:07:56 ura Exp $
+ * $Id: evdispatch.c,v 1.1.1.2 2000-01-16 05:11:09 ura Exp $
  */
 
 /*
@@ -28,8 +28,10 @@
  * Commentary:
  *
  * Change log:
+ *	'99/04/19	TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
+ *		kill()、getpid() の宣言をコメントアウト。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 19,Apr.1999
  *
  * Code:
  *
@@ -61,7 +63,7 @@ static int
 motif_event(ev)
 XClientMessageEvent *ev;
 {
-    extern int kill(), getpid();
+    /* extern int kill(), getpid(); */
 
     if (ev->window == xim->root_pointer[xim->default_screen]->ximclient->w) {
 	do_end();

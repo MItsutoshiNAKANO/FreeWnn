@@ -1,0 +1,875 @@
+#
+# $Id: Makefile.in,v 1.1.1.1 2000-01-16 05:11:17 ura Exp $
+#
+
+# FreeWnn is a network-extensible Kana-to-Kanji conversion system.
+# This file is part of FreeWnn.
+#
+# Copyright Kyoto University Research Institute for Mathematical Sciences
+#                 1987, 1988, 1989, 1990, 1991, 1992
+# Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
+# Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
+#
+# Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Emacs; see the file COPYING.  If not, write to the
+# Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+# Commentary:
+#
+# Change log:
+#
+# Last modified date: 23,Mar.1999
+#
+
+all::
+
+.SUFFIXES: .i
+
+ _NULLCMD_ = @ echo -n
+
+TKLIBNAME = tk80
+
+TKLIBDIR =
+
+TCLLIBNAME = tcl80
+
+TCLIBDIR =
+
+          PATHSEP = /
+            SHELL = /bin/sh
+
+              TOP = ../..
+      CURRENT_DIR = cWnn/jlib
+
+            IMAKE = imake
+           DEPEND = gccmakedep
+        MKDIRHIER = mkdir -p
+    EXPORTLISTGEN =
+        CONFIGSRC = $(TOP)/config
+         IMAKESRC = $(CONFIGSRC)/imake
+        DEPENDSRC = $(CONFIGSRC)/util
+
+          INCROOT = /usr/X11R6/include
+        USRLIBDIR = /usr/X11R6/lib
+        VARLIBDIR = /var/lib
+         SHLIBDIR = /usr/X11R6/lib
+       LINTLIBDIR = $(USRLIBDIR)/lint
+          MANPATH = /usr/X11R6/man
+    MANSOURCEPATH = $(MANPATH)/man
+           MANDIR = $(MANSOURCEPATH)$(MANSUFFIX)
+        LIBMANDIR = $(MANSOURCEPATH)$(LIBMANSUFFIX)
+       FILEMANDIR = $(MANSOURCEPATH)$(FILEMANSUFFIX)
+
+               AR = ar clq
+  BOOTSTRAPCFLAGS =
+               CC = @CC@
+               AS = as
+
+.SUFFIXES: .cc
+
+              CXX = c++
+          CXXFILT = c++filt
+           CXXLIB =
+    CXXDEBUGFLAGS = -O2 -fno-strength-reduce
+CXXDEPENDINCLUDES =
+ CXXEXTRA_DEFINES =
+CXXEXTRA_INCLUDES =
+   CXXSTD_DEFINES = $(CXXPROJECT_DEFINES)
+       CXXOPTIONS =
+      CXXINCLUDES = $(INCLUDES) $(TOP_INCLUDES) $(CXXEXTRA_INCLUDES)
+       CXXDEFINES = $(CXXINCLUDES) $(CXXSTD_DEFINES) $(THREADS_CXXDEFINES) $(CXXEXTRA_DEFINES) $(DEFINES)
+         CXXFLAGS = $(CXXDEBUGFLAGS) $(CXXOPTIONS) $(THREADS_CXXFLAGS) $(CXXDEFINES)
+
+         COMPRESS = compress
+          GZIPCMD = gzip
+              CPP = @CPP@ $(STD_CPP_DEFINES)
+    PREPROCESSCMD = @CPP@ $(STD_CPP_DEFINES)
+          INSTALL = install
+     INSTALLFLAGS = -c
+               LD = ld
+              LEX = @LEX@ -l
+           LEXLIB = -lfl
+             YACC = @YACC@
+           CCYACC = @YACC@
+             LINT = lint
+      LINTLIBFLAG = -C
+         LINTOPTS = -axz
+               LN = @LN_S@ -s
+             MAKE = make
+               MV = mv -f
+               CP = cp
+
+           RANLIB = @RANLIB@
+  RANLIBINSTFLAGS =
+
+               RM = rm -f
+        MANSUFFIX = 1
+     LIBMANSUFFIX = 3
+    FILEMANSUFFIX = 5
+            TROFF = groff -Tps
+            NROFF = groff -Tascii
+         MSMACROS = -ms
+        MANMACROS = -man
+              TBL = tbl
+              EQN = eqn
+             NEQN = neqn
+              COL = col
+         COLFLAGS = -b
+
+            DVIPS = dvips
+            LATEX = latex
+
+     STD_INCLUDES =
+  STD_CPP_DEFINES = -traditional $(PROJECT_DEFINES)
+      STD_DEFINES = $(PROJECT_DEFINES)
+ EXTRA_LOAD_FLAGS =
+  EXTRA_LDOPTIONS =
+  EXTRA_LIBRARIES = 
+             TAGS = ctags
+
+   PARALLELMFLAGS =
+
+    SHAREDCODEDEF =
+         SHLIBDEF = -DBSDSHLIB
+
+     SHLIBLDFLAGS = -Bshareable -R $(USRLIBDIRPATH)
+
+         PICFLAGS = -fpic
+
+      CXXPICFLAGS = -fpic
+
+    PROTO_DEFINES = -DFUNCPROTO=15 -DNARROWPROTO
+
+     INSTPGMFLAGS = -s
+
+     INSTBINFLAGS = -m 0755
+     INSTUIDFLAGS = -m 4711
+     INSTLIBFLAGS = -m 0644
+     INSTINCFLAGS = -m 0444
+     INSTMANFLAGS = -m 0444
+     INSTDATFLAGS = -m 0444
+    INSTKMEMFLAGS = -g kmem -m 2755
+
+      PROJECTROOT = /usr/X11R6
+
+      CDEBUGFLAGS = @CDEBUGFLAGS@
+        CCOPTIONS = @CCOPTIONS@
+
+      ALLINCLUDES = $(INCLUDES) $(EXTRA_INCLUDES) $(TOP_INCLUDES) $(STD_INCLUDES)
+       ALLDEFINES = $(ALLINCLUDES) $(STD_DEFINES) $(EXTRA_DEFINES) $(PROTO_DEFINES) $(THREADS_DEFINES) $(DEFINES)
+           CFLAGS = $(CDEBUGFLAGS) $(CCOPTIONS) $(THREADS_CFLAGS) $(ALLDEFINES)
+        LINTFLAGS = $(LINTOPTS) -DLINT $(ALLDEFINES) $(DEPEND_DEFINES)
+         LDPRELIB = -L$(USRLIBDIR)
+        LDPOSTLIB =
+        LDOPTIONS = $(CDEBUGFLAGS) $(CCOPTIONS)  $(EXTRA_LDOPTIONS) $(THREADS_LDFLAGS) $(LOCAL_LDFLAGS) $(LDPRELIBS)
+     CXXLDOPTIONS = $(CXXDEBUGFLAGS) $(CXXOPTIONS) $(EXTRA_LDOPTIONS) $(THREADS_CXXLDFLAGS) $(LOCAL_LDFLAGS) $(LDPRELIBS)
+
+           LDLIBS = $(LDPOSTLIBS) $(THREADS_LIBS) $(SYS_LIBRARIES) $(EXTRA_LIBRARIES)
+
+           CCLINK = $(CC)
+
+          CXXLINK = $(CXX)
+
+     LDSTRIPFLAGS = -x
+   LDCOMBINEFLAGS = -X -r
+      DEPENDFLAGS =
+
+# Not sure this belongs here
+         TKLIBDIR =
+         TKINCDIR = /usr/local/include/tk8.0
+        TKLIBNAME = tk80
+        TKLIBRARY = -L$(TKLIBDIR) -l$(TKLIBNAME)
+        TCLLIBDIR =
+        TCLINCDIR = /usr/local/include/tcl8.0
+       TCLLIBNAME = tcl80
+       TCLLIBRARY = -L$(TCLLIBDIR) -l$(TCLLIBNAME)
+
+        MACROFILE = 
+           RM_CMD = $(RM)
+
+    IMAKE_DEFINES =
+
+         IRULESRC = $(CONFIGDIR)
+        IMAKE_CMD = $(IMAKE) -DUseInstalled -I$(IRULESRC) $(IMAKE_DEFINES)
+
+     ICONFIGFILES = $(IRULESRC)/Imake.tmpl $(IRULESRC)/X11.tmpl 			$(IRULESRC)/site.def $(IRULESRC)/$(MACROFILE) 			$(IRULESRC)/xfree86.cf $(IRULESRC)/xf86.rules $(IRULESRC)/xf86site.def $(IRULESRC)/host.def $(EXTRA_ICONFIGFILES)
+
+# FreeWnn is a network-extensible Kana-to-Kanji conversion system.
+# This file is part of FreeWnn.
+#
+# Copyright Kyoto University Research Institute for Mathematical Sciences
+#                 1987, 1988, 1989, 1990, 1991, 1992
+# Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
+# Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
+#
+# Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Emacs; see the file COPYING.  If not, write to the
+# Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+    SYS_LIBRARIES = @LIBS@
+
+           BINDIR = /usr/X11R6/bin
+     BUILDINCROOT = $(TOP)
+      BUILDINCDIR = $(BUILDINCROOT)/X11
+      BUILDINCTOP = ..
+      BUILDLIBDIR = $(TOP)/usrlib
+      BUILDLIBTOP = ..
+           INCDIR = $(INCROOT)/X11
+           ADMDIR = /usr/adm
+           LIBDIR = $(USRLIBDIR)/X11
+
+          FONTDIR = $(LIBDIR)/fonts
+         XINITDIR = $(LIBDIR)/xinit
+           XDMDIR = $(LIBDIR)/xdm
+           TWMDIR = $(LIBDIR)/twm
+           NLSDIR = $(LIBDIR)/nls
+       XLOCALEDIR = $(LIBDIR)/locale
+        PEXAPIDIR = $(LIBDIR)/PEX
+      XAPPLOADDIR = $(LIBDIR)/app-defaults
+       FONTCFLAGS = -t
+
+     INSTINCFLAGS = -m 0444 -c
+     INSTDATFLAGS = -m 0444 -c
+     INSTBINFLAGS = -m 0755 -c
+     INSTAPPFLAGS = $(INSTDATFLAGS)
+
+              RGB = rgb
+            FONTC = bdftopcf
+        MKFONTDIR = mkfontdir
+
+       DOCUTILSRC = $(TOP)/doc/util
+       XDOCMACROS = $(DOCUTILSRC)/macros.t
+       XIDXMACROS = $(DOCUTILSRC)/indexmacros.t
+       PROGRAMSRC = $(TOP)/programs
+           LIBSRC = $(TOP)/lib
+          FONTSRC = $(TOP)/fonts
+       INCLUDESRC = $(TOP)/X11
+        SERVERSRC = $(TOP)/programs/Xserver
+       CONTRIBSRC = $(TOP)/../contrib
+   UNSUPPORTEDSRC = $(TOP)/unsupported
+           DOCSRC = $(TOP)/doc
+           RGBSRC = $(TOP)/programs/rgb
+      BDFTOPCFSRC = $(PROGRAMSRC)/bdftopcf
+     MKFONTDIRSRC = $(PROGRAMSRC)/mkfontdir
+    FONTSERVERSRC = $(PROGRAMSRC)/xfs
+       FONTINCSRC = $(TOP)/include/fonts
+        EXTINCSRC = $(TOP)/include/extensions
+     TRANSCOMMSRC = $(LIBSRC)/xtrans
+   TRANS_INCLUDES = -I$(TRANSCOMMSRC)
+
+# $XConsortium: bsdLib.tmpl /main/3 1996/09/28 16:09:25 rws $
+# $XFree86: xc/config/cf/bsdLib.tmpl,v 3.3.2.2 1998/11/06 13:54:16 dawes Exp $
+
+          XLIBSRC = $(LIBSRC)/X11
+
+SOXLIBREV = 6.0
+DEPXONLYLIB =
+XONLYLIB =  -lX11
+
+LINTXONLY = $(LINTLIBDIR)/llib-lX11.ln
+
+         XLIBONLY = $(XONLYLIB)
+
+      XEXTLIBSRC = $(LIBSRC)/Xext
+
+SOXEXTREV = 6.0
+DEPEXTENSIONLIB =
+EXTENSIONLIB =  -lXext
+
+LINTEXTENSION = $(LINTLIBDIR)/llib-lXext.ln
+
+LINTEXTENSIONLIB = $(LINTEXTENSION)
+          DEPXLIB = $(DEPEXTENSIONLIB) $(DEPXONLYLIB)
+             XLIB = $(EXTENSIONLIB) $(XONLYLIB)
+         LINTXLIB = $(LINTXONLYLIB)
+
+         XAUTHSRC = $(LIBSRC)/Xau
+
+DEPXAUTHLIB = $(USRLIBDIR)/libXau.a
+XAUTHLIB =  -lXau
+
+LINTXAUTH = $(LINTLIBDIR)/llib-lXau.ln
+
+      XDMCPLIBSRC = $(LIBSRC)/Xdmcp
+
+DEPXDMCPLIB = $(USRLIBDIR)/libXdmcp.a
+XDMCPLIB =  -lXdmcp
+
+LINTXDMCP = $(LINTLIBDIR)/llib-lXdmcp.ln
+
+           XMUSRC = $(LIBSRC)/Xmu
+
+SOXMUREV = 6.0
+DEPXMULIB =
+XMULIB =  -lXmu $(LDPRELIBS) $(XTOOLONLYLIB) $(XONLYLIB)
+
+LINTXMU = $(LINTLIBDIR)/llib-lXmu.ln
+
+       OLDXLIBSRC = $(LIBSRC)/oldX
+
+SOOLDXREV = 6.0
+DEPOLDXLIB =
+OLDXLIB =  -loldX
+
+LINTOLDX = $(LINTLIBDIR)/llib-loldX.ln
+
+       TOOLKITSRC = $(LIBSRC)/Xt
+
+SOXTREV = 6.0
+DEPXTOOLONLYLIB =
+XTOOLONLYLIB =  -lXt
+
+LINTXTOOLONLY = $(LINTLIBDIR)/llib-lXt.ln
+
+      DEPXTOOLLIB = $(DEPXTOOLONLYLIB) $(DEPSMLIB) $(DEPICELIB)
+         XTOOLLIB = $(XTOOLONLYLIB) $(SMLIB) $(ICELIB)
+     LINTXTOOLLIB = $(LINTXTOOLONLYLIB)
+
+       AWIDGETSRC = $(LIBSRC)/Xaw
+
+SOXAWREV = 6.0
+DEPXAWLIB =
+XAWLIB =  -lXaw
+
+LINTXAW = $(LINTLIBDIR)/llib-lXaw.ln
+
+       XTFSRC = $(TOP)/workInProgress/Xtf
+
+SOXTFREV = 0.7
+DEPXTFLIB =
+XTFLIB =  -lXtf
+
+LINTXTF = $(LINTLIBDIR)/llib-lXtf.ln
+
+       FRESCOSRC = $(TOP)/workInProgress/Fresco
+
+SOFRESCOREV = 0.7
+DEPFRESCOLIB =
+FRESCOLIB =  -lFresco
+
+LINTFRESCO = $(LINTLIBDIR)/llib-lFresco.ln
+
+         XILIBSRC = $(LIBSRC)/Xi
+
+SOXINPUTREV = 6.0
+DEPXILIB =
+XILIB =  -lXi
+
+LINTXI = $(LINTLIBDIR)/llib-lXi.ln
+
+      XTESTLIBSRC = $(LIBSRC)/Xtst
+
+SOXTESTREV = 6.0
+DEPXTESTLIB =
+XTESTLIB =  -lXtst
+
+LINTXTEST = $(LINTLIBDIR)/llib-lXtst.ln
+
+        PEXLIBSRC = $(LIBSRC)/PEX5
+
+SOPEXREV = 6.0
+DEPPEXLIB =
+PEXLIB =  -lPEX5
+
+LINTPEX = $(LINTLIBDIR)/llib-lPEX5.ln
+
+        XIELIBSRC = $(LIBSRC)/XIE
+
+SOXIEREV = 6.0
+DEPXIELIB =
+XIELIB =  -lXIE
+
+LINTXIE = $(LINTLIBDIR)/llib-lXIE.ln
+
+      PHIGSLIBSRC = $(LIBSRC)/PHIGS
+
+DEPPHIGSLIB = $(USRLIBDIR)/libphigs.a
+PHIGSLIB =  -lphigs
+
+LINTPHIGS = $(LINTLIBDIR)/llib-lphigs.ln
+
+DEPXBSDLIB = $(USRLIBDIR)/libXbsd.a
+XBSDLIB =  -lXbsd
+
+LINTXBSD = $(LINTLIBDIR)/llib-lXbsd.ln
+
+           ICESRC = $(LIBSRC)/ICE
+
+SOICEREV = 6.0
+DEPICELIB =
+ICELIB =  -lICE
+
+LINTICE = $(LINTLIBDIR)/llib-lICE.ln
+
+            SMSRC = $(LIBSRC)/SM
+
+SOSMREV = 6.0
+DEPSMLIB =
+SMLIB =  -lSM
+
+LINTSM = $(LINTLIBDIR)/llib-lSM.ln
+
+         FSLIBSRC = $(LIBSRC)/FS
+
+DEPFSLIB = $(USRLIBDIR)/libFS.a
+FSLIB =  -lFS
+
+LINTFS = $(LINTLIBDIR)/llib-lFS.ln
+
+         FONTLIBSRC = $(LIBSRC)/font
+
+DEPFONTLIB = $(USRLIBDIR)/libfont.a
+FONTLIB =  -lfont
+
+LINTFONT = $(LINTLIBDIR)/llib-lfont.ln
+
+          DEPLIBS = $(DEPXAWLIB) $(DEPXMULIB) $(DEPXTOOLLIB) $(DEPXLIB)
+
+         DEPLIBS1 = $(DEPLIBS)
+         DEPLIBS2 = $(DEPLIBS)
+         DEPLIBS3 = $(DEPLIBS)
+
+#
+# OMRON INPUT MATHOD MAKE ENV
+#
+
+       WNNOWNER = wnn
+
+          IMTOP = $(TOP)
+
+         PREFIX = /usr/local
+      WNNWNNDIR = ${PREFIX}/lib/wnn
+      WNNBINDIR = ${PREFIX}/bin
+      WNNINCDIR = $(INCROOT)
+      WNNLIBDIR = $(USRLIBDIR)
+    WNNTERM_LIB = -ltermcap
+
+      PUBDICSRC = $(IMTOP)/Pubdic
+  WNNCONSDICSRC = $(IMTOP)/Wnn-consortium/dic
+
+         WNNTOP = $(IMTOP)/Wnn
+       JWNNLANG = ja_JP
+     JWNNWNNDIR = $(WNNWNNDIR)/$(JWNNLANG)
+     JWNNBINDIR = $(WNNBINDIR)/Wnn4
+     JWNNINCDIR = $(WNNINCDIR)/wnn
+     JWNNDICDIR = $(JWNNWNNDIR)/dic
+  JWNNPUBDICDIR = $(JWNNDICDIR)/pubdic
+JWNNWNNCONSDICDIR = $(JWNNDICDIR)/wnncons
+  JWNNFZKSRCDIR = $(JWNNDICDIR)/src
+     WNNCONVSRC = $(WNNTOP)/conv
+      WNNETCSRC = $(WNNTOP)/etc
+  WNNINCLUDESRC = $(WNNTOP)/include
+       WNNJDSRC = $(WNNTOP)/jd
+     WNNJLIBSRC = $(WNNTOP)/jlib
+   WNNJLIBV3SRC = $(WNNTOP)/jlib.V3
+  WNNJSERVERSRC = $(WNNTOP)/jserver
+    WNNJUTILSRC = $(WNNTOP)/jutil
+       WNNLDSRC = $(WNNTOP)/ld
+   WNNPUBDICSRC = $(WNNTOP)/pubdic
+WNNWNNCONSSRC = $(WNNTOP)/wnncons
+WNNWNNCONSDICSRC = $(WNNWNNCONSSRC)/dic
+   WNNROMKANSRC = $(WNNTOP)/romkan
+      WNNUUMSRC = $(WNNTOP)/uum
+   WNNCNVFILEDIR = $(WNNJDSRC)/./bsd
+    WNNINCLUDES = -I$(WNNINCLUDESRC) -I$(WNNROMKANMSRC)
+     WNNDEFINES = -DLIBDIR=\"$(WNNWNNDIR)\"
+        WNNJLIB = $(WNNJLIBSRC)/libwnn.a
+     WNNCONVLIB = $(WNNCONVSRC)/libconvkey.a
+
+        CWNNTOP = $(IMTOP)/cWnn
+       CWNNLANG = zh_CN
+     CWNNWNNDIR = $(WNNWNNDIR)/$(CWNNLANG)
+     CWNNINCDIR = $(WNNINCDIR)/cwnn
+     CWNNBINDIR = $(WNNBINDIR)/cWnn4
+     CWNNDICDIR = $(CWNNWNNDIR)/dic
+  CWNNSYSDICDIR = $(CWNNDICDIR)/sys
+      CWNNCDSRC = $(CWNNTOP)/cd
+    CWNNCDICSRC = $(CWNNTOP)/cdic
+    CWNNCONVSRC = $(CWNNTOP)/conv
+     CWNNETCSRC = $(CWNNTOP)/etc
+ CWNNINCLUDESRC = $(CWNNTOP)/include
+    CWNNJLIBSRC = $(CWNNTOP)/jlib
+ CWNNJSERVERSRC = $(CWNNTOP)/jserver
+   CWNNJUTILSRC = $(CWNNTOP)/jutil
+  CWNNROMKANSRC = $(CWNNTOP)/romkan
+     CWNNUUMSRC = $(CWNNTOP)/uum
+ CWNNCNVFILEDIR = $(CWNNCDSRC)/./bsd
+   CWNNINCLUDES = -I$(CWNNINCLUDESRC) -I$(CWNNROMKANMSRC)
+    CWNNDEFINES = -DLIBDIR=\"$(WNNWNNDIR)\"
+       CWNNJLIB = $(CWNNJLIBSRC)/libcwnn.a
+    CWNNCONVLIB = $(CWNNCONVSRC)/libconvkey.a
+
+        KWNNTOP = $(IMTOP)/kWnn
+       KWNNLANG = ko_KR
+     KWNNWNNDIR = $(WNNWNNDIR)/$(KWNNLANG)
+     KWNNINCDIR = $(WNNINCDIR)/kwnn
+     KWNNBINDIR = $(WNNBINDIR)/kWnn4
+     KWNNDICDIR = $(KWNNWNNDIR)/dic
+  KWNNSYSDICDIR = $(KWNNDICDIR)/sys
+      KWNNKDSRC = $(KWNNTOP)/kd
+    KWNNKDICSRC = $(KWNNTOP)/kdic
+    KWNNCONVSRC = $(KWNNTOP)/conv
+     KWNNETCSRC = $(KWNNTOP)/etc
+ KWNNINCLUDESRC = $(KWNNTOP)/include
+    KWNNJLIBSRC = $(KWNNTOP)/jlib
+ KWNNJSERVERSRC = $(KWNNTOP)/jserver
+   KWNNJUTILSRC = $(KWNNTOP)/jutil
+  KWNNROMKANSRC = $(KWNNTOP)/romkan
+     KWNNUUMSRC = $(KWNNTOP)/uum
+ KWNNCNVFILEDIR = $(KWNNCDSRC)/./bsd
+   KWNNINCLUDES = -I$(KWNNINCLUDESRC) -I$(KWNNROMKANMSRC)
+    KWNNDEFINES = -DLIBDIR=\"$(WNNWNNDIR)\"
+       KWNNJLIB = $(KWNNJLIBSRC)/libkwnn.a
+    KWNNCONVLIB = $(KWNNCONVSRC)/libconvkey.a
+
+       TWNNLANG = zh_TW
+     TWNNWNNDIR = $(WNNWNNDIR)/$(TWNNLANG)
+     TWNNDICDIR = $(TWNNWNNDIR)/dic
+  TWNNSYSDICDIR = $(TWNNDICDIR)/sys
+      TWNNTDSRC = $(CWNNTOP)/td
+    TWNNTDICSRC = $(CWNNTOP)/tdic
+
+       LWNNLANG = lt_LN
+     LWNNWNNDIR = $(WNNWNNDIR)/$(LWNNLANG)
+
+     WNNLANGDEF = -DJAPANESE
+    CWNNLANGDEF = -DCHINESE
+    TWNNLANGDEF = -DTAIWANESE
+    KWNNLANGDEF = -DKOREAN
+    LWNNLANGDEF = -DLATIN
+     ALLLANGDEF = $(WNNLANGDEF) $(CWNNLANGDEF) $(KWNNLANGDEF) $(LWNNLANGDEF)
+
+       XWNMOTOP = $(IMTOP)/Xwnmo
+       XWNMOSRC = $(XWNMOTOP)/xwnmo
+      XJUTILSRC = $(XWNMOTOP)/xjutil
+ XWNMOROMKANSRC = $(XWNMOTOP)/romkan
+   XWNMOJLIBSRC = $(XWNMOTOP)/jlib
+     XWNMOJDSRC = $(XWNMOTOP)/jd
+XWNMOROMKANMSRC = $(XWNMOTOP)/romkan_m
+
+  XWNMOXLIBINC  = -I$(XWNMOTOP)/X11R6/include
+
+  XWNMOINCLUDES = -I$(XWNMOROMKANMSRC) -I$(WNNINCLUDESRC) $(XWNMOXLIBINC)
+      XWNMOJLIB = $(XWNMOJLIBSRC)/libwnn_m.a
+ XWNMOLIBRARIES = $(XWNMOJLIB)
+
+       XWNMODEF = -DBC_X11R5
+
+     IMIRULESRC = $(IMTOP)/config
+
+      IMAKE_CMD = $(IMAKE) -DUseInstalled -I$(IMIRULESRC) 			-I$(IRULESRC) $(IMAKE_DEFINES)
+
+XMULIBONLY = -lXmu
+XMULIB = $(XMULIBONLY) $(XTOOLLIB) $(XLIB)
+
+        CONFIGDIR = $(LIBDIR)/config
+
+    USRLIBDIRPATH = $(USRLIBDIR)
+        LDPRELIBS = -L$(USRLIBDIR)
+       LDPOSTLIBS =
+     TOP_INCLUDES = -I$(INCROOT) $(TOP_X_INCLUDES)
+  PROJECT_DEFINES =
+
+CXXPROJECT_DEFINES =
+
+# FreeWnn is a network-extensible Kana-to-Kanji conversion system.
+# This file is part of FreeWnn.
+#
+# Copyright Kyoto University Research Institute for Mathematical Sciences
+#                 1987, 1988, 1989, 1990, 1991, 1992
+# Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
+# Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
+#
+# Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Emacs; see the file COPYING.  If not, write to the
+# Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+         CC = @CC@
+  CCOPTIONS = @CCOPTIONS@
+STD_DEFINES = $(PROJECT_DEFINES)
+CDEBUGFLAGS = @CDEBUGFLAGS@
+
+LIB_MT_DEFINES = LibraryMTDefines
+
+LINKS = getopt.c jl.c js.c kankana.c wnnerrmsg.c
+    JLIBDEFINES = -DWRITE_CHECK
+       INCLUDES = -I$(CWNNINCLUDESRC) -I$(TOP)
+        DEFINES = $(CWNNDEFINES) $(CWNNLANGDEF) $(JLIBDEFINES)
+   INSTALLFLAGS = $(INSTBINFLAGS)
+       LINTLIBS =
+
+SRC1= js.c 	wnnerrmsg.c 	jl.c
+
+OBJ1= js.o 	wnnerrmsg.o 	jl.o
+
+SRC2= getopt.c
+OBJ2= getopt.o
+SRC3= $(CWNNETCSRC)/msg.c
+OBJ3= msg.o
+SRC4= $(CWNNETCSRC)/yincoding.c
+OBJ4= yincoding.o
+SRC5= $(CWNNETCSRC)/py_table.c
+OBJ5= py_table.o
+SRC6= $(CWNNETCSRC)/zy_table.c
+OBJ6= zy_table.o
+SRC7= $(CWNNETCSRC)/strings.c
+OBJ7= strings.o
+SRC8= $(CWNNETCSRC)/bcopy.c
+OBJ8= bcopy.o
+LOCAL_RKSRCS= $(CWNNROMKANSRC)/rk_bltinfn.c 	$(CWNNROMKANSRC)/rk_main.c 	$(CWNNROMKANSRC)/rk_modread.c 	$(CWNNROMKANSRC)/rk_read.c 	$(CWNNROMKANSRC)/rk_vars.c
+
+LOCAL_RKOBJS= $(CWNNROMKANSRC)/rk_bltinfn.o 	$(CWNNROMKANSRC)/rk_main.o 	$(CWNNROMKANSRC)/rk_modread.o 	$(CWNNROMKANSRC)/rk_read.o 	$(CWNNROMKANSRC)/rk_vars.o
+
+LOCAL_ETCSRCS = $(SRC4) $(SRC5) $(SRC6) $(SRC7) $(SRC8)
+LOCAL_ETCOBJS = $(OBJ4) $(OBJ5) $(OBJ6) $(OBJ7) $(OBJ8)
+SRCS= $(SRC1) $(SRC3) $(LOCAL_ETCSRCS)
+OBJS= $(OBJ1) $(OBJ3) $(LOCAL_ETCOBJS) $(LOCAL_RKOBJS)
+
+all::
+	$(_NULLCMD_)
+	$(_NULLCMD_)
+	$(_NULLCMD_)
+	$(_NULLCMD_)
+
+includes::
+	$(_NULLCMD_)
+	$(_NULLCMD_)
+	$(_NULLCMD_)
+	$(_NULLCMD_)
+
+.c.o:
+	$(_NULLCMD_)
+	$(_NULLCMD_)
+	$(RM) $@
+	 $(CC) -c $(CFLAGS) $(_NOOP_) $*.c
+	$(_NULLCMD_)
+	$(_NULLCMD_)
+
+clean::
+	$(_NULLCMD_)
+	$(_NULLCMD_)
+	$(_NULLCMD_)
+	$(_NULLCMD_)
+
+all:: $(LINKS) $(OBJS) libcwnn.a
+
+includes:: $(LINKS)
+
+getopt.c:  $(WNNJLIBSRC)/getopt.c
+	$(RM) $@
+	$(LN) $? $@
+
+includes:: getopt.c
+
+depend:: getopt.c
+
+clean::
+	$(RM) getopt.c
+
+jl.c:  $(WNNJLIBSRC)/jl.c
+	$(RM) $@
+	$(LN) $? $@
+
+includes:: jl.c
+
+depend:: jl.c
+
+clean::
+	$(RM) jl.c
+
+js.c:  $(WNNJLIBSRC)/js.c
+	$(RM) $@
+	$(LN) $? $@
+
+includes:: js.c
+
+depend:: js.c
+
+clean::
+	$(RM) js.c
+
+kankana.c:  $(WNNJLIBSRC)/kankana.c
+	$(RM) $@
+	$(LN) $? $@
+
+includes:: kankana.c
+
+depend:: kankana.c
+
+clean::
+	$(RM) kankana.c
+
+wnnerrmsg.c:  $(WNNJLIBSRC)/wnnerrmsg.c
+	$(RM) $@
+	$(LN) $? $@
+
+includes:: wnnerrmsg.c
+
+depend:: wnnerrmsg.c
+
+clean::
+	$(RM) wnnerrmsg.c
+
+all:: libgetopt.a
+
+libgetopt.a: $(OBJ2) $(EXTRALIBRARYDEPS)
+	$(RM) $@
+	$(AR) $@ $(OBJ2)
+	$(RANLIB) $@
+	$(_NULLCMD_)
+
+lintlib:: llib-lgetopt.ln
+
+llib-lgetopt.ln: $(SRC2) $(EXTRALIBRARYDEPS)
+	$(RM) $@
+	$(LINT) $(LINTLIBFLAG)getopt $(LINTFLAGS) $(SRC2)
+
+js.o : js.c 	$(CWNNETCSRC)/bdic.c 	$(CWNNETCSRC)/pwd.c 	$(CWNNETCSRC)/gethinsi.c
+
+lint:
+	$(LINT) $(LINTFLAGS) $(SRC2) $(LINTLIBS)
+lint1:
+	$(LINT) $(LINTFLAGS) $(FILE) $(LINTLIBS)
+
+kankana: kankana.o
+	$(RM) $@
+	$(CCLINK) -o $@ $(LDOPTIONS) kankana.o $(CWNNJLIB) $(LDLIBS)  $(EXTRA_LOAD_FLAGS)
+
+clean::
+	$(RM) kankana
+
+all:: libcwnn.a
+
+libcwnn.a: $(OBJS) $(EXTRALIBRARYDEPS)
+	$(RM) $@
+	$(AR) $@ $(OBJS)
+	$(RANLIB) $@
+	$(_NULLCMD_)
+
+lintlib:: llib-lcwnn.ln
+
+llib-lcwnn.ln: $(SRCS) $(EXTRALIBRARYDEPS)
+	$(RM) $@
+	$(LINT) $(LINTLIBFLAG)cwnn $(LINTFLAGS) $(SRCS)
+
+instlib:: install
+
+install:: libcwnn.a
+	@if [ -d $(DESTDIR)$(WNNLIBDIR) ]; then set +x; \
+	else (set -x; $(MKDIRHIER) $(DESTDIR)$(WNNLIBDIR)); fi
+	$(INSTALL) $(INSTALLFLAGS) $(INSTLIBFLAGS) libcwnn.a $(DESTDIR)$(WNNLIBDIR)
+	$(RANLIB) $(RANLIBINSTFLAGS) $(DESTDIR)$(WNNLIBDIR)/libcwnn.a
+
+$(OBJ3) : $(SRC3)
+	$(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
+
+$(OBJ4) : $(SRC4)
+	$(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
+
+$(OBJ5) : $(SRC5)
+	$(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
+
+$(OBJ6) : $(SRC6)
+	$(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
+
+$(OBJ7) : $(SRC7)
+	$(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
+
+$(OBJ8) : $(SRC8)
+	$(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
+
+$(LOCAL_RKOBJS) : $(LOCAL_RKSRCS)
+	@case '${MFLAGS}' in *[ik]*) set +e;; esac; 	cd $(CWNNROMKANSRC); echo "making all in $(CWNNROMKANSRC)"; 	$(MAKE) 'CDEBUGFLAGS=$(CDEBUGFLAGS)' $(MFLAGS)
+
+depend:: .depend
+
+.depend::
+	$(RM) $@
+	$(DEPEND) -f- $(DEPENDFLAGS) -- $(ALLDEFINES) $(DEPEND_DEFINES) -- $(SRCS) > $@
+
+clean::
+	$(RM) $(LINKS)
+
+# ----------------------------------------------------------------------
+# common rules for all Makefiles - do not edit
+
+.c.i:
+	$(RM) $@
+	 $(CC) -E $(CFLAGS) $(_NOOP_) $*.c > $@
+
+emptyrule::
+
+clean::
+	$(RM) *.CKP *.ln *.BAK *.bak *.o core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut *.core "#"*
+
+Makefile::
+	-@if [ -f Makefile ]; then set -x; \
+	$(RM) Makefile.bak; $(MV) Makefile Makefile.bak; \
+	else exit 0; fi
+	$(IMAKE_CMD) -DTOPDIR=$(TOP) -DCURDIR=$(CURRENT_DIR)
+
+tags::
+	$(TAGS) -w *.[ch]
+	$(TAGS) -xw *.[ch] > TAGS
+
+man_keywords::
+
+# ----------------------------------------------------------------------
+# empty rules for directories that do not have SUBDIRS - do not edit
+
+install::
+	@echo "install in $(CURRENT_DIR) done"
+
+install.man::
+	@echo "install.man in $(CURRENT_DIR) done"
+
+install.linkkit::
+	@echo "install.linkkit in $(CURRENT_DIR) done"
+
+Makefiles::
+
+includes::
+
+depend::
+
+# ----------------------------------------------------------------------
+# dependencies generated by makedepend
+
+# dependencies are in .depend
+

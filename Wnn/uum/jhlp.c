@@ -1,5 +1,5 @@
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.1.1.1 2000-01-16 05:07:51 ura Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.1.1.2 2000-01-16 05:11:04 ura Exp $";
 #endif /* lint */
 
 /*
@@ -30,8 +30,16 @@ static char *rcs_id = "$Id: jhlp.c,v 1.1.1.1 2000-01-16 05:07:51 ura Exp $";
  * Commentary:
  *
  * Change log:
+ *	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+ *		ESC 後の待ち時間の変更。
+ *		疑似端末の名称追加。
+ *	'99/04/02	渡邊剛 (Watanabe,Go) <go@isoternet.org/go@dsl.gr.jp>
+ *		utem の変更を止める。
+ *	'99/04/19	TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
+ *		#include <sys/param.h> の追加。
+ *		wait3(2) の第１引数を cast する。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 19,Apr.1999
  *
  * Code:
  *
@@ -70,6 +78,9 @@ struct passwd *getpwuid();
 
 jmp_buf kk_env;
 
+#if (defined(__unix__) || defined(unix)) && !defined(USG)
+#include <sys/param.h>
+#endif
 #ifdef SYSVR2
 #	include <sys/param.h>
 #endif /* SYSVR2 */
@@ -253,9 +264,11 @@ char **argv;
 
 
 #if defined(BSD42) && !defined(DGUX)
+#if !(defined(BSD) && (BSD >= 199306))
     if (saveutmp() < 0) {
 	puts("Can't save utmp\n");
     }
+#endif
 #endif /* BSD42 */
 
 
@@ -761,7 +774,12 @@ chld_handler()
 #endif
     int pid;
 
-    if ((pid = wait3(&status, WNOHANG | WUNTRACED, NULL)) == child_id) {
+/*
+ * Remove warning.
+ * Patched by Hidekazu Kuroki(hidekazu@cs.titech.ac.jp)		1996/8/20
+ */
+/*  if ((pid = wait3(&status, WNOHANG | WUNTRACED, NULL)) == child_id) { */
+    if ((pid = wait3((int *)&status, WNOHANG | WUNTRACED, NULL)) == child_id) {
 	if (WIFSTOPPED(status)) {
 #ifdef SIGCONT
 	    kill(pid, SIGCONT);
@@ -943,8 +961,8 @@ unsigned char keyin0()
 	    return(*bufstart++);
         }
 
-	time_out.tv_sec = 2; /* 2 sec 間待つのだゾ! */
-	time_out.tv_usec = 0;
+	time_out.tv_sec = 0;
+	time_out.tv_usec = 200*1000;   /* 200 msec 間待つのだゾ! */
 	for(rfds = sel_ptn;
 #ifdef linux
 	    (sel_ret = select(20, &rfds, 0, 0, NULL)) < 0 && errno == EINTR;
@@ -1130,9 +1148,11 @@ char **argv;
 	setpgrp(0, pid);
 #endif /* BSD42 */
 
+#if !(defined(BSD) && (BSD >= 199306))
 	if (setutmp(ttypfd) == ERROR) {
 	    puts("Can't set utmp.");
 	} 
+#endif
 
 #ifdef linux
 	setsid();
@@ -1552,9 +1572,11 @@ do_end()
 	perror(prog);
     }
 
+#if !(defined(BSD) && (BSD >= 199306))
     if (resetutmp(ttypfd) == ERROR) {
 	printf("Can't reset utmp.");
     }
+#endif
 #ifdef TIOCSSIZE
     pty_rowcol.ts_lines = 0;
     pty_rowcol.ts_cols = 0;
@@ -1626,7 +1648,16 @@ ptyname(b, pty, no)
 char *b, *pty;
 int no;
 {
+/*
+ * Change pseudo-devices.
+ * Because FreeBSD's master pseudo-devices are pty[p-sP-S][0-9a-v].
+ * Patched by Hidekazu Kuroki(hidekazu@cs.titech.ac.jp)		1996/8/20
+ */
+#if (defined(BSD) && (BSD >= 199306)) /* 4.4BSD-Lite by Taoka */
+    sprintf(b, "%s%1c%1c", pty, "pqrsPQRS"[(no >> 5)], ((no & 0x1f > 9)? 'a' : '0') + (no & 0x1f));
+#else /* ! 4.4BSD-Lite */
     sprintf(b, "%s%1c%1x", pty, 'p' + (no >> 4), no & 0x0f);
+#endif /* ! 4.4BSD-Lite */
 }
 #endif /* !sgi */
 

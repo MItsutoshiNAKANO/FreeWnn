@@ -1,5 +1,5 @@
 /*
- * $Id: pwd.c,v 1.1.1.1 2000-01-16 05:07:45 ura Exp $
+ * $Id: pwd.c,v 1.1.1.2 2000-01-16 05:10:49 ura Exp $
  */
 
 /*
@@ -30,8 +30,11 @@
  * Commentary:
  *
  * Change log:
+ *	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+ *		crypt が、（MD5 のように）salt が NUL ターミネイトされていること
+ *		を要求しているシステムへの対応。
  *
- * Last modified date: 8,Feb.1999
+ * Last modified date: 20,Mar.1999
  *
  * Code:
  *
@@ -58,7 +61,7 @@ new_pwd(src, encd)
 char *src, *encd;
 {
     int i, x,c;
-    char xx[2];
+    char xx[3];
     char *cr;
 
     if(encd == NULL)encd = src;
@@ -66,6 +69,7 @@ char *src, *encd;
     x = time(NULL);
     xx[0] = x & 0x3f;
     xx[1] = (x & 0x3f00) >> 8;
+    xx[2] = '\0';  /* for MD5 (that requires terminator) */
     for (i = 0; i < 2; i++) {
 	c = xx[i] + '.';
 	if (c > '9')

@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.R5ini,v 1.2.2.1 1999/02/08 02:09:55 yamasita Exp $
+# $Id: Makefile.R5ini,v 1.2.2.3 1999/04/01 05:59:12 nakanisi Exp $
 #
 
 # FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -29,8 +29,10 @@
 # Commentary:
 #
 # Change log:
+#	'99/03/20	片山＠ＰＦＵ <kate@pfu.co.jp>
+#		コマンドの訂正（case → echo）及びエラー終了するように変更。
 #
-# Last modified date: 8,Feb.1999
+# Last modified date: 20,Mar.1999
 #
 
 # If TOP dir is not "../../mit", set TOP.
@@ -51,7 +53,8 @@
       IMAKE_CMD = $(NEWTOP)$(IMAKE) -I$(NEWTOP)$(IMIRULESRC) 			-I$(NEWTOP)$(IRULESRC) $(IMAKE_DEFINES)
 
 all:
-	@case "Use make World instead, and set TOP and CONTRIBDIR if necessary"
+	@echo "Use make World instead, and set TOP and CONTRIBDIR if necessary"
+	@false
 
 World::
 	@echo ""
