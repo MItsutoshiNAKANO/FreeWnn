@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_os.h,v 1.4 2001-06-18 09:09:33 ura Exp $
+ *  $Id: wnn_os.h,v 1.5 2001-09-16 11:46:54 hiroo Exp $
  */
 
 /*
@@ -85,11 +85,11 @@ typedef int intfntype;
 typedef intfntype (*intfnptr) ();
 
 /* ISO C and K&R compatibility */
-#if !defined(__P)
+#if !defined(P_)
 # if (defined(__STDC__) && (__STDC__)) || defined(_cplusplus)
-#  define __P(p) p
+#  define P_(p) p
 # else
-#  define __P(p) ()
+#  define P_(p) ()
 # endif
 #endif
 
