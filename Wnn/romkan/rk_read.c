@@ -1,5 +1,5 @@
 /*
- *  $Id: rk_read.c,v 1.4 2002-03-24 22:54:17 hiroo Exp $
+ *  $Id: rk_read.c,v 1.5 2003-05-11 19:01:09 hiroo Exp $
  */
 
 /*
@@ -1403,11 +1403,7 @@ chkL_get_int (lp, ip, range)
     {
       if (!is_digit (*lp))
         return (-1);
-#if defined(UX386) || defined(sun386)
-      out = out * 10;
-#else
       out *= 10;
-#endif
       out += ltov (*lp);
     }
   if (range != 0)

@@ -1,5 +1,5 @@
 /*
- *  $Id: fzk.c,v 1.6 2003-04-06 06:30:48 hiroo Exp $
+ *  $Id: fzk.c,v 1.7 2003-05-11 19:01:06 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -29,7 +29,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-static char rcs_id[] = "$Id: fzk.c,v 1.6 2003-04-06 06:30:48 hiroo Exp $";
+static char rcs_id[] = "$Id: fzk.c,v 1.7 2003-05-11 19:01:06 hiroo Exp $";
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
