@@ -1,5 +1,5 @@
 /*
- *  $Id: termcap.c,v 1.5 2002-05-12 22:51:17 hiroo Exp $
+ *  $Id: termcap.c,v 1.6 2002-06-13 21:27:47 hiroo Exp $
  */
 
 /*
@@ -47,6 +47,15 @@
 #endif /* STDC_HEADERS */
 #include <sys/errno.h>
 #include <sys/ioctl.h>
+#if HAVE_CURSES_H
+#  include <curses.h>
+#elif HAVE_NCURSES_H
+#  include <ncurses.h>
+#endif /* HAVE_CURSES_H */
+#if HAVE_TERM_H
+#  include <term.h>
+#endif
+
 #include "commonhd.h"
 
 #include "sdefine.h"

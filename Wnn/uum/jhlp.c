@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.9 2002-05-12 22:51:17 hiroo Exp $
+ *  $Id: jhlp.c,v 1.10 2002-06-13 21:27:46 hiroo Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.9 2002-05-12 22:51:17 hiroo Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.10 2002-06-13 21:27:46 hiroo Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -152,6 +152,7 @@ main (argc, argv)
   char nlspath[64];
   FuncDataBase *f;
   char *server_env;
+  char errprefix[1024] = "error";
   int i;
   extern char *get_server_env ();
 
@@ -260,7 +261,15 @@ main (argc, argv)
 
   if ((p = getenv (WNN_COUNTDOWN_ENV)) == NULL)
     {
-      setenv (WNN_COUNTDOWN_ENV, "0", 1);
+      if (setenv (WNN_COUNTDOWN_ENV, "0", 1) != 0)
+	{
+#if HAVE_SNPRINTF
+	  snprintf (errprefix, sizeof (errprefix),
+		    "error at %s (%d)", __FILE__, __LINE__); 
+#endif /* HAVE_SNPRINTF */
+	  perror (errprefix);
+	  exit (1);
+	}
     }
   else if (atoi (p) <= 0)
     {
@@ -273,7 +282,15 @@ main (argc, argv)
   else
     {
       sprintf (p, "%d", atoi (p) - 1);
-      setenv (WNN_COUNTDOWN_ENV, p, 1);
+      if (setenv (WNN_COUNTDOWN_ENV, p, 1) != 0)
+	{
+#if HAVE_SNPRINTF
+	  snprintf (errprefix, sizeof (errprefix),
+		    "error at %s (%d)", __FILE__, __LINE__); 
+#endif /* HAVE_SNPRINTF */
+	  perror (errprefix);
+	  exit (1);
+	}
     }
 
   if ((tname = getenv ("TERM")) == NULL)
@@ -1365,7 +1382,12 @@ exec_cmd (argv)
 
 #if !(HAVE_SETENV)
 /** 環境変数のセット */
-void
+/*
+ * This function causes memory leak, but I leave it as it is. Anyway,
+ * this function is called only a few times at the startup of uum.
+ * The 3rd parameter is ignored. It is added for compatibility only.
+ */
+int
 setenv (var, value, overwrite)
      char *var;
      char *value;
@@ -1373,7 +1395,7 @@ setenv (var, value, overwrite)
 {
   extern char **environ;
   char **newenv;
-  register int i, j;
+  int i, j;
 
   j = strlen (var);
   for (i = 0; environ[i] != NULL; i++)
@@ -1387,8 +1409,7 @@ setenv (var, value, overwrite)
     {
       if ((newenv = (char **) malloc ((sizeof (char *)) * (i + 2))) == NULL)
         {
-          puts ("Can't allocate environ.");
-          exit (1);
+	  return (-1);
         }
       for (j = 0; j < i + 1; j++)
         {
@@ -1399,12 +1420,12 @@ setenv (var, value, overwrite)
     }
   if ((environ[i] = malloc (strlen (var) + strlen (value) + 2)) == NULL)
     {
-      puts ("Can't allocate environ area.");
-      exit (1);
+      return (-1);
     }
   strcpy (environ[i], var);
   strcat (environ[i], "=");
   strcat (environ[i], value);
+  return (0);
 }
 #endif /* !HAVE_SETENV */
 

@@ -1,5 +1,5 @@
 /*
- *  $Id: termio.c,v 1.3 2001-06-14 18:16:08 ura Exp $
+ *  $Id: termio.c,v 1.4 2002-06-13 21:27:47 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -28,6 +28,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
+#include <stdio.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#endif /* STDC_HEADERS */
 
 #include "commonhd.h"
 #include "sdefine.h"
@@ -57,11 +65,12 @@ static int bold_mode_fun = 0;
 int
 openTermData ()
 {
-  char *cp, *getenv (), *get_kbd_env ();
+  char *cp, *get_kbd_env ();
   int status;
   int k;
   char lcode[10];
   char termchar[20];
+  char errprefix[1024] = "error";
 
   /* for convert_key --- added by Nide 10/3 */
   if (NULL == (cp = get_kbd_env ()) || 0 != convert_getterm (cp, (0 != verbose_option)))
@@ -106,10 +115,26 @@ openTermData ()
   termchar[0] = 0;
   strcat (termchar, cp);
   strcat (termchar, "-j");
-  setenv ("TERM", termchar);
+  if (setenv ("TERM", termchar, 1) != 0)
+    {
+#if HAVE_SNPRINTF
+      snprintf (errprefix, sizeof (errprefix),
+		"error at %s (%d)", __FILE__, __LINE__); 
+#endif /* HAVE_SNPRINTF */
+      perror (errprefix);
+      exit (1);
+    }
 
   sprintf (lcode, "%d", lines - conv_lines);
-  setenv ("LINES", lcode);
+  if (setenv ("LINES", lcode, 1) != 0)
+    {
+#if HAVE_SNPRINTF
+      snprintf (errprefix, sizeof (errprefix),
+		"error at %s (%d)", __FILE__, __LINE__); 
+#endif /* HAVE_SNPRINTF */
+      perror (errprefix);
+      exit (1);
+    }
 
   if (cursor_normal && cursor_invisible)
     {

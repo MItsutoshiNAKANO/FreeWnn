@@ -1,5 +1,5 @@
 /*
- *  $Id: sheader.h,v 1.8 2002-05-12 22:51:17 hiroo Exp $
+ *  $Id: sheader.h,v 1.9 2002-06-13 21:27:47 hiroo Exp $
  */
 
 /*
@@ -192,20 +192,31 @@ extern FuncDataBase function_db[];
 
 extern int (*default_code_trans[]) ();
 
-/* extern function defines */
+/* ============================================================
+ *   extern function defines
+ * ============================================================ */
 #include "rk_spclval.h"
 #include "rk_fundecl.h"
 #include "wnn_string.h"
 
+/* jhlp.c */
+extern void err (char *);
+#if !(HAVE_SETENV)
+  extern int setenv();
+#endif
+
+/* printf.c */
+extern void FPRINTF ();
+extern void PRINTF ();
+
+/* to be classified */
 extern void b_s_off_raw (void);
 extern void b_s_on_raw (void);
 extern int backward (void);
 extern int buffer_in (void);
 extern int change_ascii_to_int (char*, int*);
-/* extern int change_mode (); */ /* not used? then remove it. */
 extern void change_to_empty_mode (void);
 extern void change_to_insert_mode (void);
-/* extern void chartowchar (); */ /* not used? then remove it. */
 extern void clr_end_screen ();
 extern void clr_line ();
 extern void clr_line_all ();
@@ -371,7 +382,6 @@ extern int c_top_normal ();
 extern int c_end_normal ();
 extern int c_end_nobi_normal ();
 extern int char_q_len_normal ();
-extern void FPRINTF ();
 extern int char_len_normal ();
 extern int t_redraw_move_normal ();
 extern int t_print_l_normal ();
