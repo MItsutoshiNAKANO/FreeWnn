@@ -1,5 +1,5 @@
 /*
- *  $Id: wnnrc_op.c,v 1.5 2001-09-16 11:42:58 hiroo Exp $
+ *  $Id: wnnrc_op.c,v 1.6 2002-03-23 21:18:29 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -31,10 +31,16 @@
 
 /* uumrc operations */
 
-#include "stdio.h"
+#include <stdio.h>
 #include <ctype.h>
-#include <sys/errno.h>
+#include <errno.h>
+#if STDC_HEADERS
+#  include <string.h>
+#elif HAVE_STRINGS_H
+#  include <strings.h>
+#endif /* STDC_HEADERS */
 #include <pwd.h>
+
 #include "jllib.h"
 #include "commonhd.h"
 #include "wnn_config.h"
@@ -42,12 +48,6 @@
 #include "rk_spclval.h"
 #include "sdefine.h"
 #include "sheader.h"
-
-#ifdef BSD42
-#include <strings.h>
-#else
-#include <string.h>
-#endif
 
 extern char *getenv ();
 extern FILE *fopen ();

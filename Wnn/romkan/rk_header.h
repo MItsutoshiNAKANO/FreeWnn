@@ -1,5 +1,5 @@
 /*
- *  $Id: rk_header.h,v 1.3 2001-06-14 18:16:05 ura Exp $
+ *  $Id: rk_header.h,v 1.4 2002-03-23 21:18:29 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -60,13 +60,14 @@
 #endif
 
 #include <stdio.h>
-#ifdef BSD42
+#if STDC_HEADERS
+#  include <string.h>
+#elif HAVE_STRINGS_H
 #  include <strings.h>
 #  define strchr  index
 #  define strrchr rindex
-#else
-#  include <string.h>
-#endif
+#endif /* STDC_HEADERS */
+
 #include "rk_macros.h"
 
 #define ESCCHR  '\033'

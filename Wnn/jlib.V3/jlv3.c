@@ -1,5 +1,5 @@
 /*
- *  $Id: jlv3.c,v 1.4 2002-03-07 17:35:26 hiroo Exp $
+ *  $Id: jlv3.c,v 1.5 2002-03-23 21:18:29 hiroo Exp $
  */
 
 /*
@@ -50,14 +50,21 @@ extern  Variables
         int     wnn_errorno;
 */
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <ctype.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#endif
 #include <fcntl.h>
 #include <pwd.h>
 #include <sys/types.h>
-#include <unistd.h>
+#if HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
 #ifdef  SYSVR2
 #include <malloc.h>
 #else
