@@ -1,5 +1,5 @@
 /*
- *  $Id: de_header.h,v 1.18 2003-05-18 14:34:01 h-abe Exp $
+ *  $Id: de_header.h,v 1.19 2003-06-07 02:22:23 hiroo Exp $
  */
 
 /*
@@ -59,6 +59,8 @@
 #include "wnn_os.h"
 
 #define FILENAME 128
+#define SUCCESS 1
+#define FAILURE NULL
 
 #define CL_MAX 32
 #define ST_MAX 10
@@ -304,7 +306,7 @@ extern void js_param_set (void);
 extern void js_param_get (void);
 extern int envhandle (void);
 /* do_filecom.c */
-extern void file_init (void);
+extern int file_init (void);
 extern void js_mkdir (void);
 extern void js_access (void);
 extern void js_file_list_all (void);
@@ -460,9 +462,9 @@ extern struct JKT_DBN *getjktdbn ();
 extern struct JKT_SBN *getjktsbn ();
 extern struct JKT_SONE *getjktsone ();
 /* rd_jishoop.c */
-extern int rd_word_add1 ();
-extern int rd_word_delete1 ();
-extern int inspect_rd ();
+extern int rd_word_add1 (struct JT *, w_char *, int, w_char *, w_char *);
+extern int rd_word_delete1 (struct JT *, struct HJT *, int);
+extern int inspect_rd (int, int, w_char *, struct jdata *);
 /* readfile.c */
 extern int read_file (struct wnn_file *);
 extern int ud_realloc_hontai (struct JT *);

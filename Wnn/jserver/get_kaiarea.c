@@ -1,5 +1,5 @@
 /*
- *  $Id: get_kaiarea.c,v 1.6 2003-06-04 14:12:12 hiroo Exp $
+ *  $Id: get_kaiarea.c,v 1.7 2003-06-07 02:22:23 hiroo Exp $
  */
 
 /*
@@ -45,7 +45,7 @@
 #include "commonhd.h"
 #include "de_header.h"
 #include "jdata.h"
-#define GLOBAL_VALUE_DEFINE
+#define GLOBAL_VALUE_DEFINE 1
 #include "kaiseki.h"
 #undef  GLOBAL_VALUE_DEFINE
 

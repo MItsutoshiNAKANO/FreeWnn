@@ -1,5 +1,5 @@
 /*
- *  $Id: jbiki.c,v 1.3 2001-06-14 18:16:01 ura Exp $
+ *  $Id: jbiki.c,v 1.4 2003-06-07 02:22:23 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2003
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -29,9 +29,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <stdio.h>
-#include "commonhd.h"
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
+#include <stdio.h>
+
+#include "commonhd.h"
 #include "de_header.h"
 #include "jdata.h"
 #include "kaiseki.h"
@@ -56,18 +60,17 @@ static w_char pan_yomi[256];
 static char pan_tmp[256];
 #endif /* CONVERT_with_SiSheng */
 
-static int ud_biki (), sd_biki (), sd_biki_one (), sdbinary ();
+static int ud_biki (struct JT *, w_char *);
+static int sd_biki ();
+static int sd_biki_one ();
+static int sdbinary ();
 
 int
-jishobiki (yomi, jmtx)
-     w_char *yomi;
-             /** 読みの先頭へのポインタ */
-     struct jdata **jmtx;
-                    /** 結果を返す領域の先頭 */
+jishobiki (w_char *yomi,	/* 読みの先頭へのポインタ */
+	   struct jdata **jmtx)	/* 結果を返す領域の先頭 */
 {
-
-  register struct JT *jtp;
-  register int k;
+  struct JT *jtp;
+  int k;
 #ifdef  CONVERT_with_SiSheng    /* TMP */
   char sisheng_si[LENGTHBUNSETSU];
   w_char yomi_tmp[LENGTHBUNSETSU];
@@ -98,26 +101,23 @@ jishobiki (yomi, jmtx)
             {
 #ifdef  CONVERT_with_SiSheng
               if (ud_biki (jtp, yomi_tmp) == -1)
-                {
 #else
               if (ud_biki (jtp, yomi) == -1)
-                {
 #endif /* CONVERT_with_SiSheng */
+                {
                   goto err;
                 }
-#ifdef  CONVERT_with_SiSheng
             }
+#ifdef  CONVERT_with_SiSheng
           else if ((jtp->syurui & 0x00ff) == WNN_REV_DICT)
             {
               if (rd_biki (jtp, yomi_tmp, dic_table[c_env->jisho[k]].rev) == -1)
-                {
 #else
-            }
           else if (jtp->syurui == WNN_REV_DICT)
             {
               if (rd_biki (jtp, yomi, dic_table[c_env->jisho[k]].rev) == -1)
-                {
 #endif /* CONVERT_with_SiSheng */
+                {
                   goto err;
                 }
             }
@@ -125,11 +125,10 @@ jishobiki (yomi, jmtx)
             {
 #ifdef  CONVERT_with_SiSheng
               if (sd_biki (jtp, yomi_tmp) == -1)
-                {
 #else
               if (sd_biki (jtp, yomi) == -1)
-                {
 #endif /* CONVERT_with_SiSheng */
+                {
                   goto err;
                 }
             }
@@ -150,9 +149,7 @@ err:
 
 
 static int
-ud_biki (jtl, yomi)
-     struct JT *jtl;
-     w_char *yomi;
+ud_biki (struct JT *jtl, w_char *yomi)
 {
   struct jdata *jep;
   register struct uind2 *p;
@@ -166,7 +163,9 @@ ud_biki (jtl, yomi)
   for (ind1 = binary (tary, yomi, jtl->maxtable, jtl); ind1 >= 0; ind1 = tary[ind1].pter1)
     {
 
-      for (p = ((struct uind2 *) ((tary[ind1].pter) + jtl->hontai));; p = ((struct uind2 *) ((p->next) + jtl->hontai)))
+      for (p = ((struct uind2 *) ((tary[ind1].pter) + jtl->hontai));
+	  ;
+	  p = ((struct uind2 *) ((p->next) + jtl->hontai)))
         {
           len = p->yomi[0];
           if (jmt + len > jmt_end)
