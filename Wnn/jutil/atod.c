@@ -1,5 +1,5 @@
 /*
- *  $Id: atod.c,v 1.9 2002-05-12 22:51:17 hiroo Exp $
+ *  $Id: atod.c,v 1.10 2002-07-14 04:26:57 hiroo Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ UJIS 形式を、辞書登録可能形式, 及び固定形式辞書に変換するプログラム。
 */
 
 #ifndef lint
-static char *rcs_id = "$Id: atod.c,v 1.9 2002-05-12 22:51:17 hiroo Exp $";
+static char *rcs_id = "$Id: atod.c,v 1.10 2002-07-14 04:26:57 hiroo Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -45,9 +45,13 @@ static char *rcs_id = "$Id: atod.c,v 1.9 2002-05-12 22:51:17 hiroo Exp $";
 #include <ctype.h>
 #if STDC_HEADERS
 #  include <stdlib.h>
+#  include <string.h>
 #else
 #  if HAVE_MALLOC_H
 #    include <malloc.h>
+#  endif
+#  if HAVE_STRINGS_H
+#    include <strings.h>
 #  endif
 #endif /* STDC_HEADERS */
 #if HAVE_UNISTD_H

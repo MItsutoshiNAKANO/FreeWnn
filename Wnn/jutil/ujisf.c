@@ -1,5 +1,5 @@
 /*
- *  $Id: ujisf.c,v 1.6 2002-05-12 22:51:17 hiroo Exp $
+ *  $Id: ujisf.c,v 1.7 2002-07-14 04:26:57 hiroo Exp $
  */
 
 /*
@@ -40,9 +40,13 @@
 #include <stdio.h>
 #if STDC_HEADERS
 #  include <stdlib.h>
+#  include <string.h>
 #else
 #  if HAVE_MALLOC_H
 #    include <malloc.h>
+#  endif
+#  if HAVE_STRINGS_H
+#    include <strings.h>
 #  endif
 #endif /* STDC_HEADERS */
 

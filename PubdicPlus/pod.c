@@ -21,7 +21,7 @@
  */
 
 #ifndef lint
-static char rcsid[] = "$Id: pod.c,v 1.4 2002-06-10 22:15:16 hiroo Exp $";
+static char rcsid[] = "$Id: pod.c,v 1.5 2002-07-14 04:26:57 hiroo Exp $";
 #endif
 
 #ifdef HAVE_CONFIG_H
@@ -29,26 +29,30 @@ static char rcsid[] = "$Id: pod.c,v 1.4 2002-06-10 22:15:16 hiroo Exp $";
 #endif
 
 #include <stdio.h>
-
-#define bzero(a, c) memset(a, 0, c)
-
 #if STDC_HEADERS
 #  include <stdlib.h>
+#  include <stddef.h>
+#  include <string.h>
 #else
 #  if HAVE_MALLOC_H
 #    include <malloc.h>
 #  endif
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif
 #endif /* STDC_HEADERS */
 
 #define POD_WCHAR
-
 #ifdef POD_WCHAR
 typedef unsigned short Wchar;
 #else
-#include <stddef.h>
 #include <locale.h>
 #include <widec.h>
 #define Wchar wchar_t
+#endif
+
+#if !(HAVE_BZERO) && (HAVE_MEMSET)
+#  define bzero(a, c) memset(a, 0, c)
 #endif
 
 static char *program;

@@ -1,5 +1,5 @@
 /*
- *  $Id: jlv3.c,v 1.8 2002-06-22 13:24:31 hiroo Exp $
+ *  $Id: jlv3.c,v 1.9 2002-07-14 04:26:57 hiroo Exp $
  */
 
 /*
@@ -58,9 +58,13 @@ extern  Variables
 #include <ctype.h>
 #if STDC_HEADERS
 #  include <stdlib.h>
+#  include <string.h>
 #else
 #  if HAVE_MALLOC_H
 #    include <malloc.h>
+#  endif
+#  if HAVE_STRINGS_H
+#    include <strings.h>
 #  endif
 #endif /* STDC_HEADERS */
 #if HAVE_FCNTL_H

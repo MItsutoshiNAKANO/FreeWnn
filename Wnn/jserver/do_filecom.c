@@ -1,5 +1,5 @@
 /*
- *  $Id: do_filecom.c,v 1.8 2002-03-29 15:12:40 hiroo Exp $
+ *  $Id: do_filecom.c,v 1.9 2002-07-14 04:26:57 hiroo Exp $
  */
 
 /*
@@ -40,6 +40,13 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#if STDC_HEADERS
+#  include <string.h>
+#else
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif
+#endif /* STDC_HEADERS */
 #if HAVE_UNISTD_H
 #  include <unistd.h>
 #endif

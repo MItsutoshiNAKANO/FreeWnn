@@ -1,5 +1,5 @@
 /*
- *  $Id: error.c,v 1.13 2002-06-22 13:25:45 hiroo Exp $
+ *  $Id: error.c,v 1.14 2002-07-14 04:26:57 hiroo Exp $
  */
 
 /*
@@ -40,9 +40,13 @@
 #if STDC_HEADERS
 #  include <stdlib.h>
 #  include <stdarg.h>
+#  include <string.h>
 #else
 #  if HAVE_MALLOC_H
 #    include <malloc.h>
+#  endif
+#  if HAVE_STRINGS_H
+#    include <strings.h>
 #  endif
 #endif /* STDC_HEADERS */
 #if HAVE_SYSLOG_H
