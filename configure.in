@@ -1,5 +1,5 @@
 dnl
-dnl $Id: configure.in,v 1.9 2000-01-16 07:15:50 ura Exp $
+dnl $Id: configure.in,v 1.10 2000-01-16 07:30:00 ura Exp $
 dnl
 
 dnl FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -38,6 +38,7 @@ dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
 AC_INIT(Wnn/conv/cvt_head.h)
+AC_CONFIG_HEADER(config.h)
 
 dnl
 dnl srcdir の絶対パスバージョンの作成。本当はこんなものを定義しなくても
@@ -245,6 +246,20 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 dnl
 AC_TYPE_MODE_T
 AC_HEADER_TIME
+AC_CHECK_TYPE(time_t, long)
+AC_CHECK_TYPE(socklen_t, int)
+
+dnl
+dnl Checks for symbol
+dnl
+
+AC_MSG_CHECKING(for RAND_MAX)
+AC_EGREP_CPP(yes,
+[#include <stdlib.h>
+#ifdef RAND_MAX
+yes
+#endif
+],AC_DEFINE(HAVE_RAND_MAX))
 
 dnl
 dnl Checks for library functions.
@@ -254,11 +269,8 @@ AC_FUNC_MEMCMP
 AC_TYPE_SIGNAL
 AC_FUNC_WAIT3
 AC_CHECK_FUNCS(gethostname mkdir select socket strtol)
+AC_CHECK_FUNCS(drand48)
 
-dnl
-dnl
-dnl
-AC_CONFIG_HEADER(config.h)
 
 dnl
 dnl Creating Makefiles.

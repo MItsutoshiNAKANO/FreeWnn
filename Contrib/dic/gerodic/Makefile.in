@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.3 2000-01-16 06:37:13 ura Exp $
+# $Id: Makefile.in,v 1.4 2000-01-16 07:30:00 ura Exp $
 #
 
 # FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -32,32 +32,39 @@
 # Last modified date: 19,Apr.1999
 #
 
+include @top_srcdir@/makerule.mk
+
 # Makefile for gerodic 1.00
 #
 #	Jun. 26th '93 Wnn Consortium
 
-PREFIX = @prefix@
-WNNBINDIR=${PREFIX}/bin/Wnn4
-WNNWNNDIR=${PREFIX}/lib/wnn
 
-WNNOWNER=wnn
 
-JWNNWNNDIR=${WNNWNNDIR}/ja_JP
-JWNNDICDIR=${JWNNWNNDIR}/dic
+#ATOD=${JWNNBINDIR}/atod
+ATOD=${WNNJUTILSRC}/atod
 
-ATOD=${WNNBINDIR}/atod
-WNNTOUCH=${WNNBINDIR}/wnntouch
-HINSI=${JWNNWNNDIR}/hinsi.data
+#WNNTOUCH=${WNNBINDIR}/wnntouch
+WNNTOUCH=${WNNJUTILSRC}/wnntouch
+
+#HINSI=${JWNNWNNDIR}/hinsi.data
+HINSI=${PUBDICPLUSSRC}/hinsi.data
+
 GERODIR=${JWNNDICDIR}/gerodic
 
 SRC=g-jinmei.u
 OBJ=g-jinmei.dic
 
-all: ${SRC}
+all:: ${OBJ}
+
+$(OBJ): $(SRC)
 	${ATOD} -h ${HINSI} ${OBJ} < ${SRC}
 
-install: ${OBJ}
-	-mkdir ${GERODIR}
-	chown ${WNNOWNER} ${GERODIR}
-	install -o ${WNNOWNER} -m 644 ${OBJ} ${GERODIR}
-	${WNNTOUCH} ${GERODIR}/${OBJ}
+install:: ${OBJ}
+	@if [ -d $(DESTDIR)$(GERODIR) ]; then set +x; \
+	else (set -x; $(MKDIRHIER) $(DESTDIR)$(GERODIR)); fi
+	chown ${WNNOWNER} $(DESTDIR)$(GERODIR)
+	@INSTALL@ $(INSTALLFLAGS) $(INSTDATFLAGS) -o ${WNNOWNER} ${OBJ} $(DESTDIR)$(GERODIR)
+	${WNNTOUCH} $(DESTDIR)$(GERODIR)/${OBJ}
+
+clean::
+	$(RM) ${OBJ}

@@ -1,5 +1,5 @@
 /*
- * "$Id: de.c,v 1.4 2000-01-16 07:27:11 ura Exp $"
+ * "$Id: de.c,v 1.5 2000-01-16 07:30:02 ura Exp $"
  */
 
 /*
@@ -47,6 +47,8 @@
 /*
 	Jserver		(Nihongo Demon)
 */
+#include <config.h>
+
 #include <stdio.h>
 #include <signal.h>
 #include "commonhd.h"
@@ -482,10 +484,10 @@ demon_init()	/* initialize Demon */
 	    perror("Malloc for client");
 	    exit(1);
 	}
-#ifdef SRAND48
+#ifdef HAVE_DRAND48
 	srand48(time(NULL));
 #else
-	srand((int)time(NULL);
+	srand((int)time(NULL));
 #endif
 	clientp = 0;	/* V3.0 */
 	cur_clp = 0;	/* V3.0 */
@@ -506,7 +508,7 @@ demon_fin()
     struct sockaddr_un addr_un;
 #endif	/* AF_UNIX */
     struct sockaddr_in addr_in;
-    int addrlen;
+    socklen_t addrlen;
 #ifdef BEOS
     int on = ~0;
 #endif
@@ -874,7 +876,7 @@ static int
 socket_accept()
 {
     struct sockaddr_un addr;
-    int addrlen;
+    socklen_t addrlen;
 
     addrlen = sizeof(addr);
     return accept(sock_d_un, (struct sockaddr *)&addr, &addrlen);
@@ -885,7 +887,7 @@ static int
 socket_accept_in()
 {
     struct sockaddr_in addr;
-    int addrlen;
+    socklen_t addrlen;
 
     addrlen = sizeof(addr);
     return accept(sock_d_in, (struct sockaddr *)&addr, &addrlen);

@@ -1,3 +1,55 @@
+Wed Sep 29 03:19:17 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* 開発版 1.1.1-a012 として内部リリース
+
+Wed Sep 29 02:13:56 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* gerodic の Makefile.in が古いままだった。
+	([freewnn:00143]: 大森さんの指摘)
+
+	* gerodic が make および make install の対象になるようにした。
+
+Wed Sep 29 00:46:31 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/jserver/de_header.h: wnn_get_hinsi_name() のプロトタイプ宣言
+	が間違っていたので修正(関数の型が int(誤) -> char*(正))。
+
+Wed Sep 29 00:01:03 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Makefile.in:    ".c.i" のルールを削除。使ってないので。
+	* makerule.mk.in: ".c.i" のルールを削除。使ってないので。
+
+Tue Sep 28 23:25:42 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/jlib/js.c: BSD系のOSで SUN_LEN を正しく定義
+	([freewnn:00144]: 坂本さん報告のパッチ)
+
+Tue Sep 28 23:03:26 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/etc/strings.c: 使いもしないのに NULL が定義されていたので
+	削除
+
+Tue Sep 28 02:04:44 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* HAVE_DRAND48 および HAVE_RAND_MAX を導入。SRAND48 は削除。
+
+	* Wnn/jserver/do_hindo_s.c (RAND): (1<<31) が int を越えていたので 
+	1U に変更。
+	([freewnn:00136]: 永江さんのパッチ)
+
+Tue Sep 28 01:04:36 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/jserver/de.c: socklen_t 型を導入
+	* Wnn/jserver/error.c: time_t 型を導入
+
+	([freewnn:00140]: にしくさんのパッチ、[freewnn:00135]: 元木さんの
+	アドバイス)
+	
+Tue Sep 28 00:25:12 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
+
+	* Wnn/jserver/de.c: typo の修正(恥ずかしい…)
+	([freewnn:00136] 永江さん、[freewnn:00139] 冨樫さんのパッチ)
+
 Fri Sep 24 03:05:11 1999  Tatsuo Furukawa  <frkwtto@osk3.3web.ne.jp>
 
 	* 開発版 1.1.1-a011 として内部リリース

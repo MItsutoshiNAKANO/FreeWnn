@@ -1,5 +1,5 @@
 /*
- * $Id: commonhd.h,v 1.2 2000-01-16 06:37:14 ura Exp $
+ * $Id: commonhd.h,v 1.3 2000-01-16 07:30:01 ura Exp $
  */
 
 /*
@@ -143,9 +143,6 @@ typedef  unsigned char UCHAR;
 #endif /* sun */
 #endif /* luna */
 
-#if defined(SYSVR2) || defined(sun)
-# define SRAND48
-#endif
 #if defined(SVR4) || defined(hpux)
 #ifndef F_OK
 #define F_OK	0

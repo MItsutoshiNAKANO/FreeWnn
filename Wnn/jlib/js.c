@@ -1,5 +1,5 @@
 /*
- * $Id: js.c,v 1.2 2000-01-16 06:37:14 ura Exp $
+ * $Id: js.c,v 1.3 2000-01-16 07:30:02 ura Exp $
  */
 
 /*
@@ -226,11 +226,11 @@ register char *lang;
 #endif
 	return -1;
     }
-#if !(defined(BSD) && (BSD >= 199306)) /* !4.4BSD-Lite */
-    if (connect(sd,(struct sockaddr *)&saddr,strlen(saddr.sun_path)+sizeof(saddr.sun_family)) == ERROR) {
-#else /* 4.4BSD-Lite */
+
+#if !defined(SUN_LEN)
+# define SUN_LEN(su) (sizeof(*(su)) - sizeof((su)->sun_path) + strlen((su)->sun_path))
+#endif
     if (connect(sd,(struct sockaddr *)&saddr,SUN_LEN(&saddr)) == ERROR) {
-#endif /* 4.4BSD-Lite */
 
 #if DEBUG
 	xerror("jslib:Can't connect socket.\n");

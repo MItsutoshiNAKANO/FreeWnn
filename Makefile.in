@@ -30,7 +30,7 @@ CWNNDIR = cWnn
 
 KWNNDIR = kWnn
 
-SUBDIRS= PubdicPlus $(WNNDIR) $(CWNNDIR) $(KWNNDIR)
+SUBDIRS= PubdicPlus $(WNNDIR) Contrib/dic/gerodic $(CWNNDIR) $(KWNNDIR) 
 
 World::
 	@echo ""
@@ -71,10 +71,6 @@ Everything::
 
 # ----------------------------------------------------------------------
 # common rules for all Makefiles - do not edit
-
-.c.i:
-	$(RM) $@
-	 $(CC) -E $(CFLAGS) $(_NOOP_) $*.c > $@
 
 emptyrule::
 

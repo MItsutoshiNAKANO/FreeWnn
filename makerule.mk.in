@@ -1,5 +1,5 @@
 #
-# $Id: makerule.mk.in,v 1.4 2000-01-16 07:06:07 ura Exp $
+# $Id: makerule.mk.in,v 1.5 2000-01-16 07:30:00 ura Exp $
 #
 
 # FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -140,7 +140,7 @@ JWNNWNNCONSDICDIR = $(JWNNDICDIR)/wnncons
   WNNJSERVERSRC = $(WNNTOP)/jserver
     WNNJUTILSRC = $(WNNTOP)/jutil
        WNNLDSRC = $(WNNTOP)/ld
-   WNNPUBDICSRC = $(WNNTOP)/pubdic
+WNNPUBDICPLUSSRC = $(WNNTOP)/pubdicplus
 WNNWNNCONSSRC = $(WNNTOP)/wnncons
 WNNWNNCONSDICSRC = $(WNNWNNCONSSRC)/dic
    WNNROMKANSRC = $(WNNTOP)/romkan
@@ -305,9 +305,6 @@ depend:: .depend
 # ----------------------------------------------------------------------
 # common rules for all Makefiles - do not edit
 
-.c.i:
-	$(RM) $@
-	 $(CC) -E $(CFLAGS) $(_NOOP_) $*.c > $@
 
 emptyrule::
 

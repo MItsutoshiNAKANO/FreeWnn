@@ -1,5 +1,5 @@
 /*
- * $Id: de_header.h,v 1.1.1.2 2000-01-16 05:10:52 ura Exp $
+ * $Id: de_header.h,v 1.2 2000-01-16 07:30:02 ura Exp $
  */
 
 /*
@@ -499,7 +499,7 @@ extern int wnn_hinsi_number();
 extern int wnn_hinsi_list();
 extern int wnn_has_hinsi();
 extern int wnn_find_hinsi_by_name();
-extern int wnn_get_hinsi_name();
+extern char *wnn_get_hinsi_name();
 extern int wnn_get_fukugou_component_body();
 extern int wnn_get_fukugou_component();
 /* bdic.c */
