@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_string.h,v 1.3 2001-06-14 18:15:57 ura Exp $
+ *  $Id: wnn_string.h,v 1.4 2001-06-18 09:09:33 ura Exp $
  */
 
 /*
@@ -29,8 +29,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _WNN_STRING_
-#define _WNN_STRING_
+#ifndef WNN_STRING_H
+#define WNN_STRING_H
 
 extern int wnn_sStrcpy ();
 extern int wnn_Sstrcpy ();
@@ -53,4 +53,5 @@ extern int check_pwd ();
 #ifdef CHINESE
 extern int wnn_Sstrcat ();
 #endif
-#endif
+
+#endif  /* WNN_STRING_H */

@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.6 2001-06-14 17:55:39 ura Exp $
+#   $Id: Makefile.in,v 1.7 2001-06-18 09:09:46 ura Exp $
 #
 
 #
@@ -31,5 +31,9 @@
 
 include @top_srcdir@/makerule.mk
 
-SUBDIRS = 2.env 3.libwnn 4.cmd 6.jutil
+LIB_WNNMANDIR = 3.libwnn
+
+SERVER_WNNMANDIR = 2.env 4.cmd 6.jutil
+
+SUBDIRS = @WNNMANDIR@
 

@@ -1,5 +1,5 @@
 /*
- *  $Id: msg.h,v 1.3 2001-06-14 18:15:57 ura Exp $
+ *  $Id: msg.h,v 1.4 2001-06-18 09:09:33 ura Exp $
  */
 
 /*
@@ -29,6 +29,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#ifndef WNN_MSG_H
+#define WNN_MSG_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#ifdef HAVE_SYS_PARAM_H
+#include <sys/param.h>
+#endif
+
 struct msg_bd
 {
   int msg_id;
@@ -39,7 +50,7 @@ struct msg_cat
 {
   char lang[32];
   char name[64];
-  char nlspath[64];
+  char nlspath[MAXPATHLEN];
   int msg_cnt;
   struct msg_cat *nextp;
   struct msg_bd *msg_bd;
@@ -55,3 +66,5 @@ struct msg_cat
 extern struct msg_cat *msg_open ();
 extern char *msg_get ();
 extern void msg_close ();
+
+#endif  /* WNN_MSG_H */

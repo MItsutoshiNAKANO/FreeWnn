@@ -1,5 +1,5 @@
 /*
- *  $Id: wnnerror.h,v 1.3 2001-06-14 18:15:57 ura Exp $
+ *  $Id: wnnerror.h,v 1.4 2001-06-18 09:09:33 ura Exp $
  */
 
 /*
@@ -28,6 +28,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
+#ifndef WNN_WNNERROR_H
+#define WNN_WNNERROR_H
 
 /* file 関係のエラー */
 #define WNN_FILE_READ_ERROR     90      /* ファイルを読み込むことができません。 */
@@ -134,8 +137,5 @@ WNN_RDONLY
 #define WNN_NO_HINDO_FILE 115   /* 辞書に頻度ファイルがついていません。 */
 
 #define WNN_CANT_CREATE_PASSWD_FILE 116 /*パスワードのファイルが作成出来ません。 */
-/*
-  Local Variables:
-  kanji-flag: t
-  End:
-*/
+
+#endif  /* WNN_WNNERROR_H */

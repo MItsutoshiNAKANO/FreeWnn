@@ -29,7 +29,7 @@ INSTALLFLAGS = $(INSTLIBFLAGS) -o $(WNNOWNER)
         ATOD = $(KWNNJUTILSRC)/katod
         ATOF = $(KWNNJUTILSRC)/katof
     WNNTOUCH = $(KWNNJUTILSRC)/kwnntouch
-       HINSI = $(KWNNKDSRC)/hinsi.data
+       HINSI = @KHINSI_DATA@
     FZK_FLAG =
 
    INSTALLFLAGS = -m 644 -o $(WNNOWNER)

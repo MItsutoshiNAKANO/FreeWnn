@@ -1,5 +1,5 @@
 /*
- *  $Id: dispatch.c,v 1.4 2001-06-14 18:28:53 ura Exp $
+ *  $Id: dispatch.c,v 1.5 2001-06-18 09:09:40 ura Exp $
  */
 
 /*
@@ -33,7 +33,9 @@
  *      Command Dispatch routine
  */
 
+#if defined(HAVE_CONFIG_H)
 #include <config.h>
+#endif
 
 #include <stdio.h>
 

@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.8 2001-06-14 17:55:28 ura Exp $
+#   $Id: Makefile.in,v 1.9 2001-06-18 09:09:20 ura Exp $
 #
 
 #
@@ -31,13 +31,22 @@
 
 include @top_srcdir@/makerule.mk
 
-WNNDIR = Wnn
+WNNDIR = @Wnn@
 
-CWNNDIR = cWnn
+CWNNDIR = @cWnn@
 
-KWNNDIR = kWnn
+KWNNDIR = @kWnn@
 
-SUBDIRS= PubdicPlus $(WNNDIR) Contrib/dic/gerodic $(CWNNDIR) $(KWNNDIR) 
+LIB_SUBDIRS =  
+SEVER_SUBDIRS =	
+
+# PubdicPlusとContrib/dic/gerodicをSERVER_SUBDIRSにまとめいところだが、
+# SUBDIRSの処理順をうまくしないとWnn/pubdicplusのmakeに失敗するので仕方
+# ない
+JSERVER_SUBDIRS1 = PubdicPlus
+JSERVER_SUBDIRS2 = Contrib/dic/gerodic
+
+SUBDIRS= @JSERVER_SUBDIRS1@ $(WNNDIR) @JSERVER_SUBDIRS2@ $(CWNNDIR) $(KWNNDIR) @SUBDIRS@
 
 World::
 	@echo ""
@@ -75,6 +84,12 @@ Everything::
 	@echo ""
 	@echo "Rebuild of Input Method."
 	@echo ""
+
+distclean::
+	make clean
+	rm -f makerule.mk config.h config.status config.cache config.log
+	rm -f libtool
+	find . -name Makefile -exec rm -f {} \;
 
 # ----------------------------------------------------------------------
 # common rules for all Makefiles - do not edit

@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.6 2001-06-14 17:55:51 ura Exp $
+#   $Id: Makefile.in,v 1.7 2001-06-18 09:10:01 ura Exp $
 #
 
 #
@@ -36,7 +36,7 @@ INSTALL         = @INSTALL@
    INSTALLFLAGS = $(INSTLIBFLAGS) -o $(WNNOWNER)
            ATOD = $(WNNJUTILSRC)/atod
        WNNTOUCH = $(WNNJUTILSRC)/wnntouch
-          HINSI = $(WNNJDSRC)/hinsi.data
+          HINSI = @HINSI_DATA@
 
 LINKS = tankan2.u tankan3.u
 

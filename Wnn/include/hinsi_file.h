@@ -1,5 +1,5 @@
 /*
- *  $Id: hinsi_file.h,v 1.3 2001-06-14 18:15:56 ura Exp $
+ *  $Id: hinsi_file.h,v 1.4 2001-06-18 09:09:33 ura Exp $
  */
 
 /*
@@ -29,9 +29,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/*    品詞ファイルに関する、定義
-*/
+#ifndef WNN_HINSI_FILE_H
+#define WNN_HINSI_FILE_H
 
+/*
+ * 品詞ファイルに関する、定義
+ */
 
 #define MAXHINSI        256
 #define MAXFUKUGOU      256
@@ -75,3 +78,5 @@ struct wnn_hinsi_node
   int kosuu;                    /* 子どもの数 */
   w_char *son;                  /* 最初の子どもへのポインタ */
 };
+
+#endif  /* WNN_HINSI_FILE_H */

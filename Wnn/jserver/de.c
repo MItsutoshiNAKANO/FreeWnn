@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.10 2001-06-14 18:28:53 ura Exp $
+ *  $Id: de.c,v 1.11 2001-06-18 09:09:40 ura Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2001
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -32,7 +32,9 @@
 /*
         Jserver         (Nihongo Demon)
 */
+#if defined(HAVE_CONFIG_H)
 #include <config.h>
+#endif
 
 #include <stdio.h>
 #include <signal.h>
@@ -41,6 +43,7 @@
 #include "jd_sock.h"
 #include "demcom.h"
 #include "wnn_malloc.h"
+#include "wnn_os.h"
 
 #include <ctype.h>
 #include <errno.h>
@@ -52,15 +55,22 @@ extern int errno;               /* Pure BSD */
 #include <sys/types.h>
 #endif
 
-#if (defined(__unix__) || defined(unix)) && !defined(USG)
+#if defined(HAVE_SYS_PARAM_H)
 #include <sys/param.h>
-#endif
+#else /* should be revised... */
+#if defined(BSD42)
+#define NOFILE getdtablesize()
+#endif /* BSD42 */
+#ifdef HITACHI
+#define NOFILE 89
+#endif /* HITACHI */
+#endif /* HAVE_SYS_PARAM_H */
+
 #ifdef SYSVR2
-#include <sys/param.h>
 #ifndef SIGCHLD
 #define SIGCHLD SIGCLD
 #endif
-#endif
+#endif /* SYSVR2 */
 
 #include "de_header.h"
 #ifdef UX386
@@ -69,16 +79,6 @@ extern int errno;               /* Pure BSD */
 #endif
 
 #include "msg.h"
-
-#ifdef BSD42
-#undef NOFILE
-#define NOFILE getdtablesize()
-#endif
-
-#ifdef HITACHI
-#undef NOFILE
-#define NOFILE 89
-#endif /* HITACHI */
 
 #ifdef SOLARIS
 #ifdef SO_DONTLINGER
@@ -182,6 +182,7 @@ static void demon_main (), sel_all (), new_client (), demon_init (), socket_init
 void demon_fin (), del_client (), put2_cur (), putc_cur ();
 static int get_client (), rcv_1_client (), socket_accept (), socket_accept_in ();
 int get2_cur ();
+static void usage __P((void));
 
 char cmd_name[80];
 
@@ -1052,7 +1053,7 @@ get_options (argc, argv)
 
   strcpy (jserverrcfile, LIBDIR);       /* usr/local/lib/wnn */
   strcat (jserverrcfile, SERVER_INIT_FILE);     /* ja_JP/jserverrc */
-  while ((c = getopt (argc, argv, "f:s:h:N:p:")) != EOF)
+  while ((c = getopt (argc, argv, "f:s:h:N:p:v")) != EOF)
     {
       switch (c)
         {
@@ -1080,9 +1081,19 @@ get_options (argc, argv)
         case 'p':
           port = atoi (optarg);
           break;
+        case 'v':
+#ifdef  CHINESE
+  printf ("%s %s (Chinese Multi Client Server)\n", cmd_name, SER_VERSION);
+#else
+# ifdef KOREAN
+  printf ("%s %s (Korean Multi Client Server)\n", cmd_name, SER_VERSION);
+# else
+  printf ("%s %s (Nihongo Multi Client Server)\n", cmd_name, SER_VERSION);
+# endif /* KOREAN */
+#endif /* CHINESE */
+	  exit (0);
         default:
-          printf ("usage: %s [-F <fuzokugo file> -f <initialize-file> -s <script-file(\"-\" for stderr)> -h <hinsi_file> -N <server-NO> -p <port>] \n", cmd_name);
-          exit (1);
+	  usage();
         }
     }
 }
@@ -1125,4 +1136,16 @@ js_kill ()
       put4_cur (clientp - 1);
       putc_purge ();
     }
+}
+
+void
+usage ()
+{
+  fprintf(stderr, 
+	  "usage: %s [-f <init_file> -s <log_file(\"-\" for stderr)> -h <pos_file> -N <serverNO> -p <port_base>]\n",
+	  cmd_name);
+  fprintf(stderr,
+	  "       %s -v\n",
+	  cmd_name);
+  exit (1);
 }

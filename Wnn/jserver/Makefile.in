@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.9 2001-06-14 18:28:53 ura Exp $
+#   $Id: Makefile.in,v 1.10 2001-06-18 09:09:40 ura Exp $
 #
 
 #
@@ -83,17 +83,19 @@ all:: jserver
 
 jserver: $(OBJS)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) @LIBS@
+	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) @LIBS@
 
 clean::
 	$(RM) jserver
+	$(RM) -r .libs
+	$(RM) *.lo *.la
 
 instserver:: install
 
 install:: jserver
 	@if [ -d $(DESTDIR)$(JWNNBINDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(JWNNBINDIR)); fi
-	$(INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) jserver $(DESTDIR)$(JWNNBINDIR)/jserver
+	$(LIBTOOL) $(INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) jserver $(DESTDIR)$(JWNNBINDIR)/jserver
 
 $(OBJ0) : $(SRC0)
 	$(CC) -c $(CFLAGS) $(SERVERINITDEF) $(FORKDEF) $(SOLINGERDEFS) ./`basename $@ .o`.c

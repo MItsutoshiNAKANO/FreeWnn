@@ -201,8 +201,8 @@ socket, connect により、通信路の確立は終了する。
 	WORD		上位バイトから順に2バイト送る。
 	INT		上位バイトから順に4バイト送る。
 
-	TEXT		WORD を先頭から順に送り、最後に Null を送る。
-	STRING		BYTE を先頭から順に送り、最後に Bnull を送る。
+	TEXT		WORD を先頭から順に送り、最後に NULL を送る。
+	STRING		BYTE を先頭から順に送り、最後に BNULL を送る。
 
 構造を持ったデータは、データの並びの順に送り出す。
 ここのデータは上記の手順に従う。
@@ -242,7 +242,7 @@ socket, connect により、通信路の確立は終了する。
 	ホスト名			STRING
 	ユーザー名			STRING
 
-    <= Replay
+    <= Reply
 
 	状態				INT
 	if ( 状態 == ERROR ) {
@@ -276,7 +276,7 @@ socket, connect により、通信路の確立は終了する。
 	識別子			INT		0x0005
 	環境名			STRING
 
-    <= Replay
+    <= Reply
 
 	環境ID			INT
 	if(環境ID == ERROR){
@@ -293,7 +293,7 @@ socket, connect により、通信路の確立は終了する。
 	識別子			INT		0x0007
 	環境名			STRING
 
-    <= Replay
+    <= Reply
 
 	返値			INT
 
@@ -307,7 +307,7 @@ socket, connect により、通信路の確立は終了する。
 	識別子			INT		0x0008
 	環境ID			INT
 
-    <= Replay
+    <= Reply
 
 	返値			INT
 
@@ -321,7 +321,7 @@ socket, connect により、通信路の確立は終了する。
 	識別子			INT		0x0009
 	環境ID			INT
 
-    <= Replay
+    <= Reply
 
 	返値			INT
 
@@ -335,7 +335,7 @@ socket, connect により、通信路の確立は終了する。
 	識別子			INT		0x0006
 	環境ID			INT
 
-    <= Replay
+    <= Reply
 
 	状態			INT
 	if(状態 == ERROR){
@@ -370,7 +370,7 @@ socket, connect により、通信路の確立は終了する。
 	疑似品詞 付属語の頻度		INT
 	疑似品詞 開括弧の頻度		INT
 
-    <= Replay
+    <= Reply
 
 	状態				INT
 	if(状態 == ERROR){
@@ -387,7 +387,7 @@ socket, connect により、通信路の確立は終了する。
 	識別子				INT		0x0042
 	環境ID				INT
 
-    <= Replay
+    <= Reply
 
 	状態				INT
 	if(状態 == ERROR){
@@ -424,7 +424,7 @@ socket, connect により、通信路の確立は終了する。
 	環境ID				INT
 	パス名				STRING
 
-    <= Replay
+    <= Reply
 
 	状態				INT
 	if(状態 == ERROR){
@@ -443,7 +443,7 @@ socket, connect により、通信路の確立は終了する。
 	アクセスモード			INT
 	パス名				STRING
 
-    <= Replay
+    <= Reply
 
 	状態				INT
 
@@ -456,7 +456,7 @@ socket, connect により、通信路の確立は終了する。
 
 	識別子				INT		0x0056
 
-    <= Replay
+    <= Reply
 
 	個数				INT
 	repeat(個数){
@@ -480,7 +480,7 @@ socket, connect により、通信路の確立は終了する。
 	識別子				INT		0x0068
 	環境ID				INT
 
-    <= Replay
+    <= Reply
 
 	個数				INT
 	repeat(個数){
@@ -501,7 +501,7 @@ socket, connect により、通信路の確立は終了する。
 	環境ID				INT
 	パス名				STRING
 
-    <= Replay
+    <= Reply
 
 	ファイルの種類			INT
 
@@ -515,7 +515,7 @@ socket, connect により、通信路の確立は終了する。
 	環境ID				INT
 	ファイルID			INT
 
-    <= Replay
+    <= Reply
 
 	状態				INT
 	if(状態 == ERROR){
@@ -538,7 +538,7 @@ socket, connect により、通信路の確立は終了する。
 	識別子				INT		0x006a
 	パス名				STRING
 
-    <= Replay
+    <= Reply
 
 	状態				INT
 
@@ -555,7 +555,7 @@ socket, connect により、通信路の確立は終了する。
 	識別子				INT		0x006b
 	ファイル唯一子			UNIFIER
 
-    <= Replay
+    <= Reply
 
 	状態				INT
 
@@ -573,7 +573,7 @@ socket, connect により、通信路の確立は終了する。
 	コメント			TEXT
 	パスワード文字列		STRING
 
-    <= Replay
+    <= Reply
 
 	状態				INT
 	if(状態 == ERROR){
@@ -595,7 +595,7 @@ socket, connect により、通信路の確立は終了する。
 	頻度部分パスワード文字列	STRING
 	辞書のタイプ			INT
 
-    <= Replay
+    <= Reply
 
 	状態				INT
 	if(状態 == ERROR){
@@ -650,7 +650,7 @@ socket, connect により、通信路の確立は終了する。
 	ファイルID			INT
 	ファイル名			STRING
 
-    <= Replay
+    <= Reply
 
 	状態				INT
 	if(状態 == ERROR){
@@ -739,7 +739,7 @@ socket, connect により、通信路の確立は終了する。
 
 	# まず、ファイルがすでにサーバ内に存在しているか調べる。
 
-    <= Replay
+    <= Reply
 
 	存在				INT
 	if (存在 != -1) {
@@ -789,7 +789,7 @@ socket, connect により、通信路の確立は終了する。
 	頻度パスワード			STRING
 	正変換/逆変換			INT
 
-    <= Replay
+    <= Reply
 
 	状態				INT
 	if ( 状態 == ERROR ) {
@@ -970,7 +970,7 @@ socket, connect により、通信路の確立は終了する。
 	環境ID				INT
 	読み				TEXT
 
-    <= Replay
+    <= Reply
 
 	辞書単語情報			JOHO
 
@@ -1264,7 +1264,7 @@ socket, connect により、通信路の確立は終了する。
 	環境ID				INT
 	ファイルID			INT		# 辞書の
 
-    <= Replay
+    <= Reply
 
 	状態				INT
 	if(状態 == ERROR){

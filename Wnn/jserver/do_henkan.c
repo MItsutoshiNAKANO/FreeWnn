@@ -1,5 +1,5 @@
 /*
- *  $Id: do_henkan.c,v 1.4 2001-06-14 18:28:54 ura Exp $
+ *  $Id: do_henkan.c,v 1.5 2001-06-18 09:09:41 ura Exp $
  */
 
 /*
@@ -29,7 +29,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#if defined(HAVE_CONFIG_H)
 #include <config.h>
+#endif
 
 #if defined(HAVE_SYS_TYPES_H)
 #include <sys/types.h>

@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.8 2001-06-14 18:28:56 ura Exp $
+#   $Id: Makefile.in,v 1.9 2001-06-18 09:10:09 ura Exp $
 #
 
 #
@@ -82,11 +82,13 @@ includes::
 
 .c.o:
 	$(RM) $@
-	$(CC) -c $(CFLAGS) $(_NOOP_) $*.c
+	$(LIBTOOL) $(CC) -c $(CFLAGS) $(_NOOP_) $*.c
 
 clean::
+	$(RM) -r .libs
+	$(RM) *.lo *.la
 
-all:: $(LINKS) $(OBJS) libcwnn.a
+all:: $(LINKS) $(OBJS) libcwnn.la
 
 includes:: $(LINKS)
 
@@ -167,17 +169,15 @@ lint1:
 
 kankana: kankana.o
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) kankana.o $(CWNNJLIB)
+	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) kankana.o $(CWNNJLIB)
 
 clean::
 	$(RM) kankana
 
-all:: libcwnn.a
+all:: libcwnn.la
 
-libcwnn.a: $(OBJS) $(EXTRALIBRARYDEPS)
-	$(RM) $@
-	$(AR) $@ $(OBJS)
-	$(RANLIB) $@
+libcwnn.la: $(OBJS) $(EXTRALIBRARYDEPS)
+	$(LIBTOOL) $(CC) -o $@ $(OBJS:.o=.lo) -rpath $(DESTDIR)$(WNNLIBDIR) -version-info $(CWNNJLIBVERSION)
 
 lintlib:: llib-lcwnn.ln
 
@@ -187,32 +187,31 @@ llib-lcwnn.ln: $(SRCS) $(EXTRALIBRARYDEPS)
 
 instlib:: install
 
-install:: libcwnn.a
+install:: libcwnn.la
 	@if [ -d $(DESTDIR)$(WNNLIBDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(WNNLIBDIR)); fi
-	$(INSTALL) $(INSTALLFLAGS) $(INSTLIBFLAGS) libcwnn.a $(DESTDIR)$(WNNLIBDIR)
-	$(RANLIB) $(RANLIBINSTFLAGS) $(DESTDIR)$(WNNLIBDIR)/libcwnn.a
+	$(LIBTOOL) $(INSTALL) $(INSTALLFLAGS) $(INSTLIBFLAGS) libcwnn.la $(DESTDIR)$(WNNLIBDIR)
 
 $(OBJ3) : $(SRC3)
-	$(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
+	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
 
 $(OBJ4) : $(SRC4)
-	$(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
+	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
 
 $(OBJ5) : $(SRC5)
-	$(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
+	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
 
 $(OBJ6) : $(SRC6)
-	$(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
+	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
 
 $(OBJ7) : $(SRC7)
-	$(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
+	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
 
 $(OBJ8) : $(SRC8)
-	$(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
+	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
 
 $(OBJ9) : $(SRC9)
-	$(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
+	$(LIBTOOL) $(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c
 
 $(LOCAL_RKOBJS) : $(LOCAL_RKSRCS)
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; 	cd $(CWNNROMKANSRC); echo "making all in $(CWNNROMKANSRC)"; 	$(MAKE) 'CDEBUGFLAGS=$(CDEBUGFLAGS)' $(MFLAGS)

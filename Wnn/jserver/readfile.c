@@ -1,5 +1,5 @@
 /*
- *  $Id: readfile.c,v 1.4 2001-06-14 18:28:55 ura Exp $
+ *  $Id: readfile.c,v 1.5 2001-06-18 09:09:42 ura Exp $
  */
 
 /*
@@ -33,7 +33,9 @@
   (Updatable, Stable) dictionary read routine.
 */
 
+#if defined(HAVE_CONFIG_H)
 #include <config.h>
+#endif
 
 #include <stdio.h>
 

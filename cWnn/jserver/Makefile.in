@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.9 2001-06-14 18:28:56 ura Exp $
+#   $Id: Makefile.in,v 1.10 2001-06-18 09:10:10 ura Exp $
 #
 
 #
@@ -102,6 +102,8 @@ cserver: $(OBJS)
 
 clean::
 	$(RM) cserver
+	$(RM) -r .libs
+	$(RM) *.lo *.la
 
 tserver: $(TOBJS)
 	$(RM) $@
@@ -109,18 +111,20 @@ tserver: $(TOBJS)
 
 clean::
 	$(RM) tserver
+	$(RM) -r .libs
+	$(RM) *.lo *.la
 
 instserver:: install
 
 install:: cserver
 	@if [ -d $(DESTDIR)$(CWNNBINDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(CWNNBINDIR)); fi
-	$(INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) cserver $(DESTDIR)$(CWNNBINDIR)/cserver
+	$(LIBTOOL) $(INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) cserver $(DESTDIR)$(CWNNBINDIR)/cserver
 
 install:: tserver
 	@if [ -d $(DESTDIR)$(CWNNBINDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(CWNNBINDIR)); fi
-	$(INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) tserver $(DESTDIR)$(CWNNBINDIR)/tserver
+	$(LIBTOOL) $(INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) tserver $(DESTDIR)$(CWNNBINDIR)/tserver
 
 includes:: $(HDRS) $(SRC0) $(SRC1) $(TSRCS)
 

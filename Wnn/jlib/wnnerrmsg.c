@@ -1,5 +1,5 @@
 /*
- *  $Id: wnnerrmsg.c,v 1.3 2001-06-14 18:15:58 ura Exp $
+ *  $Id: wnnerrmsg.c,v 1.4 2001-06-18 09:09:37 ura Exp $
  */
 
 /*
@@ -199,11 +199,3 @@ wnn_perror ()
 {
   return (wnn_perror_lang (NULL));
 }
-
-/*
-  Local Variables:
-  eval: (setq kanji-flag t)
-  eval: (setq kanji-fileio-code 0)
-  eval: (mode-line-kanji-code-update)
-  End:
-*/

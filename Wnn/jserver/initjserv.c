@@ -1,5 +1,5 @@
 /*
- *  $Id: initjserv.c,v 1.6 2001-06-14 18:28:54 ura Exp $
+ *  $Id: initjserv.c,v 1.7 2001-06-18 09:09:42 ura Exp $
  */
 
 /*
@@ -29,7 +29,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#if defined(HAVE_CONFIG_H)
 #include <config.h>
+#endif
 
 #include <stdio.h>
 #include <ctype.h>

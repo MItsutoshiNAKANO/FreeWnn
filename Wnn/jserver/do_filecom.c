@@ -1,5 +1,5 @@
 /*
- *  $Id: do_filecom.c,v 1.4 2001-06-14 18:28:54 ura Exp $
+ *  $Id: do_filecom.c,v 1.5 2001-06-18 09:09:41 ura Exp $
  */
 
 /*
@@ -33,7 +33,9 @@
  *      Do Global File command
  */
 
+#if defined(HAVE_CONFIG_H)
 #include <config.h>
+#endif
 
 #include <sys/types.h>
 #include <sys/stat.h>

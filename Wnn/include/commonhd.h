@@ -1,5 +1,5 @@
 /*
- *  $Id: commonhd.h,v 1.5 2001-06-14 18:15:56 ura Exp $
+ *  $Id: commonhd.h,v 1.6 2001-06-18 09:09:32 ura Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2001
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -29,6 +29,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#ifndef WNN_COMMONHD_H
+#define WNN_COMMONHD_H
+
 /****************
  * Common header 
  ****************/
@@ -37,7 +40,7 @@
 #include <unistd.h>
 #endif
 #define JSERVER_VERSION 0x4200  /* minor version */
-#define _SERVER_VERSION "4.20"
+#define _SERVER_VERSION "FreeWnn 1.1.0pl18"
 
 #include "wnnerror.h"
 
@@ -259,7 +262,6 @@ typedef unsigned char UCHAR;
 
 
 #define WNN_FILE_STRING "£×£î£î¤Î¥Õ¥¡¥¤¥ë"
-
 #define WNN_FILE_STRING_LEN 16
 
 
@@ -268,8 +270,5 @@ typedef unsigned char UCHAR;
 #define FILE_NOT_READ -3
 
 /*      file ID */
-/*
-  Local Variables:
-  kanji-flag: t
-  End:
-*/
+
+#endif  /* WNN_COMMONHD_H */

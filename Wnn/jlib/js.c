@@ -1,5 +1,5 @@
 /*
- *  $Id: js.c,v 1.6 2001-06-14 18:28:52 ura Exp $
+ *  $Id: js.c,v 1.7 2001-06-18 09:09:37 ura Exp $
  */
 
 /*
@@ -51,6 +51,9 @@ extern  Variables
         int     wnn_errorno;
 */
 
+#if defined(HAVE_CONFIG_H)
+#include <config.h>
+#endif
 
 #include <stdio.h>
 #include <ctype.h>
@@ -672,7 +675,7 @@ js_open_lang (server, lang, timeout)
 
   if (wnn_msg_cat == NULL)
     {
-      char nlspath[64];
+      char nlspath[MAXPATHLEN];
       strcpy (nlspath, LIBDIR);
       strcat (nlspath, "/%L/%N");
       wnn_msg_cat = msg_open ("libwnn.msg", nlspath, lang);

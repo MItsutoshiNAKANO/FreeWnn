@@ -1,66 +1,109 @@
-/*
- *   $Id: config.h.in,v 1.5 2001-06-14 18:28:51 ura Exp $
- */
+/* config.h.in.  Generated automatically from configure.in by autoheader.  */
 
-/*
- * FreeWnn is a network-extensible Kana-to-Kanji conversion system.
- * This file is part of FreeWnn.
- * 
- * Copyright Kyoto University Research Institute for Mathematical Sciences
- *                 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
- * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
- * 
- * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
- * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+/* Define if you have <sys/wait.h> that is POSIX.1 compatible.  */
+#undef HAVE_SYS_WAIT_H
 
-#undef HAVE_UNISTD_H
-#undef HAVE_SYS_TYPES_H
-#undef HAVE_MKDIR
+/* Define if you have the wait3 system call.  */
+#undef HAVE_WAIT3
 
-/* *_t が定義されているか? (定義されていればここでは undef になる) */
+/* Define to `int' if <sys/types.h> doesn't define.  */
+#undef mode_t
+
+/* Define as the return type of signal handlers (int or void).  */
+#undef RETSIGTYPE
+
+/* Define if the `setpgrp' function takes no argument.  */
+#undef SETPGRP_VOID
+
+/* Define if you have the ANSI C header files.  */
+#undef STDC_HEADERS
+
+/* Define if you can safely include both <sys/time.h> and <time.h>.  */
+#undef TIME_WITH_SYS_TIME
+
+/* Define to `long' if <sys/types.h> doesn't define.  */
 #undef time_t
+
+/* Define to 'socklen_t' if <sys/socket.h> does'n define. */
 #undef socklen_t
 
-
-/*
- *   drand48() があるかどうかを調べる。あれば srand48() もあるはずなので
- *   HAVE_SRAND48 は作らず、これで兼用させる。
- */    
-#undef HAVE_DRAND48
-
-/*
- *   RAND_MAX が定義されていればこれも定義される。ちなみにこれは rand() が
- *   返す値の最大値である。
- */
+/* Define to 'RAND_MAX' if <stdlib.h> does'n define. */
 #undef HAVE_RAND_MAX
 
-/*
- *   perror() が定義されていればこれも定義される。
- */
+/* Define if you have the closesocket function.  */
+#undef HAVE_CLOSESOCKET
+
+/* Define if you have the drand48 function.  */
+#undef HAVE_DRAND48
+
+/* Define if you have the gethostname function.  */
+#undef HAVE_GETHOSTNAME
+
+/* Define if you have the mkdir function.  */
+#undef HAVE_MKDIR
+
+/* Define if you have the perror function.  */
 #undef HAVE_PERROR
 
-/*
- *   その他イロイロ
- */
-#undef HAVE_SETSOCKOPT
-#undef HAVE_CLOSESOCKET
-#undef HAVE_SEND
+/* Define if you have the recv function.  */
 #undef HAVE_RECV
-#undef HAVE_SETPGRP
-#undef SETPGRP_VOID
+
+/* Define if you have the select function.  */
+#undef HAVE_SELECT
+
+/* Define if you have the send function.  */
+#undef HAVE_SEND
+
+/* Define if you have the setsockopt function.  */
+#undef HAVE_SETSOCKOPT
+
+/* Define if you have the socket function.  */
+#undef HAVE_SOCKET
+
+/* Define if you have the strtol function.  */
+#undef HAVE_STRTOL
+
+/* Define if you have the <fcntl.h> header file.  */
+#undef HAVE_FCNTL_H
+
+/* Define if you have the <limits.h> header file.  */
+#undef HAVE_LIMITS_H
+
+/* Define if you have the <malloc.h> header file.  */
+#undef HAVE_MALLOC_H
+
+/* Define if you have the <sgtty.h> header file.  */
+#undef HAVE_SGTTY_H
+
+/* Define if you have the <strings.h> header file.  */
+#undef HAVE_STRINGS_H
+
+/* Define if you have the <sys/file.h> header file.  */
+#undef HAVE_SYS_FILE_H
+
+/* Define if you have the <sys/ioctl.h> header file.  */
+#undef HAVE_SYS_IOCTL_H
+
+/* Define if you have the <sys/param.h> header file.  */
+#undef HAVE_SYS_PARAM_H
+
+/* Define if you have the <sys/time.h> header file.  */
+#undef HAVE_SYS_TIME_H
+
+/* Define if you have the <sys/types.h> header file.  */
+#undef HAVE_SYS_TYPES_H
+
+/* Define if you have the <termio.h> header file.  */
+#undef HAVE_TERMIO_H
+
+/* Define if you have the <unistd.h> header file.  */
+#undef HAVE_UNISTD_H
+
+/* Define if you have the crypt library (-lcrypt).  */
+#undef HAVE_LIBCRYPT
+
+/* Define if you have the nsl library (-lnsl).  */
+#undef HAVE_LIBNSL
+
+/* Define if you have the socket library (-lsocket).  */
+#undef HAVE_LIBSOCKET

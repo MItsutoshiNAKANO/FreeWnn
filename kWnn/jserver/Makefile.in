@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.9 2001-06-14 18:28:57 ura Exp $
+#   $Id: Makefile.in,v 1.10 2001-06-18 09:10:21 ura Exp $
 #
 
 #
@@ -90,13 +90,15 @@ kserver: $(OBJS)
 
 clean::
 	$(RM) kserver
+	$(RM) -r .libs
+	$(RM) *.lo *.la
 
 instserver:: install
 
 install:: kserver
 	@if [ -d $(DESTDIR)$(KWNNBINDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(KWNNBINDIR)); fi
-	$(INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) kserver $(DESTDIR)$(KWNNBINDIR)/kserver
+	$(LIBTOOL) $(INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) kserver $(DESTDIR)$(KWNNBINDIR)/kserver
 
 includes:: $(HDRS) $(SRC0) $(SRC1)
 

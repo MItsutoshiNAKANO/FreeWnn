@@ -1,5 +1,5 @@
 /*
- *  $Id: demcom.h,v 1.3 2001-06-14 18:15:56 ura Exp $
+ *  $Id: demcom.h,v 1.4 2001-06-18 09:09:32 ura Exp $
  */
 
 /*
@@ -29,6 +29,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#ifndef WNN_DEMCOM_H
+#define WNN_DEMCOM_H
+
 /*
         demcom.h
         entry functions definitions
@@ -37,7 +40,7 @@
 /*
  *      Demon Commands
  */
-#define JS_VERSION      0x00
+#define JS_VERSION      0x00    /* changing this will break protocol version check */
 #define JS_OPEN         0x01
 /*      #define JS_OPEN_IN      0x02    */
 #define JS_CLOSE        0x03
@@ -109,3 +112,6 @@
 #define JS_HINSI_NUMBER 0x74
 #define JS_HINSI_DICTS  0x75
 #define JS_HINSI_TABLE_SET 0x76
+
+
+#endif /* WNN_DEMCOM_H */

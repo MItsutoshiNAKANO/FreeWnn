@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_config.h,v 1.3 2001-06-14 18:15:57 ura Exp $
+ *  $Id: wnn_config.h,v 1.4 2001-06-18 09:09:33 ura Exp $
  */
 
 /*
@@ -29,9 +29,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef LIBDIR
-#define LIBDIR          "/usr/local/lib/wnn"
-#endif /* LIBDIR */
+#ifndef WNN_CONFIG_H
+#define WNN_CONFIG_H
 
 #ifdef TAIWANESE
 #ifndef CHINESE
@@ -182,3 +181,5 @@
 
 #define WNN_TIMEOUT     5       /* connect の際に５秒待つんだよ */
 #define WNN_DISP_MODE_LEN       5       /* モード表示に必要なcolumn数 */
+
+#endif  /* WNN_CONFIG_H */

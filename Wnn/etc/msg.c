@@ -1,5 +1,5 @@
 /*
- *  $Id: msg.c,v 1.6 2001-06-14 18:28:51 ura Exp $
+ *  $Id: msg.c,v 1.7 2001-06-18 09:09:31 ura Exp $
  */
 
 /*
@@ -307,7 +307,7 @@ msg_open (name, nlspath, lang)
 {
   struct msg_cat *cd;
 
-  char fn[128];
+  char fn[MAXPATHLEN];
   FILE *fp;
   char data[1024];
   char save[1024];

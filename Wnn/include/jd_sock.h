@@ -1,5 +1,5 @@
 /*
- *  $Id: jd_sock.h,v 1.3 2001-06-14 18:15:57 ura Exp $
+ *  $Id: jd_sock.h,v 1.4 2001-06-18 09:09:33 ura Exp $
  */
 
 /*
@@ -29,9 +29,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/*      jd_sock.h
-        jslib header file
-*/
+#ifndef WNN_JD_SOCK_H
+#define WNN_JD_SOCK_H
+
+/*
+ * jd_sock.h
+ *    jslib header file
+ */
 
 #ifdef UX386
 #undef  AF_UNIX
@@ -107,3 +111,6 @@ static char *sockname = "/tmp/jd_sockV4";       /* for jserver */
 
 #define S_BUF_SIZ       1024    /* NEVER change this */
 #define R_BUF_SIZ       1024    /* NEVER change this */
+
+
+#endif  /* WNN_JD_SOCK_H */

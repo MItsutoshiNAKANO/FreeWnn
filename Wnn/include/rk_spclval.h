@@ -1,5 +1,5 @@
 /*
- *  $Id: rk_spclval.h,v 1.3 2001-06-14 18:15:57 ura Exp $
+ *  $Id: rk_spclval.h,v 1.4 2001-06-18 09:09:33 ura Exp $
  */
 
 /*
@@ -37,8 +37,13 @@
         関数も、ctype.hを使うもの以外はこちらで定義されている。
         rk_macros.h にincludeされている。
 ***********************************************************************/
-/*      Version 3.0
+/*
+ *  Version 3.0
  */
+
+#ifndef RK_SPCLVAL_H
+#define RK_SPCLVAL_H
+
 #ifndef EOLTTR
 
 typedef unsigned int letter;    /* 文字は一般にこの型で表す */
@@ -160,3 +165,5 @@ typedef unsigned char uns_chr;
 
 
 #endif /* of ifndef EOLTTR */
+
+#endif  /* RK_SPCLVAL_H */

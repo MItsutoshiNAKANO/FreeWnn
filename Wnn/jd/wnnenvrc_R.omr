@@ -41,6 +41,7 @@ setdic pubdic/computer.dic	usr/@USR/computer.h	5 1 0 - - 1
 setdic pubdic/symbol.dic	usr/@USR/symbol.h	1 1 0 - - 1
 setdic pubdic/tankan.dic	-			1 1 1 - - 1
 setdic pubdic/bio.dic		usr/@USR/bio.h		1 1 0 - - 1
+setdic gerodic/g-jinmei.dic	usr/@USR/g-jinmei.h	1 1 0 - - 1
 setdic usr/@USR/ud		-			5 0 0 - - 1
 
 ;setdic wnncons/tankan2.dic	-			1 1 1 - - 1

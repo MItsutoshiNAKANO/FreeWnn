@@ -1,5 +1,5 @@
 /*
- *  $Id: wnnstat.c,v 1.5 2001-06-14 18:16:04 ura Exp $
+ *  $Id: wnnstat.c,v 1.6 2001-06-18 09:09:44 ura Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: wnnstat.c,v 1.5 2001-06-14 18:16:04 ura Exp $";
+static char *rcs_id = "$Id: wnnstat.c,v 1.6 2001-06-18 09:09:44 ura Exp $";
 #endif /* lint */
 
 #include <stdio.h>

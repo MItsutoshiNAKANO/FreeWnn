@@ -30,7 +30,7 @@ INSTALLFLAGS = $(INSTLIBFLAGS) -o $(WNNOWNER)
         ATOD = $(CWNNJUTILSRC)/catod
         ATOF = $(CWNNJUTILSRC)/catof
     WNNTOUCH = $(CWNNJUTILSRC)/cwnntouch
-       HINSI = $(TWNNTDSRC)/cixing.data
+       HINSI = @THINSI_DATA@
 #       HINSI = ./cixing.data
     FZK_FLAG =
 

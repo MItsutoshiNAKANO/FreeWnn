@@ -1,5 +1,5 @@
 /*
- *  $Id: jh.h,v 1.3 2001-06-14 18:15:57 ura Exp $
+ *  $Id: jh.h,v 1.4 2001-06-18 09:09:33 ura Exp $
  */
 
 /*
@@ -29,9 +29,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#ifndef WNN_JH_H
+#define WNN_JH_H
+
 /* 
-  header file for jisho structure program.
-*/
+ * header file for jisho structure program.
+ */
 
 /* The following defin and structure definition
  * are concerned with ASCII (UJIS) files.
@@ -87,3 +90,6 @@ extern w_char hinsi_list[];
 #define DEF_ENTRIES 10000
 
 #define HEAPINC 1000
+
+
+#endif  /* WNN_JH_H */

@@ -1,5 +1,5 @@
 /*
- *  $Id: jl.c,v 1.6 2001-06-14 18:28:52 ura Exp $
+ *  $Id: jl.c,v 1.7 2001-06-18 09:09:36 ura Exp $
  */
 
 /*
@@ -33,7 +33,9 @@
         Nihongo Henkan Hi-level Library
 */
 
+#if defined(HAVE_CONFIG_H)
 #include <config.h>
+#endif
 
 #include "commonhd.h"
 #include "wnn_config.h"

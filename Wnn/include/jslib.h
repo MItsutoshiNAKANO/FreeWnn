@@ -1,5 +1,5 @@
 /*
- *  $Id: jslib.h,v 1.3 2001-06-14 18:15:57 ura Exp $
+ *  $Id: jslib.h,v 1.4 2001-06-18 09:09:33 ura Exp $
  */
 
 /*
@@ -30,9 +30,12 @@
  */
 
 /*
-        Nihongo Henkan  Library Header File
-*/
-#ifndef JSLIB
+ *       Nihongo Henkan  Library Header File
+ */
+
+#ifndef WNN_JSLIB_H
+#define WNN_JSLIB_H
+
 #ifndef _WNN_SETJMP
 #define _WNN_SETJMP
 #include <setjmp.h>
@@ -43,8 +46,6 @@
 #ifndef w_char
 #define w_char  unsigned short
 #endif /* w_char */
-
-#define JSLIB
 
 /* 前端ベクタ(品詞番号)の定義 */
 #define WNN_BUN_SENTOU  -1      /* 大文節の先頭になれる奴 */
@@ -463,4 +464,4 @@ extern int js_word_search ();
 extern int js_word_search_by_env ();
 
 #endif
-#endif /* JSLIB */
+#endif  /* WNN_JSLIB_H */

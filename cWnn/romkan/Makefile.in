@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.7 2001-06-14 17:56:03 ura Exp $
+#   $Id: Makefile.in,v 1.8 2001-06-18 09:10:14 ura Exp $
 #
 
 #
@@ -53,9 +53,11 @@ includes::
 
 .c.o:
 	$(RM) $@
-	$(CC) -c $(CFLAGS) $(_NOOP_) $*.c
+	$(LIBTOOL) $(CC) -c $(CFLAGS) $(_NOOP_) $*.c
 
 clean::
+	$(RM) -r .libs
+	$(RM) *.lo *.la
 
 all:: $(HDRS) $(SRCS) $(OBJS)
 

@@ -54,7 +54,7 @@ JS_OPEN_LANG( )     UNIX Programmer's Manual      JS_OPEN_LANG( )
 使用上の注意
 
      タイムアウトには、 SIGALARM を使用しているので、注意が必要で
-     ある。 SIGALARM を使用する場合には、 timeout に 0 を設定しな
+     ある。 SIGALARM を使用しない場合には、 timeout に 0 を設定しな
      ければならない。
 
 

@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.7 2001-06-14 17:56:04 ura Exp $
+#   $Id: Makefile.in,v 1.8 2001-06-18 09:10:17 ura Exp $
 #
 
 #
@@ -34,7 +34,7 @@ include @top_srcdir@/makerule.mk
 INSTALL      = @INSTALL@
 
        UUMOWNER = root
-       INCLUDES = -I$(CWNNINCLUDESRC) -I$(CWNNROMKANSRC)
+       INCLUDES = -I$(CWNNINCLUDESRC) -I$(CWNNROMKANSRC) -I$(TOP)
         DEFINES = $(CWNNDEFINES) $(CWNNLANGDEF)
 LOCAL_INSTFLAGS = $(INSTUIDFLAGS) -o $(UUMOWNER)
 LOCAL_LIBRARIES = $(CWNNJLIB) $(CWNNCONVLIB)

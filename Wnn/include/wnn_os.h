@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_os.h,v 1.3 2001-06-14 18:15:57 ura Exp $
+ *  $Id: wnn_os.h,v 1.4 2001-06-18 09:09:33 ura Exp $
  */
 
 /*
@@ -29,8 +29,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _WNN_OS_
-#define _WNN_OS_
+#ifndef WNN_OS_H
+#define WNN_OS_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 /* OS dependent */
 
@@ -47,13 +51,13 @@
 # define re_signal(x, y)
 #endif
 
-#if defined(SYSVR2) || defined(UX386)
+#if defined(HAVE_SYS_PARAM_H)
 #include <sys/param.h>
 #define getdtablesize() (NOFILE)        /* sys/param.h must be included */
 #ifndef SIGCHLD
-# define SIGCHLD SIGCLD
+#define SIGCHLD SIGCLD
 #endif
-#endif
+#endif /* HAVE_SYS_PARAM_H */
 
 #include <sys/types.h>
 #include <sys/file.h>
@@ -65,17 +69,6 @@
 #ifdef TERMINFO
 #include <curses.h>
 #include <term.h>
-#endif
-
-
-/*
-  if your system has wait3() system call define HAVE_WAIT3.
-  wait3() doesn't have to be fully supported.
-  uum uses only NULL for the 3rd parameter rusage.
- */
-
-#if !defined(UX386) && !defined(SVR4) && !defined(hpux) && !defined(AIXV3)
-#define HAVE_WAIT3
 #endif
 
 #if defined(luna) && !defined(SIGNALRETURNSINT)
@@ -91,4 +84,14 @@ typedef int intfntype;
 #endif
 typedef intfntype (*intfnptr) ();
 
-#endif /* _WNN_OS_ */
+/* ISO C and K&R compatibility */
+#if !defined(__P)
+# if (defined(__STDC__) && (__STDC__)) || defined(_cplusplus)
+#  define __P(p) p
+# else
+#  define __P(p) ()
+# endif
+#endif
+
+
+#endif  /* WNN_OS_H */

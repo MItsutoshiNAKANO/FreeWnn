@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.4 2001-06-14 18:16:07 ura Exp $
+ *  $Id: jhlp.c,v 1.5 2001-06-18 09:10:00 ura Exp $
  */
 
 /*
@@ -30,8 +30,12 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.4 2001-06-14 18:16:07 ura Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.5 2001-06-18 09:10:00 ura Exp $";
 #endif /* lint */
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include <stdio.h>
 #include <signal.h>
@@ -65,12 +69,9 @@ struct passwd *getpwuid();
 
 jmp_buf kk_env;
 
-#if (defined(__unix__) || defined(unix)) && !defined(USG)
+#if defined(HAVE_SYS_PARAM_H)
 #include <sys/param.h>
 #endif
-#ifdef SYSVR2
-#       include <sys/param.h>
-#endif /* SYSVR2 */
 
 #ifdef HAVE_WAIT3
 #       include <sys/wait.h>

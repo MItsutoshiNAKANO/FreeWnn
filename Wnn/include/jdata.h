@@ -1,5 +1,5 @@
 /*
- *  $Id: jdata.h,v 1.3 2001-06-14 18:15:57 ura Exp $
+ *  $Id: jdata.h,v 1.4 2001-06-18 09:09:33 ura Exp $
  */
 
 /*
@@ -28,6 +28,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
+#ifndef WNN_JDATA_H
+#define WNN_JDATA_H
 
 #ifndef JS
 struct jdata
@@ -266,4 +269,7 @@ struct b_koho
   int serial;
   int dic_no;
 };
-#endif
+#endif  /* CONVERT_by_STROKE */
+
+
+#endif  /* WNN_JDATA_H */

@@ -1,5 +1,5 @@
 /*
- *  $Id: jllib.h,v 1.3 2001-06-14 18:15:57 ura Exp $
+ *  $Id: jllib.h,v 1.4 2001-06-18 09:09:33 ura Exp $
  */
 
 /*
@@ -30,15 +30,14 @@
  */
 
 /*
-        Nihongo Henkan  Library Header File
-*/
+ *       Nihongo Henkan  Library Header File
+ */
 
-#ifndef JLLIB
-#ifndef JSLIB
+#ifndef WNN_JLLIB_H
+#define WNN_JLLIB_H
+
 #include "jslib.h"
-#endif
 
-#define JLLIB
 
 /*
    ユーザープログラムは、直接この構造体の内容をアクセスする必要は無いはず。
@@ -302,4 +301,5 @@ extern char *wnn_perror_lang ();
 #ifdef  CONVERT_by_STROKE
 extern void jl_get_zenkouho_yomi ();
 #endif
-#endif /* JLLIB */
+
+#endif  /* WNN_JLLIB_H */

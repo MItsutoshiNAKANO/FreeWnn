@@ -1,5 +1,5 @@
 /*
- *  $Id: cplib.h,v 1.3 2001-06-14 18:15:56 ura Exp $
+ *  $Id: cplib.h,v 1.4 2001-06-18 09:09:32 ura Exp $
  */
 
 /*
@@ -29,8 +29,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/**  cWnn  Version 1.1   **/
+#ifndef WNN_CPLIB_H
+#define WNN_CPLIB_H
 
+/**  cWnn  Version 1.1   **/
 
 #ifndef min
 #define min(a,b) ((int)(a) > (int)(b)? (b):(a))
@@ -114,3 +116,5 @@ extern char *zy_yunmu_tbl[];    /* ZhuYin YunMu table   */
 
 extern int pinyin_tbl[];        /* PinYin table         */
 extern int zhuyin_tbl[];        /* ZhuYin table         */
+
+#endif  /* WNN_CPLIB_H */

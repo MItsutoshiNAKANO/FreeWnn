@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_malloc.h,v 1.4 2001-06-14 18:15:57 ura Exp $
+ *  $Id: wnn_malloc.h,v 1.5 2001-06-18 09:09:33 ura Exp $
  */
 
 /*
@@ -29,8 +29,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WNN_MALLOC
-#define WNN_MALLOC
+#ifndef WNN_MALLOC_H
+#define WNN_MALLOC_H
 
 #ifdef hpux
 extern void *malloc0 (size_t);
@@ -45,4 +45,5 @@ extern char *realloc0 ();
 #define malloc(s)       malloc0(s)
 #define free(p)         free0(p)
 #define realloc(p,s)    realloc0(p,s)
-#endif /* WNN_MALLOC */
+
+#endif  /* WNN_MALLOC_H */

@@ -1,5 +1,5 @@
 /*
- *  $Id: jlib.h,v 1.3 2001-06-14 18:15:57 ura Exp $
+ *  $Id: jlib.h,v 1.4 2001-06-18 09:09:33 ura Exp $
  */
 
 /*
@@ -40,6 +40,10 @@
         28/Nov/1986
         23/Oct/1986
 */
+
+#ifndef WNN_JLIB_H
+#define WNN_JLIB_H
+
 #include <setjmp.h>
 
 #ifndef w_char
@@ -146,8 +150,5 @@ struct jwho
 
 #define JWHO struct jwho
 
-/*
-  Local Variables:
-  kanji-flag: t
-  End:
-*/
+
+#endif  /* WNN_JLIB_H */

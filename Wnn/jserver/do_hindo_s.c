@@ -1,5 +1,5 @@
 /*
- *  $Id: do_hindo_s.c,v 1.5 2001-06-14 18:16:01 ura Exp $
+ *  $Id: do_hindo_s.c,v 1.6 2001-06-18 09:09:42 ura Exp $
  */
 
 /*
@@ -29,7 +29,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#if defined(HAVE_CONFIG_H)
 #include <config.h>
+#endif
 
 #include "commonhd.h"
 #include "jslib.h"
