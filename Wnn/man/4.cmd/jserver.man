@@ -1,5 +1,5 @@
 .\"
-.\"   $Id: jserver.man,v 1.4 2001-09-16 11:51:46 hiroo Exp $
+.\"   $Id: jserver.man,v 1.5 2002-03-04 04:01:53 aono Exp $
 .\"
 .\"
 .\" FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -91,16 +91,15 @@ getservbyname で取得できない場合はヘッダファイル jd_sock.h で定義され
 ている WNN_PORT_IN の値が使われる。
 .TP 8
 -u
-.TP 8
 unix domain socket を使用する。
+.TP 8
 -4
 inet socket を使用する。
 .TP 8
 -6
 inet6 socket を使用する。
-.TP 8
--u, -4, -6 のいずれも指定しない場合は、全てのプロトコルが使用される。
 .PP
+-u, -4, -6 のいずれも指定しない場合は、全てのプロトコルが使用される。
 .SH ファイル
  /tmp/jd_sockV4
 .HP 0
