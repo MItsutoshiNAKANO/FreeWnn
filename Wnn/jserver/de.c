@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.19 2002-03-24 22:54:16 hiroo Exp $
+ *  $Id: de.c,v 1.20 2002-03-31 06:26:52 hiroo Exp $
  */
 
 /*
@@ -99,7 +99,8 @@
 #undef USE_SETSOCKOPT
 #endif
 
-#define QUIET   1
+#define DOFORK	1
+#define QUIET	1
 
 #define NOT_QUIET       DEBUG | !QUIET
 
@@ -201,7 +202,7 @@ static void dmp ();
 #endif
 
 
-char cmd_name[MAXPATHLEN];
+char cmd_name[16];
 
 /* No arguments are used. Only options. */
 int
@@ -217,7 +218,7 @@ main (argc, argv)
 
   char nlspath[64];
 
-  strncpy (cmd_name, argv[0], sizeof(cmd_name));
+  strcpy (cmd_name, WNN_DAEMON_NAME);
   strcpy (lang_dir, LANG_NAME);
   strcpy (nlspath, LIBDIR);
   strcat (nlspath, "/%L/%N");
@@ -225,7 +226,7 @@ main (argc, argv)
   wnn_msg_cat = msg_open ("libwnn.msg", nlspath, lang_dir);
   if (wnn_msg_cat == NULL)
     {
-      fprintf (stderr, "libwnn: Cannot open message file for libwnn.a\n");
+      log_err ("Cannot open message file libwnn.msg.");
     }
   if (cswidth_name = get_cswidth_name (LANG_NAME))
     set_cswidth (create_cswidth (cswidth_name));
@@ -233,33 +234,35 @@ main (argc, argv)
   port = -1;
 
   setuid (geteuid ());
-/* check whether another jserver already exists. */
   get_options (argc, argv);
   print_version();
-#ifndef NOTFORK
-  if (fork ())
+  log_debug("invoked as %s.", argv[0]);
+  if (DOFORK)
     {
-      signal (SIGCHLD, _exit);
-      signal (SIGHUP, SIG_IGN);
-      signal (SIGINT, SIG_IGN);
-      signal (SIGQUIT, SIG_IGN);
+      if (fork ())
+	{
+	  signal (SIGCHLD, _exit);
+	  signal (SIGHUP, SIG_IGN);
+	  signal (SIGINT, SIG_IGN);
+	  signal (SIGQUIT, SIG_IGN);
 #ifdef  SIGTSTP
-      signal (SIGTSTP, SIG_IGN);
+	  signal (SIGTSTP, SIG_IGN);
 #endif
-      signal (SIGTERM, _exit);
-      pause ();
+	  signal (SIGTERM, _exit);
+	  pause ();
+	}
     }
-#endif /* !NOTFORK */
 
   signal (SIGHUP, signal_hand);
   signal (SIGINT, signal_hand);
   signal (SIGQUIT, signal_hand);
   signal (SIGTERM, terminate_hand);
-#ifndef NOTFORK
+  if (DOFORK)
+    {
 #ifdef  SIGTSTP
-  signal (SIGTSTP, SIG_IGN);
+      signal (SIGTSTP, SIG_IGN);
 #endif /* SIGTSTP */
-#endif /* !NOTFORK */
+    }
   read_default ();
   daemon_init ();
 
@@ -272,41 +275,42 @@ main (argc, argv)
 
   read_default_files ();
 
-#ifndef NOTFORK
-  /* End of initialization, kill parent */
-  kill (getppid (), SIGTERM);
-  fclose (stdin);
-  fclose (stdout);
-  if (!noisy)
+  if (DOFORK)
     {
+      /* End of initialization, kill parent */
+      kill (getppid (), SIGTERM);
+      fclose (stdin);
+      fclose (stdout);
+      if (!noisy)
+	{
 #if !(defined(BSD) && (BSD >= 199306))  /* !4.4BSD-Lite by Taoka */
-      fclose (stderr);
+	  fclose (stderr);
 #else /* 4.4BSD-Lite */
-      int fd = open ("/dev/null", O_WRONLY);
-      if (fd < 0)
-        {
-          xerror ("Cannot open /dev/null");
-        }
-      dup2 (fd, 2);
-      close (fd);
+	  int fd = open ("/dev/null", O_WRONLY);
+	  if (fd < 0)
+	    {
+	      xerror ("Cannot open /dev/null");
+	    }
+	  dup2 (fd, 2);
+	  close (fd);
 #endif /* 4.4BSD-Lite */
-    }
+	}
 
 #ifdef SETPGRP_VOID
-  setpgrp ();
+      setpgrp ();
 #else /* !SETPGRP_VOID */
 # if !defined(TIOCNOTTY) && defined(SVR4)
 #  define TIOCNOTTY     _IO('t', 113)
 # endif /* !defined(TIOCNOTTY) && defined(SVR4) */
 #ifndef HITACHI
-  if ((tmpttyfd = open ("/dev/tty", O_RDWR)) >= 0)
-    {
-      ioctl (tmpttyfd, TIOCNOTTY, 0);
-      close (tmpttyfd);
-    }
+      if ((tmpttyfd = open ("/dev/tty", O_RDWR)) >= 0)
+	{
+	  ioctl (tmpttyfd, TIOCNOTTY, 0);
+	  close (tmpttyfd);
+	}
 #endif /* HITACHI */
 #endif /* SETPGRP_VOID */
-#endif /* !NOTFORK */
+    }
 
   daemon_main ();
 

@@ -1,5 +1,5 @@
 /*
- *  $Id: de_header.h,v 1.10 2002-03-09 16:50:31 aono Exp $
+ *  $Id: de_header.h,v 1.11 2002-03-31 06:26:52 hiroo Exp $
  */
 
 /*
@@ -30,6 +30,16 @@
  */
 
 #define DAEMON
+
+#if defined(CHINESE)
+#define WNN_DAEMON_NAME "cserver"
+#else
+#  if defined(KOREAN)
+#  define WNN_DAEMON_NAME "kserver"
+#  else
+#  define WNN_DAEMON_NAME "jserver"
+#  endif        /* KOREAN */
+#endif        /* CHINESE */
 
 #include "jslib.h"
 #include "ddefine.h"
