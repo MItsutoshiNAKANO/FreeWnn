@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_os.h,v 1.10 2002-06-15 13:02:14 hiroo Exp $
+ *  $Id: wnn_os.h,v 1.11 2002-06-17 17:28:53 hiroo Exp $
  */
 
 /*
@@ -40,6 +40,7 @@
 #include <signal.h>
 #if STDC_HEADERS
 #  include <limits.h>
+#endif /* STDC_HEADERS */
 #if HAVE_SYS_PARAM_H
 #  include <sys/param.h>
 #endif

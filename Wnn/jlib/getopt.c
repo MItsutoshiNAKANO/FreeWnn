@@ -1,5 +1,5 @@
 /*
- *  $Id: getopt.c,v 1.4 2002-06-15 13:02:14 hiroo Exp $
+ *  $Id: getopt.c,v 1.5 2002-06-17 17:28:53 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -43,6 +43,8 @@
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
+
+#if !(HAVE_GETOPT)
 
 #include <stdio.h>
 #if STDC_HEADERS
@@ -132,3 +134,4 @@ getopt (argc, argv, opts)
   return (c);
 }
 
+#endif /* !HAVE_GETOPT */

@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.29 2002-06-15 13:02:13 hiroo Exp $
+dnl   $Id: configure.in,v 1.30 2002-06-17 17:28:53 hiroo Exp $
 dnl
 
 dnl
@@ -388,15 +388,16 @@ dnl
 dnl socklen_t は sys/socket.h や bits/socket.h で定義されているので、
 dnl AC_CHECK_TYPE では検出できない
 dnl
-dnl AC_MSG_CHECKING(for socklen_t)
-dnl AC_EGREP_CPP(socklen_t, [#include <sys/socket.h>], AC_MSG_RESULT(yes), 
-dnl [ 
-dnl AC_DEFINE(socklen_t, int)
-dnl AC_MSG_RESULT(no)
-dnl ])
-AC_CHECK_TYPES(socklen_t,,
-	AC_DEFINE(socklen_t, int),
-	[INCLUDES = sys/socket.h])
+AC_MSG_CHECKING(for socklen_t)
+AC_EGREP_CPP(socklen_t, [#include <sys/socket.h>], AC_MSG_RESULT(yes), 
+[ 
+AC_DEFINE(socklen_t, int)
+AC_MSG_RESULT(no)
+])
+dnl code below is for the same thing with autoconf 2.53
+dnl AC_CHECK_TYPES(socklen_t,,
+dnl 	AC_DEFINE(socklen_t, int),
+dnl	[INCLUDES = sys/socket.h])
 
 dnl
 dnl Checks for symbol
@@ -427,7 +428,7 @@ AC_FUNC_SETPGRP
 dnl FreeWnn do not use the 3rd parameter of wait3().
 dnl AC_FUNC_WAIT3
 
-AC_CHECK_FUNCS(drand48 fchmod \
+AC_CHECK_FUNCS(drand48 fchmod getopt \
 	gethostname select socket closesocket setsockopt send recv \
 	getdtablesize getrlimit syslog vsyslog setenv snprintf)
 dnl for bcopy/index -> memcpy/strchr conversion (preparation):
