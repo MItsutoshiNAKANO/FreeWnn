@@ -1,5 +1,5 @@
 /*
- *  $Id: msg.c,v 1.7 2001-06-18 09:09:31 ura Exp $
+ *  $Id: msg.c,v 1.8 2002-03-08 19:57:40 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -48,70 +48,10 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "commonhd.h"
 #include "wnn_os.h"
 #include "msg.h"
-
-extern char *getenv ();
-
-#ifdef hpux
-void *
-bsearch (ky, bs, nel, width, compar)
-     const void *ky;
-     const void *bs;
-     size_t nel;
-     size_t width;
-     int (*compar) (const void *, const void *);
-#else
-static char *
-bsearch (ky, bs, nel, width, compar)
-     char *ky;
-     char *bs;
-     unsigned long nel;
-     unsigned long width;
-     int (*compar) ();
-#endif /* hpux */
-{
-  char *key = ky;
-  char *base = bs;
-  int two_width = width + width;
-  char *last = base + width * (nel - 1);
-
-  register char *p;
-  register int ret;
-#ifdef hpux
-  register int tmp;
-#endif
-
-  while (last >= base)
-    {
-      p = base + width * ((last - base) / two_width);
-      ret = (*compar) ((void *) key, (void *) p);
-
-      if (ret == 0)
-        return ((char *) p);    /* found */
-#ifdef hpux
-      if (ret < 0)
-        {
-          tmp = p;
-          tmp -= width;
-          last = tmp;
-        }
-      else
-        {
-          tmp = p;
-          tmp += width;
-          base = tmp;
-        }
-#else /* hpux */
-      if (ret < 0)
-        last = p - width;
-      else
-        base = p + width;
-#endif /* hpux */
-    }
-  return ((char *) 0);          /* not found */
-}
 
 static char *
 getlang (lang)
@@ -222,13 +162,13 @@ _escape (op, ip)
 
 static char *
 get_msg_bd (cd, id)
-     register struct msg_cat *cd;
-     register int id;
+     struct msg_cat *cd;
+     int id;
 {
   register struct msg_bd *bd;
   if (cd->msg_bd == 0 || cd->msg_cnt == 0)
     return (NULL);
-  bd = (struct msg_bd *) bsearch (id, cd->msg_bd, cd->msg_cnt, sizeof (struct msg_bd), _search);
+  bd = (struct msg_bd *) bsearch (&id, cd->msg_bd, cd->msg_cnt, sizeof (struct msg_bd), _search);
   if (bd == NULL)
     return (NULL);
   return (bd->msg);
