@@ -5,6 +5,7 @@
 \comment Copyright Wnn Consortium. 1993
 \comment
 \comment Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
+\comment Maintainer:  FreeWnn Project	<freewnn@tomo.gr.jp>
 \comment
 \comment This program is free software; you can redistribute it and/or modify
 \comment it under the terms of the GNU General Public License as published by
@@ -23,8 +24,11 @@
 \comment Commentary:
 \comment
 \comment Change log:
+\comment 	Minor fix(es) added by FreeWnn Project.
+\comment	(See cvs commit log for details)
 \comment
 \comment Last modified date: 8,Feb.1999
+\comment Modified date by FreeWnn: $Date$
 \comment
 \comment 
 \comment	人名辞書(gerodic) Ver-1.00
@@ -21856,7 +21860,7 @@
 もりしま			守島			人名		0
 もりしま			森嶋			人名		0
 もりじり			森尻			人名		0
-もりす				ノリス			人名		0
+もりす				モリス			人名		0
 もりすえ			森末			人名		0
 もりずみ			森澄			人名		0
 もりせ				森瀬			人名		0
