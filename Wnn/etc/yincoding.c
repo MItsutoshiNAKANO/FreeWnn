@@ -1,5 +1,5 @@
 /*
- *  $Id: yincoding.c,v 1.4 2002-03-21 04:25:18 hiroo Exp $
+ *  $Id: yincoding.c,v 1.5 2002-03-21 06:56:38 hiroo Exp $
  */
 
 /*
@@ -30,6 +30,9 @@
  */
 
 /**  cWnn  Version 1.1   **/
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
 #include  <stdio.h>
 #include  <ctype.h>

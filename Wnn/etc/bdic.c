@@ -1,5 +1,5 @@
 /*
- *  $Id: bdic.c,v 1.7 2002-03-21 04:25:18 hiroo Exp $
+ *  $Id: bdic.c,v 1.8 2002-03-21 06:56:38 hiroo Exp $
  */
 
 /*
@@ -32,6 +32,9 @@
 /*
   Binary (Updatable, Stable) dictionary common routine.
 */
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
 #if defined(JSERVER) || defined(JS)
 #ifdef WRITE_CHECK

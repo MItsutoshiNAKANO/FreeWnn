@@ -1,5 +1,5 @@
 /*
- *  $Id: cvt_read.c,v 1.4 2002-03-21 03:32:45 hiroo Exp $
+ *  $Id: cvt_read.c,v 1.5 2002-03-21 06:59:20 hiroo Exp $
  */
 
 /*
@@ -37,8 +37,11 @@
         convert_key.c の部分品。指定した変換表及びtermcap・
         terminfoからの読みこみを行う関数を定義してある。
 ***********************************************************************/
-/*      Version 4.0
- */
+/*  Version 4.0  */
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #include <stdio.h>
 #include <ctype.h>
 #if STDC_HEADERS
