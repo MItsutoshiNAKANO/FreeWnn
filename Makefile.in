@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.13 2002-05-12 22:51:15 hiroo Exp $
+#   $Id: Makefile.in,v 1.14 2002-06-14 19:39:25 hiroo Exp $
 #
 
 #
@@ -92,10 +92,11 @@ Everything::
 
 distclean::
 	$(MAKE) clean
-	rm -f makerule.mk config.h config.status config.cache config.log
-	rm -f configure.lineno autom4te.cache
-	rm -f libtool
-	find . -name Makefile -exec rm -f {} \;
+	-$(RM) makerule.mk config.h config.status config.cache config.log
+	-$(RM) configure.lineno
+	-$(RM) libtool
+	-$(RM) -r autom4te.cache
+	find . -name Makefile -exec $(RM) {} \;
 
 # ----------------------------------------------------------------------
 # common rules for all Makefiles - do not edit
@@ -103,7 +104,7 @@ distclean::
 emptyrule::
 
 clean::
-	$(RM) *.CKP *.ln *.BAK *.bak *.o core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut *.core "#"*
+	-$(RM) *.CKP *.ln *.BAK *.bak *.o core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut *.core "#"*
 
 
 tags::
