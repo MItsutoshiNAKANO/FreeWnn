@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.20 2002-03-09 16:50:31 aono Exp $
+dnl   $Id: configure.in,v 1.21 2002-03-21 01:19:50 hiroo Exp $
 dnl
 
 dnl
@@ -10,7 +10,7 @@ dnl Copyright Kyoto University Research Institute for Mathematical Sciences
 dnl                 1987, 1988, 1989, 1990, 1991, 1992
 dnl Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 dnl Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-dnl Copyright FreeWnn Project 1999, 2000, 2001
+dnl Copyright FreeWnn Project 1999, 2000, 2001, 2002
 dnl 
 dnl Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 dnl 
@@ -34,19 +34,6 @@ dnl Process this file with autoconf to produce a configure script.
 dnl
 AC_INIT(Wnn/conv/cvt_head.h)
 AC_CONFIG_HEADER(config.h)
-
-dnl
-dnl srcdir の絶対パスバージョンの作成。本当はこんなものを定義しなくても
-dnl 動くように Makefile.in を書くべきである。
-dnl 多分、修正できたので、とりあえず comment out しておく。
-dnl
-dnl case "$top_srcdir" in
-dnl   .)  abs_top_srcdir=`pwd` ;;
-dnl   /*) abs_top_srcdir=top_srcdir;;
-dnl   *) # Relative path.
-dnl     abs_top_srcdir=`pwd`$ac_dots$ac_given_srcdir ;;
-dnl esac
-dnl AC_SUBST(abs_top_srcdir)
 
 dnl ====================================================================
 dnl Check optional features
@@ -238,6 +225,10 @@ AC_SUBST(KWNNJLIB)
 AC_SUBST(DEPKWNNJLIB)
 AC_SUBST(KHINSI_DATA)
 
+dnl
+dnl Build Options
+dnl
+
 AC_ARG_ENABLE(ipv6,
 [  --enable-ipv6           build and install IPv6 [default=no]],
 [case "${enableval}" in
@@ -367,52 +358,10 @@ AC_SUBST(CCOPTIONS)
 AC_SUBST(CDEBUGFLAGS)
 
 dnl Checks for libraries.
-dnl ### dnl Replace `main' with a function in -lFS:
-dnl ### AC_CHECK_LIB(FS, main)
-dnl ### dnl Replace `main' with a function in -lFresco:
-dnl ### AC_CHECK_LIB(Fresco, main)
-dnl ### dnl Replace `main' with a function in -lICE:
-dnl ### AC_CHECK_LIB(ICE, main)
-dnl ### dnl Replace `main' with a function in -lPEX5:
-dnl ### AC_CHECK_LIB(PEX5, main)
-dnl ### dnl Replace `main' with a function in -lSM:
-dnl ### AC_CHECK_LIB(SM, main)
 dnl ### dnl Replace `main' with a function in -lX11:
 dnl ### AC_CHECK_LIB(X11, main)
-dnl ### dnl Replace `main' with a function in -lXIE:
-dnl ### AC_CHECK_LIB(XIE, main)
-dnl ### dnl Replace `main' with a function in -lXau:
-dnl ### AC_CHECK_LIB(Xau, main)
-dnl ### dnl Replace `main' with a function in -lXaw:
-dnl ### AC_CHECK_LIB(Xaw, main)
-dnl ### dnl Replace `main' with a function in -lXbsd:
-dnl ### AC_CHECK_LIB(Xbsd, main)
-dnl ### dnl Replace `main' with a function in -lXdmcp:
-dnl ### AC_CHECK_LIB(Xdmcp, main)
-dnl ### dnl Replace `main' with a function in -lXext:
-dnl ### AC_CHECK_LIB(Xext, main)
-dnl ### dnl Replace `main' with a function in -lXi:
-dnl ### AC_CHECK_LIB(Xi, main)
-dnl ### dnl Replace `main' with a function in -lXmu:
-dnl ### AC_CHECK_LIB(Xmu, main)
-dnl ### dnl Replace `main' with a function in -lXt:
-dnl ### AC_CHECK_LIB(Xt, main)
-dnl ### dnl Replace `main' with a function in -lXtf:
-dnl ### AC_CHECK_LIB(Xtf, main)
-dnl ### dnl Replace `main' with a function in -lXtst:
-dnl ### AC_CHECK_LIB(Xtst, main)
 dnl ### dnl Replace `main' with a function in -lcurses:
 dnl ### AC_CHECK_LIB(curses, main)
-dnl ### dnl Replace `main' with a function in -lfl:
-dnl ### AC_CHECK_LIB(fl, main)
-dnl ### dnl Replace `main' with a function in -lfont:
-dnl ### AC_CHECK_LIB(font, main)
-dnl ### dnl Replace `main' with a function in -loldX:
-dnl ### AC_CHECK_LIB(oldX, main)
-dnl ### dnl Replace `main' with a function in -lphigs:
-dnl ### AC_CHECK_LIB(phigs, main)
-dnl ### dnl Replace `main' with a function in -lxpg4:
-dnl ### AC_CHECK_LIB(xpg4, main)
 
 AC_CHECK_LIB(crypt, crypt)
 AC_CHECK_LIB(socket, connect)
