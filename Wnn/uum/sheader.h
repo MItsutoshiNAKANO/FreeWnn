@@ -1,5 +1,5 @@
 /*
- *  $Id: sheader.h,v 1.7 2002-05-01 21:05:08 hiroo Exp $
+ *  $Id: sheader.h,v 1.8 2002-05-12 22:51:17 hiroo Exp $
  */
 
 /*
@@ -221,12 +221,9 @@ extern int dic_nickname (int, char*);
 extern int disconnect_jserver (void);
 extern int disp_mode (void);
 extern void display_henkan_off_mode (void);
-/* extern int dup (); */ /* it's from unistd.h */
 extern int empty_modep (void);
-/* extern int endttyent (); */ /* 4.3BSD libc functions in ttyent.h */
 extern void epilogue (void);
 extern void epilogue_no_close (void);
-extern void err (char *);
 extern void errorkeyin (void);
 extern int eu_columlen (unsigned char *);
 extern int expand_argument (char *);
@@ -285,7 +282,6 @@ extern void pop_cursor ();
 extern void pop_hrus ();
 extern int previous_history1 ();
 extern void print_buf_msg ();
-extern void printf ();
 extern void reset_cursor ();
 extern void push_cursor ();
 extern void push_hrus ();
@@ -306,7 +302,6 @@ extern void ring_bell ();
 extern void save_cursor_raw ();
 extern int saveutmp ();
 extern void scroll_up ();
-extern int select ();
 extern int select_jikouho1 ();
 extern int select_line_element ();
 extern int select_one_dict1 ();

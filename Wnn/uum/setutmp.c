@@ -1,5 +1,5 @@
 /*
- *  $Id: setutmp.c,v 1.4 2002-03-30 01:45:41 hiroo Exp $
+ *  $Id: setutmp.c,v 1.5 2002-05-12 22:51:17 hiroo Exp $
  */
 
 /*
@@ -35,19 +35,23 @@
 #include <stdio.h>
 #if STDC_HEADERS
 #  include <string.h>
+#  include <time.h>
 #else
 #  if HAVE_STRINGS_H
 #    include <strings.h>
 #  endif
-#  ifdef SYSVR2 /* should be converted to HAVE_MEMORY_H */
+#  ifdef HAVE_MEMORY_H
 #    include <memory.h>
-#  endif /* SYSVR2 */
+#  endif
 #endif /* STDC_HEADERS */
 #include <sys/types.h>
 #if HAVE_FCNTL_H
 #  include <fcntl.h>
 #endif
 #include <pwd.h>
+#if HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
 #include <utmp.h>
 
 #include "commonhd.h"

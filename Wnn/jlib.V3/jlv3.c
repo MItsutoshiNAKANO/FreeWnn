@@ -1,5 +1,5 @@
 /*
- *  $Id: jlv3.c,v 1.6 2002-03-29 15:08:51 hiroo Exp $
+ *  $Id: jlv3.c,v 1.7 2002-05-12 22:51:16 hiroo Exp $
  */
 
 /*
@@ -58,7 +58,11 @@ extern  Variables
 #include <ctype.h>
 #if STDC_HEADERS
 #  include <stdlib.h>
-#endif
+#else
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
+#  endif
+#endif /* STDC_HEADERS */
 #if HAVE_FCNTL_H
 #  include <fcntl.h>
 #endif
@@ -67,11 +71,6 @@ extern  Variables
 #  include <unistd.h>
 #endif
 #include <sys/types.h>
-#ifdef  SYSVR2
-#include <malloc.h>
-#else
-extern char *malloc ();
-#endif
 
 #include "jllib.h"
 #include "jlib.h"

@@ -1,5 +1,5 @@
 /*
- *  $Id: kankana.c,v 1.3 2001-06-14 18:15:58 ura Exp $
+ *  $Id: kankana.c,v 1.4 2002-05-12 22:51:16 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -30,10 +30,21 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: kankana.c,v 1.3 2001-06-14 18:15:58 ura Exp $";
+static char *rcs_id = "$Id: kankana.c,v 1.4 2002-05-12 22:51:16 hiroo Exp $";
 #endif /* lint */
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #include <stdio.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#else
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
+#  endif
+#endif /* STDC_HEADERS */
 #include "jslib.h"
 
 #define FZK_FILE "pubdic/full.fzk"

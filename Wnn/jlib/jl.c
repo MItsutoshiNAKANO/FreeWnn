@@ -1,5 +1,5 @@
 /*
- *  $Id: jl.c,v 1.9 2002-03-23 21:13:59 hiroo Exp $
+ *  $Id: jl.c,v 1.10 2002-05-12 22:51:16 hiroo Exp $
  */
 
 /*
@@ -43,8 +43,13 @@
 #if STDC_HEADERS
 # include <stdlib.h>
 # include <string.h>
-#elif HAVE_STRINGS_H
-# include <strings.h>
+#else
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
+#  endif
 #endif /* STDC_HEADERS */
 #include <sys/types.h>
 #include <sys/file.h>

@@ -1,5 +1,5 @@
 /*
- *  $Id: termcap.c,v 1.4 2002-03-30 01:45:41 hiroo Exp $
+ *  $Id: termcap.c,v 1.5 2002-05-12 22:51:17 hiroo Exp $
  */
 
 /*
@@ -35,8 +35,12 @@
 #include <stdio.h>
 #include <ctype.h>
 #if STDC_HEADERS
+#  include <stdlib.h>
 #  include <string.h>
 #else
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
+#  endif
 #  if HAVE_STRINGS_H
 #    include <strings.h>
 #  endif
@@ -91,11 +95,8 @@ static char TermData[1024];
 
 int cursor_state;
 
-extern char *tgetstr ();
-extern FILE *fopen ();
-
 #ifdef DCUREOR
-FILE *debugc, *fopen ();
+FILE *debugc;
 #endif
 
 
@@ -264,7 +265,6 @@ decfline (name)
 {
   char *name1;
   char *c;
-  extern char *malloc ();
 
   if ((name1 = malloc (strlen (name) + 1024)) == NULL)
     {
@@ -292,7 +292,7 @@ decfline (name)
     }
   remove (name1, ":sc");
   remove (name1, ":rc");
-  setenv ("TERMCAP", name1);
+  setenv ("TERMCAP", name1, 1);
   free (name1);
   return (0);
 }

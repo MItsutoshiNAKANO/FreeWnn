@@ -1,5 +1,5 @@
 /*
- *  $Id: prologue.c,v 1.5 2002-03-30 01:45:41 hiroo Exp $
+ *  $Id: prologue.c,v 1.6 2002-05-12 22:51:17 hiroo Exp $
  */
 
 /*
@@ -39,9 +39,15 @@
 #include <stdio.h>
 #include <ctype.h>
 #if STDC_HEADERS
+#  include <stdlib.h>
 #  include <string.h>
-#elif HAVE_STRINGS_H
-#  include <strings.h>
+#else
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
+#  endif
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif
 #endif /* STDC_HEADERS */
 #include <sys/errno.h>
 #include <pwd.h>
@@ -121,7 +127,6 @@ get_envrc_name (str)
 int
 allocate_areas ()
 {
-  char *malloc ();
   char *area_start;
   char *area_pter;
 
@@ -266,7 +271,6 @@ connect_jserver (first)
   WnnEnv *save_cur_normal_env = NULL, *save_cur_reverse_env = NULL;
   int (*yes_no_func) ();
   void (*puts_func) ();
-  extern char *malloc ();
 
   if (first == 0)
     {

@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.8 2002-03-09 16:50:31 aono Exp $
+#   $Id: Makefile.in,v 1.9 2002-05-12 22:51:17 hiroo Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001
+# Copyright FreeWnn Project 1999, 2000, 2001, 2002
 # 
 # Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
 # 
@@ -35,7 +35,7 @@ top_builddir = ../..
 INSTALL      = @INSTALL@ $(INSTALLFLAGS)
 
 LINKS = commonhd.h wnn_config.h copyright.h demcom.h hinsi_file.h jd_sock.h  \
-        jdata.h jh.h jlib.h jllib.h jslib.h msg.h rk_spclval.h wnn_malloc.h  \
+        jdata.h jh.h jlib.h jllib.h jslib.h msg.h rk_spclval.h  \
         wnn_string.h wnnerror.h cplib.h wnn_os.h hinsi.h ansidecl.h
 
 HEADERS = \
@@ -193,17 +193,6 @@ depend:: rk_spclval.h
 
 clean::
 	$(RM) rk_spclval.h
-
-wnn_malloc.h:  $(WNNINCLUDESRC)/wnn_malloc.h
-	$(RM) $@
-	$(LN) $? $@
-
-includes:: wnn_malloc.h
-
-depend:: wnn_malloc.h
-
-clean::
-	$(RM) wnn_malloc.h
 
 wnn_string.h:  $(WNNINCLUDESRC)/wnn_string.h
 	$(RM) $@

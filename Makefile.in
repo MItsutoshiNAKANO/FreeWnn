@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.12 2002-03-09 16:50:31 aono Exp $
+#   $Id: Makefile.in,v 1.13 2002-05-12 22:51:15 hiroo Exp $
 #
 
 #
@@ -93,6 +93,7 @@ Everything::
 distclean::
 	$(MAKE) clean
 	rm -f makerule.mk config.h config.status config.cache config.log
+	rm -f configure.lineno autom4te.cache
 	rm -f libtool
 	find . -name Makefile -exec rm -f {} \;
 

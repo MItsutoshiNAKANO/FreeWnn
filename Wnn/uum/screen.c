@@ -1,5 +1,5 @@
 /*
- *  $Id: screen.c,v 1.5 2001-06-14 18:16:08 ura Exp $
+ *  $Id: screen.c,v 1.6 2002-05-12 22:51:17 hiroo Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000
+ * Copyright FreeWnn Project 1999, 2000, 2002
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -28,8 +28,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
 #include <stdio.h>
+#if STDC_HEADERS
+#  include <string.h>
+#else
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif
+#endif /* STDC_HEADERS */
 
 #include "commonhd.h"
 #include "wnn_config.h"
@@ -39,23 +49,31 @@
 #include "buffer.h"
 
 /*
- このファイルは、画面制御部分とのインターフェースを行う関数を
+このファイルは、画面制御部分とのインターフェースを行う関数を
 定義している。これらの関数を用いずに、画面を制御してはならない。
 このファイルからextern されている関数を示す。
 なお、画面の制御は、c_b->buffer の中でのインデックスを用いて
-行われる。今、c_b->buffer の中のどの部分が画面に出されているかは意識しなく
-てよい。
-t_move(x) : カーソルを x に飛ばす。リドローが必要(反転、カセンのため)
-な部分も勝手に考えて行って来れる。
-t_redraw_move(x , start , end,clr_l) :buffer の中で、start から end までの
-バッファの内容が変えられた時に、カーソルをx に飛ばすのに用いる。
-print_buf_msg(msg) :メッセージ部分を表示する。
-disp_mode():romkan のモードを表示する。
-disp_mode_line():romkan のモードを表示する。
-t_print_l(): 画面のリドローする。
+行われる。今、c_b->buffer の中のどの部分が画面に出されている
+かは意識しなくてよい。
 
-t_throw(): カーソルを飛ばす
-init_screen():画面関係(vst)をイニシャライズし、画面表示を行う。
+t_move(x) :
+	カーソルを x に飛ばす。リドローが必要 (反転、カセンの
+	ため) な部分も勝手に考えて行って来れる。
+t_redraw_move(x , start , end,clr_l) :
+	buffer の中で、start から end までのバッファの内容が
+	変えられた時に、カーソルをx に飛ばすのに用いる。
+print_buf_msg(msg) :
+	メッセージ部分を表示する。
+disp_mode():
+	romkan のモードを表示する。
+disp_mode_line():
+	romkan のモードを表示する。
+t_print_l():
+	画面をリドローする。
+t_throw():
+	カーソルを飛ばす
+init_screen():
+	画面関係(vst)をイニシャライズし、画面表示を行う。
 */
 
 /* 文字の画面上での大きさを返す。*/

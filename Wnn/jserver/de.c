@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.21 2002-04-02 09:09:55 aono Exp $
+ *  $Id: de.c,v 1.22 2002-05-12 22:51:16 hiroo Exp $
  */
 
 /*
@@ -44,6 +44,9 @@
 #  include <stdlib.h>
 #  include <string.h>
 #else
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
+#  endif
 #  if HAVE_STRINGS_H
 #    include <strings.h>
 #  endif
@@ -62,7 +65,6 @@
 #include "wnn_config.h"
 #include "jd_sock.h"
 #include "demcom.h"
-#include "wnn_malloc.h"
 #include "wnn_os.h"
 
 #if defined(HAVE_SYS_PARAM_H)

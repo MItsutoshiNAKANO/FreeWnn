@@ -1,5 +1,5 @@
 /*
- *  $Id: wddel.c,v 1.7 2002-03-23 21:13:59 hiroo Exp $
+ *  $Id: wddel.c,v 1.8 2002-05-12 22:51:17 hiroo Exp $
  */
 
 /*
@@ -34,7 +34,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: wddel.c,v 1.7 2002-03-23 21:13:59 hiroo Exp $";
+static char *rcs_id = "$Id: wddel.c,v 1.8 2002-05-12 22:51:17 hiroo Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -44,7 +44,11 @@ static char *rcs_id = "$Id: wddel.c,v 1.7 2002-03-23 21:13:59 hiroo Exp $";
 #include <stdio.h>
 #if STDC_HEADERS
 #  include <stdlib.h>
-#endif
+#else
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
+#  endif
+#endif /* STDC_HEADERS */
 #if HAVE_UNISTD_H
 #  include <unistd.h>
 #endif

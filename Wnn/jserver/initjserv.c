@@ -1,5 +1,5 @@
 /*
- *  $Id: initjserv.c,v 1.10 2002-03-24 22:54:16 hiroo Exp $
+ *  $Id: initjserv.c,v 1.11 2002-05-12 22:51:16 hiroo Exp $
  */
 
 /*
@@ -39,6 +39,9 @@
 #  include <stdlib.h>
 #  include <string.h>
 #else
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
+#  endif
 #  if HAVE_STRINGS_H
 #    include <strings.h>
 #  endif /* HAVE_STRINGS_H */
@@ -47,7 +50,6 @@
 
 #include "commonhd.h"
 #include "de_header.h"
-#include "wnn_malloc.h"
 #include "wnn_config.h"
 #include "kaiseki.h"
 

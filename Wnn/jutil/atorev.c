@@ -1,5 +1,5 @@
 /*
- *  $Id: atorev.c,v 1.5 2002-03-23 21:13:59 hiroo Exp $
+ *  $Id: atorev.c,v 1.6 2002-05-12 22:51:17 hiroo Exp $
  */
 
 /*
@@ -41,7 +41,11 @@
 #include <ctype.h>
 #if STDC_HEADERS
 #  include <stdlib.h>
-#endif
+#else
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
+#  endif
+#endif /* STDC_HEADERS */
 
 #include "commonhd.h"
 #include "jslib.h"

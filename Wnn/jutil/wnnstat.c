@@ -1,5 +1,5 @@
 /*
- *  $Id: wnnstat.c,v 1.9 2002-03-26 18:54:54 hiroo Exp $
+ *  $Id: wnnstat.c,v 1.10 2002-05-12 22:51:17 hiroo Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: wnnstat.c,v 1.9 2002-03-26 18:54:54 hiroo Exp $";
+static char *rcs_id = "$Id: wnnstat.c,v 1.10 2002-05-12 22:51:17 hiroo Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -42,6 +42,9 @@ static char *rcs_id = "$Id: wnnstat.c,v 1.9 2002-03-26 18:54:54 hiroo Exp $";
 #  include <stdlib.h>
 #  include <string.h>
 #else /* !STDC_HEADERS */
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
+#  endif
 #  if HAVE_STRINGS_H
 #    include <strings.h>
 #  endif

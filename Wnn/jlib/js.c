@@ -1,5 +1,5 @@
 /*
- *  $Id: js.c,v 1.11 2002-03-29 15:08:51 hiroo Exp $
+ *  $Id: js.c,v 1.12 2002-05-12 22:51:16 hiroo Exp $
  */
 
 /*
@@ -60,8 +60,12 @@ extern  Variables
 #include <errno.h>
 #include <signal.h>
 #if STDC_HEADERS
-# include <stdlib.h>
-#endif
+#  include <stdlib.h>
+#else
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
+#  endif
+#endif /* STDC_HEADERS */
 #if HAVE_FCNTL_H
 #  include <fcntl.h>
 #endif
@@ -89,12 +93,6 @@ extern  Variables
 #define JS                      /* For include ../etc/bdic.c */
 #include "../etc/bdic.c"
 #include "../etc/pwd.c"
-
-#ifdef hpux
-void *malloc (size_t);
-#else
-char *malloc ();
-#endif /* hpux */
 
 #ifdef SYSVR2
 #define bzero(adr,n)    memset((adr),0,(n))

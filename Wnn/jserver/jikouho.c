@@ -1,5 +1,5 @@
 /*
- *  $Id: jikouho.c,v 1.5 2002-03-23 21:13:59 hiroo Exp $
+ *  $Id: jikouho.c,v 1.6 2002-05-12 22:51:16 hiroo Exp $
  */
 
 /*
@@ -40,14 +40,13 @@
 #include        <ctype.h>
 #if STDC_HEADERS
 #  include	<stdlib.h>
-#endif
+#endif /* STDC_HEADERS */
 
 #include        "commonhd.h"
 #include        "de_header.h"
 #include        "jdata.h"
 #include        "fzk.h"
 #include        "kaiseki.h"
-#include "wnn_malloc.h"
 
 static struct JKT_SBN *find_jktsbn ();
 static int cmp_dsd_sbn (), cnt_jkt_sbn (), get_suuji_kouho (), get_eisuu_kouho (), get_kigou_kouho ();

@@ -21,25 +21,32 @@ Boston, MA 02111-1307, USA.  */
 /*
    Changes for importing vasprintf.c to FreeWnn:
      - Comment out #include "libiberty.h" (aono)
+     - Header inclusions were modified due to our use of configure. (H.Ono)
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include <config.h>
 #endif
 #include <ansidecl.h>
-#ifdef ANSI_PROTOTYPES
-#include <stdarg.h>
-#else
-#include <varargs.h>
-#endif
+
 #include <stdio.h>
-#include <string.h>
-#ifdef HAVE_STDLIB_H
-#include <stdlib.h>
+#if STDC_HEADERS
+#  include <stdarg.h>
+#  include <string.h>
+#  include <stdlib.h>
 #else
+#  include <varargs.h>
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif
 extern unsigned long strtoul ();
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
+#  else
 extern PTR malloc ();
-#endif
+#  endif /* HAVE_MALLOC_H */
+#endif /* STDC_HEADERS */
+
 /* #include "libiberty.h" */
 
 #ifdef TEST

@@ -1,5 +1,5 @@
 /*
- *  $Id: do_env.c,v 1.6 2002-03-24 22:54:16 hiroo Exp $
+ *  $Id: do_env.c,v 1.7 2002-05-12 22:51:16 hiroo Exp $
  */
 
 /*
@@ -34,15 +34,20 @@
 
 #include <stdio.h>
 #if STDC_HEADERS
+#  include <stdlib.h>
 #  include <string.h>
-#elif HAVE_STRINGS_H
-#  include <string.h>
+#else
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
+#  endif
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif
 #endif /* STDC_HEADERS */
 
 #include "demcom.h"
 #include "commonhd.h"
 #include "de_header.h"
-#include "wnn_malloc.h"
 
 void new_env ();
 static void disconnect (), del_env_from_client ();

@@ -1,5 +1,5 @@
 /*
- *  $Id: msg.c,v 1.10 2002-05-07 22:26:26 hiroo Exp $
+ *  $Id: msg.c,v 1.11 2002-05-12 22:51:15 hiroo Exp $
  */
 
 /*
@@ -53,7 +53,11 @@
 #include <stdio.h>
 #if STDC_HEADERS
 #  include <stdlib.h>
-#endif
+#else
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
+#  endif
+#endif /* STDC_HEADERS */
 
 #include "commonhd.h"
 #include "wnn_os.h"

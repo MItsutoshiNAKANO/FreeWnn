@@ -1,5 +1,5 @@
 /*
- *  $Id: uif.c,v 1.6 2002-03-30 01:45:41 hiroo Exp $
+ *  $Id: uif.c,v 1.7 2002-05-12 22:51:17 hiroo Exp $
  */
 
 /*
@@ -41,6 +41,17 @@ buffer_inを用いているので、そちらの方も参照して下さい。
 #endif
 
 #include <stdio.h>
+#if STDC_HEADERS
+#  include <stdlib.h>
+#  include <string.h>
+#else
+#  if HAVE_MALLOC_H
+#    include <malloc.h>
+#  endif
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif
+#endif /* STDC_HEADERS */
 #include <sys/types.h>
 #if HAVE_UNISTD_H
 #  include <unistd.h>

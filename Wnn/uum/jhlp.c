@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.8 2002-05-01 21:05:08 hiroo Exp $
+ *  $Id: jhlp.c,v 1.9 2002-05-12 22:51:17 hiroo Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.8 2002-05-01 21:05:08 hiroo Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.9 2002-05-12 22:51:17 hiroo Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -56,6 +56,7 @@ static char *rcs_id = "$Id: jhlp.c,v 1.8 2002-05-01 21:05:08 hiroo Exp $";
 #ifdef HAVE_SYS_PARAM_H
 #  include <sys/param.h>
 #endif
+#include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #if HAVE_FCNTL_H
@@ -1371,7 +1372,6 @@ setenv (var, value, overwrite)
      int  overwrite;
 {
   extern char **environ;
-  char *malloc ();
   char **newenv;
   register int i, j;
 
