@@ -1,8 +1,4 @@
 /*
- *  $Id: de.c,v 1.26 2002-08-15 10:31:03 aono Exp $
- */
-
-/*
  * FreeWnn is a network-extensible Kana-to-Kanji conversion system.
  * This file is part of FreeWnn.
  * 
@@ -32,6 +28,8 @@
 /*
         Jserver         (Nihongo Daemon)
 */
+static char rcs_id[] = "$Id";
+
 #if defined(HAVE_CONFIG_H)
 #  include <config.h>
 #endif
@@ -90,10 +88,6 @@
 #else
 #undef USE_SETSOCKOPT
 #endif
-
-#define QUIET	1
-
-#define NOT_QUIET       DEBUG | !QUIET
 
 #ifndef min
 #define min(x,y)        ( (x)<(y) ? (x) : (y) )
@@ -182,14 +176,27 @@ static int nofile;              /** No. of files **/
 struct msg_cat *wnn_msg_cat;
 struct msg_cat *js_msg_cat;
 
-static void daemon_main (), sel_all (), new_client (), daemon_init (), socket_init_un (), socket_init_in (), xerror (), get_options ();
-void daemon_fin (), daemon_fin_un (), daemon_fin_in (), del_client (), put2_cur (), putc_cur ();
-static int get_client (), rcv_1_client (), socket_accept_un (), socket_accept_in ();
-int get2_cur ();
+/* function prototypes */
+static void daemon_main (void);
+static void socket_disc_init (void);
+static void sel_all (void);
+static int  get_client (void);
+static void new_client (void);
+static void daemon_init (void);
+static void daemon_fin_un (int);
+static void daemon_fin_in (int);
+static int  rcv_1_client (int);
+static void snd_1_client (int, int);
+static void socket_init_un (void);
+static void socket_init_in (void);
+static int  socket_accept_un (void);
+static int  socket_accept_in (int);
+static void xerror (char*);
+static void get_options (int, char **);
 static void usage (void);
 static void print_version (void);
 #ifdef DEBUG
-static void dmp ();
+static void dmp (char*, int);
 #endif
 
 
@@ -197,11 +204,8 @@ char cmd_name[16];
 
 /* No arguments are used. Only options. */
 int
-main (argc, argv)
-     int argc;
-     char **argv;
+main (int argc, char *argv[])
 {
-  extern void _exit ();
   int tmpttyfd;
   char *cswidth_name;
   extern char *get_cswidth_name ();
@@ -217,7 +221,7 @@ main (argc, argv)
   wnn_msg_cat = msg_open ("libwnn.msg", nlspath, lang_dir);
   if (wnn_msg_cat == NULL)
     {
-      log_err ("Cannot open message file libwnn.msg.");
+      log_err ("cannot open message file libwnn.msg.");
     }
   if (cswidth_name = get_cswidth_name (LANG_NAME))
     set_cswidth (create_cswidth (cswidth_name));
@@ -311,7 +315,7 @@ main (argc, argv)
 }
 
 static void
-daemon_main ()
+daemon_main (void)
 {
   for (;;)
     {
@@ -319,11 +323,9 @@ daemon_main ()
       new_client ();
       for (;;)
         {
-          log_debug ("main loop: ready_socks = %02X", ready_socks);
           if (get_client () == -1)
             break;
           c_c = &client[cur_clp];
-/*      error1("cur_clp = %d\n", cur_clp);  Moved into do_command() */
           rbc = 0;
           sbp = 0;
 /*      if(rcv_1_client(cur_clp) == 0){ del_client(); continue; }       */
@@ -340,14 +342,14 @@ daemon_main ()
 /*
         allocs area for selecting socketts
 */
-void
-socket_disc_init ()
+static void
+socket_disc_init (void)
 {
   int sel_w;                    /* long word(==int) width of all_socks */
 
   nofile = WNN_NFD;
   sel_w = (nofile - 1) / BINTSIZE + 1;
-  all_socks = (int *) calloc (sel_w, (sizeof (int)));
+  all_socks = (int *) malloc (sel_w * (sizeof (int)));
   ready_socks = (int *) malloc (sel_w * (sizeof (int)));
   dummy1_socks = (int *) malloc (sel_w * (sizeof (int)));
   dummy2_socks = (int *) malloc (sel_w * (sizeof (int)));
@@ -357,7 +359,7 @@ socket_disc_init ()
 
 /**     全てのソケットについて待つ      **/
 static void
-sel_all ()
+sel_all (void)
 {
   bcopy (all_socks, ready_socks, sel_width);
   bzero (dummy1_socks, sel_width);
@@ -372,7 +374,7 @@ top:
       xerror ("select error");
     }
 #ifdef DEBUG
-  error1 ("select OK, ready_socks[0]=%02X, n-r-s=%x\n", ready_socks[0], no_of_ready_socks);
+  log_debug ("select OK, ready_socks[0]=%02X, n-r-s=%x\n", ready_socks[0], no_of_ready_socks);
 #endif
 }
 
@@ -380,7 +382,7 @@ top:
         誰も居ない時は-1
         スケジューリングはラウンドロビン        **/
 static int
-get_client ()
+get_client (void)
 {
   register int i;
 
@@ -406,7 +408,7 @@ get_client ()
 /**     新しいクライアントが居るか否かを調べる
         居た場合はcblkに登録する        **/
 static void
-new_client ()                   /* NewClient */
+new_client (void)               /* NewClient */
 {
   register int sd;
   register int full, i;
@@ -484,7 +486,7 @@ new_client ()                   /* NewClient */
 /**     クライアントをcblkから削除する  **/
 /* delete Client (please call from JS_CLOSE) */
 void
-del_client ()
+del_client (void)
 {
   disconnect_all_env_of_client ();
   sock_clr (all_socks, cblk[cur_clp].sd);
@@ -512,7 +514,7 @@ del_client ()
 
 /**     サーバをイニシャライズする      **/
 static void
-daemon_init ()                   /* initialize Daemon */
+daemon_init (void)               /* initialize Daemon */
 {
   /*
   signal (SIGHUP, SIG_IGN);
@@ -523,12 +525,12 @@ daemon_init ()                   /* initialize Daemon */
 
   if ((cblk = (COMS_BLOCK *) malloc (max_client * sizeof (COMS_BLOCK))) == NULL)
     {
-      perror ("Malloc for cblk");
+      log_err ("daemon_init: %s.", strerror(errno));
       exit (1);
     }
   if ((client = (CLIENT *) malloc (max_client * sizeof (CLIENT))) == NULL)
     {
-      perror ("Malloc for client");
+      log_err ("daemon_init: %s.", strerror(errno));
       exit (1);
     }
   SDRAND (time (NULL));
@@ -550,9 +552,8 @@ daemon_init ()                   /* initialize Daemon */
 
 /**     サーバを終わる  **/
 #ifdef  AF_UNIX
-void
-daemon_fin_un (sock_d_un)
-     int sock_d_un;
+static void
+daemon_fin_un (int sock_d_un)
 {
   int trueFlag = 1;
   struct sockaddr_un addr_un;
@@ -580,9 +581,8 @@ daemon_fin_un (sock_d_un)
 }
 #endif /* AF_UNIX */
 
-void
-daemon_fin_in (sock_d_in)
-     int sock_d_in;
+static void
+daemon_fin_in (int sock_d_in)
 {
   int trueFlag = 1;
   struct sockaddr_in addr_in;
@@ -618,7 +618,7 @@ daemon_fin_in (sock_d_in)
 }
 
 void
-daemon_fin ()
+daemon_fin (void)
 {
   int fd;
 #ifdef  AF_UNIX
@@ -666,9 +666,7 @@ daemon_fin ()
 
 /**     **/
 char *
-gets_cur (buffer, buffer_size)
-     char *buffer;
-     size_t buffer_size;
+gets_cur (char *buffer, size_t buffer_size)
 {
   char *b;
 
@@ -692,9 +690,7 @@ gets_cur (buffer, buffer_size)
 
 /**     **/
 w_char *
-getws_cur (buffer, buffer_size)
-     w_char *buffer;
-     size_t buffer_size;
+getws_cur (w_char *buffer, size_t buffer_size)
 {
   w_char *b;
 
@@ -718,7 +714,7 @@ getws_cur (buffer, buffer_size)
 
 /**     カレント・クライアントから2バイト取る   **/
 int
-get2_cur ()
+get2_cur (void)
 {
   register int x;
   x = getc_cur ();
@@ -727,7 +723,7 @@ get2_cur ()
 
 /**     カレント・クライアントから4バイト取る   **/
 int
-get4_cur ()
+get4_cur (void)
 {
   register int x1, x2, x3;
   x1 = getc_cur ();
@@ -738,7 +734,7 @@ get4_cur ()
 
 /**     カレント・クライアントから1バイト取る   **/
 int
-getc_cur ()
+getc_cur (void)
 {
   static int rbp;
   if (rbc <= 0)
@@ -752,8 +748,7 @@ getc_cur ()
 
 /**     クライアントから1パケット取る   **/
 static int
-rcv_1_client (clp)
-     int clp;   /**     clp=クライアント番号    **/
+rcv_1_client (int clp)		/* clp=クライアント番号 */
 {
   register int cc = 0;
   while (cc <= 0)
@@ -783,7 +778,7 @@ rcv_1_client (clp)
         }
     }
 #ifdef DEBUG
-  error1 ("rcv: clp = %d, sd = %d, cc = %d\n", clp, cblk[clp].sd, cc);
+  log_debug ("rcv: clp = %d, sd = %d, cc = %d", clp, cblk[clp].sd, cc);
   dmp (rcv_buf, cc);
 #endif
   return cc;
@@ -791,12 +786,12 @@ rcv_1_client (clp)
 
 /**     クライアントへ1パケット送る     **/
 static void
-snd_1_client (clp, n)
-     int clp, n;/**     clp=クライアント番号, n= send n Bytes   **/
+snd_1_client (int clp,	/* clp: クライアント番号 */
+	      int n	/* n : number of bytes to send */ )
 {
   register int cc, x;
 #ifdef  DEBUG
-  error1 ("snd: clp = %d, sd = %d\n", clp, cblk[clp].sd);
+  log_debug ("snd: clp = %d, sd = %d", clp, cblk[clp].sd);
   dmp (snd_buf, n);
 #endif
   for (cc = 0; cc < n;)
@@ -825,8 +820,7 @@ snd_1_client (clp, n)
 
 /**     **/
 void
-puts_cur (p)
-     char *p;
+puts_cur (char *p)
 {
   register int c;
   while (c = *p++)
@@ -836,9 +830,7 @@ puts_cur (p)
 
 /**     **/
 void
-puts_n_cur (p, n)
-     char *p;
-     int n;
+puts_n_cur (char *p, int n)
 {
   register int c;
   while ((c = *p++) && --n >= 0)
@@ -848,8 +840,7 @@ puts_n_cur (p, n)
 
 /**     **/
 void
-putws_cur (p)
-     w_char *p;
+putws_cur (w_char *p)
 {
   register int c;
   while (c = *p++)
@@ -859,9 +850,7 @@ putws_cur (p)
 
 /**     **/
 void
-putnws_cur (p, n)
-     register w_char *p;
-     register int n;
+putnws_cur (w_char *p, int n)
 {
   register int c;
   for (; n > 0; n--)
@@ -875,8 +864,7 @@ putnws_cur (p, n)
 
 /**     カレント・クライアントへ2バイト送る     **/
 void
-put2_cur (c)
-     register int c;
+put2_cur (int c)
 {
   putc_cur (c >> (8 * 1));
   putc_cur (c);
@@ -884,8 +872,7 @@ put2_cur (c)
 
 /**     カレント・クライアントへ4バイト送る     **/
 void
-put4_cur (c)
-     register int c;
+put4_cur (int c)
 {
   putc_cur (c >> (8 * 3));
   putc_cur (c >> (8 * 2));
@@ -895,8 +882,7 @@ put4_cur (c)
 
 /**     カレント・クライアントへ1バイト送る     **/
 void
-putc_cur (c)
-     register int c;
+putc_cur (int c)
 {
   snd_buf[sbp++] = c;
   if (sbp >= R_BUF_SIZ)
@@ -908,7 +894,7 @@ putc_cur (c)
 
 /**     カレント・クライアントの送信バッファをフラッシュする    **/
 void
-putc_purge ()
+putc_purge (void)
 {
   if (sbp != 0)
     {
@@ -922,7 +908,7 @@ putc_purge ()
 /**     ソケットのイニシャライズ        **/
 #ifdef  AF_UNIX
 static void
-socket_init_un ()
+socket_init_un (void)
 {
   struct sockaddr_un saddr_un;
   int sock_d_un;
@@ -948,7 +934,7 @@ socket_init_un ()
       chmod (sockname, 0777);
       signal (SIGPIPE, SIG_IGN);
 #ifdef DEBUG
-      error1 ("sock_d_un = %d\n", sock_d_un);
+      log_debug ("sock_d_un = %d\n", sock_d_un);
 #endif
       accept_blk[UNIX_ACPT].sd = sock_d_un;
       sock_set (all_socks, sock_d_un);
@@ -958,7 +944,7 @@ socket_init_un ()
 
 /*      Inet V3.0 */
 static void
-socket_init_in ()
+socket_init_in (void)
 {
 #ifndef SOLARIS
   int on = 1;
@@ -993,7 +979,7 @@ socket_init_in ()
   port += serverNO;
 
 #if DEBUG
-  error1 ("port=%x\n", port);
+  log_debug ("port=%x", port);
 #endif
 #ifdef INET6
   memset(&hints, 0, sizeof(hints));
@@ -1064,7 +1050,7 @@ socket_init_in ()
       xerror ("can't listen inet socket");
     }
 #if DEBUG
-  error1 ("sock_d_in = %d\n", sock_d_in);
+  log_debug ("sock_d_in = %d", sock_d_in);
 #endif
   sock_set (all_socks, sock_d_in);
 #ifdef INET6
@@ -1084,7 +1070,7 @@ socket_init_in ()
 /**     accept new client socket        **/
 #ifdef  AF_UNIX
 static int
-socket_accept_un ()
+socket_accept_un (void)
 {
   struct sockaddr_un addr;
   socklen_t addrlen;
@@ -1095,8 +1081,7 @@ socket_accept_un ()
 #endif /* AF_UNIX */
 
 static int
-socket_accept_in (fd)
-     int fd;
+socket_accept_in (int fd)
 {
   struct sockaddr_in addr;
   socklen_t addrlen;
@@ -1106,18 +1091,15 @@ socket_accept_in (fd)
 }
 
 static void
-xerror (s)
-     register char *s;
+xerror (char *s)
 {
-  fprintf (stderr, "%s: %s\n", cmd_name, s);
-  perror (cmd_name);
+  log_err ("%s (%s).", s, strerror(errno));
   exit (1);
 }
 
 #if DEBUG
 static void
-dmp (p, n)
-     char *p;
+dmp (char *p, int n)
 {
   int i, j;
 
@@ -1130,36 +1112,10 @@ dmp (p, n)
       fprintf (stderr, "n=%d\n", n);
     }
 }
-
-int
-niide (x)                       /* おまけだよ。niide(3);とコールしてね */
-     int x;
-{
-  switch (x)
-    {
-    case 0:
-      return 1;
-    case 1:
-      fprintf (stderr, "ゲッターロボは");
-      break;
-    case 2:
-      fprintf (stderr, "ゴレンジャーは");
-      break;
-    case 3:
-      fprintf (stderr, "ロードランナーシリーズは");
-      break;
-    default:
-      return x * niide (x - 1);
-    }
-  fprintf (stderr, "良い番組だ by 新出。\n");
-  return x * niide (x - 1);
-}
 #endif
 
 static void
-get_options (argc, argv)
-     int argc;
-     char **argv;
+get_options (int argc, char **argv)
 {
   int c;
   extern char *optarg;
@@ -1187,7 +1143,7 @@ get_options (argc, argv)
                   exit (1);
                 }
             }
-          error1 ("script started\n");
+          log_debug ("script started");
           break;
         case 'h':
           hinsi_file_name = optarg;
@@ -1223,11 +1179,10 @@ get_options (argc, argv)
 }
 
 
-
 /*
 */
 void
-js_who ()
+js_who (void)
 {
   register int i, j;
 
@@ -1247,7 +1202,7 @@ js_who ()
 }
 
 void
-js_kill ()
+js_kill (void)
 {
   if (clientp == 1)
     {
@@ -1263,7 +1218,7 @@ js_kill ()
 }
 
 void
-usage ()
+usage (void)
 {
   fprintf(stderr, 
 #ifdef INET6
@@ -1279,7 +1234,7 @@ usage ()
 }
 
 void
-print_version ()
+print_version (void)
 {
 #if  defined(CHINESE)
   printf ("%s (%s) Chinese Multi Client Server\n", cmd_name, SER_VERSION);
