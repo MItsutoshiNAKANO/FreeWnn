@@ -28,7 +28,7 @@
 /*
         Jserver         (Nihongo Daemon)
 */
-static char rcs_id[] = "$Id: de.c,v 1.33 2003-06-20 15:34:29 aono Exp $";
+static char rcs_id[] = "$Id: de.c,v 1.34 2003-06-20 16:10:23 aono Exp $";
 
 #if defined(HAVE_CONFIG_H)
 #  include <config.h>
@@ -52,7 +52,7 @@ static char rcs_id[] = "$Id: de.c,v 1.33 2003-06-20 15:34:29 aono Exp $";
 #endif /* STDC_HEADERS */
 #include <sys/ioctl.h>
 #include <sys/stat.h>
-#if TIME_WITH_SIS_TIME
+#if TIME_WITH_SYS_TIME
 #  include <sys/time.h>
 #  include <time.h>
 #else
@@ -61,7 +61,7 @@ static char rcs_id[] = "$Id: de.c,v 1.33 2003-06-20 15:34:29 aono Exp $";
 #  else
 #    include <time.h>
 #  endif /* HAVE_SYS_TIME_H */
-#endif /* TIME_WITH_SIS_TIME */
+#endif /* TIME_WITH_SYS_TIME */
 #if HAVE_UNISTD_H
 #  include <sys/types.h>
 #  include <unistd.h>
