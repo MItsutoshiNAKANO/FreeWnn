@@ -1,5 +1,5 @@
 /*
- *  $Id: sheader.h,v 1.9 2002-06-13 21:27:47 hiroo Exp $
+ *  $Id: sheader.h,v 1.10 2002-06-15 13:02:14 hiroo Exp $
  */
 
 /*
@@ -193,7 +193,7 @@ extern FuncDataBase function_db[];
 extern int (*default_code_trans[]) ();
 
 /* ============================================================
- *   extern function defines
+ *   extern function prototypes
  * ============================================================ */
 #include "rk_spclval.h"
 #include "rk_fundecl.h"

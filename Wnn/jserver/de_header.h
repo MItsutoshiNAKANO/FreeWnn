@@ -1,5 +1,5 @@
 /*
- *  $Id: de_header.h,v 1.11 2002-03-31 06:26:52 hiroo Exp $
+ *  $Id: de_header.h,v 1.12 2002-06-15 13:02:14 hiroo Exp $
  */
 
 /*
@@ -345,8 +345,8 @@ extern void error_exit ();
 #endif
 extern void log_err (const char *, ...);
 extern void log_debug (const char *, ...);
-extern intfntype signal_hand ();
-extern intfntype terminate_hand ();
+extern RETSIGTYPE signal_hand ();
+extern RETSIGTYPE terminate_hand ();
 /* error1() - For compatiblity */
 #define error1 log_debug
 extern void out ();

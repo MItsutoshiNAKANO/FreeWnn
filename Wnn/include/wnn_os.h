@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_os.h,v 1.9 2002-03-29 15:08:51 hiroo Exp $
+ *  $Id: wnn_os.h,v 1.10 2002-06-15 13:02:14 hiroo Exp $
  */
 
 /*
@@ -33,16 +33,31 @@
 #define WNN_OS_H
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
-/* OS dependent */
-
+/* system headers needed for system dependent configuration */
 #include <signal.h>
+#if STDC_HEADERS
+#  include <limits.h>
+#if HAVE_SYS_PARAM_H
+#  include <sys/param.h>
+#endif
+
+/* strchr vs. index, etc. */
+#if (HAVE_MEMSET) && !(HAVE_BZERO)
+#  define bzero(adr,n)  memset((adr),0,(n))
+#endif
+#if !(HAVE_STRCHR) && (HAVE_INDEX)
+#  define strchr  index
+#endif
+#if !(HAVE_STRRCHR) && (HAVE_RINDEX)
+#  define strrchr rindex
+#endif
+
+/* SIGNAL */
 
 #ifdef SYSVR2
-#include <string.h>
-#define index   strchr
 #ifndef re_signal
 # define re_signal(x, y) signal((x), (y))
 #endif
@@ -50,13 +65,9 @@
 # define re_signal(x, y)
 #endif
 
-#if defined(HAVE_SYS_PARAM_H)
-#include <sys/param.h>
-#define getdtablesize() (NOFILE)        /* sys/param.h must be included */
 #ifndef SIGCHLD
-#define SIGCHLD SIGCLD
+#  define SIGCHLD SIGCLD
 #endif
-#endif /* HAVE_SYS_PARAM_H */
 
 #include <sys/types.h>
 #include <sys/file.h>
@@ -66,18 +77,16 @@
 #include <term.h>
 #endif
 
-#if defined(luna) && !defined(SIGNALRETURNSINT)
-#define SIGNALRETURNSINT
-#endif
+typedef RETSIGTYPE (*intfnptr) ();
 
-#ifndef SIGNALRETURNSINT
-typedef void intfntype;
-#define SIGNAL_RETURN   return
-#else
-typedef int intfntype;
-#define SIGNAL_RETURN   return(0)
-#endif
-typedef intfntype (*intfnptr) ();
+/* Temporally place the number of filedescripters hack here. */
+#if HAVE_GETDTABLESIZE
+#  define WNN_NFD getdtablesize()
+#elif defined (OPEN_MAX)
+#  define WNN_NFD OPEN_MAX
+#elif defined (NOFILE)
+#  define WNN_NFD NOFILE
+#endif /* HAVE_GETDTABLESIZE */
 
 /* function prototypes (temporal use. need reconstruction) */
 unsigned int create_cswidth (char *s);	/* xutoj.c */

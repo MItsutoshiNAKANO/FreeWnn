@@ -1,5 +1,5 @@
 /*
- *  $Id: getopt.c,v 1.3 2001-06-14 18:15:58 ura Exp $
+ *  $Id: getopt.c,v 1.4 2002-06-15 13:02:14 hiroo Exp $
  */
 
 /*
@@ -40,8 +40,20 @@
         加えて下さい。
 
 ***********************************************************************/
-#define NULL    0
-#define EOF     (-1)
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
+#include <stdio.h>
+#if STDC_HEADERS
+#  include <string.h>
+#else  /* !STDC_HEADERS */
+#  if HAVE_STRINGS_H
+#    include <strings.h>
+#  endif
+#endif /* !STDC_HEADERS */
+#include "wnn_os.h"
+
 #define ERR_PRINT(s, c)                                                 \
         if(opterr){                                                     \
                 char    errbuf[2];                                      \
@@ -52,11 +64,6 @@
                 (void)write(2, s, (unsigned)strlen(s));                 \
                 (void)write(2, errbuf, 2);                              \
         }
-#ifdef  BSD42
-#define strchr  index
-#endif
-extern int strcmp ();
-extern char *strchr ();
 
 int opterr = 1;
 int optind = 1;
@@ -125,8 +132,3 @@ getopt (argc, argv, opts)
   return (c);
 }
 
-/*
-  Local Variables:
-  kanji-flag: t
-  End:
-*/

@@ -1,5 +1,5 @@
 /*
- *  $Id: rk_header.h,v 1.4 2002-03-23 21:18:29 hiroo Exp $
+ *  $Id: rk_header.h,v 1.5 2002-06-15 13:02:14 hiroo Exp $
  */
 
 /*
@@ -40,7 +40,6 @@
  */
 /*      make時に必要なdefine
 
-        BSD42           BSDにてstrings.hを使用（string.hを使う場合は不要）
         SYSVR2          System Vにて定義域の制限されたtoupper・tolowerを使用
                         （なくても動く）
         MVUX            ECLIPSE MVでの運転時にdefine  IKISが自動defineされる
@@ -55,6 +54,10 @@
         この他 デバッグ時は必要に応じて KDSP、CHMDSPをdefine
 */
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #ifdef MVUX
 #  define IKIS
 #endif
@@ -64,11 +67,10 @@
 #  include <string.h>
 #elif HAVE_STRINGS_H
 #  include <strings.h>
-#  define strchr  index
-#  define strrchr rindex
 #endif /* STDC_HEADERS */
 
 #include "rk_macros.h"
+#include "wnn_os.h"
 
 #define ESCCHR  '\033'
 #define BASEMX  (26 + 10)

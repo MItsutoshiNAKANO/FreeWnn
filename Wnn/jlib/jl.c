@@ -1,5 +1,5 @@
 /*
- *  $Id: jl.c,v 1.10 2002-05-12 22:51:16 hiroo Exp $
+ *  $Id: jl.c,v 1.11 2002-06-15 13:02:14 hiroo Exp $
  */
 
 /*
@@ -67,6 +67,7 @@
 #include "jllib.h"
 #include "msg.h"
 #include "wnn_string.h"
+#include "wnn_os.h"
 
 extern struct msg_cat *wnn_msg_cat;
 
@@ -2988,13 +2989,8 @@ expand_expr (s, env)
     return (-1);
 
   s1 = s;
-#ifdef BSD42
-  if (NULL != (p = index (++s1, '/')))
-    {
-#else
   if (NULL != (p = strchr (++s1, '/')))
     {
-#endif
       strcpy (tmp, p);
       *p = '\0';
     }

@@ -1,5 +1,5 @@
 /*
- *  $Id: error.c,v 1.11 2002-05-12 22:51:16 hiroo Exp $
+ *  $Id: error.c,v 1.12 2002-06-15 13:02:14 hiroo Exp $
  */
 
 /*
@@ -210,19 +210,29 @@ log_err(const char *fmt, ...)
 }
 
 
-void
+RETSIGTYPE
 signal_hand (x)
      int x;
 {
   log_debug ("signal catched signal_no = %d (ignored)", x);
   re_signal (x, signal_hand);	/* See <wnn_os.h> */
+
+  /* not reached */
+#ifndef RETSIGTYPE_VOID
+  return 0;
+#endif
 }
 
-void
+RETSIGTYPE
 terminate_hand ()
 {
   daemon_fin ();
   exit (0);
+
+  /* not reached */
+#ifndef RETSIGTYPE_VOID
+  return 0;
+#endif
 }
 
 #if 0		/* Not used for now */

@@ -1,5 +1,5 @@
 /*
- *  $Id: initjserv.c,v 1.11 2002-05-12 22:51:16 hiroo Exp $
+ *  $Id: initjserv.c,v 1.12 2002-06-15 13:02:14 hiroo Exp $
  */
 
 /*
@@ -51,6 +51,7 @@
 #include "commonhd.h"
 #include "de_header.h"
 #include "wnn_config.h"
+#include "wnn_os.h"
 #include "kaiseki.h"
 
 struct wnn_param default_para = {
@@ -90,13 +91,8 @@ expand_expr (s)
         return (-1);
 
       s1 = s;
-#ifdef BSD42
-      if (NULL != (p = index (++s1, '/')))
-        {
-#else
       if (NULL != (p = strchr (++s1, '/')))
         {
-#endif
           strcpy (tmp, p);
           *p = '\0';
         }

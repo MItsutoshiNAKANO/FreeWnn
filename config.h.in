@@ -1,5 +1,5 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
-/* $Id: config.h.in,v 1.14 2002-06-15 10:19:27 hiroo Exp $ */
+/* $Id: config.h.in,v 1.15 2002-06-15 13:02:13 hiroo Exp $ */
 
 /* Define `socklen_t' to int if <sys/socket.h> does not define. */
 #undef socklen_t
@@ -45,6 +45,9 @@
 
 /* Define to 1 if you have the <fcntl.h> header file. */
 #undef HAVE_FCNTL_H
+
+/* Define to 1 if you have the `getdtablesize' function. */
+#undef HAVE_GETDTABLESIZE
 
 /* Define to 1 if you have the `gethostname' function. */
 #undef HAVE_GETHOSTNAME

@@ -1,5 +1,5 @@
 /*
- *  $Id: js.c,v 1.12 2002-05-12 22:51:16 hiroo Exp $
+ *  $Id: js.c,v 1.13 2002-06-15 13:02:14 hiroo Exp $
  */
 
 /*
@@ -61,9 +61,13 @@ extern  Variables
 #include <signal.h>
 #if STDC_HEADERS
 #  include <stdlib.h>
+#  include <string.h>
 #else
 #  if HAVE_MALLOC_H
 #    include <malloc.h>
+#  endif
+#  if HAVE_STRINGS_H
+#    include <strings.h>
 #  endif
 #endif /* STDC_HEADERS */
 #if HAVE_FCNTL_H
@@ -94,9 +98,8 @@ extern  Variables
 #include "../etc/bdic.c"
 #include "../etc/pwd.c"
 
-#ifdef SYSVR2
-#define bzero(adr,n)    memset((adr),0,(n))
-#endif
+/* defined in wnn_os.h & should be modified in the future */
+/* #define bzero(adr,n)    memset((adr),0,(n)) */
 
 int wnn_errorno = 0;
 struct msg_cat *wnn_msg_cat = NULL;

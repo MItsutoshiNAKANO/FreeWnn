@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.28 2002-06-15 10:19:27 hiroo Exp $
+dnl   $Id: configure.in,v 1.29 2002-06-15 13:02:13 hiroo Exp $
 dnl
 
 dnl
@@ -429,7 +429,7 @@ dnl AC_FUNC_WAIT3
 
 AC_CHECK_FUNCS(drand48 fchmod \
 	gethostname select socket closesocket setsockopt send recv \
-	getrlimit syslog vsyslog setenv snprintf)
+	getdtablesize getrlimit syslog vsyslog setenv snprintf)
 dnl for bcopy/index -> memcpy/strchr conversion (preparation):
 AC_CHECK_FUNCS(bcopy bzero bcmp index rindex \
 	memcpy memmove memset strchr strrchr)

@@ -1,5 +1,5 @@
 /*
- *  $Id: de.c,v 1.22 2002-05-12 22:51:16 hiroo Exp $
+ *  $Id: de.c,v 1.23 2002-06-15 13:02:14 hiroo Exp $
  */
 
 /*
@@ -68,14 +68,7 @@
 #include "wnn_os.h"
 
 #if defined(HAVE_SYS_PARAM_H)
-#include <sys/param.h>
-#else /* should be revised... */
-#if defined(BSD42)
-#define NOFILE getdtablesize()
-#endif /* BSD42 */
-#ifdef HITACHI
-#define NOFILE 89
-#endif /* HITACHI */
+#  include <sys/param.h>
 #endif /* HAVE_SYS_PARAM_H */
 
 #ifdef SYSVR2
@@ -360,7 +353,7 @@ socket_disc_init ()
 {
   int sel_w;                    /* long word(==int) width of all_socks */
 
-  nofile = NOFILE;
+  nofile = WNN_NFD;
   sel_w = (nofile - 1) / BINTSIZE + 1;
   all_socks = (int *) calloc (sel_w, (sizeof (int)));
   ready_socks = (int *) malloc (sel_w * (sizeof (int)));
@@ -1124,9 +1117,7 @@ xerror (s)
      register char *s;
 {
   fprintf (stderr, "%s: %s\n", cmd_name, s);
-#ifdef HAVE_PERROR
   perror (cmd_name);
-#endif
   exit (1);
 }
 

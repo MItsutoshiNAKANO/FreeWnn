@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.10 2002-06-13 21:27:46 hiroo Exp $
+ *  $Id: jhlp.c,v 1.11 2002-06-15 13:02:14 hiroo Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.10 2002-06-13 21:27:46 hiroo Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.11 2002-06-15 13:02:14 hiroo Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -75,6 +75,7 @@ static char *rcs_id = "$Id: jhlp.c,v 1.10 2002-06-13 21:27:46 hiroo Exp $";
 #include "sdefine.h"
 #include "sheader.h"
 #include "wnn_config.h"
+#include "wnn_os.h"
 
 
 jmp_buf kk_env;
@@ -137,7 +138,7 @@ extern char *ttyname ();
 static void save_signals ();
 static void restore_signals ();
 
-static intfntype terminate_handler ();
+static RETSIGTYPE terminate_handler ();
 static void do_end (), open_pty (), open_ttyp (), do_main (), exec_cmd (), parse_options (), setsize (), get_rubout (), usage (), change_size (), default_usage ();
 
 /** メイン */
@@ -872,7 +873,7 @@ j_term_init ()
 
 /** signal SIGCHLD を受けた後の処理をする。*/
 /* *INDENT-OFF* */
-intfntype
+RETSIGTYPE
 chld_handler ()
 /* *INDENT-ON* */
 {
@@ -932,28 +933,40 @@ chld_handler ()
 #endif /* HAVE_WAIT3 */
 
   re_signal (SIGCHLD, chld_handler);
-  SIGNAL_RETURN;
+
+  /* not reached */
+#ifndef RETSIGTYPE_VOID 
+  return 0;
+#endif
 }
 
 /** signal SIGTERM を受けた時の処理をする。*/
-static intfntype
+static RETSIGTYPE
 terminate_handler ()
 {
   signal (SIGCHLD, SIG_IGN);
   epilogue_no_close ();
   do_end ();
-  SIGNAL_RETURN;
+
+  /* not reached */
+#ifndef RETSIGTYPE_VOID 
+  return 0;
+#endif
 }
 
 #ifdef  SIGWINCH
 /* *INDENT-OFF* */
-intfntype
+RETSIGTYPE
 resize_handler ()
 /* *INDENT-ON* */
 {
   re_signal (SIGWINCH, resize_handler);
   change_size ();
-  SIGNAL_RETURN;
+
+  /* not reached */
+#ifndef RETSIGTYPE_VOID 
+  return 0;
+#endif
 }
 #endif /* SIGWINCH */
 
@@ -1343,13 +1356,8 @@ exec_cmd (argv)
           err ("redirection fault.");
         }
 #endif /* linux */
-#ifdef UX386
-      for (i = NOFILES - 1; i > 2; i--)
+      for (i = WNN_NFD - 1; i > 2; i--)
         {
-#else
-      for (i = getdtablesize () - 1; i > 2; i--)
-        {
-#endif
           close (i);
         }
 
