@@ -1,5 +1,5 @@
 /*
- *  $Id: bdic.c,v 1.12 2004-07-12 17:53:02 hiroo Exp $
+ *  $Id: bdic.c,v 1.13 2005-06-12 17:14:22 aonoto Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002, 2003, 2004
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2003, 2004, 2005
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -105,8 +105,6 @@ JS_STATIC int put_short (FILE* ofpter, int i);
 JS_STATIC int put_int (FILE* ofpter, int i);
 JS_STATIC int get_null (FILE* ifpter, int n);
 JS_STATIC int get_nstring (FILE* ifpter, int n, char* st);
-JS_STATIC int get_n_EU_str (FILE* ifpter, int n, w_char* st);
-JS_STATIC int get_short (short* sp, FILE* ifpter);
 JS_STATIC int get_int (int* ip, FILE* ifpter);
 
 #ifndef JS
@@ -327,36 +325,10 @@ get_nstring (FILE* ifpter, int n, char* st)
 }
 
 
-JS_STATIC int
-get_n_EU_str (FILE* ifpter, int n, w_char* st)
-{
-  int k;
-
-  for (; n; n--)
-    {
-      k = get_short ((short *) st++, ifpter);
-      if (k == -1)
-        return (-1);
-    }
-  return (0);
-}
-
-JS_STATIC int
-get_short (short* sp, FILE* ifpter)
-{
-  int i = 0;
-  int k;
-
-  i |= (k = vgetc (ifpter)) << 8;
-  if (k == -1)
-    return (-1);
-  i |= (k = vgetc (ifpter));
-  if (k == -1)
-    return (-1);
-  *sp = i;
-  return (0);
-}
-
+/* 
+ * Note for get_n_EU_str() / get_short() :
+ * Moved to dtoa.c for now (currently we don't use them in other files) ...
+ */
 
 JS_STATIC int
 get_int (int* ip, FILE* ifpter)

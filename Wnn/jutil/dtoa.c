@@ -1,5 +1,5 @@
 /*
- *  $Id: dtoa.c,v 1.8 2002-05-12 22:51:17 hiroo Exp $
+ *  $Id: dtoa.c,v 1.9 2005-06-12 17:14:23 aonoto Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2005
  *
  * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
  *
@@ -34,7 +34,7 @@
   */
 
 #ifndef lint
-static char *rcs_id = "$Id: dtoa.c,v 1.8 2002-05-12 22:51:17 hiroo Exp $";
+static char *rcs_id = "$Id: dtoa.c,v 1.9 2005-06-12 17:14:23 aonoto Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -71,11 +71,14 @@ extern int pzy_flag;            /* Pinyin or Zhuyin */
 #endif
 
 extern void parse_options (), usage (), input_dic (), udtoujis (), kset (), sdtoujis (), ghindo (), sort (), output_ujis (), exit1 (), init_jeary (), get_kanji_str ();
-extern int input_header (), input_comment (), input_hinsi_list (), little_endian (), revdic (), wnn_loadhinsi (), init_heap (), w_stradd (), input_hindo_header (), motoni2 (), get_n_EU_str ();
+extern int input_header (), input_comment (), input_hinsi_list (), little_endian (), revdic (), wnn_loadhinsi (), init_heap (), w_stradd (), input_hindo_header (), motoni2 ();
 #ifdef CONVERT_with_SiSheng
 extern int cwnn_yincod_pzy_str (), input_sisheng ();
 #endif
 static int rdtoujis (), set_hinsi (), input_hindo (), add_hindo ();
+/* Moved from Wnn/etc/bdic.c */
+int get_n_EU_str (FILE* ifpter, int n, w_char* st);
+int get_short (short* sp, FILE* ifpter);
 
 int which_dict;
 
@@ -572,3 +575,33 @@ input_sisheng (ifpter)
 }
 
 #endif
+
+int
+get_n_EU_str (FILE* ifpter, int n, w_char* st)
+{
+  int k;
+
+  for (; n; n--)
+    {
+      k = get_short ((short *) st++, ifpter);
+      if (k == -1)
+        return (-1);
+    }
+  return (0);
+}
+
+int
+get_short (short* sp, FILE* ifpter)
+{
+  int i = 0;
+  int k;
+
+  i |= (k = getc (ifpter)) << 8;
+  if (k == -1)
+    return (-1);
+  i |= (k = getc (ifpter));
+  if (k == -1)
+    return (-1);
+  *sp = i;
+  return (0);
+}
