@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.9 2001-08-14 13:43:22 hiroo Exp $
+#   $Id: Makefile.in,v 1.10 2005-08-28 17:17:36 aonoto Exp $
 #
 
 #
@@ -10,9 +10,9 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001
+# Copyright FreeWnn Project 1999, 2000, 2001, 2005
 # 
-# Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
+# Maintainer:  FreeWnn Project
 # 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,16 +29,16 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-include @top_srcdir@/makerule.mk
-top_builddir = ../..
+include @top_builddir@/makerule.mk
+top_builddir = @top_builddir@
 
 INSTALL      = @INSTALL@
 
        UUMOWNER = root
-       INCLUDES = -I$(CWNNINCLUDESRC) -I$(CWNNROMKANSRC) -I$(TOP)
+       INCLUDES = -I$(CWNNINCLUDESRC) -I$(CWNNROMKANSRC) -I$(top_builddir)
         DEFINES = $(CWNNDEFINES) $(CWNNLANGDEF)
 LOCAL_INSTFLAGS = $(INSTUIDFLAGS) -o $(UUMOWNER)
-LOCAL_LIBRARIES = $(CWNNJLIB) $(CWNNCONVLIB)
+LOCAL_LIBRARIES = $(CWNNJLIB) $(CWNNCONVLIB) @LIBS@
 
 HDRS= buffer.h cvtcode.h sdefine.h sheader.h
 SRC1= epilogue.c header.c kensaku.c kuten.c jis_in.c       prologue.c touroku.c jikouho.c jutil.c w_string.c       printf.c termio.c hinsi.c termcap.c       ttyfdslot.c setutmp.c redraw.c history.c key_bind.c       screen.c basic_op.c uif.c cursor.c jhlp.c       select_ele.c inspect.c wnnrc_op.c functions.c
@@ -62,9 +62,10 @@ all:: $(HDRS) $(SRC1) cuum
 
 cuum: $(OBJS) $(LOCAL_LIBRARIES)
 	$(RM) $@
-	$(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) $(WNNTERM_LIB)
+	$(LIBTOOL) --mode=link $(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) $(WNNTERM_LIB)
 
 clean::
+	$(RM) -r .libs
 	$(RM) cuum
 
 includes:: $(HDRS) $(SRC1)
@@ -426,7 +427,7 @@ instclient:: install
 install:: cuum
 	@if [ -d $(DESTDIR)$(CWNNBINDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(CWNNBINDIR)); fi
-	$(INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) cuum $(DESTDIR)$(CWNNBINDIR)/cuum
+	$(LIBTOOL) --mode=install $(INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) cuum $(DESTDIR)$(CWNNBINDIR)/cuum
 
 $(OBJ2) : $(SRC2)
 	$(CC) -c $(CFLAGS)  $(CWNNETCSRC)/`basename $@ .o`.c

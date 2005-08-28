@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.11 2002-06-22 13:26:21 hiroo Exp $
+#   $Id: Makefile.in,v 1.12 2005-08-28 17:17:35 aonoto Exp $
 #
 
 #
@@ -10,9 +10,9 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001
+# Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2005
 # 
-# Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
+# Maintainer:  FreeWnn Project
 # 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,14 +29,16 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-include @top_srcdir@/makerule.mk
-top_builddir = ../..
+include @top_builddir@/makerule.mk
+  top_srcdir = @top_srcdir@
+top_builddir = @top_builddir@
+       VPATH = @srcdir@
 
 INSTALL         = @INSTALL@ $(INSTALLFLAGS)
 LOCAL_INSTFLAGS = $(INSTUIDFLAGS) -o $(UUMOWNER)
 
        UUMOWNER = root
-       INCLUDES = -I$(WNNINCLUDESRC) -I$(WNNROMKANSRC) -I$(TOP)
+       INCLUDES = -I$(WNNINCLUDESRC) -I$(WNNROMKANSRC) -I$(top_builddir)
         DEFINES = $(WNNDEFINES) $(WNNLANGDEF)
 LOCAL_LIBRARIES = $(WNNJLIB) $(WNNCONVLIB) @LIBS@
 
@@ -61,9 +63,10 @@ all:: uum
 
 uum: $(OBJS) $(LOCAL_LIBRARIES)
 	$(RM) $@
-	$(LIBTOOL) $(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) $(WNNTERM_LIB)
+	$(LIBTOOL) --mode=link $(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) $(WNNTERM_LIB) @LIBS@
 
 clean::
+	$(RM) -r .libs
 	$(RM) uum
 
 instclient:: install
@@ -71,7 +74,7 @@ instclient:: install
 install:: uum
 	@if [ -d $(DESTDIR)$(JWNNBINDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(JWNNBINDIR)); fi
-	$(LIBTOOL) $(INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) uum $(DESTDIR)$(JWNNBINDIR)/uum
+	$(LIBTOOL) --mode=install $(INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) uum $(DESTDIR)$(JWNNBINDIR)/uum
 
 $(OBJ2) : $(SRC2)
 	$(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c
