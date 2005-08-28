@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.15 2003-05-11 18:25:29 hiroo Exp $
+ *  $Id: jhlp.c,v 1.16 2005-08-28 16:44:21 aonoto Exp $
  */
 
 /*
@@ -12,7 +12,7 @@
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright FreeWnn Project 1999, 2000, 2002-2003
  *
- * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
+ * Maintainer:  FreeWnn Project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.15 2003-05-11 18:25:29 hiroo Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.16 2005-08-28 16:44:21 aonoto Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -43,7 +43,6 @@ static char *rcs_id = "$Id: jhlp.c,v 1.15 2003-05-11 18:25:29 hiroo Exp $";
 #if STDC_HEADERS
 #  include <stdlib.h>
 #  include <string.h>
-#  include <err.h>
 #else
 #  if HAVE_STRINGS_H
 #    include <strings.h>
