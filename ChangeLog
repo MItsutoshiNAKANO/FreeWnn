@@ -1,3 +1,211 @@
+/*
+  Some entries (from CVS ChangeLog) are not yet translated to
+  Japanese...
+ */
+
+Mon, 29 Aug 2005 02:17:35  Tomoki AONO <aonoto at users.sourceforge.jp>
+	* Wnn/uum/Makefile.in:
+	  - Fix libtool issue (Added --mode, remove .libs/ directory
+	    in make clean).
+	- Stripped (not valid?) mail address of the project.
+	- Changed some line to build correctly in case
+	  builddir != srcdir. (I think this don't break normal build.)
+	* [kc]Wnn/uum/Makefile.in:
+	  ditto, but I'm not sure we can build kuum / cuum correctly.
+
+Mon, 29 Aug 2005 01:44:21  Tomoki AONO <aonoto at users.sourceforge.jp>
+	* Wnn/uum/jhlp.c:
+	  Strip #include <err.h> because we don't need it and it's
+	  specific to BSD. And stripped (not valid?) mail address of
+	  the project.
+
+Mon, 13 Jun 2005 02:14:22  Tomoki AONO <aonoto at users.sourceforge.jp>
+	* Wnn/etc/bdic.c, Wnn/include/wnn_os.h, Wnn/jutil/dtoa.c:
+	  Moved get_n_EU_str / get_short from Wnn/etc/bdic.c to
+	  Wnn/jutil/dtoa.c .  It may be bad idea, but fix compile
+	  error on strict compilers (ex. gcc4).
+
+Mon, 11 Apr 2005 00:26:36  Tomoki AONO <aonoto at users.sourceforge.jp>
+
+	* CONTRIBUTORS, Wnn/etc/bcopy.c, Wnn/etc/mkdir.c, Wnn/etc/msg.c,
+	  Wnn/etc/py_table.c, Wnn/etc/strings.c, Wnn/etc/yincoding.c,
+	  Wnn/etc/zy_table.c, Wnn/include/commonhd.h, Wnn/include/demcom.h,
+	  Wnn/include/hinsi.h, Wnn/include/hinsi_file.h,
+	  Wnn/include/jd_sock.h, Wnn/include/jdata.h, Wnn/include/jh.h,
+	  Wnn/include/jllib.h, Wnn/include/jslib.h, Wnn/include/msg.h,
+	  Wnn/include/rk_spclval.h, Wnn/include/wnn_config.h,
+	  Wnn/include/wnn_os.h, Wnn/include/wnn_string.h,
+	  Wnn/include/wnnerror.h, Wnn/jlib/jl.c, Wnn/jlib/js.c,
+	  Wnn/jlib/kankana.c, Wnn/jlib/wnnerrmsg.c,
+	  Wnn/romkan/rk_bltinfn.c, Wnn/romkan/rk_extvars.h,
+	  Wnn/romkan/rk_fundecl.h, Wnn/romkan/rk_header.h,
+	  Wnn/romkan/rk_macros.h, Wnn/romkan/rk_main.c,
+	  Wnn/romkan/rk_modread.c, Wnn/romkan/rk_read.c,
+	  Wnn/romkan/rk_spclval.h, Wnn/romkan/rk_vars.c:
+
+	Changed license of libwnn-related files to LGPL-2.0.
+	Thanks to the original Wnn authors and FreeWnn contributors.
+
+	And thanks to Yukihiro Nagai (and tyoshida) for coordination
+	of this relicensing.
+
+Mon, 31 Jan 2005 02:14:20  Tomoki AONO <aonoto at users.sourceforge.jp>
+	* Wnn/jutil/wnnkill.c:
+	  I forgot to add prototype for usage() ... (^^;
+
+Mon, 31 Jan 2005 02:03:50  Tomoki AONO <aonoto at users.sourceforge.jp>
+	* Wnn/jutil/wnnkill.c:
+
+	- Use vsnprintf() within out() and use vsprintf() for systems
+	  doesn't have snprintf() (avoid build error). We should
+	  implement (or import) alternate snprintf() for these systems ...
+	- Added prototype of out() for strict C compilers (ex. gcc-4.0).
+	- Show simple usage if unsupported parameter is given.
+
+Thu, 30 Dec 2004 02:45:32  Tomoki AONO <aonoto at users.sourceforge.jp>
+	* Wnn/jserver/de_header.h:
+	  Fix prototype declaration of output_file_uniq() to match
+	  recent change of bdic.c .
+
+Sun, 21 Nov 2004 04:17:19  Tomoki AONO <aonoto at users.sourceforge.jp>
+	* COPYING.LIB:
+	  My first commit to sourceforge.jp :
+	  Added LGPL-2.0 COPYING file to repository. (LGPL patch by
+	  Nakai switch license of libwnn-related files to GNU Lesser
+	  General Public License 2, so this is not the version he (or
+	  she) intends to.)
+
+Mon, 13 Sep 2004 01:56:55  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp>
+	* Wnn/jlib/Makefile.in, cWnn/jlib/Makefile.in,
+	  kWnn/jlib/Makefile.in:
+
+	- Added libtool --mode options by introducing LT_CC / LT_INSTALL.
+	  (This change is mainly for [ck]Wnn, but also changed Wnn to
+	  match style).
+	- Cosmetic change to match style between Wnn and [ck]Wnn.
+	- My usual work to build correctly if builddir != srcdir .
+	  (Probably it cannot harm normal build.)
+
+Sun, 15 Aug 2004 18:38:22  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp>
+	* Wnn/jutil/Makefile.in, cWnn/jutil/Makefile.in,
+	  kWnn/jutil/Makefile.in:
+
+	  - Added libtool --mode=XXX option. (by (experimentally)
+	    introducing LT_LD / LT_INSTALL variable. Is this idea
+	    reasonable?)
+	  - Also added my change to support building in case
+	    builddir != srcdir .
+
+Thu, 12 Aug 2004 18:03:19  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp>
+	* Wnn/jutil/atod.c:
+	  Converted strlcpy() -> strncpy(). (Portability issue)
+
+Tue, 20 Jul 2004 03:24:26  Hiroo Ono <hiroo at oikumene.gcd.org>
+	* Wnn/jutil/: atod.c, atorev.c, dic_head.c, oldatonewa.c, sort.c,
+	  utilbdic.c, wnnkill.c, wnntouch.c:
+
+	  Conform to ISO C.
+	  Bad thing with this commit is that it is not tested (even
+	  not compiled). However I thought it better to commit than
+	  forget, as I cannot take enough time.
+
+Tue, 13 Jul 2004 02:53:02  Hiroo Ono <hiroo at oikumene.gcd.org>
+	* Wnn/etc/bdic.c, Wnn/etc/pwd.c:
+	  ANSIfy, and make #ifdef thing a little bit simple.
+	  Added function prototypes, which are to be moved to some
+	  header file.
+
+Wed, 30 Jun 2004 00:11:55  Hiroo Ono <hiroo at oikumene.gcd.org>
+	* ChangeLog, ChangeLog.en:
+	  update to 20 June 2003.
+
+Tue, 29 Jun 2004 01:25:58  Hiroo Ono <hiroo at oikumene.gcd.org>
+	* ChangeLog, ChangeLog.en:
+	  update to 4 June 2003.
+	  Remove a comment about setenv(). It may have come from my
+	  misunderstandig.
+
+Tue, 29 Jun 2004 01:24:35  Hiroo Ono <hiroo at oikumene.gcd.org>
+	* Wnn/jlib/Makefile.in:
+	  add libtool option.
+
+Mon, 28 Jun 2004 00:39:11  Hiroo Ono <hiroo at oikumene.gcd.org>
+	* Contrib/dic/gerodic/g-jinmei.u:
+	  gerodic: Fix あじゃこんぐ & りえ entry.
+		They might be deleted, but for the instant just fix
+		them.
+
+Sat, 19 Jun 2004 01:32:41  Hiroo Ono <hiroo at oikumene.gcd.org>
+	* Wnn/jserver/de.c:
+	  Mistakenly removed "break" in rev.1.29. Revert them.
+	  pointy hat to: hiroo
+
+Sat, 22 May 2004 01:39:31  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp>
+	* INSTALL, INSTALL.en, config.h.in, configure, configure.in,
+	  Wnn/etc/revdic.c, Wnn/jserver/Makefile.in, Wnn/jserver/do_env.c,
+	  cWnn/jserver/Makefile.in, kWnn/jserver/Makefile.in:
+
+	Commit from my work area part 2. (Bit large ...)
+
+	Rewrote configure part of libwrap support:
+
+	- By default, configure finds if libwrap is installed.
+	- Do AC_TRY_LINK() on both $withval=yes and $withval=PATH case.
+	  (AC_CHECK_LIB() fails against original TCP wrapper ...)
+	- HAVE_LIBWRAP are defined in config.h.in, so remove "-DHAVE_LIBWRAP"
+	    from CFLAGS.
+	- Changed WRAPLIBS -> WRAPLIB .
+	- Add WRAPLIB on [kc]Wnn . Also add --mode=XXX to LIBTOOL lines.
+
+	Other changes:
+
+	- (configure) Running generated script by autoconf-2.53 (that
+	  we are using) fails on some Bourne shell family (lack of
+	  LINENO support.  ex. FreeBSD). Add code to clear default
+	  --with-tag (Libtool issue?).
+	- (configure) Add -no-cpp-precomp on Darwin only if you are using gcc.
+	  (But I don't know other compilers running on Darwin.)
+	- (configure) Use $ac_install_sh to mkdir Contrib/dic/gerodic .
+	- (do_env.c) Convert non-printable character for logging on
+	  JS_OPEN / JS_CONNECT. Partial fix of Bugtraq id 7918
+	  ([freewnn:01002]).
+	  Please don't install jserver as setuid *root* ... (^^;)
+	- (revdic.c) Fix compiler warnings.
+	- (some Makefiles) Some lines changed to build correctly if
+	  builddir != srcdir. (I think this don't break normal build.)
+
+Fri, 21 May 2004 22:55:53  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp>
+	* configure.in:
+	  Commit from my work area: Change indention of help string in
+	  configure.  (Cosmetic issue only.)
+
+Sun, 25 Apr 2004 03:56:40  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp>
+	* Wnn/pubdicplus/Makefile.in, cWnn/cdic/Makefile.in,
+	  cWnn/tdic/Makefile.in, kWnn/kdic/Makefile.in:
+
+	  Some CPP (ex. cpp bundled with Mac OS X 10.3 Developers CD)
+	  adds "#pragma" line, so strip these lines before processing
+	  atof.  Inspired by Makoto Fujiwara's Web diary (2004/Mar/01).
+
+	  This change includes part of my modification (in case
+	  builddir != srcdir), but it doesn't affect to normal build ...
+
+Thu, 20 Nov 2003 19:31:59  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp>
+	* Wnn/jserver/de.c:
+	  Don't use is_internet_socket if --without-libwrap (quick &
+	  dirty fix). Spotted by Makoto Fujiwara (in his Web diary).
+
+Sat,  8 Nov 2003 15:26:06  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp>
+	* Wnn/jlib/js.c:
+	If we use s[0..6] (in get_serv_defs()), we should declare s[7].
+	Found in RawHide package (1.11-39) (and probably in Fedora / Red Hat
+	Enterprise Linux package). Spotted to (at least) Red Hat
+	by d.binderman at virgin.net .
+
+Tue, 16 Sep 2003 20:42:13  Tomoki AONO <aono at cc.osaka-kyoiku.ac.jp>
+	* Contrib/dic/gerodic/g-jinmei.u:
+	  Fix translation of 'morisu' -> 'Morris' (not '*N*orris').
+	  Spotted by Fe2+ ([freewnn:01006]).
 Fri, 20 Jun 2003 16:10:24 Tomoki Aono <aono at cc.osaka-kyoiku.ac.jp>
 	* Wnn/jserver/de.c:
 	  libwrap 対応を修正して、許可されていない host からの接続のみ拒否
