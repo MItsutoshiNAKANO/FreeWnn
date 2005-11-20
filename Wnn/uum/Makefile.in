@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.12 2005-08-28 17:17:35 aonoto Exp $
+#   $Id: Makefile.in,v 1.13 2005-11-20 16:10:28 aonoto Exp $
 #
 
 #
@@ -61,9 +61,9 @@ OBJS= $(OBJ1) $(LOCAL_ETCOBJS)
 
 all:: uum
 
-uum: $(OBJS) $(LOCAL_LIBRARIES)
+uum: $(OBJS) @DEPWNNJLIB@ $(WNNCONVLIB)
 	$(RM) $@
-	$(LIBTOOL) --mode=link $(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) $(WNNTERM_LIB) @LIBS@
+	$(LIBTOOL) --mode=link $(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) $(WNNTERM_LIB)
 
 clean::
 	$(RM) -r .libs

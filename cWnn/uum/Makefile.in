@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.10 2005-08-28 17:17:36 aonoto Exp $
+#   $Id: Makefile.in,v 1.11 2005-11-20 16:10:28 aonoto Exp $
 #
 
 #
@@ -60,7 +60,7 @@ OBJS= $(OBJ1) $(LOCAL_ETCOBJS)
 
 all:: $(HDRS) $(SRC1) cuum
 
-cuum: $(OBJS) $(LOCAL_LIBRARIES)
+cuum: $(OBJS) @DEPCWNNJLIB@ $(CWNNCONVLIB)
 	$(RM) $@
 	$(LIBTOOL) --mode=link $(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) $(WNNTERM_LIB)
 
