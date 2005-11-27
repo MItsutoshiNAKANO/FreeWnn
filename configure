@@ -1653,9 +1653,9 @@ fi;
 	HINSI_DATA="\$(JWNNWNNDIR)/hinsi.data"
 
 else
-  	WNNJLIB="\$(WNNJLIBSRC)/libwnn.la"
+  	WNNJLIB="\$(top_builddir)/Wnn/jlib/libwnn.la"
 	DEPWNNJLIB="\$(WNNJLIB)"
-	HINSI_DATA="\$(WNNJDSRC)/hinsi.data"
+	HINSI_DATA="\$(top_builddir)/Wnn/jd/hinsi.data"
 
 fi;
 
@@ -1695,7 +1695,7 @@ fi;
 	THINSI_DATA="\$(TWNNTDSRC)/cixing.data"
 
 else
-  	CWNNJLIB="\$(CWNNJLIBSRC)/libcwnn.la"
+  	CWNNJLIB="\$(top_builddir)/cWnn/jlib/libcwnn.la"
 	DEPCWNNJLIB="\$(CWNNJLIB)"
 	CHINSI_DATA="\$(CWNNCDSRC)/cixing.data"
 	THINSI_DATA="\$(TWNNTDSRC)/cixing.data"
@@ -1738,7 +1738,7 @@ fi;
 	KHINSI_DATA="\$(KWNNWNNDIR)/hinsi.data"
 
 else
-  	KWNNJLIB="\$(KWNNJLIBSRC)/libkwnn.la"
+  	KWNNJLIB="\$(top_builddir)/kWnn/jlib/libkwnn.la"
 	DEPKWNNJLIB="\$(KWNNJLIB)"
 	KHINSI_DATA="\$(KWNNKDSRC)/hinsi.data"
 
@@ -2547,13 +2547,13 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 case $host in
 *-*-linux*)
-    CCOPTIONS="-Dlinux -D_POSIX_SOURCE -D_BSD_SOURCE"
+    CCOPTIONS="-Dlinux -D_GNU_SOURCE -D_POSIX_SOURCE -D_BSD_SOURCE"
     ;;
 *-*-darwin*)
     if test $GCC = yes; then
-    # Unfortunately, autoconf (at least 2.57) does not recognize
-    # proper CPP. (Normal cpp-precomp nor auto-retrying in basic mode does
-    # not work with pubdic+ processing.) So define here ....
+      # Unfortunately, autoconf (at least 2.57) does not recognize
+      # proper CPP. (Normal cpp-precomp nor auto-retrying in basic mode does
+      # not work with pubdic+ processing.) So define here ....
       # Note: It seems gcc-3.3 (or (probably) later) does not need this.
       CPP=${CPP:-"$CC -E -no-cpp-precomp"}
     fi
@@ -17739,14 +17739,13 @@ LIBTOOL='$(SHELL) $(top_builddir)/libtool'
 
 
 
-
-echo "$as_me:$LINENO: checking for crypt in -lcrypt" >&5
-echo $ECHO_N "checking for crypt in -lcrypt... $ECHO_C" >&6
-if test "${ac_cv_lib_crypt_crypt+set}" = set; then
+echo "$as_me:$LINENO: checking for library containing crypt" >&5
+echo $ECHO_N "checking for library containing crypt... $ECHO_C" >&6
+if test "${ac_cv_search_crypt+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lcrypt  $LIBS"
+  ac_func_search_save_LIBS=$LIBS
+ac_cv_search_crypt=no
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 #include "confdefs.h"
@@ -17784,23 +17783,67 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_lib_crypt_crypt=yes
+  ac_cv_search_crypt="none required"
 else
   echo "$as_me: failed program was:" >&5
 cat conftest.$ac_ext >&5
-ac_cv_lib_crypt_crypt=no
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_crypt_crypt" >&5
-echo "${ECHO_T}$ac_cv_lib_crypt_crypt" >&6
-if test $ac_cv_lib_crypt_crypt = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBCRYPT 1
-_ACEOF
+if test "$ac_cv_search_crypt" = no; then
+  for ac_lib in crypt; do
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+    cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+#include "confdefs.h"
 
-  LIBS="-lcrypt $LIBS"
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char crypt ();
+#ifdef F77_DUMMY_MAIN
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN() { return 1; }
+#endif
+int
+main ()
+{
+crypt ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_search_crypt="-l$ac_lib"
+break
+else
+  echo "$as_me: failed program was:" >&5
+cat conftest.$ac_ext >&5
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+  done
+fi
+LIBS=$ac_func_search_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_search_crypt" >&5
+echo "${ECHO_T}$ac_cv_search_crypt" >&6
+if test "$ac_cv_search_crypt" != no; then
+  test "$ac_cv_search_crypt" = "none required" || LIBS="$ac_cv_search_crypt $LIBS"
 
 fi
 
@@ -19572,10 +19615,10 @@ fi
 
 # mkdir -p Contrib/dic/gerodic in case builddir != srcdir
 dir=Contrib/dic/gerodic
-  if test ! -d $dir; then
-    echo "creating $dir ..."
+if test ! -d $dir; then
+  echo "creating $dir ..."
   $ac_install_sh -d $dir
-  fi
+fi
 
 
 
