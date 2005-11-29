@@ -1,3 +1,38 @@
+Wed, 30 Nov 2005 02:25:00  Tomoki AONO <aonoto at users.sourceforge.jp>
+	Update ChangeLog and added 1.1.1-a021 tag.
+
+Wed, 30 Nov 2005 02:00:02  Tomoki AONO <aonoto at users.sourceforge.jp>
+	* PubdicPlus/pod.c:
+	  Changed searchdesc() spec because 2nd / 3rd parameter is not
+	  used currently. (I found this on RedHat Bugzilla #110750.)
+	  Also added prototype for other functions. Currently it can
+	  compile on traditional (K&R) environment.
+
+Mon, 28 Nov 2005 02:30:23  Tomoki AONO <aonoto at users.sourceforge.jp>
+	* config.h.in, configure, configure.in:
+	  - Added -D_GNU_SOURCE to CCOPTIONS if linux. Merged from
+	    Gentoo portage, but discussion began in wnn-users ML
+	    ([wnn-users 1035]).  Thanks to MATSUU Takuto.
+	    (Some (ancient?) Linux users may get some problems on
+	    building. Please report us if it occurs.)
+	  - Changed library searching method of crypt() (to
+	    AC_SEARCH_LIBS). Maybe useful for systems that have
+	    crypt() on both libc and libcrypt (i.e. Solaris).
+	  - Use $(top_builddir) to *WNNJLIB / HINSI_DATA (instead of
+	    *WNNJLIBSRC / WNNJDSRC) by default. Useful if builddir !=
+	    srcdir, but it doesn't break normal configurations.
+	  - Some cosmetic change. (Also stripped old mail address.)
+
+Mon, 21 Nov 2005 01:10:28  Tomoki AONO <aonoto at users.sourceforge.jp>
+	* Wnn/uum/Makefile.in, cWnn/uum/Makefile.in, kWnn/uum/Makefile.in:
+	  Describe each library in *uum dependency line instead of
+	  $LOCAL_LIBRARIES (to avoid searching libraries in @LIBS@).
+
+Sun, 20 Nov 2005 03:25:52  Tomoki AONO <aonoto at users.sourceforge.jp>
+
+	* ChangeLog, ChangeLog.en:
+	  Update ChangeLog to 29 Aug 2005. (Japanese translation is
+	  not available...)
 Mon, 29 Aug 2005 02:17:35  Tomoki AONO <aonoto at users.sourceforge.jp>
 	* Wnn/uum/Makefile.in:
 	  - Fix libtool issue (Added --mode, remove .libs/ directory
