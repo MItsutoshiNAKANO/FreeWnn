@@ -21,7 +21,7 @@
  */
 
 #ifndef lint
-static char rcsid[] = "$Id: pod.c,v 1.5 2002-07-14 04:26:57 hiroo Exp $";
+static char rcsid[] = "$Id: pod.c,v 1.6 2005-11-29 17:00:02 aonoto Exp $";
 #endif
 
 #ifdef HAVE_CONFIG_H
@@ -81,6 +81,93 @@ static int hinshi_direction = INORDER;  /* see above */
 /* status of intern() */
 #define FOUND 0
 #define CREATE 1
+
+/* 品詞を表す構造体 */
+
+struct hinshipack
+{
+  int nhinshis;
+  Wchar *hinshi;
+  unsigned flags;               /* see below */
+  struct hinshipack *next;
+};
+
+/* values of (struct hinshipack.)flags */
+#define REPLACED 1
+
+/* 終止形を追加するためのルールファイルの内部表現(だと思う) */
+
+struct descpack
+{
+  Wchar *hinshi, *tandesc, *yomdesc;
+  struct descpack *next;
+};
+
+/* エントリの種別を表す構造体その他 */
+
+struct kindpack
+{
+  Wchar *kind;
+  long kindbit;
+};
+
+/* 辞書を表す構造体 */
+
+struct dicpack
+{
+  Wchar *yomi, *tango;
+  struct hinshipack *hinshi;
+  int hindo;
+  long kind;
+  Wchar *extdata;
+  unsigned flags;               /* SEE BELOW */
+  struct dicpack *next;
+};
+
+/* values of (struct dicpack.)flags */
+#define COMMON 001
+#define NEW    002
+
+#if defined (__STDC__) || defined (_AIX) || (defined (__mips) && defined (_SYSTYPE_SVR4)) || defined(_WIN32)
+/* Prototype for C89 (or later) */
+#ifndef POD_WCHAR
+size_t Mbstowcs (Wchar *d, char *ss, int n);
+size_t Wcstombs (char *d, Wchar *s, int n);
+int    Wscmp (register Wchar *s1, register Wchar *s2);
+Wchar  *Wscpy (Wchar *d, register Wchar *s);
+int    Wslen (Wchar *s);
+int    Watoi (Wchar *s);
+static void Fputws (Wchar *s, FILE *f);
+Wchar  *Fgetws (Wchar *buf, int siz, FILE *f);
+#endif /* !POD_WCHAR */
+
+static int all_kana (Wchar *s);
+static Wchar *findslash (Wchar *s);
+static Wchar *extstr (Wchar *p, Wchar **pp, int *key_return);
+static void malloc_failed (void);
+static struct hinshipack *internhinshi (Wchar *str, int flag);
+static void replace_hinshi (void);
+static void select_hinshi (int n);
+static void freedesc (struct descpack *p);
+static struct descpack *interndesc (Wchar *hin, Wchar *tan, Wchar *yom);
+static struct descpack *searchdesc (Wchar *hin);
+static void store_description (void);
+static long internkind (Wchar *s);
+static void listkinds (void);
+static int kindcompar (struct kindpack *k1, struct kindpack *k2);
+static void sortkind (void);
+static struct dicpack *intern (int key, Wchar *yomi, Wchar *kouho, Wchar *hinshi, int hindo, long kind, int *stat, long flags);
+static void storepd (FILE *file);
+static void comparepd (FILE *file);
+static void canna_output (FILE *cf, struct dicpack *p, Wchar *h, int n);
+static void entry_out (FILE *cf, struct dicpack *p, Wchar *h, int n, Wchar *ex);
+static void printentry (FILE *cf, struct dicpack *p);
+static void showentry (struct dicpack **pd, int n);
+static int diccompar (struct dicpack **p1, struct dicpack **p2);
+static int dichindocompar (struct dicpack **p1, struct dicpack **p2);
+void shrinkargs (char **argv, int n, int count);
+static void parseargs (int argc, char *argv[]);
+#endif
 
 #ifndef POD_WCHAR
 # define Mbstowcs mbstowcs
@@ -343,19 +430,6 @@ extstr (p, pp, key_return)
   return res;
 }
 
-/* 品詞を表す構造体 */
-
-struct hinshipack
-{
-  int nhinshis;
-  Wchar *hinshi;
-  unsigned flags;               /* see below */
-  struct hinshipack *next;
-};
-
-/* values of flags */
-#define REPLACED 1
-
 static struct hinshipack *partsofspeech[HINSHIBUFSIZE];
 
 static void
@@ -558,14 +632,6 @@ select_hinshi (n)
     }
 }
 
-/* 終止形を追加するためのルールファイルの内部表現(だと思う) */
-
-struct descpack
-{
-  Wchar *hinshi, *tandesc, *yomdesc;
-  struct descpack *next;
-};
-
 static void
 freedesc (p)
      struct descpack *p;
@@ -640,8 +706,8 @@ interndesc (hin, tan, yom)
 /* ルールの探索 */
 
 static struct descpack *
-searchdesc (hin, tan, yom)
-     Wchar *hin, **tan, **yom;
+searchdesc (hin)
+     Wchar *hin;
 {
   struct descpack *p, **pp;
   Wchar *s;
@@ -698,14 +764,7 @@ store_description ()
   (void) fclose (f);
 }
 
-/* エントリの種別を表す構造体その他 */
-
-struct kindpack
-{
-  Wchar *kind;
-  long kindbit;
-}
-kinds[sizeof (long) * 8];
+struct kindpack kinds[sizeof (long) * 8];
 static int nkinds;
 
 #define KIHONBIT 1L
@@ -774,22 +833,6 @@ sortkind ()
 {
   qsort (kinds, nkinds, sizeof (struct kindpack), kindcompar);
 }
-
-/* 辞書を表す構造体 */
-
-struct dicpack
-{
-  Wchar *yomi, *tango;
-  struct hinshipack *hinshi;
-  int hindo;
-  long kind;
-  Wchar *extdata;
-  unsigned flags;               /* SEE BELOW */
-  struct dicpack *next;
-};
-
-#define COMMON 001
-#define NEW    002
 
 static struct dicpack *dic[DICBUFSIZE], **pdic;
 static int ndicentries = 0;
