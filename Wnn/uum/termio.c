@@ -1,5 +1,5 @@
 /*
- *  $Id: termio.c,v 1.4 2002-06-13 21:27:47 hiroo Exp $
+ *  $Id: termio.c,v 1.5 2006-02-11 09:51:44 aonoto Exp $
  */
 
 /*
@@ -10,9 +10,9 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2006
  *
- * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
+ * Maintainer:  FreeWnn Project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,11 @@
 #include <stdio.h>
 #if STDC_HEADERS
 #  include <stdlib.h>
+#  include <string.h>
+#else
+#  if defined (HAVE_STRINGS_H)
+#    include <strings.h>
+#  endif /* HAVE_STRINGS_H */
 #endif /* STDC_HEADERS */
 
 #include "commonhd.h"
