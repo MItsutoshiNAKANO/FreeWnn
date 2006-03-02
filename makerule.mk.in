@@ -1,5 +1,5 @@
 #
-#   $Id: makerule.mk.in,v 1.11 2003-05-11 18:22:57 hiroo Exp $
+#   $Id: makerule.mk.in,v 1.12 2006-03-02 17:18:49 aonoto Exp $
 #
 
 #
@@ -10,9 +10,9 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001, 2003
+# Copyright FreeWnn Project 1999, 2000, 2001, 2003, 2006
 # 
-# Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
+# Maintainer:  FreeWnn Project
 # 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -64,7 +64,11 @@ CCLINK = $(CC)
       LINTLIBFLAG = -C
          LINTOPTS = -axz
                LN = @LN_S@
-             MAKE = make
+# コンパイル時に違うmake (ex. システムのmakeとGNU make)を使えるよう、
+# ($MAKEが定義されるmakeならば) $MAKEは定義しない。
+# If you like to use specific make, uncomment and modify following line ...
+#            MAKE = make
+              @SET_MAKE@
                MV = mv -f
                CP = cp
 
@@ -72,6 +76,10 @@ CCLINK = $(CC)
   RANLIBINSTFLAGS =
 
           LIBTOOL = @LIBTOOL@
+# LT_* : shortcut for Makefile.in
+            LT_CC = $(LIBTOOL) --mode=compile $(CC)
+            LT_LD = $(LIBTOOL) --mode=link $(CCLINK)
+       LT_INSTALL = $(LIBTOOL) --mode=install $(INSTALL)
 
                RM = rm -f
               TBL = tbl
