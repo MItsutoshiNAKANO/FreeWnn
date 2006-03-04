@@ -1,5 +1,5 @@
 /*
- *  $Id: termio.c,v 1.5 2006-02-11 09:51:44 aonoto Exp $
+ *  $Id: termio.c,v 1.6 2006-03-04 19:01:46 aonoto Exp $
  */
 
 /*
@@ -46,7 +46,7 @@
 #include "sdefine.h"
 #include "sheader.h"
 
-#ifdef TERMINFO
+#ifdef HAVE_TERMINFO
 #include <stdio.h>
 #include <curses.h>
 #include <term.h>
@@ -72,7 +72,7 @@ openTermData ()
 {
   char *cp, *get_kbd_env ();
   int status;
-  int k;
+  /*  int k; */
   char lcode[10];
   char termchar[20];
   char errprefix[1024] = "error";
@@ -117,9 +117,13 @@ openTermData ()
       fprintf (stderr, "Your terminal is not strong enough. Goodbye !\n");
       return (-1);
     }
+  /*
+   * setenv TERM "${TERM}-j" to prevent starting uum over
+   * uum-controled terminal (disabled for now ...)
+   */
   termchar[0] = 0;
   strcat (termchar, cp);
-  strcat (termchar, "-j");
+  /* strcat (termchar, "-j"); */
   if (setenv ("TERM", termchar, 1) != 0)
     {
 #if HAVE_SNPRINTF
@@ -299,4 +303,4 @@ cursor_normal_raw ()
   tputs (cursor_normal, 1, putchar);
 }
 
-#endif /* TERMINFO */
+#endif /* HAVE_TERMINFO */

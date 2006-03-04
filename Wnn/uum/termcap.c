@@ -1,5 +1,5 @@
 /*
- *  $Id: termcap.c,v 1.6 2002-06-13 21:27:47 hiroo Exp $
+ *  $Id: termcap.c,v 1.7 2006-03-04 19:01:46 aonoto Exp $
  */
 
 /*
@@ -89,7 +89,7 @@ char *Term_UnderScoreEnd;
 
 char *Term_KeyPadOn;
 char *Term_KeyPadOff;
-#ifdef TERMCAP
+#if !HAVE_TERMINFO	/* Assume TERMCAP */
 char *Term_CursorNormal;
 char *Term_CursorInvisible;
 
@@ -564,4 +564,4 @@ strascii (dest, str)
   *dest = '\0';
 }
 
-#endif /* TERMCAP */
+#endif /* !HAVE_TERMINFO */

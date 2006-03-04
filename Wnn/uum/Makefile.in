@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.13 2005-11-20 16:10:28 aonoto Exp $
+#   $Id: Makefile.in,v 1.14 2006-03-04 19:01:46 aonoto Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2005
+# Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2005, 2006
 # 
 # Maintainer:  FreeWnn Project
 # 
@@ -40,7 +40,12 @@ LOCAL_INSTFLAGS = $(INSTUIDFLAGS) -o $(UUMOWNER)
        UUMOWNER = root
        INCLUDES = -I$(WNNINCLUDESRC) -I$(WNNROMKANSRC) -I$(top_builddir)
         DEFINES = $(WNNDEFINES) $(WNNLANGDEF)
+# todo: should update configure to switch both WNNJLIB and WNNCONVLIB
+#	according to --with-wnn-libraries
 LOCAL_LIBRARIES = $(WNNJLIB) $(WNNCONVLIB) @LIBS@
+# FIXME: libspt: need configure support ...
+# LIBSPT_CFLAGS = @LIBSPT_CFLAGS@
+#   LIBSPT_LIBS = @LIBSPT_LIBS@
 
 SRC1= epilogue.c header.c kensaku.c kuten.c jis_in.c       prologue.c touroku.c jikouho.c jutil.c w_string.c       printf.c termio.c hinsi.c termcap.c       ttyfdslot.c setutmp.c redraw.c history.c key_bind.c       screen.c basic_op.c uif.c cursor.c jhlp.c       select_ele.c inspect.c wnnrc_op.c functions.c
 
@@ -63,7 +68,7 @@ all:: uum
 
 uum: $(OBJS) @DEPWNNJLIB@ $(WNNCONVLIB)
 	$(RM) $@
-	$(LIBTOOL) --mode=link $(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) $(WNNTERM_LIB)
+	$(LT_LD) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) $(LIBSPT_LIBS) @TERMLIB@
 
 clean::
 	$(RM) -r .libs
@@ -74,7 +79,7 @@ instclient:: install
 install:: uum
 	@if [ -d $(DESTDIR)$(JWNNBINDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(JWNNBINDIR)); fi
-	$(LIBTOOL) --mode=install $(INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) uum $(DESTDIR)$(JWNNBINDIR)/uum
+	$(LT_INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) uum $(DESTDIR)$(JWNNBINDIR)/uum
 
 $(OBJ2) : $(SRC2)
 	$(CC) -c $(CFLAGS)  $(WNNETCSRC)/`basename $@ .o`.c

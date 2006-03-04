@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.42 2005-11-27 17:30:23 aonoto Exp $
+dnl   $Id: configure.in,v 1.43 2006-03-04 19:01:45 aonoto Exp $
 dnl
 
 dnl
@@ -10,7 +10,8 @@ dnl Copyright Kyoto University Research Institute for Mathematical Sciences
 dnl                 1987, 1988, 1989, 1990, 1991, 1992
 dnl Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 dnl Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-dnl Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2003, 2004, 2005
+dnl Copyright FreeWnn Project
+dnl                 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006
 dnl 
 dnl Maintainer:  FreeWnn Project
 dnl 
@@ -32,6 +33,9 @@ dnl
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
+dnl new AC_INIT do not work. I seem to make a mistake...
+dnl AC_INIT("FreeWnn", "1.11-pl21", "freewnn-users-owner@lists.sourceforge.jp")
+dnl AC_CONFIG_SRC_DIR(Wnn/conv/cvt_head.h)
 AC_INIT(Wnn/conv/cvt_head.h)
 AC_CONFIG_HEADER(config.h)
 
@@ -362,6 +366,9 @@ AC_SEARCH_LIBS(crypt, crypt)
 AC_CHECK_LIB(socket, connect)
 AC_CHECK_LIB(bind, getservbyname)
 AC_CHECK_LIB(nsl, gethostbyname)
+dnl libutil only needed by uum w/openpty...
+dnl FIXME: deals with Linux that have both ptsname & openpty
+AC_CHECK_LIB(util, openpty)
 
 dnl
 dnl Checks for header files.
@@ -374,7 +381,75 @@ AC_CHECK_HEADERS(fcntl.h syslog.h unistd.h utmp.h utmpx.h \
 	sys/file.h sys/ioctl.h sys/time.h sys/types.h sys/param.h \
 	malloc.h strings.h memory.h \
 	curses.h ncurses.h sgtty.h term.h termio.h termios.h \
+	termcap.h sys/termio.h libutil.h\
 )
+
+dnl
+dnl Terminal library selection.
+dnl ported from vim6.1 via canuum (Canna 3.6p3) for uum.
+dnl FIXME: cross compilation
+dnl
+olibs="$LIBS"
+AC_MSG_CHECKING(--with-term-libs argument)
+AC_ARG_WITH(tlib,
+[  --with-term-libs=-lLIB  terminal library to be used ],)
+if test -n "$with_term_libs"; then
+  AC_MSG_RESULT($with_term_libs)
+dnl  LIBS="$LIBS $with_term_libs"
+  TERMLIB=$with_term_libs
+else
+  AC_MSG_RESULT([automatic terminal library selection])
+  dnl  On HP-UX 10.10 termcap or termlib should be used instead of
+  dnl  curses, because curses is much slower.
+  dnl  Newer versions of ncurses are preferred over anything.
+  dnl  Older versions of ncurses have bugs, get a new one!
+  dnl  Digital Unix (OSF1) should use curses (Ronald Schild).
+  case "`uname -s 2>/dev/null`" in
+	OSF1)	tlibs="ncurses curses termlib termcap";;
+	*)	tlibs="ncurses termlib termcap curses";;
+  esac
+ for libname in $tlibs; do
+    AC_CHECK_LIB(${libname}, tgetent, [
+      dnl It's possible that a library is found but it doesn't work
+      dnl e.g., shared library that cannot be found.
+      dnl compile and run a test program to be sure
+      LIBS="${LIBS} -l${libname}"
+      AC_TRY_RUN([
+#ifdef HAVE_TERMCAP_H
+# include <termcap.h>
+#endif
+main() {char *s; s=(char *)tgoto("%p1%d", 0, 1); exit(0); }],
+	res="OK", res="FAIL", res="FAIL")
+      if test "$res" = "OK"; then
+	TERMLIB="${TERMLIB} -l${libname}"
+	lname=translit(${libname}, 'a-z', 'A-Z')
+	AC_DEFINE(HAVE_${lname}, 1, [use ${libname} for terminal control])
+	break
+      fi
+      AC_MSG_RESULT($libname library is not usable)
+      ],)
+    LIBS=${olibs}
+  done
+fi
+if test "x$TERMLIB" != "x"; then
+  LIBS="${LIBS} ${TERMLIB}"
+  AC_MSG_CHECKING(whether we talk terminfo)
+  AC_TRY_RUN([
+#ifdef HAVE_TERMCAP_H
+# include <termcap.h>
+#endif
+main()
+{char *s; s=(char *)tgoto("%p1%d", 0, 1); exit(!strcmp(s==0 ? "" : s, "1")); }],
+	AC_MSG_RESULT([no -- we are in termcap land]),
+	[ AC_DEFINE(HAVE_TERMINFO, 1, [terminfo spoken here])
+	  AC_MSG_RESULT([yes -- terminfo spoken here]) ],
+	AC_MSG_ERROR(failed to compile test program.))
+else
+  AC_MSG_RESULT(none found)
+fi
+LIBS=${olibs}
+AC_SUBST(TERMLIB)
+
 
 dnl
 dnl Checks for typedefs, structures, and compiler characteristics.
@@ -414,10 +489,13 @@ AC_FUNC_SETPGRP
 dnl FreeWnn do not use the 3rd parameter of wait3().
 dnl AC_FUNC_WAIT3
 
+dnl NOTE: FD_SET is defined as macro on many systems. But this check
+dnl	  will be done in Wnn/include/wnn_os.h , so don't care...
 AC_CHECK_FUNCS(random drand48 fchmod getopt killpg \
 	FD_SET \
 	gethostname select socket closesocket setsockopt send recv \
-	getdtablesize getrlimit syslog vsyslog setenv snprintf)
+	getdtablesize getrlimit syslog vsyslog setenv snprintf \
+	ptsname openpty)
 dnl for bcopy/index -> memcpy/strchr conversion (preparation):
 AC_CHECK_FUNCS(bcopy bzero bcmp index rindex \
 	memcpy memmove memset strchr strrchr)
@@ -428,6 +506,28 @@ AC_CHECK_FUNCS(mkdir vasprintf, ,
 [JS_SUPPORTOBJS="${JS_SUPPORTOBJS} ${ac_func}.o"])
 AC_SUBST(JS_SUPPORTOBJS)
 
+
+dnl
+dnl File Existence
+dnl Checking file at compile time may bring false result when cross-
+dnl compiling. So, one have to check generated config.h and edit it
+dnl if necessary after running configure.
+dnl
+dnl AC_CHECK_FILE(/dev/ptmx, AC_DEFINE(HAVE_DEV_PTMX, 1, [/dev/ptmx found]),)
+AC_CHECK_FILES(/dev/ptmx,,)
+
+
+dnl
+dnl FIXME: libspt support
+dnl for example:
+dnl
+dnl --with-libspt[=/path/to/libspt-config]
+dnl
+dnl LIBSPT_CFLAGS=`/path/to/libspt-config --cflags`
+dnl LIBSPT_LIBS=`/path/to/libspt-config --libs`
+dnl AC_SUBST(LIBSPT_CFLAGS)
+dnl AC_SUBST(LIBSPT_LIBS)
+dnl AC_DEFINE(HAVE_LIBSPT, 1, [Define if you have libspt support.])
 
 dnl
 dnl TCP Wrapper.

@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.11 2005-11-20 16:10:28 aonoto Exp $
+#   $Id: Makefile.in,v 1.12 2006-03-04 19:01:46 aonoto Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001, 2005
+# Copyright FreeWnn Project 1999, 2000, 2001, 2005, 2006
 # 
 # Maintainer:  FreeWnn Project
 # 
@@ -30,6 +30,7 @@
 #
 
 include @top_builddir@/makerule.mk
+  top_srcdir = @top_srcdir@
 top_builddir = @top_builddir@
 
 INSTALL      = @INSTALL@
@@ -39,6 +40,9 @@ INSTALL      = @INSTALL@
         DEFINES = $(KWNNDEFINES) $(KWNNLANGDEF)
 LOCAL_INSTFLAGS = $(INSTUIDFLAGS) -o $(UUMOWNER)
 LOCAL_LIBRARIES = $(KWNNJLIB) $(KWNNCONVLIB) @LIBS@
+# FIXME: libspt: need configure support ...
+# LIBSPT_CFLAGS = @LIBSPT_CFLAGS@
+#   LIBSPT_LIBS = @LIBSPT_LIBS@
 
 HDRS= buffer.h cvtcode.h sdefine.h sheader.h
 SRC1= epilogue.c header.c kensaku.c kuten.c jis_in.c       prologue.c touroku.c jikouho.c jutil.c w_string.c       printf.c termio.c hinsi.c termcap.c       ttyfdslot.c setutmp.c redraw.c history.c key_bind.c       screen.c basic_op.c uif.c cursor.c jhlp.c       select_ele.c inspect.c wnnrc_op.c functions.c
@@ -62,7 +66,7 @@ all:: $(HDRS) $(SRC1) kuum
 
 kuum: $(OBJS) @DEPKWNNJLIB@ $(KWNNCONVLIB)
 	$(RM) $@
-	$(LIBTOOL) --mode=link $(CCLINK) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) $(WNNTERM_LIB)
+	$(LT_LD) -o $@ $(LDOPTIONS) $(OBJS) $(LOCAL_LIBRARIES) $(LIBSPT_LIBS) @TERMLIB@
 
 clean::
 	$(RM) -r .libs
@@ -427,7 +431,7 @@ instclient:: install
 install:: kuum
 	@if [ -d $(DESTDIR)$(KWNNBINDIR) ]; then set +x; \
 	else (set -x; $(MKDIRHIER) $(DESTDIR)$(KWNNBINDIR)); fi
-	$(LIBTOOL) --mode=install $(INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) kuum $(DESTDIR)$(KWNNBINDIR)/kuum
+	$(LT_INSTALL) $(INSTALLFLAGS) $(INSTPGMFLAGS) $(LOCAL_INSTFLAGS) kuum $(DESTDIR)$(KWNNBINDIR)/kuum
 
 $(OBJ2) : $(SRC2)
 	$(CC) -c $(CFLAGS)  $(KWNNETCSRC)/`basename $@ .o`.c

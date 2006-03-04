@@ -1,5 +1,5 @@
 /*
- *  $Id: sheader.h,v 1.13 2003-05-11 18:29:24 hiroo Exp $
+ *  $Id: sheader.h,v 1.14 2006-03-04 19:01:46 aonoto Exp $
  */
 
 /*
@@ -10,9 +10,9 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002-2003
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2003, 2006
  *
- * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
+ * Maintainer:  FreeWnn Project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

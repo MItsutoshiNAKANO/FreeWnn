@@ -1,5 +1,5 @@
 /*
- *  $Id: wnn_os.h,v 1.16 2005-06-12 17:14:23 aonoto Exp $
+ *  $Id: wnn_os.h,v 1.17 2006-03-04 19:01:45 aonoto Exp $
  */
 
 /*
@@ -10,9 +10,9 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002, 2005
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2005, 2006
  *
- * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
+ * Maintainer:  FreeWnn Project
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -48,11 +48,6 @@
 #include <sys/file.h>
 #if HAVE_SYS_PARAM_H
 #  include <sys/param.h>
-#endif
-
-#ifdef TERMINFO
-#include <curses.h>
-#include <term.h>
 #endif
 
 /* strchr vs. index, etc. */

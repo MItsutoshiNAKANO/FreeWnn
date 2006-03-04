@@ -1,5 +1,5 @@
 /*
- *  $Id: setutmp.c,v 1.6 2002-06-22 13:26:21 hiroo Exp $
+ *  $Id: setutmp.c,v 1.7 2006-03-04 19:01:46 aonoto Exp $
  */
 
 /*
@@ -10,9 +10,9 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2006
  *
- * Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
+ * Maintainer:  FreeWnn Project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@
 #include <stdio.h>
 #if STDC_HEADERS
 #  include <string.h>
-#  include <time.h>
 #else
 #  if HAVE_STRINGS_H
 #    include <strings.h>
@@ -45,14 +44,30 @@
 #  endif
 #endif /* STDC_HEADERS */
 #include <sys/types.h>
+#include <pwd.h>
 #if HAVE_FCNTL_H
 #  include <fcntl.h>
 #endif
-#include <pwd.h>
+#if TIME_WITH_SYS_TIME
+#  include <sys/time.h>
+#  include <time.h>
+#else
+#  if HAVE_SYS_TIME_H
+#    include <sys/time.h>
+#  else
+#    include <time.h>
+#  endif /* HAVE_SYS_TIME_H */
+#endif /* TIME_WITH_SYS_TIME */
 #if HAVE_UNISTD_H
 #  include <unistd.h>
 #endif
-#include <utmp.h>
+#if HAVE_UTMPX_H
+#  include <utmpx.h>
+#elif HAVE_UTMP_H
+#  include <utmp.h>
+#else
+#  error "No utmp/utmpx header."
+#endif /* HAVE_UTMP_X */
 
 #include "commonhd.h"
 #include "sdefine.h"
@@ -60,14 +75,13 @@
 
 #define public
 
-#if defined(SVR4) && !defined(DGUX)
-#include <utmpx.h>
+#if HAVE_UTMPX_H
 static struct utmpx saveut;
 static struct utmpx nullut;
-#else /* SVR4 */
+#elif HAVE_UTMP_H
 static struct utmp saveut;
 static struct utmp nullut;
-#endif /* SVR4 */
+#endif /* HAVE_UTMPX_H */
 
 #ifdef BSD42
 static int savslotnum = 0;
@@ -124,8 +138,11 @@ setutmp (ttyFd)
   bzero (&ut, sizeof ut);
   if ((p = ttyname (ttyFd)) == NULL)
     return -1;
-  strncpy (ut.ut_line, strrchr (p, '/') + 1, 8);
-  strncpy (ut.ut_name, getpwuid (getuid ())->pw_name, 8);
+
+  if (!strcmp(p, "/dev/"))
+    p += 5;
+  strncpy (ut.ut_line, p, sizeof (ut.ut_line));
+  strncpy (ut.ut_user, getpwuid (getuid ())->pw_name, 8); /* should be sizeof (ut.ut_user) */
   ut.ut_time = time (0);
   strncpy (ut.ut_host, savttynm, 8);
   if (!(i = ttyfdslot (ttyFd)))
@@ -153,8 +170,11 @@ setutmp (ttyFd)
   memset (&ut, 0, sizeof ut);
   if ((p = ttyname (ttyFd)) == NULL)
     return -1;
-  strncpy (ut.ut_line, strrchr (p, '/') + 1, 12);
-  strncpy (ut.ut_user, getpwuid (getuid ())->pw_name, 8);
+
+  if (!strcmp(p, "/dev/"))
+    p += 5;
+  strncpy (ut.ut_line, p, sizeof (ut.ut_line));
+  strncpy (ut.ut_user, getpwuid (getuid ())->pw_name, 8); /* should be sizeof (ut.ut_user) */
   ut.ut_time = time (0);
 #ifdef DGUX
   strncpy (ut.ut_id, &ut.ut_line[3], 4);
