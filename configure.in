@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.43 2006-03-04 19:01:45 aonoto Exp $
+dnl   $Id: configure.in,v 1.44 2006-03-07 17:15:33 aonoto Exp $
 dnl
 
 dnl
@@ -440,15 +440,18 @@ if test "x$TERMLIB" != "x"; then
 #endif
 main()
 {char *s; s=(char *)tgoto("%p1%d", 0, 1); exit(!strcmp(s==0 ? "" : s, "1")); }],
-	AC_MSG_RESULT([no -- we are in termcap land]),
+	[ AC_MSG_RESULT([no -- we are in termcap land])
+	  CNVFILE_SUBDIR=bsd ],
 	[ AC_DEFINE(HAVE_TERMINFO, 1, [terminfo spoken here])
-	  AC_MSG_RESULT([yes -- terminfo spoken here]) ],
+	  AC_MSG_RESULT([yes -- terminfo spoken here])
+	  CNVFILE_SUBDIR=sysV ],
 	AC_MSG_ERROR(failed to compile test program.))
 else
   AC_MSG_RESULT(none found)
 fi
 LIBS=${olibs}
 AC_SUBST(TERMLIB)
+AC_SUBST(CNVFILE_SUBDIR)
 
 
 dnl

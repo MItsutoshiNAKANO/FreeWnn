@@ -18890,8 +18890,9 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: no -- we are in termcap land" >&5
+   echo "$as_me:$LINENO: result: no -- we are in termcap land" >&5
 echo "${ECHO_T}no -- we are in termcap land" >&6
+	  CNVFILE_SUBDIR=bsd
 else
   echo "$as_me: program exited with status $ac_status" >&5
 echo "$as_me: failed program was:" >&5
@@ -18904,6 +18905,7 @@ _ACEOF
 
 	  echo "$as_me:$LINENO: result: yes -- terminfo spoken here" >&5
 echo "${ECHO_T}yes -- terminfo spoken here" >&6
+	  CNVFILE_SUBDIR=sysV
 fi
 rm -f core core.* *.core conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
@@ -18912,6 +18914,7 @@ else
 echo "${ECHO_T}none found" >&6
 fi
 LIBS=${olibs}
+
 
 
 
@@ -20573,6 +20576,7 @@ s,@ac_ct_F77@,$ac_ct_F77,;t t
 s,@LIBTOOL@,$LIBTOOL,;t t
 s,@LIBTOOL_DEPS@,$LIBTOOL_DEPS,;t t
 s,@TERMLIB@,$TERMLIB,;t t
+s,@CNVFILE_SUBDIR@,$CNVFILE_SUBDIR,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@JS_SUPPORTOBJS@,$JS_SUPPORTOBJS,;t t
 s,@WRAPLIB@,$WRAPLIB,;t t
