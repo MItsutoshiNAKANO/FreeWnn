@@ -1,5 +1,5 @@
 /*
- *  $Id: setutmp.c,v 1.7 2006-03-04 19:01:46 aonoto Exp $
+ *  $Id: setutmp.c,v 1.8 2006-03-19 16:38:15 aonoto Exp $
  */
 
 /*
@@ -63,11 +63,13 @@
 #endif
 #if HAVE_UTMPX_H
 #  include <utmpx.h>
-#elif HAVE_UTMP_H
+#endif
+#if HAVE_UTMP_H
 #  include <utmp.h>
-#else
+#endif
+#if !HAVE_UTMPX_H && !HAVE_UTMP_H
 #  error "No utmp/utmpx header."
-#endif /* HAVE_UTMP_X */
+#endif
 
 #include "commonhd.h"
 #include "sdefine.h"
@@ -75,6 +77,7 @@
 
 #define public
 
+#ifdef BSD42
 #if HAVE_UTMPX_H
 static struct utmpx saveut;
 static struct utmpx nullut;
@@ -83,7 +86,6 @@ static struct utmp saveut;
 static struct utmp nullut;
 #endif /* HAVE_UTMPX_H */
 
-#ifdef BSD42
 static int savslotnum = 0;
 static char savttynm[8];
 static int suf = 0;
