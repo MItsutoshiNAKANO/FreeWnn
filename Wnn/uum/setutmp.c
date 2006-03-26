@@ -1,5 +1,5 @@
 /*
- *  $Id: setutmp.c,v 1.8 2006-03-19 16:38:15 aonoto Exp $
+ *  $Id: setutmp.c,v 1.9 2006-03-26 14:33:20 aonoto Exp $
  */
 
 /*
@@ -78,13 +78,11 @@
 #define public
 
 #ifdef BSD42
-#if HAVE_UTMPX_H
-static struct utmpx saveut;
-static struct utmpx nullut;
-#elif HAVE_UTMP_H
+#if HAVE_UTMP_H
 static struct utmp saveut;
 static struct utmp nullut;
-#endif /* HAVE_UTMPX_H */
+/* #else error, but declared before. */
+#endif /* HAVE_UTMP_H */
 
 static int savslotnum = 0;
 static char savttynm[8];
