@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.17 2006-03-04 19:01:46 aonoto Exp $
+ *  $Id: jhlp.c,v 1.18 2006-03-26 14:10:51 aonoto Exp $
  */
 
 /*
@@ -32,7 +32,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.17 2006-03-04 19:01:46 aonoto Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.18 2006-03-26 14:10:51 aonoto Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -1511,7 +1511,7 @@ exec_cmd (char **argv)
 #endif
 #ifdef linux
   struct winsize win;
-  extern int Term_RowWidth, int crow;
+  extern int Term_RowWidth;
 #endif
 #endif /* (!HAVE_LIBSPT && !HAVE_SETSID) || linux */
 
@@ -1872,8 +1872,12 @@ open_ttyp (void)
   if ((ttypfd = open (tty_slave, O_RDWR)) == ERROR)
 # elif defined(HAVE_PTSNAME) && defined (HAVE__DEV_PTMX)
   if ((ttypfd = open(tty_slave, O_RDWR)) == ERROR	/* open slave */
+#   if defined(I_PUSH)
+	/* for systems that have STREAMS */
        || ioctl (ttypfd, I_PUSH, "ptem") == ERROR	/* push ptem */
-       || ioctl (ttypfd, I_PUSH, "ldterm") == ERROR)	/* push ldterm */
+       || ioctl (ttypfd, I_PUSH, "ldterm") == ERROR	/* push ldterm */
+#   endif
+     )
 # elif defined (HAVE_OPENPTY)
   if (ttypfd < 0)		/* already open */
 # else
@@ -2214,7 +2218,7 @@ setsize (void)
 {
   int i;
   struct winsize win;
-  extern int Term_LineWidth, Term_RowWidth, maxlength, crow;
+  extern int Term_LineWidth, Term_RowWidth, maxlength;
 
   if (ioctl (ttyfd, TIOCGWINSZ, &win) < 0)
     {
@@ -2241,7 +2245,7 @@ change_size (void)
 {
   register int i;
   struct winsize win;
-  extern int Term_LineWidth, Term_RowWidth, maxlength, crow;
+  extern int Term_LineWidth, Term_RowWidth, maxlength;
 
   if (ioctl (ttyfd, TIOCGWINSZ, &win) < 0)
     {
