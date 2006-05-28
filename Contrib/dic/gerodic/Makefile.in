@@ -1,15 +1,15 @@
 #
-# $Id: Makefile.in,v 1.5 2001-08-14 13:43:20 hiroo Exp $
+# $Id: Makefile.in,v 1.6 2006-05-28 16:37:02 aonoto Exp $
 #
 
 # FreeWnn is a network-extensible Kana-to-Kanji conversion system.
 # This file is part of FreeWnn.
 #
 # Copyright Wnn Consortium. 1993
-# Copyright FreeWnn Project 2001
+# Copyright FreeWnn Project 2001, 2006
 #
 # Author: OMRON SOFTWARE Co., Ltd. <freewnn@rd.kyoto.omronsoft.co.jp>
-# Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
+# Maintainer:  FreeWnn Project
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,11 +31,14 @@
 #	'99/04/19	TAOKA Satoshi - 田岡 智志<taoka@infonets.hiroshima-u.ac.jp>
 #		インストールディレクトリを変更可能にする
 #
-# Last modified date: 19,Apr.1999
+#		More changes are described in ChangeLog file or CVS commit log.
 #
 
-include @top_srcdir@/makerule.mk
-top_builddir = ../../..
+include @top_builddir@/makerule.mk
+  top_srcdir = @top_srcdir@
+      srcdir = @srcdir@
+top_builddir = @top_builddir@
+ WNNJUTILOBJ = $(top_builddir)/Wnn/jutil
 
 # Makefile for gerodic 1.00
 #
@@ -46,17 +49,17 @@ INSTALL         = @INSTALL@ $(INSTALLFLAGS)
 LOCAL_INSTFLAGS = -o ${WNNOWNER}
 
 #ATOD=${JWNNBINDIR}/atod
-ATOD=${WNNJUTILSRC}/atod
+ATOD=${WNNJUTILOBJ}/atod
 
 #WNNTOUCH=${WNNBINDIR}/wnntouch
-WNNTOUCH=${WNNJUTILSRC}/wnntouch
+WNNTOUCH=${WNNJUTILOBJ}/wnntouch
 
 #HINSI=${JWNNWNNDIR}/hinsi.data
 HINSI=${PUBDICPLUSSRC}/hinsi.data
 
 GERODIR=${JWNNDICDIR}/gerodic
 
-SRC=g-jinmei.u
+SRC=$(srcdir)/g-jinmei.u
 OBJ=g-jinmei.dic
 
 all:: ${OBJ}
