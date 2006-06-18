@@ -1,5 +1,5 @@
 /*
- *  $Id: sheader.h,v 1.14 2006-03-04 19:01:46 aonoto Exp $
+ *  $Id: sheader.h,v 1.15 2006-06-18 16:49:41 aonoto Exp $
  */
 
 /*
@@ -209,6 +209,11 @@ extern void uum_err (char *);
 extern void FPRINTF ();
 extern void PRINTF ();
 
+/* setutmp.c */
+extern int saveutmp (void);
+extern int resetutmp (int ttyFd);
+extern int setutmp (int ttyFd);
+
 /* ttyfdslot.c */
 extern int  ttyfdslot (int fd);
 
@@ -310,11 +315,9 @@ extern int isconect_jserver ();
 extern int ren_henkan0 ();
 extern void reset_bold ();
 extern void reset_cursor_status ();
-extern int resetutmp ();
 extern void restore_cursor_raw ();
 extern void ring_bell ();
 extern void save_cursor_raw ();
-extern int saveutmp ();
 extern void scroll_up ();
 extern int select_jikouho1 ();
 extern int select_line_element ();
@@ -330,7 +333,6 @@ extern void set_screen_vars_default ();
 extern void set_keypad_on ();
 extern void set_keypad_off ();
 extern void set_scroll_region ();
-extern int setutmp ();
 extern int st_colum ();
 extern void t_cont_line_note_delete ();
 extern int t_delete_char ();

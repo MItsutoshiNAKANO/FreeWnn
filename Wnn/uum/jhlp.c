@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.18 2006-03-26 14:10:51 aonoto Exp $
+ *  $Id: jhlp.c,v 1.19 2006-06-18 16:49:41 aonoto Exp $
  */
 
 /*
@@ -32,7 +32,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.18 2006-03-26 14:10:51 aonoto Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.19 2006-06-18 16:49:41 aonoto Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -77,7 +77,7 @@ static char *rcs_id = "$Id: jhlp.c,v 1.18 2006-03-26 14:10:51 aonoto Exp $";
 #ifdef HAVE_UNISTD_H
 #  include <unistd.h>
 #endif
-#ifdef HAVE_WAIT3
+#if HAVE_SYS_WAIT_H
 #  include <sys/wait.h>
 #endif
 #ifdef HAVE_LIBUTIL_H
@@ -149,8 +149,8 @@ int child_id;
 char *prog;
 #ifdef HAVE_LIBSPT
 spt_handle *spth = NULL;
-int need_utmp_clear = 0;
 #endif
+int need_utmp_clear = 0;
 
 static void save_signals (void);
 static void restore_signals (void);
@@ -330,14 +330,11 @@ main (int argc, char **argv)
 
 /* 2003.06 should delete this? */
 #ifndef HAVE_LIBSPT
-#  if defined(BSD42) && !defined(DGUX)
-#    if !(defined(BSD) && (BSD >= 199306))
+  /* saveutmp() does utmp handling if USE_UTMP is set to 1 */
   if (saveutmp () < 0)
     {
       puts ("Can't save utmp\n");
     }
-#    endif
-#  endif /* BSD42 */
 #endif /* !HAVE_LIBSPT */
 
 
@@ -1591,12 +1588,15 @@ exec_cmd (char **argv)
 #endif /* SYSVR2 */
  
 /* unneccessary? */
-#if !(defined(BSD) && (BSD >= 199306))
+      /* setutmp() does utmp handling if USE_UTMP is set to 1 */
       if (setutmp (ttypfd) == ERROR)
         {
           puts ("Can't set utmp.");
         }
-#endif
+      else
+	{
+	  need_utmp_clear = 1;
+	}
 
 /* It is bizarre to open tty after fork().
    So, try to do same as other os.
@@ -2073,13 +2073,6 @@ do_end (void)
     }
 # endif /* HAVE__DEV_PTMX */
 
-/* needless? */
-#if !(defined(BSD) && (BSD >= 199306))
-  if (resetutmp (ttypfd) == ERROR)
-    {
-      printf ("Can't reset utmp.");
-    }
-#endif
 #endif /* !HAVE_LIBSPT && !sgi */
   close (ttyfd);
 #ifdef HAVE_LIBSPT
@@ -2088,6 +2081,16 @@ do_end (void)
   if (spth && (r = spt_close_pty(spth)))
     spt_perror(NULL, r);
 #else
+/* needless? */
+  /* resetutmp() does utmp handling if USE_UTMP is set to 1 */
+  if (need_utmp_clear)
+    {
+      if (resetutmp (ttypfd) == ERROR)
+	{
+	  printf ("Can't reset utmp.");
+	}
+      need_utmp_clear = 0;	/* for safety */
+    }
   close (ptyfd);
 #endif /* HAVE_LIBSPT */
 

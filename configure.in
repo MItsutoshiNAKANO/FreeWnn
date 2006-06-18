@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.44 2006-03-07 17:15:33 aonoto Exp $
+dnl   $Id: configure.in,v 1.45 2006-06-18 16:49:41 aonoto Exp $
 dnl
 
 dnl
@@ -83,6 +83,16 @@ AC_ARG_ENABLE(client,
    no)  client=false ;;
    *)   AC_MSG_ERROR(bad value for --enable-client) ;;
 esac], client=false)
+
+AC_ARG_ENABLE(client-utmp,
+[  --enable-client-utmp    write utmp with client [[default=yes if not modern BSD]]],
+[case "${enableval}" in
+   yes) client_utmp=true ;;
+   no)  client_utmp=false ;;
+   *)   AC_MSG_ERROR(bad value for --enable-client-utmp) ;;
+esac],
+client_utmp=auto
+)
 
 if test $libraries = true; then
 	SUBDIRS="\$(LIB_SUBDIRS)"
@@ -322,7 +332,8 @@ esac
 dnl Checking if we use gcc or not
 if test $debug = true; then
     if test $GCC = yes; then
-      CDEBUGFLAGS=${CDEBUGFLAGS:-"-g2 -O2 -Wall -fstack-check"}
+      # FIXME: gcc -fstack-check doesn't work well on Linux/i386 ...
+      CDEBUGFLAGS=${CDEBUGFLAGS:-"-g2 -O2 -Wall"}
     else
       CDEBUGFLAGS=${CDEBUGFLAGS:-""}
     fi
@@ -390,6 +401,7 @@ dnl ported from vim6.1 via canuum (Canna 3.6p3) for uum.
 dnl FIXME: cross compilation
 dnl
 olibs="$LIBS"
+CNVFILE_SUBDIR=bsd
 AC_MSG_CHECKING(--with-term-libs argument)
 AC_ARG_WITH(tlib,
 [  --with-term-libs=-lLIB  terminal library to be used ],)
@@ -453,6 +465,29 @@ LIBS=${olibs}
 AC_SUBST(TERMLIB)
 AC_SUBST(CNVFILE_SUBDIR)
 
+dnl delayed check for --enable-client-utmp
+if test $client = true; then
+  if test $client_utmp = auto; then
+    AC_EGREP_CPP(yes, [
+#if HAVE_SYS_PARAM_H
+# include <sys/param.h>
+#endif
+#if defined(BSD) && (BSD >= 199306)
+   yes
+#endif
+    ], client_utmp=false, client_utmp=true)
+  fi
+
+  dnl for Debug
+  AC_MSG_CHECKING([whether we're using utmp with uum])
+  if test $client_utmp = true; then
+    dnl We need to look again if we introduce libspt check 
+    AC_DEFINE(USE_UTMP, 1, [Define to 1 if uum writes utmp entry])
+    AC_MSG_RESULT(yes)
+  else
+    AC_MSG_RESULT(no)
+  fi
+fi
 
 dnl
 dnl Checks for typedefs, structures, and compiler characteristics.
@@ -469,6 +504,15 @@ AC_CHECK_TYPES(socklen_t,,
 # include <sys/types.h>
 #endif
 #include <sys/socket.h>])
+
+AC_CHECK_MEMBERS([struct utmp.ut_user, struct utmp.ut_name],,,[
+#include <sys/types.h>
+#if HAVE_UTMPX_H
+#  include <utmpx.h>
+#endif
+#if HAVE_UTMP_H
+#  include <utmp.h>
+#endif])
 
 dnl
 dnl Checks for symbol
@@ -498,7 +542,7 @@ AC_CHECK_FUNCS(random drand48 fchmod getopt killpg \
 	FD_SET \
 	gethostname select socket closesocket setsockopt send recv \
 	getdtablesize getrlimit syslog vsyslog setenv snprintf \
-	ptsname openpty)
+	ptsname openpty pututxline pututline)
 dnl for bcopy/index -> memcpy/strchr conversion (preparation):
 AC_CHECK_FUNCS(bcopy bzero bcmp index rindex \
 	memcpy memmove memset strchr strrchr)

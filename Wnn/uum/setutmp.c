@@ -1,5 +1,5 @@
 /*
- *  $Id: setutmp.c,v 1.9 2006-03-26 14:33:20 aonoto Exp $
+ *  $Id: setutmp.c,v 1.10 2006-06-18 16:49:41 aonoto Exp $
  */
 
 /*
@@ -71,18 +71,30 @@
 #  error "No utmp/utmpx header."
 #endif
 
+#if HAVE_STRUCT_UTMP_UT_NAME
+#  define UT_USER ut_name
+#elif HAVE_STRUCT_UTMP_UT_USER
+#  define UT_USER ut_user
+#else
+#  error "No member that indicates user in struct utmp."
+#endif
+
 #include "commonhd.h"
 #include "sdefine.h"
 #include "sheader.h"
 
 #define public
 
-#ifdef BSD42
-#if HAVE_UTMP_H
+#if USE_UTMP && !HAVE_LIBSPT
+
+/* Set alias macro UTMP_TRADITIONAL */
+#if !HAVE_PUTUTXLINE && !HAVE_PUTUTLINE /* && !(defined(BSD) && (BSD >= 199306)) */
+#  define UTMP_TRADITIONAL 1
+#endif
+
+#ifdef UTMP_TRADITIONAL
 static struct utmp saveut;
 static struct utmp nullut;
-/* #else error, but declared before. */
-#endif /* HAVE_UTMP_H */
 
 static int savslotnum = 0;
 static char savttynm[8];
@@ -96,8 +108,8 @@ static int suf = 0;
 # endif
 #endif
 
-public int
-saveutmp ()
+static int
+saveutmp_traditional (void)
 {
   register int utmpFd;
   register char *p;
@@ -117,16 +129,15 @@ saveutmp ()
   lseek (utmpFd, savslotnum * (sizeof saveut), 0);
   read (utmpFd, &saveut, sizeof saveut);
   close (utmpFd);
-  strncpy (nullut.ut_line, saveut.ut_line, 8);
-  strncpy (nullut.ut_host, saveut.ut_host, 16);
+  strncpy (nullut.ut_line, saveut.ut_line, sizeof(nullut.ut_line));
+  strncpy (nullut.ut_host, saveut.ut_host, sizeof(nullut.ut_host));
   nullut.ut_time = saveut.ut_time;
   suf = 1;
   return 0;
 }
 
-public int
-setutmp (ttyFd)
-     int ttyFd;
+static int
+setutmp_traditional (int ttyFd)
 {
   int utmpFd;
   struct utmp ut;
@@ -139,10 +150,10 @@ setutmp (ttyFd)
   if ((p = ttyname (ttyFd)) == NULL)
     return -1;
 
-  if (!strcmp(p, "/dev/"))
+  if (!strncmp(p, "/dev/", 5))
     p += 5;
   strncpy (ut.ut_line, p, sizeof (ut.ut_line));
-  strncpy (ut.ut_user, getpwuid (getuid ())->pw_name, 8); /* should be sizeof (ut.ut_user) */
+  strncpy (ut.UT_USER, getpwuid (getuid ())->pw_name, sizeof(ut.UT_USER));
   ut.ut_time = time (0);
   strncpy (ut.ut_host, savttynm, 8);
   if (!(i = ttyfdslot (ttyFd)))
@@ -156,46 +167,9 @@ setutmp (ttyFd)
   close (utmpFd);
   return 0;
 }
-#endif /* BSD42 */
 
-#ifdef SYSVR2
-public int
-setutmp (ttyFd)
-     int ttyFd;
-{
-  struct utmp ut;
-  char *p;
-  struct passwd *getpwuid ();
-
-  memset (&ut, 0, sizeof ut);
-  if ((p = ttyname (ttyFd)) == NULL)
-    return -1;
-
-  if (!strcmp(p, "/dev/"))
-    p += 5;
-  strncpy (ut.ut_line, p, sizeof (ut.ut_line));
-  strncpy (ut.ut_user, getpwuid (getuid ())->pw_name, 8); /* should be sizeof (ut.ut_user) */
-  ut.ut_time = time (0);
-#ifdef DGUX
-  strncpy (ut.ut_id, &ut.ut_line[3], 4);
-#else
-  strncpy (ut.ut_id, &ut.ut_line[2], 4);
-  ut.ut_id[0] = 't';
-#endif /* DGUX */
-  ut.ut_pid = getpid ();
-  ut.ut_type = USER_PROCESS;
-  setutent ();                  /* is it necessary? */
-  getutid (&ut);
-  pututline (&ut);
-  endutent ();
-  return 0;
-}
-#endif /* SYSVR2 */
-
-#ifdef BSD42
-public int
-resetutmp (ttyFd)
-     int ttyFd;
+static int
+resetutmp_traditional (int ttyFd)
 {
   int utmpFd;
   struct utmp ut;
@@ -218,35 +192,155 @@ resetutmp (ttyFd)
   close (utmpFd);
   return 0;
 }
-#endif /* BSD42 */
+#endif /* UTMP_TRADITIONAL */
 
-#ifdef SYSVR2
 public int
-resetutmp (ttyFd)
-     int ttyFd;
+saveutmp (void)
 {
+#if UTMP_TRADITIONAL && !defined(DGUX)
+  return saveutmp_traditional();
+#else
+  return 0;
+#endif
+}
+
+public int
+setutmp (int ttyFd)
+{
+#if UTMP_TRADITIONAL
+  return setutmp_traditional (ttyFd);
+#else  /* !UTMP_TRADITIONAL */
+
+#if HAVE_PUTUTXLINE
+  struct utmpx utx;
+#endif
   struct utmp ut;
+  int ut_err = 0;
   char *p;
-  struct passwd *getpwuid ();
+  /* struct passwd *getpwuid (); */
+
+  memset (&ut, 0, sizeof ut);
+  if ((p = ttyname (ttyFd)) == NULL)
+    return -1;
+
+  if (!strncmp(p, "/dev/", 5))
+    p += 5;
+  strncpy (ut.ut_line, p, sizeof (ut.ut_line));
+  strncpy (ut.UT_USER, getpwuid (getuid ())->pw_name, sizeof(ut.UT_USER));
+  ut.ut_time = time (0);
+#ifdef DGUX
+  strncpy (ut.ut_id, &ut.ut_line[3], 4);
+#else
+  /* FIXME: この辺りの命名法則がよく分からない */
+  strncpy (ut.ut_id, &ut.ut_line[2], 4);
+  ut.ut_id[0] = 't';
+#endif /* DGUX */
+  ut.ut_pid = getpid ();
+  ut.ut_type = USER_PROCESS;
+#if HAVE_PUTUTXLINE || HAVE_PUTUTLINE
+# if HAVE_PUTUTXLINE
+  getutmpx (&ut, &utx);
+  setutxent ();                  /* is it necessary? */
+  getutxid (&utx);
+  if (pututxline (&utx) == NULL) {
+    ut_err = 1;
+  }
+  endutxent();
+# endif		/* HAVE_PUTUTXLINE */
+  /* Set utmp if we also have utmpx */
+  if (ut_err != 0) {
+    setutent ();                  /* is it necessary? */
+    getutid (&ut);
+    if (pututline (&ut) == NULL) {
+      ut_err = 1;
+    }
+    endutent ();
+  }
+#endif /* HAVE_PUTUT(X)LINE */
+  if (ut_err == 0) {
+    return 0;
+  } else {
+    return -1;
+  }
+#endif  /* !UTMP_TRADITIONAL */
+}
+
+public int
+resetutmp (int ttyFd)
+{
+#if UTMP_TRADITIONAL
+  return resetutmp_traditional (ttyFd);
+#else  /* !UTMP_TRADITIONAL */
+
+#if HAVE_PUTUTXLINE
+  struct utmpx utx;
+#endif
+  struct utmp ut;
+  int ut_err = 0;
+  char *p;
+  /* struct passwd *getpwuid (); */
 
   memset (&ut, 0, sizeof ut);
   if ((p = ttyname (ttyFd)) == NULL)
     return -1;
   strncpy (ut.ut_line, strrchr (p, '/') + 1, 12);
-  strncpy (ut.ut_user, getpwuid (getuid ())->pw_name, 8);
+  strncpy (ut.UT_USER, getpwuid (getuid ())->pw_name, sizeof(ut.UT_USER));
   ut.ut_time = time (0);
 #ifdef DGUX
   strncpy (ut.ut_id, &ut.ut_line[3], 4);
 #else
+  /* FIXME: この辺りの命名法則がよく分からない */
   strncpy (ut.ut_id, &ut.ut_line[2], 4);
   ut.ut_id[0] = 't';
 #endif /* DGUX */
   ut.ut_pid = getpid ();
   ut.ut_type = DEAD_PROCESS;    /* not sure */
-  setutent ();                  /* is it necessary? */
-  getutid (&ut);
-  pututline (&ut);
-  endutent ();
+#if HAVE_PUTUTXLINE || HAVE_PUTUTLINE
+# if HAVE_PUTUTXLINE
+  getutmpx (&ut, &utx);
+  setutxent ();                  /* is it necessary? */
+  getutxid (&utx);
+  if (pututxline (&utx) == NULL) {
+    ut_err = 1;
+  }
+  endutxent();
+# endif		/* HAVE_PUTUTXLINE */
+  /* Set utmp if we also have utmpx */
+  if (ut_err != 0) {
+    setutent ();                  /* is it necessary? */
+    getutid (&ut);
+    if (pututline (&ut) == NULL) {
+      ut_err = 1;
+    }
+    endutent ();
+  }
+#endif /* HAVE_PUTUT(X)LINE */
+  if (ut_err == 0) {
+    return 0;
+  } else {
+    return -1;
+  }
   return 0;
+#endif  /* !UTMP_TRADITIONAL */
 }
-#endif /* SYSVR2 */
+
+#else  /* ! USE_UTMP */
+/* We don't use setutmp feature. Set dummy function. */
+public int
+saveutmp (void)
+{
+  return 1;
+}
+
+public int
+setutmp (int ttyFd)
+{
+  return 1;
+}
+
+public int
+resetutmp (int ttyFd)
+{
+  return 1;
+}
+#endif  /* ! USE_UTMP */
