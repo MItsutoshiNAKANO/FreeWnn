@@ -1,5 +1,5 @@
 /*
- *  $Id: setutmp.c,v 1.10 2006-06-18 16:49:41 aonoto Exp $
+ *  $Id: setutmp.c,v 1.11 2006-07-23 17:30:33 aonoto Exp $
  */
 
 /*
@@ -179,7 +179,10 @@ resetutmp_traditional (int ttyFd)
   bzero (&ut, sizeof ut);
   if ((p = ttyname (ttyFd)) == NULL)
     return -1;
-  strncpy (ut.ut_line, strrchr (p, '/') + 1, 8);
+  if (!strncmp(p, "/dev/", 5))
+    p += 5;
+  strncpy (ut.ut_line, p, sizeof(ut.ut_line));
+  /* strncpy (ut.ut_line, strrchr (p, '/') + 1, 8); */
   ut.ut_time = time (0);
   if (!(i = ttyfdslot (ttyFd)))
     return -1;
@@ -193,6 +196,18 @@ resetutmp_traditional (int ttyFd)
   return 0;
 }
 #endif /* UTMP_TRADITIONAL */
+
+static void
+build_utid (char *ut_id, char *ut_line, int size)
+{
+#ifdef DGUX
+  strncpy (ut_id, &ut_line[3], size);
+#else
+  /* FIXME: この辺りの命名法則がよく分からない */
+  strncpy (ut_id, &ut_line[2], size);
+  ut_id[0] = 't';
+#endif /* DGUX */
+}
 
 public int
 saveutmp (void)
@@ -228,25 +243,32 @@ setutmp (int ttyFd)
   strncpy (ut.ut_line, p, sizeof (ut.ut_line));
   strncpy (ut.UT_USER, getpwuid (getuid ())->pw_name, sizeof(ut.UT_USER));
   ut.ut_time = time (0);
-#ifdef DGUX
-  strncpy (ut.ut_id, &ut.ut_line[3], 4);
-#else
-  /* FIXME: この辺りの命名法則がよく分からない */
-  strncpy (ut.ut_id, &ut.ut_line[2], 4);
-  ut.ut_id[0] = 't';
-#endif /* DGUX */
+#if HAVE_STRUCT_UTMP_UT_ID
+  build_utid(ut.ut_id, ut.ut_line, 4);
+  /*
+   * Maybe systems that does not have struct utmp.ut_id
+   * does not have utmp.ut_pid / ut_type ...
+   */
   ut.ut_pid = getpid ();
   ut.ut_type = USER_PROCESS;
-#if HAVE_PUTUTXLINE || HAVE_PUTUTLINE
-# if HAVE_PUTUTXLINE
+#endif
+
+#if HAVE_PUTUTXLINE
   getutmpx (&ut, &utx);
+# if ! HAVE_STRUCT_UTMP_UT_ID
+  /* Assume all struct utmpx has this parameters ... */
+  build_utid(utx.ut_id, utx.ut_line, 4);
+  utx.ut_pid = getpid ();
+  utx.ut_type = USER_PROCESS;
+# endif
   setutxent ();                  /* is it necessary? */
   getutxid (&utx);
   if (pututxline (&utx) == NULL) {
     ut_err = 1;
   }
   endutxent();
-# endif		/* HAVE_PUTUTXLINE */
+#endif		/* HAVE_PUTUTXLINE */
+#if HAVE_PUTUTLINE
   /* Set utmp if we also have utmpx */
   if (ut_err != 0) {
     setutent ();                  /* is it necessary? */
@@ -256,7 +278,7 @@ setutmp (int ttyFd)
     }
     endutent ();
   }
-#endif /* HAVE_PUTUT(X)LINE */
+#endif /* HAVE_PUTUTLINE */
   if (ut_err == 0) {
     return 0;
   } else {
@@ -283,28 +305,38 @@ resetutmp (int ttyFd)
   memset (&ut, 0, sizeof ut);
   if ((p = ttyname (ttyFd)) == NULL)
     return -1;
-  strncpy (ut.ut_line, strrchr (p, '/') + 1, 12);
+  if (!strncmp(p, "/dev/", 5))
+    p += 5;
+  strncpy (ut.ut_line, p, sizeof (ut.ut_line));
+/*   strncpy (ut.ut_line, strrchr (p, '/') + 1, 12); */
   strncpy (ut.UT_USER, getpwuid (getuid ())->pw_name, sizeof(ut.UT_USER));
   ut.ut_time = time (0);
-#ifdef DGUX
-  strncpy (ut.ut_id, &ut.ut_line[3], 4);
-#else
-  /* FIXME: この辺りの命名法則がよく分からない */
-  strncpy (ut.ut_id, &ut.ut_line[2], 4);
-  ut.ut_id[0] = 't';
-#endif /* DGUX */
+#if HAVE_STRUCT_UTMP_UT_ID
+  build_utid(ut.ut_id, ut.ut_line, 4);
+  /*
+   * Maybe systems that does not have struct utmp.ut_id
+   * does not have utmp.ut_pid / ut_type ...
+   */
   ut.ut_pid = getpid ();
   ut.ut_type = DEAD_PROCESS;    /* not sure */
-#if HAVE_PUTUTXLINE || HAVE_PUTUTLINE
-# if HAVE_PUTUTXLINE
+#endif
+
+#if HAVE_PUTUTXLINE
   getutmpx (&ut, &utx);
+# if ! HAVE_STRUCT_UTMP_UT_ID
+  /* Assume all struct utmpx has this parameters ... */
+  build_utid(utx.ut_id, utx.ut_line, 4);
+  utx.ut_pid = getpid ();
+  utx.ut_type = DEAD_PROCESS;	/* not sure */
+# endif
   setutxent ();                  /* is it necessary? */
   getutxid (&utx);
   if (pututxline (&utx) == NULL) {
     ut_err = 1;
   }
   endutxent();
-# endif		/* HAVE_PUTUTXLINE */
+#endif		/* HAVE_PUTUTXLINE */
+#if HAVE_PUTUTLINE
   /* Set utmp if we also have utmpx */
   if (ut_err != 0) {
     setutent ();                  /* is it necessary? */
@@ -314,7 +346,7 @@ resetutmp (int ttyFd)
     }
     endutent ();
   }
-#endif /* HAVE_PUTUT(X)LINE */
+#endif /* HAVE_PUTUTLINE */
   if (ut_err == 0) {
     return 0;
   } else {

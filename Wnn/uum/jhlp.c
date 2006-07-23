@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.19 2006-06-18 16:49:41 aonoto Exp $
+ *  $Id: jhlp.c,v 1.20 2006-07-23 17:30:33 aonoto Exp $
  */
 
 /*
@@ -32,7 +32,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.19 2006-06-18 16:49:41 aonoto Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.20 2006-07-23 17:30:33 aonoto Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -1587,6 +1587,7 @@ exec_cmd (char **argv)
       close (open (ttyname (ttypfd), O_WRONLY, 0));
 #endif /* SYSVR2 */
  
+#if 0
 /* unneccessary? */
       /* setutmp() does utmp handling if USE_UTMP is set to 1 */
       if (setutmp (ttypfd) == ERROR)
@@ -1597,6 +1598,7 @@ exec_cmd (char **argv)
 	{
 	  need_utmp_clear = 1;
 	}
+#endif
 
 /* It is bizarre to open tty after fork().
    So, try to do same as other os.
@@ -1676,6 +1678,16 @@ exec_cmd (char **argv)
     {
       spt_perror ("exec_cmd (login_utmp)", r);
     }
+#else	/* !HAVE_LIBSPT */
+      /* setutmp() does utmp handling if USE_UTMP is set to 1 */
+      if (setutmp (ttypfd) == ERROR)
+        {
+          puts ("Can't set utmp.");
+        }
+      else
+	{
+	  need_utmp_clear = 1;
+	}
 #endif /* HAVE_LIBSPT */
 }
 

@@ -165,6 +165,9 @@
 /* Define to 1 if you have the `strrchr' function. */
 #undef HAVE_STRRCHR
 
+/* Define to 1 if `ut_id' is member of `struct utmp'. */
+#undef HAVE_STRUCT_UTMP_UT_ID
+
 /* Define to 1 if `ut_name' is member of `struct utmp'. */
 #undef HAVE_STRUCT_UTMP_UT_NAME
 

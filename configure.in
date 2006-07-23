@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.45 2006-06-18 16:49:41 aonoto Exp $
+dnl   $Id: configure.in,v 1.46 2006-07-23 17:30:33 aonoto Exp $
 dnl
 
 dnl
@@ -505,7 +505,7 @@ AC_CHECK_TYPES(socklen_t,,
 #endif
 #include <sys/socket.h>])
 
-AC_CHECK_MEMBERS([struct utmp.ut_user, struct utmp.ut_name],,,[
+AC_CHECK_MEMBERS([struct utmp.ut_user, struct utmp.ut_name, struct utmp.ut_id],,,[
 #include <sys/types.h>
 #if HAVE_UTMPX_H
 #  include <utmpx.h>
