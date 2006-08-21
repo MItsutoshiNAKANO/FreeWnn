@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.46 2006-07-23 17:30:33 aonoto Exp $
+dnl   $Id: configure.in,v 1.47 2006-08-21 17:31:05 aonoto Exp $
 dnl
 
 dnl
@@ -542,7 +542,7 @@ AC_CHECK_FUNCS(random drand48 fchmod getopt killpg \
 	FD_SET \
 	gethostname select socket closesocket setsockopt send recv \
 	getdtablesize getrlimit syslog vsyslog setenv snprintf \
-	ptsname openpty pututxline pututline)
+	ptsname openpty pututxline pututline setsid)
 dnl for bcopy/index -> memcpy/strchr conversion (preparation):
 AC_CHECK_FUNCS(bcopy bzero bcmp index rindex \
 	memcpy memmove memset strchr strrchr)

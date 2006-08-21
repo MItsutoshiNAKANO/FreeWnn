@@ -19766,11 +19766,12 @@ fi
 
 
 
+
 for ac_func in random drand48 fchmod getopt killpg \
 	FD_SET \
 	gethostname select socket closesocket setsockopt send recv \
 	getdtablesize getrlimit syslog vsyslog setenv snprintf \
-	ptsname openpty pututxline pututline
+	ptsname openpty pututxline pututline setsid
 do
 as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
 echo "$as_me:$LINENO: checking for $ac_func" >&5
