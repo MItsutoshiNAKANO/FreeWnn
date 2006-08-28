@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.20 2006-07-23 17:30:33 aonoto Exp $
+ *  $Id: jhlp.c,v 1.21 2006-08-28 16:26:22 aonoto Exp $
  */
 
 /*
@@ -32,7 +32,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.20 2006-07-23 17:30:33 aonoto Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.21 2006-08-28 16:26:22 aonoto Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -111,6 +111,14 @@ static char *rcs_id = "$Id: jhlp.c,v 1.20 2006-07-23 17:30:33 aonoto Exp $";
 #ifdef HAVE_LIBSPT
 #  include <libspt.h>	/* lib from Canna. not used w/FreeWnn */
 #endif
+
+/*
+ * Enable old Linux specific code.
+ * We hope you don't have to use this #define ...
+ * (We will remove this #define and related code in near future.)
+ */
+/* #define USE_LINUX_TERM */
+
 
 #include "sdefine.h"
 
@@ -394,7 +402,7 @@ main (int argc, char **argv)
 /* It is normal to open tty here, before fork().
    Don't know why linux is different.
    So temporally comment it out to make it as other OSes. */
-#if 1 /* #ifndef linux */
+#ifndef USE_LINUX_TERM
   open_ttyp ();
 #endif
   exec_cmd (argv);
@@ -1499,18 +1507,18 @@ static void
 exec_cmd (char **argv)
 {
   int i;
-#if defined(HAVE_LIBSPT) && !defined(linux)
+#if defined(HAVE_LIBSPT) && !defined(USE_LINUX_TERM)
   int r;
   const char *ttynm;
-#elif !defined(HAVE_SETSID) || defined(linux)
+#elif !defined(HAVE_SETSID) || defined(USE_LINUX_TERM)
 #ifdef BSD42
   int pid;
 #endif
-#ifdef linux
+#endif /* (!HAVE_LIBSPT && !HAVE_SETSID) || USE_LINUX_TERM */
+#if defined(SIGWINCH) && defined(TIOCSWINSZ) /* || defined(linux) */
   struct winsize win;
   extern int Term_RowWidth;
 #endif
-#endif /* (!HAVE_LIBSPT && !HAVE_SETSID) || linux */
 
   child_id = fork ();
   if (child_id < 0)
@@ -1518,9 +1526,8 @@ exec_cmd (char **argv)
   if (!child_id)
     {
       /* --- start changing controlling tty --- */
-#if defined(HAVE_LIBSPT) && !defined(linux)
+#if defined(HAVE_LIBSPT) && !defined(USE_LINUX_TERM)
 #if defined(SIGWINCH) && defined(TIOCSWINSZ)
-      struct winsize win;
       if (ioctl (ttyfd, TIOCGWINSZ, &win) == 0)
 	ioctl (ttypfd, TIOCSWINSZ, &win);
 #endif /* SIGWINCH && TIOCSWINSZ */
@@ -1531,11 +1538,10 @@ exec_cmd (char **argv)
 	  uum_err ("cannot change controlling tty.");
 	}
 
-#elif defined(HAVE_SETSID) && !defined(linux) /* !HAVE_LIBSPT */
+#elif defined(HAVE_SETSID) && !defined(USE_LINUX_TERM) /* !HAVE_LIBSPT */
 
       int fd;
 # if defined(SIGWINCH) && defined(TIOCSWINSZ)
-      struct winsize win;
       if (ioctl (ttyfd, TIOCGWINSZ, &win) == 0)
 	ioctl (ttypfd, TIOCSWINSZ, &win);
 # endif /* SIGWINCH && TIOCSWINSZ */
@@ -1552,12 +1558,7 @@ exec_cmd (char **argv)
       close (fd);
       /* disable utmp logging for now */
 
-#else /* (!HAVE_LIBSPT && !HAVE_SETSID) || linux */
-
-#if defined(SYSVR2) && !defined(linux)
-      setpgrp ();
-      close (open (ttyname (ttypfd), O_WRONLY, 0));
-#endif /* SYSVR2 */
+#else /* (!HAVE_LIBSPT && !HAVE_SETSID) || USE_LINUX_TERM */
 
 #ifdef BSD42
 #ifdef TIOCNOTTY
@@ -1603,14 +1604,17 @@ exec_cmd (char **argv)
 /* It is bizarre to open tty after fork().
    So, try to do same as other os.
    If it does work, we can remove this. */
-#if 0 /* defined(linux) */
+# ifdef linux
       setsid ();
       open_ttyp ();
       close (ptyfd);
-      ioctl (ttyfd, TIOCGWINSZ, &win);
       ioctl (ttypfd, TCSETA, &savetmio);
-#endif
-#endif /* (!HAVE_LIBSPT && !HAVE_SETSID) || linux */
+# endif
+# if defined(SIGWINCH) && defined(TIOCSWINSZ) /* || defined(linux) */
+      ioctl (ttyfd, TIOCGWINSZ, &win);
+# endif
+
+#endif	/* (!HAVE_LIBSPT && !HAVE_SETSID) || USE_LINUX_TERM */
       /* --- finish changing controlling tty --- */
 
 #ifndef linux
@@ -1647,9 +1651,11 @@ exec_cmd (char **argv)
       signal (SIGTTOU, SIG_IGN);
 #endif
 
-#ifdef linux
+#if defined(SIGWINCH) && defined(TIOCSWINSZ) /* || defined(linux) */
       crow = win.ws_row = Term_RowWidth = win.ws_row - conv_lines;
       ioctl (ttyfd, TIOCSWINSZ, &win);
+#endif
+#ifdef linux
       setgid (getgid ());
       setuid (getuid ());
 #endif
