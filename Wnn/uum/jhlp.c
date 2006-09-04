@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.21 2006-08-28 16:26:22 aonoto Exp $
+ *  $Id: jhlp.c,v 1.22 2006-09-04 17:21:29 aonoto Exp $
  */
 
 /*
@@ -32,7 +32,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.21 2006-08-28 16:26:22 aonoto Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.22 2006-09-04 17:21:29 aonoto Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -148,7 +148,7 @@ jmp_buf kk_env;
 struct ttysize pty_rowcol;
 #endif /* TIOCSSIZE */
 
-int ttyfd;
+int ttyfd;			/* master tty */
 
 char *tname;                    /* terminal name */
 char *cmdnm = "csh";            /* char *cmdnm = "csh"; */
@@ -918,6 +918,9 @@ j_term_init (void)
   buf1.c_lflag &= ~(ECHONL | ECHOK | ECHOE | ECHO | ICANON | ISIG);
 #  ifdef XCASE
   buf1.c_lflag &= ~(XCASE);
+#  endif
+#  ifdef IEXTEN
+  buf1.c_lflag &= ~(IEXTEN);
 #  endif
   buf1.c_oflag = OPOST;
 #  ifdef USE_TERMIOS
@@ -1869,7 +1872,7 @@ set_sony_jterm (int ttyfd, int ttypfd)
    use /dev/ptmx and ptsname() (see pts(7D) for EXAMPLE)
 */
 
-#if !defined(sgi) && !defined(HAVE__DEV_PTMX)
+#if !defined(sgi) && !(defined(HAVE_PTSNAME) && defined(HAVE__DEV_PTMX))
 char tty_master[32]; /*VVVV overflow?*/
 #endif
 char tty_slave [32]; /*VVVV overflow?*/

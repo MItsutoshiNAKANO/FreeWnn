@@ -1,5 +1,5 @@
 /*
- *  $Id: termio.c,v 1.6 2006-03-04 19:01:46 aonoto Exp $
+ *  $Id: termio.c,v 1.7 2006-09-04 17:21:29 aonoto Exp $
  */
 
 /*
@@ -45,6 +45,13 @@
 #include "commonhd.h"
 #include "sdefine.h"
 #include "sheader.h"
+
+/*
+ * tparm() macro for fixed argument prototype systems:
+ * It may not harm on systems that tparm() has variable argument prototype
+ * (or no prototype for compatibility).
+ */
+#define TPARM_3ARGS(func, p1, p2)  tparm((func), (p1), (p2), 0,0,0,0,0,0,0)
 
 #ifdef HAVE_TERMINFO
 #include <stdio.h>
@@ -199,7 +206,7 @@ void
 set_scroll_region (start, end)
      int start, end;
 {
-  tputs (tparm (change_scroll_region, start, end), 1, putchar);
+  tputs (TPARM_3ARGS (change_scroll_region, start, end), 1, putchar);
 }
 
 void
@@ -227,7 +234,7 @@ void
 throw_cur_raw (col, row)
      int col, row;
 {
-  tputs (tparm (cursor_address, row, col), 1, putchar);
+  tputs (TPARM_3ARGS (cursor_address, row, col), 1, putchar);
 }
 
 void
