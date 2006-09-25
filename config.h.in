@@ -102,6 +102,9 @@
 /* Define to 1 if you have the `openpty' function. */
 #undef HAVE_OPENPTY
 
+/* Define to 1 if you have the `posix_openpt' function. */
+#undef HAVE_POSIX_OPENPT
+
 /* Define to 1 if you have the `ptsname' function. */
 #undef HAVE_PTSNAME
 

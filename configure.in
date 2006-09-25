@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.47 2006-08-21 17:31:05 aonoto Exp $
+dnl   $Id: configure.in,v 1.48 2006-09-25 17:31:35 aonoto Exp $
 dnl
 
 dnl
@@ -278,6 +278,7 @@ AC_PROG_CC
 
 dnl System specific options
 dnl Now that we are using autoconf, CCOPTIONS should be nuked...
+dnl But please report if your system needs specific settings (CCOPTIONS etc.)
 case $host in
 *-*-linux*)
     CCOPTIONS="-Dlinux -D_GNU_SOURCE -D_POSIX_SOURCE -D_BSD_SOURCE"
@@ -322,10 +323,6 @@ powerpc-*-beos*)
 	;;
 *-*-aix*)
     CCOPTIONS="-DSYSV"
-    ;;
-*)
-dnl    AC_MSG_WARN("It is not reported if FreeWnn works on this system.  But continuing...")
-dnl    AC_MSG_WARN([(It may or may not work if you set CCOPTIONS properly.)])
     ;;
 esac
 
@@ -434,8 +431,10 @@ main() {char *s; s=(char *)tgoto("%p1%d", 0, 1); exit(0); }],
 	res="OK", res="FAIL", res="FAIL")
       if test "$res" = "OK"; then
 	TERMLIB="${TERMLIB} -l${libname}"
-	lname=translit(${libname}, 'a-z', 'A-Z')
-	AC_DEFINE(HAVE_${lname}, 1, [use ${libname} for terminal control])
+	dnl lname=`echo ${libname} | sed 'y/termcaplibnus/TERMCAPLIBNUS/'`
+	dnl AC_DEFINE_UNQUOTED(HAVE_${lname}, 1, [use ${libname} for terminal control])
+	dnl We need to define AH_TEMPLATE (if we really need this)
+	dnl ex. AH_TEMPLATE(HAVE_NCURSES, [use ncurses for terminal control])
 	break
       fi
       AC_MSG_RESULT($libname library is not usable)
@@ -542,7 +541,7 @@ AC_CHECK_FUNCS(random drand48 fchmod getopt killpg \
 	FD_SET \
 	gethostname select socket closesocket setsockopt send recv \
 	getdtablesize getrlimit syslog vsyslog setenv snprintf \
-	ptsname openpty pututxline pututline setsid)
+	ptsname posix_openpt openpty pututxline pututline setsid)
 dnl for bcopy/index -> memcpy/strchr conversion (preparation):
 AC_CHECK_FUNCS(bcopy bzero bcmp index rindex \
 	memcpy memmove memset strchr strrchr)

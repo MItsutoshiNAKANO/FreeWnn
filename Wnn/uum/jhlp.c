@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.22 2006-09-04 17:21:29 aonoto Exp $
+ *  $Id: jhlp.c,v 1.23 2006-09-25 17:31:36 aonoto Exp $
  */
 
 /*
@@ -32,7 +32,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.22 2006-09-04 17:21:29 aonoto Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.23 2006-09-25 17:31:36 aonoto Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -1868,11 +1868,12 @@ set_sony_jterm (int ttyfd, int ttypfd)
    use _getpty()
  == BSD? (HAVE_OPENPTY)
    use openpty()
- == STREAMS (Solaris) (HAVE__DEV_PTMX)
-   use /dev/ptmx and ptsname() (see pts(7D) for EXAMPLE)
+ == STREAMS (Solaris) (HAVE_PTSNAME)
+   use posix_openpt() (or open /dev/ptmx directly) and ptsname()
+   (see pts(7D) for EXAMPLE)
 */
 
-#if !defined(sgi) && !(defined(HAVE_PTSNAME) && defined(HAVE__DEV_PTMX))
+#if !defined(sgi) && !defined(HAVE_PTSNAME)
 char tty_master[32]; /*VVVV overflow?*/
 #endif
 char tty_slave [32]; /*VVVV overflow?*/
@@ -1891,7 +1892,7 @@ open_ttyp (void)
 #else /* HAVE_LIBSPT */
 # if defined(sgi)
   if ((ttypfd = open (tty_slave, O_RDWR)) == ERROR)
-# elif defined(HAVE_PTSNAME) && defined (HAVE__DEV_PTMX)
+# elif defined(HAVE_PTSNAME)
   if ((ttypfd = open(tty_slave, O_RDWR)) == ERROR	/* open slave */
 #   if defined(I_PUSH)
 	/* for systems that have STREAMS */
@@ -1943,6 +1944,21 @@ open_ttyp (void)
 #endif
 }
 
+#if defined(HAVE_PTSNAME) && ! defined(HAVE_POSIX_OPENPT)
+/* Maybe harmless on defined(HAVE_LIBSPT) */
+#if !defined(HAVE__DEV_PTMX)
+#warning "If not cross compile, you must check pts master device (other than /dev/ptmx)."
+/* but continue anyway. */
+#endif
+
+/* fallback function to posix_openpt */
+static int
+posix_openpt (int flags)
+{
+  return open("/dev/ptmx", flags);
+}
+#endif		/* HAVE_PTSNAME && !HAVE_POSIX_OPENPT */
+
 /** pty のオープン */
 /* allocate a new pty master into int ptyfd */
 static void
@@ -1962,9 +1978,9 @@ open_pty (void)
     uum_err ("Can't get pty.");
   strcpy (tty_slave, tty_name_buff);
 
-#elif defined(HAVE_PTSNAME) && defined (HAVE__DEV_PTMX)
+#elif defined(HAVE_PTSNAME)
   char *p;
-  ptyfd = open ("/dev/ptmx", O_RDWR);	/* open master */
+  ptyfd = posix_openpt(O_RDWR);	/* open master */
   if (ptyfd < 0)
     uum_err ("Could not get a pty.");
   grantpt (ptyfd);		/* change permission of slave */
@@ -2074,7 +2090,7 @@ do_end (void)
   j_term_restore ();
 
 #if !defined(HAVE_LIBSPT) && !defined(sgi)
-# ifndef HAVE__DEV_PTMX
+# ifndef HAVE_PTSNAME
   if (chown (tty_master, 0, 0) == ERROR)
     {
       perror (prog);
@@ -2092,7 +2108,7 @@ do_end (void)
     {
       perror (prog);
     }
-# endif /* HAVE__DEV_PTMX */
+# endif /* HAVE_PTSNAME */
 
 #endif /* !HAVE_LIBSPT && !sgi */
   close (ttyfd);
