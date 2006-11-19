@@ -1,5 +1,5 @@
 #
-#   $Id: INSTALL.en,v 1.4 2004-05-21 16:39:31 aono Exp $
+#   $Id: INSTALL.en,v 1.5 2006-11-19 16:21:22 aonoto Exp $
 #
 
 #
@@ -10,9 +10,9 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2002
+# Copyright FreeWnn Project 1999, 2000, 2002, 2006
 # 
-# Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
+# Maintainer:  FreeWnn Project
 # 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -92,9 +92,9 @@ Below are the main configure option of FreeWnn.
   disabled by default:
   --enable-ipv6         enable IPv6 feature.
   --enable-unsafe-path  allow creating files in jserver_dir (*5).
-  --enable-client	compile and install uum (*6).
+  --enable-client	compile and install uum.
   --with-libwrap	use libwrap (in TCP wrapper) for jserver
-			to enable connection-based access control (*7).
+			to enable connection-based access control (*6).
 
 *5: If the option --enable-unsafe-path is enabled, the [cjkt]server
   daemons accept creation of an FreeWnn dictionary file in an arbitrary
@@ -103,6 +103,4 @@ Below are the main configure option of FreeWnn.
   Unless you used to place FreeWnn dictionary files in a path other than
   jserver_dir (lib/wnn/$LANG/dic/usr), you should not enable this feature.
 
-*6: cuum cannot be compiled yet.
-
-*7: If you specify --enable-ipv6, libwrap need to support IPv6 also.
+*6: If you specify --enable-ipv6, libwrap need to support IPv6 also.

@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.8 2001-08-14 13:43:21 hiroo Exp $
+#   $Id: Makefile.in,v 1.9 2006-11-19 16:21:23 aonoto Exp $
 #
 
 #
@@ -10,9 +10,9 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001
+# Copyright FreeWnn Project 1999, 2000, 2001, 2006
 # 
-# Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
+# Maintainer:  FreeWnn Project
 # 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,8 +29,9 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-include @top_srcdir@/makerule.mk
-top_builddir = ..
+include @top_builddir@/makerule.mk
+  top_srcdir = @top_srcdir@
+top_builddir = @top_builddir@
 
 WNNOWNER = wnn
 
@@ -52,9 +53,13 @@ TDDIR = td
 
 WNNMANDIR = man
 
-LIB_SUBDIRS = $(JLIBDIR) $(CDDIR) $(WNNCLIENTSDIR) $(TDDIR)
+UUMDIR = uum
+
+LIB_SUBDIRS = $(JLIBDIR) $(CDDIR) $(TDDIR)
 
 SERVER_SUBDIRS = $(JSERVERDIR) $(WNNJUTILDIR) $(CDICDIR) $(TDICDIR) $(WNNMANDIR)
+
+CLIENT_SUBDIRS = $(WNNCLIENTSDIR) $(UUMDIR)
 
 SUBDIRS = @SUBDIRS@
 
