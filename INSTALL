@@ -1,5 +1,5 @@
 #
-#  $Id: INSTALL,v 1.7 2006-11-19 16:21:22 aonoto Exp $
+#  $Id: INSTALL,v 1.8 2007-06-23 16:34:16 aonoto Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2002, 2006
+# Copyright FreeWnn Project 1999, 2000, 2002, 2006, 2007
 # 
 # Maintainer:  FreeWnn Project
 # 
@@ -94,8 +94,24 @@ FreeWnn 独自の configure option のうち、主なものは以下の通りです。
   --enable-unsafe-path  jserverdir 以外のディレクトリに jserver がファイル
                         を作成するのを許可します。(注5)
   --enable-client	uum を作成及びインストールします。
+
+  configure中で必要性・ライブラリの存在を確認するもの:
   --with-libwrap	TCP wrapperのlibwrapを使用し、jserverの接続時点での
 			アクセス制限を可能にします。(注6)
+  --enable-client-utmp	(uumを作成する場合)uumが確保した擬似端末情報を
+			utmpに登録し、whoコマンドなどで参照できるように
+			します。(一部のシステムを除き有効になります)
+  --enable-client-setuid[=user]
+			(uumを作成する場合)指定したuser(未指定の場合は
+			root)でset-uidしてuumをインストールします。
+			このオプション自体を指定しない場合は、判別結果に
+			より必要な場合はset-uidします。
+  --enable-client-setgid=group
+			(uumを作成する場合)指定したgroupでset-gidして
+			uumをインストールします。前述のオプションと異なり、
+			groupは必ず指定する必要があります。
+			このオプション自体を指定しない場合は、判別結果に
+			より必要な場合はset-gidします。
 
 注5: [cjkt]server は、任意の host からの要求を受け付けてしまいます。
   --enable-unsafe-path を有効にすると、任意の host から jserver 実行ユーザー

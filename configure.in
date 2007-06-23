@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.48 2006-09-25 17:31:35 aonoto Exp $
+dnl   $Id: configure.in,v 1.49 2007-06-23 16:34:16 aonoto Exp $
 dnl
 
 dnl
@@ -11,7 +11,7 @@ dnl                 1987, 1988, 1989, 1990, 1991, 1992
 dnl Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 dnl Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
 dnl Copyright FreeWnn Project
-dnl                 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006
+dnl                 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007
 dnl 
 dnl Maintainer:  FreeWnn Project
 dnl 
@@ -33,17 +33,17 @@ dnl
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-dnl new AC_INIT do not work. I seem to make a mistake...
-dnl AC_INIT("FreeWnn", "1.11-pl21", "freewnn-users-owner@lists.sourceforge.jp")
-dnl AC_CONFIG_SRC_DIR(Wnn/conv/cvt_head.h)
-AC_INIT(Wnn/conv/cvt_head.h)
+AC_INIT(FreeWnn, [1.1.1-cvs-a022], [freewnn-users-owner@lists.sourceforge.jp], FreeWnn)
+AC_CONFIG_SRCDIR(Wnn/conv/cvt_head.h)
+dnl old-style AC_INIT ...
+dnl AC_INIT(Wnn/conv/cvt_head.h)
 AC_CONFIG_HEADER(config.h)
 
 dnl ====================================================================
 dnl Check optional features
 dnl ====================================================================
 
-# Quick and Dirty workaround for Autoconf-2.53 and Libtools-1.5 pair ...
+# Quick and Dirty workaround for Autoconf-2.53 and Libtools-1.5.* pair ...
 # not to use additional tagged configuration. (default: CXX F77)
 # NOTICE: Please remove next line if situation changes. (aono)
 tagnames=
@@ -92,6 +92,36 @@ AC_ARG_ENABLE(client-utmp,
    *)   AC_MSG_ERROR(bad value for --enable-client-utmp) ;;
 esac],
 client_utmp=auto
+)
+
+dnl If you set set-[ug]id user/group to (ex.) 'yes', 
+dnl you can configure this with setting UUMOWNER / UUMGROUP .
+AC_ARG_ENABLE(client-setuid,
+[  --enable-client-setuid[[=user]] Install client with setuid and specified user [[default=guess if your system need this]]],
+[case "${enableval}" in
+    yes) client_setuid=true; UUMOWNER=${UUMOWNER:-root} ;;
+    no)  client_setuid=false ;;
+    *)   client_setuid=true; UUMOWNER=${enableval} ;;
+esac],
+[client_setuid=auto	# guess later ...
+ UUMOWNER=root]
+)
+
+AC_ARG_ENABLE(client-setgid,
+[  --enable-client-setgid=group Install client with setgid and specified group [[default=guess if your system need this]]],
+[case "${enableval}" in
+    yes)
+	if test "x$UUMGROUP" = "x"; then 
+	    AC_ERROR([You must set group name with --enable-client-setgid.])
+	else
+	    client_setgid=true;	# we already defined UUMGROUP ...
+	fi
+	;;
+    no)  client_setgid=false ;;
+    *)   client_setgid=true; UUMGROUP=${enableval} ;;
+esac],
+[client_setgid=auto	# guess later ...
+UUMGROUP=]
 )
 
 if test $libraries = true; then
@@ -464,31 +494,6 @@ LIBS=${olibs}
 AC_SUBST(TERMLIB)
 AC_SUBST(CNVFILE_SUBDIR)
 
-dnl delayed check for --enable-client-utmp
-if test $client = true; then
-  if test $client_utmp = auto; then
-    AC_EGREP_CPP(yes, [
-#if HAVE_SYS_PARAM_H
-# include <sys/param.h>
-#endif
-#if defined(BSD) && (BSD >= 199306)
-   yes
-#endif
-    ], client_utmp=false, client_utmp=true)
-  fi
-
-  dnl for Debug
-  AC_MSG_CHECKING([whether we're using utmp with uum])
-  if test $client_utmp = true; then
-    dnl We need to look again if we introduce libspt check 
-    AC_DEFINE(USE_UTMP, 1, [Define to 1 if uum writes utmp entry])
-    AC_MSG_RESULT(yes)
-  else
-    AC_MSG_RESULT(no)
-  fi
-fi
-
-dnl
 dnl Checks for typedefs, structures, and compiler characteristics.
 dnl
 AC_TYPE_MODE_T
@@ -552,6 +557,122 @@ AC_CHECK_FUNCS(mkdir vasprintf, ,
 [JS_SUPPORTOBJS="${JS_SUPPORTOBJS} ${ac_func}.o"])
 AC_SUBST(JS_SUPPORTOBJS)
 
+dnl delayed check for --enable-client-utmp
+if test $client = true; then
+  if test $client_utmp = auto; then
+    AC_EGREP_CPP(yes, [
+#if HAVE_SYS_PARAM_H
+# include <sys/param.h>
+#endif
+#if defined(BSD) && (BSD >= 199306) && !defined(HAVE_PUTUTXLINE) && !defined(HAVE_PUTUTLINE)
+   yes
+#endif
+    ], client_utmp=false, client_utmp=true)
+  fi
+
+  dnl for Debug
+  AC_MSG_CHECKING([whether we're using utmp with uum])
+  if test $client_utmp = true; then
+    dnl We need to look again if we introduce libspt check 
+    AC_DEFINE(USE_UTMP, 1, [Define to 1 if uum writes utmp entry])
+    AC_MSG_RESULT(yes)
+  else
+    AC_MSG_RESULT(no)
+  fi
+fi
+
+dnl delayed check for --enable-client-set[ug]id
+if test $client = true; then
+  guess_setuid=
+  guess_setgid=false
+  dnl Note: (HAVE_OPENPTY && defined(TIOCPTMGET)): for recent OpenBSD 
+  if test $client_utmp = true; then
+    AC_EGREP_CPP(yes, [
+#if HAVE_SYS_IOCTL_H
+# include <sys/ioctl.h>
+#endif
+#if HAVE_PTSNAME || (HAVE_OPENPTY && defined(TIOCPTMGET))
+# if HAVE_PUTUTLINE || HAVE_PUTUTXLINE
+  yes
+# endif
+#endif
+    ], [
+    case $host_os in
+    linux*)
+      # On recent Linux, it has both ptsname() and putut*line().
+      # But putut*line() will take effect only if prog is installed
+      # with set-gid to group utmp.
+      guess_setgid=true
+      UUMGROUP=${UUMGROUP:-utmp}
+      ;;
+    esac
+    guess_setuid=false
+    ], guess_setuid=true)
+  else
+    # $client_utmp != true
+    AC_EGREP_CPP(yes, [
+#if HAVE_SYS_IOCTL_H
+# include <sys/ioctl.h>
+#endif
+#if HAVE_PTSNAME || (HAVE_OPENPTY && defined(TIOCPTMGET))
+  yes
+#endif
+    ], guess_setuid=false, guess_setuid=true)
+  fi
+  # $client_utmp != true
+
+  if test $client_setuid = auto; then
+    client_setuid=$guess_setuid
+    # UUMOWNER is already set ...
+  fi
+  if test $client_setgid = auto; then
+    client_setgid=$guess_setgid
+    # UUMGROUP is already set (if it needs)
+  fi
+
+  dnl set install flag (at last)
+  if test $client_setuid = true; then
+    INSTUUMFLAGS="-o \$(UUMOWNER)"
+    if test $client_setgid = true; then
+      INSTUUMFLAGS="-m 6711 $INSTUUMFLAGS -g \$(UUMGROUP)"
+    else
+    # client_setuid && !client_setgid
+      INSTUUMFLAGS="-m 4711 $INSTUUMFLAGS"
+    fi
+  else
+    if test $client_setgid = true; then
+    # !client_setuid && client_setgid
+      INSTUUMFLAGS="-m 2711 -g \$(UUMGROUP)"
+    else
+    # !client_setuid && !client_setgid
+      INSTUUMFLAGS="-m 0711"
+    fi
+  fi
+
+  dnl for Debug
+  AC_MSG_CHECKING([whether we need to install uum as setuid program])
+  if test $client_setuid = true; then
+    AC_MSG_RESULT([yes, $UUMOWNER])
+  else
+    AC_MSG_RESULT(no)
+  fi
+  AC_MSG_CHECKING([whether we need to install uum as setgid program])
+  if test $client_setgid = true; then
+    AC_MSG_RESULT([yes, $UUMGROUP])
+  else
+    AC_MSG_RESULT(no)
+  fi
+else
+# $client != true
+  INSTUUMFLAGS="-m 4711 -o \$(UUMOWNER)"
+fi
+# $client = true
+
+AC_SUBST(INSTUUMFLAGS)
+AC_SUBST(UUMOWNER)
+AC_SUBST(UUMGROUP)
+
+dnl
 
 dnl
 dnl File Existence

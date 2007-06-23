@@ -1,5 +1,5 @@
 #
-#   $Id: INSTALL.en,v 1.5 2006-11-19 16:21:22 aonoto Exp $
+#   $Id: INSTALL.en,v 1.6 2007-06-23 16:34:16 aonoto Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2002, 2006
+# Copyright FreeWnn Project 1999, 2000, 2002, 2006, 2007
 # 
 # Maintainer:  FreeWnn Project
 # 
@@ -93,8 +93,23 @@ Below are the main configure option of FreeWnn.
   --enable-ipv6         enable IPv6 feature.
   --enable-unsafe-path  allow creating files in jserver_dir (*5).
   --enable-client	compile and install uum.
+
+  auto determine by default:
   --with-libwrap	use libwrap (in TCP wrapper) for jserver
 			to enable connection-based access control (*6).
+  --enable-client-utmp  (if --enable-client specified,) uum register
+			pseudo tty information to utmp. (Except some systems,
+			it is enabled by default.)
+  --enable-client-setuid[=user]
+			(if --enable-client specified,) install uum as set-uid
+			program with specified user (root by default).
+			If this option (itself) is not specified,
+			configure determine if set-uid install is needed.
+  --enable-client-setgid=group
+			(if --enable-client specified,) install uum as set-gid
+			program with specified group (you must specify group).
+			If this option (itself) is not specified,
+			configure determine if set-gid install is needed.
 
 *5: If the option --enable-unsafe-path is enabled, the [cjkt]server
   daemons accept creation of an FreeWnn dictionary file in an arbitrary
