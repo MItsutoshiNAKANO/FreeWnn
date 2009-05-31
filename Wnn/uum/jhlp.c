@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.23 2006-09-25 17:31:36 aonoto Exp $
+ *  $Id: jhlp.c,v 1.24 2009-05-31 16:35:06 aonoto Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002, 2003, 2006
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2003, 2006, 2009
  * Copyright Canna Project 2002
  * Copyright Taketo Kabe 2003
  *
@@ -32,7 +32,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.23 2006-09-25 17:31:36 aonoto Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.24 2009-05-31 16:35:06 aonoto Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -1887,6 +1887,12 @@ static int local_mode_sv;
 static void
 open_ttyp (void)
 {
+#ifndef HAVE_LIBSPT	 /* && !defined(linux) ? */
+  struct stat tstat;
+  char chown_failed = 0;
+  const char *msg_insecure = "Your ttyp (%s) may be insecure from other users, but continue anyway ...\r\n";
+#endif	/* !HAVE_LIBSPT */
+
 #ifdef HAVE_LIBSPT
   if ((ttypfd = spt_open_slave(spth)) == ERROR)
 #else /* HAVE_LIBSPT */
@@ -1912,10 +1918,27 @@ open_ttyp (void)
     }
 #if defined(HAVE_LIBSPT)
   spt_init_slavefd(spth, ttypfd);
-#else
+#else	/* HAVE_LIBSPT */
 /* #if !defined(linux) */
-  chown (tty_slave, getuid (), getgid ());
-  chmod (tty_slave, 0622);
+  if(fstat(ttypfd, &tstat)==0) {
+    if(tstat.st_uid != getuid()) {
+      if(chown (tty_slave, getuid (), getgid ())!=0) {
+	perror("Can't change owner of ttyp.");
+	fprintf(stderr, msg_insecure, tty_slave);
+	chown_failed = 1;
+      }
+    }
+    if((tstat.st_mode & (S_IWGRP | S_IWOTH)) != 0) {
+      /* Ignore message if chown failed (chmod will fail also ...) */
+      if(chmod (tty_slave, 0622)!=0 && chown_failed == 0) {
+	perror("Can't change permission of ttyp.");
+	fprintf(stderr, msg_insecure, tty_slave);
+      }
+    }
+  } else {
+    perror("Can't stat ttyp.");
+    fprintf(stderr, msg_insecure, tty_slave);
+  }
 /* #endif */ /* linux */
 #endif /* HAVE_LIBSPT */
 
@@ -2093,20 +2116,20 @@ do_end (void)
 # ifndef HAVE_PTSNAME
   if (chown (tty_master, 0, 0) == ERROR)
     {
-      perror (prog);
+      perror ("Can't restore owner of tty_master.");
     }
   if (chmod (tty_master, 0666) == ERROR)
     {
-      perror (prog);
+      perror ("Can't restore permission of tty_master.");
     }
 
   if (chown (tty_slave, 0, 0) == ERROR)
     {
-      perror (prog);
+      perror ("Can't restore owner of ttyp.");
     }
   if (chmod (tty_slave, 0666) == ERROR)
     {
-      perror (prog);
+      perror ("Can't restore permission of ttyp.");
     }
 # endif /* HAVE_PTSNAME */
 

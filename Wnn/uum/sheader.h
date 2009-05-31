@@ -1,5 +1,5 @@
 /*
- *  $Id: sheader.h,v 1.15 2006-06-18 16:49:41 aonoto Exp $
+ *  $Id: sheader.h,v 1.16 2009-05-31 16:35:06 aonoto Exp $
  */
 
 /*
@@ -217,6 +217,14 @@ extern int setutmp (int ttyFd);
 /* ttyfdslot.c */
 extern int  ttyfdslot (int fd);
 
+#if HAVE_TERMINFO
+/* termio.c */
+extern int openTermData (void);
+#else
+/* termcap.c */
+extern int getTermData (void);
+#endif
+
 /* to be classified */
 extern void b_s_off_raw (void);
 extern void b_s_on_raw (void);
@@ -254,7 +262,6 @@ extern int find_entry (char *);
 extern void flushw_buf (void);
 extern int forward_char (void);
 extern int backward_char (void);
-extern int getTermData ();
 extern void get_end_of_history ();
 extern void getfname ();
 extern void h_r_off ();
