@@ -1,5 +1,5 @@
 /*
- *  $Id: setutmp.c,v 1.11 2006-07-23 17:30:33 aonoto Exp $
+ *  $Id: setutmp.c,v 1.12 2009-11-28 19:20:52 aonoto Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002, 2006
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2006, 2009
  *
  * Maintainer:  FreeWnn Project
  *
@@ -228,9 +228,10 @@ setutmp (int ttyFd)
 
 #if HAVE_PUTUTXLINE
   struct utmpx utx;
+  intfnptr saved_handler = NULL;
 #endif
   struct utmp ut;
-  int ut_err = 0;
+  int ut_err = -1;
   char *p;
   /* struct passwd *getpwuid (); */
 
@@ -263,20 +264,35 @@ setutmp (int ttyFd)
 # endif
   setutxent ();                  /* is it necessary? */
   getutxid (&utx);
+  /*
+   * For systems that have utmp-update helper (ex. Solaris, NetBSD-4),
+   * we temporally stop using chld_handler to correctly wait()
+   * for helper on its implementation if user is normal user and
+   * uum isn't either setuid or setgid process.
+   * (You may get problem if uum catch SIGCHLD at that time ...)
+   */
+  if (getuid() != 0 && getuid() == geteuid() && getgid() == getegid()) {
+    saved_handler = signal(SIGCHLD, SIG_DFL);
+  }
   if (pututxline (&utx) == NULL) {
+    /* perror("pututxline() failed:"); */	/* for DEBUG */
     ut_err = 1;
+  } else {
+    ut_err = 0;
+  }
+  if (saved_handler != NULL) {
+    signal(SIGCHLD, saved_handler);	/* restore handler */
   }
   endutxent();
 #endif		/* HAVE_PUTUTXLINE */
 #if HAVE_PUTUTLINE
-  /* Set utmp if we also have utmpx */
+  /* Set utmp if setting utmpx fails (or non-utmpx system) */
   if (ut_err != 0) {
-    setutent ();                  /* is it necessary? */
+    setutent ();			/* is it necessary? */
     getutid (&ut);
-    if (pututline (&ut) == NULL) {
-      ut_err = 1;
-    }
+    pututline (&ut);			/* We don't check return value */
     endutent ();
+    ut_err = 0;
   }
 #endif /* HAVE_PUTUTLINE */
   if (ut_err == 0) {
@@ -298,7 +314,7 @@ resetutmp (int ttyFd)
   struct utmpx utx;
 #endif
   struct utmp ut;
-  int ut_err = 0;
+  int ut_err = -1;
   char *p;
   /* struct passwd *getpwuid (); */
 
@@ -331,20 +347,22 @@ resetutmp (int ttyFd)
 # endif
   setutxent ();                  /* is it necessary? */
   getutxid (&utx);
+  /* We don't change SIGCHLD handler for now */
   if (pututxline (&utx) == NULL) {
     ut_err = 1;
+  } else {
+    ut_err = 0;
   }
   endutxent();
 #endif		/* HAVE_PUTUTXLINE */
 #if HAVE_PUTUTLINE
-  /* Set utmp if we also have utmpx */
+  /* Set utmp if setting utmpx fails (or non-utmpx system) */
   if (ut_err != 0) {
     setutent ();                  /* is it necessary? */
     getutid (&ut);
-    if (pututline (&ut) == NULL) {
-      ut_err = 1;
-    }
+    pututline (&ut);		  /* We don't check return value */
     endutent ();
+    ut_err = 0;
   }
 #endif /* HAVE_PUTUTLINE */
   if (ut_err == 0) {
