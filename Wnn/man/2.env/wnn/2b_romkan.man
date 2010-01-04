@@ -1,5 +1,5 @@
 .\"
-.\"   $Id: 2b_romkan.man,v 1.3 2001-06-14 18:08:31 ura Exp $
+.\"   $Id: 2b_romkan.man,v 1.4 2010-01-04 16:59:40 aonoto Exp $
 .\"
 .\"
 .\" FreeWnn is a network-extensible Kana-to-Kanji conversion system.
@@ -9,9 +9,9 @@
 .\"                 1987, 1988, 1989, 1990, 1991, 1992
 .\" Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 .\" Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-.\" Copyright FreeWnn Project 1999, 2000
+.\" Copyright FreeWnn Project 1999, 2000, 2010
 .\" 
-.\" Maintainer:  FreeWnn Project   <freewnn@tomo.gr.jp>
+.\" Maintainer:  FreeWnn Project
 .\" 
 .\" This program is free software; you can redistribute it and/or modify
 .\" it under the terms of the GNU General Public License as published by
@@ -82,6 +82,7 @@ uum(1) 起動時に解釈され、ローマ字変換用の設定を行う。
  ローマ字変換デフォルト設定
  (括弧内のものは、カタカナモードの時に限り適用される変換を示す。)
  
+.nf
  A       あ      KA      か      SA      さ      TA    た
  I       い      KI      き      SI      し      TI    ち
  U       う      KU      く      SU      す      TU    つ
@@ -145,28 +146,31 @@ uum(1) 起動時に解釈され、ローマ字変換用の設定を行う。
  N       ん
  N'      ん
  
- XA      ぁ      \A      ぁ      XYA     ゃ      \YA   ゃ
- XI      ぃ      \I      ぃ
- XU      ぅ      \U      ぅ      XYU     ゅ      \YU   ゅ
- XE      ぇ      \E      ぇ
- XO      ぉ      \O      ぉ      XYO     ょ      \YO   ょ
+ XA      ぁ      \eA      ぁ      XYA     ゃ      \eYA   ゃ
+ XI      ぃ      \eI      ぃ
+ XU      ぅ      \eU      ぅ      XYU     ゅ      \eYU   ゅ
+ XE      ぇ      \eE      ぇ
+ XO      ぉ      \eO      ぉ      XYO     ょ      \eYO   ょ
 
- XTU     っ      \TU     っ      XTI     てぃ    XWI   うぃ
- XTSU    っ      \TSU    っ      XDI     でぃ    XWE   うぇ
- XWA     ゎ      \WA     ゎ      XDU     どぅ    XWO   うぉ
- XKA   ( ヵ )    \KA   ( ヵ )    XDE     でぇ
- XKE   ( ヶ )    \KE   ( ヶ )    XDO     どぉ
+ XTU     っ      \eTU     っ      XTI     てぃ    XWI   うぃ
+ XTSU    っ      \eTSU    っ      XDI     でぃ    XWE   うぇ
+ XWA     ゎ      \eWA     ゎ      XDU     どぅ    XWO   うぉ
+ XKA   ( ヵ )    \eKA   ( ヵ )    XDE     でぇ
+ XKE   ( ヶ )    \eKE   ( ヶ )    XDO     どぉ
  
  -       ー      /       ・      Z.      …
  ,       、      [       「      Z-      〜
  .       。      ]       」
+.fi
  
  母音の次に長音がきた場合、次のように確定する。
+.nf
  A^      ああ    A~      ああ
  I^      いい    I~      いい
  U^      うう    U~      うう
  E^      えい    E~      えい
  O^      おう    O~      おう
+.fi
  
  M の次に B M P のいずれかがきた場合、M を"ん"に確定する。
 
