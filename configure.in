@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.49 2007-06-23 16:34:16 aonoto Exp $
+dnl   $Id: configure.in,v 1.50 2010-02-22 17:06:54 aonoto Exp $
 dnl
 
 dnl
@@ -11,7 +11,8 @@ dnl                 1987, 1988, 1989, 1990, 1991, 1992
 dnl Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 dnl Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
 dnl Copyright FreeWnn Project
-dnl                 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007
+dnl                 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+dnl                 2010
 dnl 
 dnl Maintainer:  FreeWnn Project
 dnl 
@@ -313,16 +314,6 @@ case $host in
 *-*-linux*)
     CCOPTIONS="-Dlinux -D_GNU_SOURCE -D_POSIX_SOURCE -D_BSD_SOURCE"
     ;;
-*-*-darwin*)
-    if test $GCC = yes; then
-      # Unfortunately, autoconf (at least 2.57) does not recognize
-      # proper CPP. (Normal cpp-precomp nor auto-retrying in basic mode does
-      # not work with pubdic+ processing.) So define here ....
-      # Note: It seems gcc-3.3 (or (probably) later) does not need this.
-      CPP=${CPP:-"$CC -E -no-cpp-precomp"}
-    fi
-    # Don't care other CC-s.
-    ;;
 *-*-sunos*)
       if test $GCC = yes; then
 	CCOPTIONS="-Dsun -Dsparc"
@@ -335,6 +326,7 @@ case $host in
       if test $GCC = yes; then
         CCOPTIONS="-Dsun -D`uname -p` -DSVR4 -DSYSV"
       else
+        # TODO: need change for sparcv9 / x64 architecture ...
         CCOPTIONS="-Xc -xF -xcg92 -Dsun -D`uname -p` -DSVR4 -DSYSV"
       fi
     ;;
@@ -383,6 +375,17 @@ dnl 「CPP=${CPP:-"/usr/ccs/lib/cpp"}」のごとくユーザの意志を尊重した方が
 dnl よいと思われる。
 AC_PROG_CPP
 
+dnl Define cpp for text processing.
+AC_MSG_CHECKING([cpp for text processing])
+if test "$GCC" = "yes" -a "$CPP" = "$CC -E"; then
+  # Need checking your gcc accepts '-traditional-cpp' option?
+  FZK_PP=${FZK_PP:-"$CPP -traditional-cpp"}
+else
+  FZK_PP=${FZK_PP:-"$CPP"}
+fi
+AC_MSG_RESULT($FZK_PP)
+AC_SUBST(FZK_PP)
+
 dnl
 dnl Checks for programs.
 dnl
@@ -403,7 +406,7 @@ dnl ### AC_CHECK_LIB(curses, main)
 AC_SEARCH_LIBS(crypt, crypt)
 AC_CHECK_LIB(socket, connect)
 AC_CHECK_LIB(bind, getservbyname)
-AC_CHECK_LIB(nsl, gethostbyname)
+AC_SEARCH_LIBS(gethostbyname, nsl)
 dnl libutil only needed by uum w/openpty...
 dnl FIXME: deals with Linux that have both ptsname & openpty
 AC_CHECK_LIB(util, openpty)
