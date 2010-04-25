@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.50 2010-02-22 17:06:54 aonoto Exp $
+dnl   $Id: configure.in,v 1.51 2010-04-25 10:38:55 aonoto Exp $
 dnl
 
 dnl
@@ -314,6 +314,10 @@ case $host in
 *-*-linux*)
     CCOPTIONS="-Dlinux -D_GNU_SOURCE -D_POSIX_SOURCE -D_BSD_SOURCE"
     ;;
+*-*-*-gnu)
+    # Non-Linux kernel with GNU libc.
+    CCOPTIONS="-D_GNU_SOURCE"
+    ;;
 *-*-sunos*)
       if test $GCC = yes; then
 	CCOPTIONS="-Dsun -Dsparc"
@@ -497,6 +501,7 @@ LIBS=${olibs}
 AC_SUBST(TERMLIB)
 AC_SUBST(CNVFILE_SUBDIR)
 
+dnl
 dnl Checks for typedefs, structures, and compiler characteristics.
 dnl
 AC_TYPE_MODE_T
@@ -674,8 +679,6 @@ fi
 AC_SUBST(INSTUUMFLAGS)
 AC_SUBST(UUMOWNER)
 AC_SUBST(UUMGROUP)
-
-dnl
 
 dnl
 dnl File Existence
