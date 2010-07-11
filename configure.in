@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.51 2010-04-25 10:38:55 aonoto Exp $
+dnl   $Id: configure.in,v 1.52 2010-07-11 10:18:16 aonoto Exp $
 dnl
 
 dnl
@@ -50,6 +50,9 @@ dnl ====================================================================
 tagnames=
 
 AC_CANONICAL_HOST
+
+dnl
+AC_ARG_PROGRAM
 
 dnl build and install libraries, server or client
 
@@ -300,6 +303,67 @@ AC_SUBST(unsafe_path)
 if test ${unsafe_path} = true; then
 	AC_DEFINE(WNN_ALLOW_UNSAFE_PATH, 1,
 		[Define to allow writing to other than JSERVERDIR.])
+fi
+
+dnl
+dnl Install layout controlling
+dnl
+AC_ARG_ENABLE(traditional-layout,
+[  --enable-traditional-layout Install files in traditional directories [[default=yes]]],
+[case "${enableval}" in
+   yes) trad_layout=true ;;
+   no)  trad_layout=false ;;
+   *)   AC_MSG_ERROR([bad value for --enable-traditional-layout]) ;;
+esac], trad_layout=true)
+
+if test $trad_layout = "true"; then
+  WNNSBINDIR="\$(bindir)"
+  # More path settings will come later ...
+else
+  WNNSBINDIR="\$(sbindir)"
+  # Same as above.
+fi
+AC_SUBST(WNNSBINDIR)
+dnl Same as above.
+
+AC_ARG_ENABLE(sub-bindir,
+[  --enable-sub-bindir         Install executables to (ex.) $(bindir)/Wnn4 [[default=yes if --enable-traditional-layout, no otherwise]]],
+[case "${enableval}" in
+   yes) sub_bindir=true ;;
+   no)  sub_bindir=false ;;
+   *)   AC_MSG_ERROR([bad value for --enable-sub-bindir]) ;;
+esac], sub_bindir=guess)
+
+if test $sub_bindir = "guess"; then
+  if test $trad_layout = "true"; then
+    sub_bindir=true
+  else
+    sub_bindir=false
+  fi
+fi
+if test $sub_bindir = "true"; then
+  if_enable_sub_bindir=' '
+  if_disable_sub_bindir='#'
+else
+  if_enable_sub_bindir='#'
+  if_disable_sub_bindir=' '
+fi
+AC_SUBST(if_enable_sub_bindir)
+AC_SUBST(if_disable_sub_bindir)
+
+# for debug
+AC_MSG_CHECKING([if we use traditional layout])
+if test $trad_layout = "true"; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+fi
+
+AC_MSG_CHECKING([if we install binaries on \$(bindir)/Wnn4 (etc.)])
+if test $sub_bindir = "true"; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
 fi
 
 dnl
