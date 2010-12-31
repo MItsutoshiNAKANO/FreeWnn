@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.52 2010-07-11 10:18:16 aonoto Exp $
+dnl   $Id: configure.in,v 1.53 2010-12-31 14:40:51 aonoto Exp $
 dnl
 
 dnl
@@ -468,8 +468,6 @@ AC_SUBST(LIBTOOL_DEPS)
 dnl Checks for libraries.
 dnl ### dnl Replace `main' with a function in -lX11:
 dnl ### AC_CHECK_LIB(X11, main)
-dnl ### dnl Replace `main' with a function in -lcurses:
-dnl ### AC_CHECK_LIB(curses, main)
 
 AC_SEARCH_LIBS(crypt, crypt)
 AC_CHECK_LIB(socket, connect)
@@ -482,7 +480,7 @@ AC_CHECK_LIB(util, openpty)
 dnl
 dnl Checks for header files.
 dnl
-AC_PATH_X
+dnl disabled for now ...: dnl AC_PATH_X
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_HEADER_TIME
