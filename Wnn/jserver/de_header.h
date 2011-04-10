@@ -1,5 +1,5 @@
 /*
- *  $Id: de_header.h,v 1.21 2010-12-23 17:17:43 aonoto Exp $
+ *  $Id: de_header.h,v 1.22 2011-04-10 16:51:16 aonoto Exp $
  */
 
 /*
@@ -10,7 +10,8 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2001, 2002, 2003, 2004, 2010
+ * Copyright FreeWnn Project
+ *                 1999, 2000, 2001, 2002, 2003, 2004, 2010, 2011
  *
  * Maintainer:  FreeWnn Project
  *
@@ -218,13 +219,13 @@ extern int b_index_add (struct JT *jt, w_char *yomi, int serial);
 extern void b_index_delete (struct JT *jt, int serial);
 #endif
 /* bnsetu_kai.c */
-extern int sbn_kai ();
-extern int j_max ();
-extern int getgiji ();
-extern int is_g_eisuu ();
-extern int getgiji_f ();
-extern int check_bar_katakana ();
-extern int kan_ckvt ();
+extern int sbn_kai (int, int, int, int, struct SYO_BNSETSU **, int, struct SYO_BNSETSU *);
+extern int j_max (struct ICHBNP *, int);
+extern int getgiji (int, int, struct SYO_BNSETSU *, struct ICHBNP *, int, int);
+extern int is_g_eisuu (w_char);
+extern int getgiji_f (int,  struct SYO_BNSETSU *);
+extern int check_bar_katakana (int, int);
+extern int kan_ckvt (unsigned short, int);
 /* daibn_kai.c */
 extern int dbn_kai ();
 extern int get_status ();
