@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.12 2010-07-11 10:18:17 aonoto Exp $
+#   $Id: Makefile.in,v 1.13 2011-04-17 16:29:50 aonoto Exp $
 #
 
 #
@@ -10,7 +10,7 @@
 #                 1987, 1988, 1989, 1990, 1991, 1992
 # Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
 # Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
-# Copyright FreeWnn Project 1999, 2000, 2001, 2004, 2010
+# Copyright FreeWnn Project 1999, 2000, 2001, 2004, 2010, 2011
 # 
 # Maintainer:  FreeWnn Project
 # 
@@ -37,7 +37,7 @@ INSTALL         = @INSTALL@ $(INSTALLFLAGS)
 LT_INSTALL      = $(LIBTOOL) --mode=install $(INSTALL)
 LT_LD           = $(LIBTOOL) --mode=link $(CCLINK)
 
-       INCLUDES = -I$(KWNNINCLUDESRC) -I$(top_builddir)
+       INCLUDES = -I$(top_builddir) @EXTKWNNJINC@ -I$(KWNNINCLUDESRC)
         DEFINES = $(KWNNDEFINES) $(KWNNLANGDEF)
 LOCAL_INSTFLAGS = -o $(WNNOWNER)
     HINSIDEFINE = -DHINSIDATA_FILE=\"/$(KWNNLANG)/hinsi.data\"

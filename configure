@@ -1035,14 +1035,14 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-libwnn             use installed Wnn library [default=no]
-  --with-wnn-includes=DIR   WNN include files are in DIR
-  --with-wnn-libraries=DIR  Search for WNN libraries in DIR [default=/usr/local/lib]
+  --with-wnn-includes=DIR   Installed Wnn include files are in DIR
+  --with-wnn-libraries=DIR  Search for Wnn libraries in DIR [default=/usr/local/lib]
   --with-libcwnn            use installed cWnn library [default=no]
-  --with-cwnn-includes=DIR  CWNN include files are in DIR
-  --with-cwnn-libraries=DIR Search for CWNN libraries in DIR [default=/usr/local/lib]
+  --with-cwnn-includes=DIR  Installed cWnn include files are in DIR
+  --with-cwnn-libraries=DIR Search for cWnn libraries in DIR [default=/usr/local/lib]
   --with-libkwnn            use installed kWnn library [default=no]
-  --with-kwnn-includes=DIR  KWNN include files are in DIR
-  --with-kwnn-libraries=DIR Search for KWNN libraries in DIR [default=/usr/local/lib]
+  --with-kwnn-includes=DIR  Installed kWnn include files are in DIR
+  --with-kwnn-libraries=DIR Search for kWnn libraries in DIR [default=/usr/local/lib]
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-pic              try to use only PIC/non-PIC objects [default=use
                           both]
@@ -1708,11 +1708,13 @@ fi;
 
 
 
-
 # Check whether --with-libwnn or --without-libwnn was given.
 if test "${with_libwnn+set}" = set; then
   withval="$with_libwnn"
     with_libwnn="${withval}"
+else
+  with_libwnn=no
+fi;
 
 # Check whether --with-wnn-includes or --without-wnn-includes was given.
 if test "${with_wnn_includes+set}" = set; then
@@ -1729,22 +1731,28 @@ if test "${with_wnn_libraries+set}" = set; then
 else
   wnnlibdir='/usr/local/lib'
 fi;
-	if test "X${with_libwnn}" = X-lwnn; then
-		WNNJLIB="-L${wnnlibdir} -lwnn"
-	elif test X"`echo ${with_libwnn} | grep '^/.*'`" != X ; then
-		WNNJLIB="${with_libwnn}"
-	else
-		WNNJLIB="${wnnlibdir}/libwnn.a"
-	fi
-	DEPWNNJLIB=""
-	HINSI_DATA="\$(JWNNWNNDIR)/hinsi.data"
 
+if test X${with_libwnn} != Xno; then
+	case X${with_libwnn} in
+	Xyes | X-lwnn)
+		WNNJLIB="-L${wnnlibdir} -lwnn" ;;
+	X/*)
+		WNNJLIB="${wnnlibdir}/libwnn.a" ;;
+	*)
+		# Honor specified value --with-libwnn
+		# (maybe wrong in most cases)
+		WNNJLIB="${with_libwnn}" ;;
+	esac
+	DEPWNNJLIB=""
+		HINSI_DATA="\$(JWNNWNNDIR)/hinsi.data"
+	EXTWNNJINC=${wnnincludedir}
 else
-  	WNNJLIB="\$(top_builddir)/Wnn/jlib/libwnn.la"
+	WNNJLIB="\$(top_builddir)/Wnn/jlib/libwnn.la"
 	DEPWNNJLIB="\$(WNNJLIB)"
 	HINSI_DATA="\$(top_builddir)/Wnn/jd/hinsi.data"
+	EXTWNNJINC=""
+fi
 
-fi;
 
 
 
@@ -1753,7 +1761,10 @@ fi;
 # Check whether --with-libcwnn or --without-libcwnn was given.
 if test "${with_libcwnn+set}" = set; then
   withval="$with_libcwnn"
-
+    with_libcwnn="${withval}"
+else
+  with_libcwnn=no
+fi;
 
 # Check whether --with-cwnn-includes or --without-cwnn-includes was given.
 if test "${with_cwnn_includes+set}" = set; then
@@ -1770,24 +1781,30 @@ if test "${with_cwnn_libraries+set}" = set; then
 else
   cwnnlibdir='/usr/local/lib'
 fi;
-	if test "X${with_libcwnn}" = X-lcwnn; then
-		CWNNJLIB="-L${cwnnlibdir} -lcwnn"
-	elif test X"`echo ${with_libcwnn} | grep '^/.*'`" != X ; then
-		CWNNJLIB="${with_libcwnn}"
-	else
-		CWNNJLIB="${cwnnlibdir}/libcwnn.a"
-	fi
-	DEPCWNNJLIB=""
-	CHINSI_DATA="\$(CWNNWNNDIR)/cixing.data"
-	THINSI_DATA="\$(TWNNTDSRC)/cixing.data"
 
+if test X${with_libcwnn} != Xno; then
+   	case X${with_libcwnn} in
+	Xyes | X-lcwnn)
+		CWNNJLIB="-L${cwnnlibdir} -lcwnn" ;;
+	X/*)
+		CWNNJLIB="${cwnnlibdir}/libcwnn.a" ;;
+	*)
+		# Honor specified value --with-libcwnn
+		# (maybe wrong in most cases)
+		CWNNJLIB="${with_libcwnn}" ;;
+	esac
+	DEPCWNNJLIB=""
+		CHINSI_DATA="\$(CWNNWNNDIR)/cixing.data"
+	THINSI_DATA="\$(TWNNWNNDIR)/cixing.data"
+	EXTCWNNJINC=${cwnnincludedir}
 else
-  	CWNNJLIB="\$(top_builddir)/cWnn/jlib/libcwnn.la"
+	CWNNJLIB="\$(top_builddir)/cWnn/jlib/libcwnn.la"
 	DEPCWNNJLIB="\$(CWNNJLIB)"
 	CHINSI_DATA="\$(CWNNCDSRC)/cixing.data"
 	THINSI_DATA="\$(TWNNTDSRC)/cixing.data"
+	EXTCWNNJINC=""
+fi
 
-fi;
 
 
 
@@ -1797,7 +1814,10 @@ fi;
 # Check whether --with-libkwnn or --without-libkwnn was given.
 if test "${with_libkwnn+set}" = set; then
   withval="$with_libkwnn"
-
+    with_libkwnn="${withval}"
+else
+  with_libkwnn=no
+fi;
 
 # Check whether --with-kwnn-includes or --without-kwnn-includes was given.
 if test "${with_kwnn_includes+set}" = set; then
@@ -1814,22 +1834,28 @@ if test "${with_kwnn_libraries+set}" = set; then
 else
   kwnnlibdir='/usr/local/lib'
 fi;
-	if test "X${with_libkwnn}" = X-lkwnn; then
-		KWNNJLIB="-L${kwnnlibdir} -lkwnn"
-	elif test X"`echo ${with_libkwnn} | grep '^/.*'`" != X ; then
-		KWNNJLIB="${with_libkwnn}"
-	else
-		KWNNJLIB="${kwnnlibdir}/libkwnn.a"
-	fi
-	DEPKWNNJLIB=""
-	KHINSI_DATA="\$(KWNNWNNDIR)/hinsi.data"
 
+if test X${with_libkwnn} != Xno; then
+   	case X${with_libkwnn} in
+	Xyes | X-lkwnn)
+		KWNNJLIB="-L${kwnnlibdir} -lkwnn" ;;
+	X/*)
+		KWNNJLIB="${kwnnlibdir}/libkwnn.a" ;;
+	*)
+		# Honor specified value --with-libkwnn
+		# (maybe wrong in most cases)
+		KWNNJLIB="${with_libkwnn}" ;;
+	esac
+	DEPKWNNJLIB=""
+		KHINSI_DATA="\$(KWNNWNNDIR)/hinsi.data"
+	EXTKWNNJINC=${kwnnincludedir}
 else
-  	KWNNJLIB="\$(top_builddir)/kWnn/jlib/libkwnn.la"
+	KWNNJLIB="\$(top_builddir)/kWnn/jlib/libkwnn.la"
 	DEPKWNNJLIB="\$(KWNNJLIB)"
 	KHINSI_DATA="\$(KWNNKDSRC)/hinsi.data"
+	EXTKWNNJINC=""
+fi
 
-fi;
 
 
 
@@ -3666,7 +3692,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 3669 "configure"' > conftest.$ac_ext
+  echo '#line 3695 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -4782,7 +4808,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:4785:" \
+echo "$as_me:4811:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6098,11 +6124,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6101: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6127: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6105: \$? = $ac_status" >&5
+   echo "$as_me:6131: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -6388,11 +6414,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6391: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6417: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6395: \$? = $ac_status" >&5
+   echo "$as_me:6421: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -6492,11 +6518,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6495: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6521: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:6499: \$? = $ac_status" >&5
+   echo "$as_me:6525: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -8778,7 +8804,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 8781 "configure"
+#line 8807 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -8878,7 +8904,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 8881 "configure"
+#line 8907 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11265,11 +11291,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11268: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11294: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:11272: \$? = $ac_status" >&5
+   echo "$as_me:11298: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -11369,11 +11395,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11372: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11398: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:11376: \$? = $ac_status" >&5
+   echo "$as_me:11402: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12952,11 +12978,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12955: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12981: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12959: \$? = $ac_status" >&5
+   echo "$as_me:12985: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13056,11 +13082,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13059: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13085: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13063: \$? = $ac_status" >&5
+   echo "$as_me:13089: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15244,11 +15270,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15247: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15273: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15251: \$? = $ac_status" >&5
+   echo "$as_me:15277: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15534,11 +15560,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15537: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15563: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15541: \$? = $ac_status" >&5
+   echo "$as_me:15567: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15638,11 +15664,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15641: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15667: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15645: \$? = $ac_status" >&5
+   echo "$as_me:15671: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -21265,13 +21291,16 @@ s,@cWnn@,$cWnn,;t t
 s,@kWnn@,$kWnn,;t t
 s,@WNNJLIB@,$WNNJLIB,;t t
 s,@DEPWNNJLIB@,$DEPWNNJLIB,;t t
+s,@EXTWNNJINC@,$EXTWNNJINC,;t t
 s,@HINSI_DATA@,$HINSI_DATA,;t t
 s,@CWNNJLIB@,$CWNNJLIB,;t t
 s,@DEPCWNNJLIB@,$DEPCWNNJLIB,;t t
+s,@EXTCWNNJINC@,$EXTCWNNJINC,;t t
 s,@CHINSI_DATA@,$CHINSI_DATA,;t t
 s,@THINSI_DATA@,$THINSI_DATA,;t t
 s,@KWNNJLIB@,$KWNNJLIB,;t t
 s,@DEPKWNNJLIB@,$DEPKWNNJLIB,;t t
+s,@EXTKWNNJINC@,$EXTKWNNJINC,;t t
 s,@KHINSI_DATA@,$KHINSI_DATA,;t t
 s,@ipv6@,$ipv6,;t t
 s,@unsafe_path@,$unsafe_path,;t t
