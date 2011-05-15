@@ -18330,6 +18330,11 @@ LIBTOOL='$(SHELL) $(top_builddir)/libtool'
 
 
 
+# Libtool-2.4 needs more powerful shell (other than /bin/sh),
+# so we explicitly use this SHELL directly.
+LIBTOOL_MOD=`echo $LIBTOOL | sed 's,\$(SHELL),'${SHELL}','`
+
+
 
 echo "$as_me:$LINENO: checking for library containing crypt" >&5
 echo $ECHO_N "checking for library containing crypt... $ECHO_C" >&6
@@ -21346,6 +21351,7 @@ s,@FFLAGS@,$FFLAGS,;t t
 s,@ac_ct_F77@,$ac_ct_F77,;t t
 s,@LIBTOOL@,$LIBTOOL,;t t
 s,@LIBTOOL_DEPS@,$LIBTOOL_DEPS,;t t
+s,@LIBTOOL_MOD@,$LIBTOOL_MOD,;t t
 s,@TERMLIB@,$TERMLIB,;t t
 s,@CNVFILE_SUBDIR@,$CNVFILE_SUBDIR,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t

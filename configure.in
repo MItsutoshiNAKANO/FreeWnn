@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.54 2011-04-17 16:29:50 aonoto Exp $
+dnl   $Id: configure.in,v 1.55 2011-05-15 17:03:53 aonoto Exp $
 dnl
 
 dnl
@@ -483,6 +483,11 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 AC_SUBST(LIBTOOL_DEPS)
+
+# Libtool-2.4 needs more powerful shell (other than /bin/sh),
+# so we explicitly use this SHELL directly.
+LIBTOOL_MOD=`echo $LIBTOOL | sed 's,\$(SHELL),'${SHELL}','`
+AC_SUBST(LIBTOOL_MOD)
 
 dnl Checks for libraries.
 dnl ### dnl Replace `main' with a function in -lX11:
