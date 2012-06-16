@@ -1,5 +1,5 @@
 /*
- *  $Id: inspect.c,v 1.6 2012-06-12 19:18:33 aonoto Exp $
+ *  $Id: inspect.c,v 1.7 2012-06-16 10:02:04 aonoto Exp $
  */
 
 /*
@@ -213,7 +213,7 @@ sakujo_kouho1 (bun_no)
   sStrcpy (buf + strlen (buf), w_buf);
   set_escape_code (buf);
   strcat (buf, " ");
-  sprintf (buf + strlen (buf), "%s", MSG_GET (20));	/* FIXME: check buffer lenghth */
+  sprintf (buf + strlen (buf), "%s", MSG_GET (20));	/* FIXME: check buffer length */
   /*
      sprintf(buf + strlen(buf), "を削除しますか?(Y/N)");
    */
