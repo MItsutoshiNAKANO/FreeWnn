@@ -18682,7 +18682,6 @@ if test "$ac_cv_search_gethostbyname" != no; then
 
 fi
 
-
 echo "$as_me:$LINENO: checking for openpty in -lutil" >&5
 echo $ECHO_N "checking for openpty in -lutil... $ECHO_C" >&6
 if test "${ac_cv_lib_util_openpty+set}" = set; then
@@ -18739,13 +18738,10 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_util_openpty" >&5
 echo "${ECHO_T}$ac_cv_lib_util_openpty" >&6
 if test $ac_cv_lib_util_openpty = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBUTIL 1
-_ACEOF
-
-  LIBS="-lutil $LIBS"
-
+  UUM_LIBS="$UUM_LIBS -lutil"
 fi
+
+
 
 
 echo "$as_me:$LINENO: checking for ANSI C header files" >&5
@@ -21352,6 +21348,7 @@ s,@ac_ct_F77@,$ac_ct_F77,;t t
 s,@LIBTOOL@,$LIBTOOL,;t t
 s,@LIBTOOL_DEPS@,$LIBTOOL_DEPS,;t t
 s,@LIBTOOL_MOD@,$LIBTOOL_MOD,;t t
+s,@UUM_LIBS@,$UUM_LIBS,;t t
 s,@TERMLIB@,$TERMLIB,;t t
 s,@CNVFILE_SUBDIR@,$CNVFILE_SUBDIR,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
