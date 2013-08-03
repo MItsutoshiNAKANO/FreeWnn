@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.24 2009-05-31 16:35:06 aonoto Exp $
+ *  $Id: jhlp.c,v 1.25 2013-08-03 15:06:16 aonoto Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
  *                 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
- * Copyright FreeWnn Project 1999, 2000, 2002, 2003, 2006, 2009
+ * Copyright FreeWnn Project 1999, 2000, 2002, 2003, 2006, 2009, 2013
  * Copyright Canna Project 2002
  * Copyright Taketo Kabe 2003
  *
@@ -32,7 +32,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.24 2009-05-31 16:35:06 aonoto Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.25 2013-08-03 15:06:16 aonoto Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -2055,7 +2055,7 @@ open_pty_traditional (void)
  */
 #if (defined(BSD) && (BSD >= 199306))   /* 4.4BSD-Lite by Taoka */
 # define PTXNAME(b, PFX, no) \
-    sprintf ((b), PFX "%1c%1c", "pqrsPQRS"[((no) >> 5)], "0123456789abcdefghijklmnopqrstuv"[(no) & 0x1f])
+    snprintf ((b), sizeof((b)), PFX "%1c%1c", "pqrsPQRS"[((no) >> 5)], "0123456789abcdefghijklmnopqrstuv"[(no) & 0x1f])
 #elif defined(hpux)
 #  define PTXNAME(b, PFX, no) \
     sprintf ((b), PFX "%1c%1c", "zyxwvutsrqp"[(no)>>4], "fedcba9876543210"[(no)&0x0f])
@@ -2077,6 +2077,7 @@ open_pty_traditional (void)
               exit (1);
             }
 # endif /* uniosu */
+	  PTSNAME(tty_slave, ptyno);
           return;
         }
     }
