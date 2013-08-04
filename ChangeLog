@@ -3,6 +3,73 @@
   Japanese...
  */
 
+Sun,  4 Aug 2013 00:06:16  Tomoki AONO <aonoto at users.sourceforge.jp>
+
+	* Wnn/uum/jhlp.c:
+
+	- uum failed to start on traditional systems because opening
+	  tty fails. Fixed open_pty_traditional() to set tty_slave correctly.
+
+	- Changed PTXNAME macro to switch sprintf() to snprintf()
+	  on 4.4BSD (or later).
+
+Sat,  3 Aug 2013 23:56:59  Tomoki AONO <aonoto at users.sourceforge.jp>
+
+	* configure, configure.in:
+
+	- Improve libutil detection. Systems that have both ptsname() and
+	  openpty() does not need libutil, this change (probably) covers
+	  these systems. Based on patch by 1xx ([freewnn-users 133]).
+
+	- Some cosmetic fixes.
+
+Fri,  2 Aug 2013 03:43:07  Tomoki AONO <aonoto at users.sourceforge.jp>
+
+	* config.h.in, configure, configure.in, Wnn/uum/Makefile.in,
+	  cWnn/uum/Makefile.in, kWnn/uum/Makefile.in:
+
+	- libutil is (may be) used only in uum, so separate this library
+	  (if exists) from normal LIBS.
+	  Patch by 1xx (itsango at gmail.com) ([freewnn-users 126])
+	  with some modification.
+
+	- Fixed spelling in configure.in .
+
+Fri,  7 Jun 2013 03:24:38  Tomoki AONO <aonoto at users.sourceforge.jp>
+
+	* makerule.mk.in, Wnn/jlib/Makefile.in, Wnn/jlib.V3/Makefile.in,
+	  cWnn/jlib/Makefile.in, kWnn/jlib/Makefile.in:
+
+	Pass CPPFLAGS and LDFLAGS on configure / make.
+	Original suggestion by Hideki Yamane, but arranged a bit.
+	ToDo: We should separate FLAGS more cleanly.
+
+Sat, 16 Jun 2012 19:02:04  Tomoki AONO <aonoto at users.sourceforge.jp>
+
+	* Wnn/uum/inspect.c:
+
+	Fix typo in comment.
+
+Wed, 13 Jun 2012 04:18:32  Tomoki AONO <aonoto at users.sourceforge.jp>
+
+	* Wnn/: jutil/wddel.c, jutil/wdreg.c, uum/inspect.c,
+	  uum/select_ele.c:
+
+	- Quick fix for warning about format-security by gcc.
+	  Based on patch by Hideki Yamane and Makoto Fujiwara
+	  ([Freewnn-users 102]).
+	  Replacing from sprintf() to snprintf() or strncat() would be better.
+	- (Wnn/jutil/wddel.c) Change (fix?) type of Com[] to w_char
+	  in code for 'wddel -C' mode. I think I'm doing right, but not tested.
+	- Strip old mail address (as usual).
+
+Sat, 24 Sep 2011 02:49:35  Tomoki AONO <aonoto at users.sourceforge.jp>
+
+	* ChangeLog, ChangeLog.en:
+
+	Update ChangeLog . Japanese translation (of some commit entry)
+	will come later.
+
 Mon, 16 May 2011 02:03:53  Tomoki AONO <aonoto at users.sourceforge.jp>
 
 	* configure, configure.in, makerule.mk.in:
@@ -150,7 +217,7 @@ Tue,  5 Jan 2010 01:59:40  Tomoki AONO <aonoto at users.sourceforge.jp>
 
 	* Wnn/: man/2.env/wnn/2b_romkan.man, manual/2.env/wnn/2b_romkana:
 
-	- Change '\' to '\e' to correctly format backspace in man file.
+	- Change '\' to '\e' to correctly format backslash in man file.
 	  (Also change formatted text file.) It should reduce Debian lintian
 	  warning.
 
