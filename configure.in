@@ -1,5 +1,5 @@
 dnl
-dnl   $Id: configure.in,v 1.57 2013-08-03 14:56:59 aonoto Exp $
+dnl   $Id: configure.in,v 1.58 2013-08-04 18:45:01 aonoto Exp $
 dnl
 
 dnl
@@ -34,7 +34,7 @@ dnl
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_INIT(FreeWnn, [1.1.1-cvs-a022], [freewnn-users-owner@lists.sourceforge.jp], FreeWnn)
+AC_INIT(FreeWnn, [1.1.1-a022], [freewnn-users-owner@lists.sourceforge.jp], FreeWnn)
 AC_CONFIG_SRCDIR(Wnn/conv/cvt_head.h)
 dnl old-style AC_INIT ...
 dnl AC_INIT(Wnn/conv/cvt_head.h)

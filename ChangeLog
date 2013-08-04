@@ -3,6 +3,26 @@
   Japanese...
  */
 
+Mon,  5 Aug 2013 03:50:00  Tomoki AONO <aonoto at users.sourceforge.jp>
+
+	Update ChangeLog entry and version string. Added 1.1.1-a022 tag.
+
+Mon,  5 Aug 2013 02:34:00  Tomoki AONO <aonoto at users.sourceforge.jp>
+
+	* ChangeLog, ChangeLog.en, PubdicPlus/pubdic.p:
+
+	ChangeLog, ChangLog.en:
+	- ChangeLogエントリを追記。
+	- Fixed some typo ('backspace' to 'backslash') in
+	  Tue,  5 Jan 2010 01:59:40.
+
+	PubdicPlus/pubdic.p:
+
+	- 自分にとっては「ひろかず」が「小林」と変換されるのはおかしいと
+	  判断したためこの組み合わせを削除した。2ch FreeWnnスレッドの
+	  投稿での指摘による。
+	  (http://toro.2ch.net/test/read.cgi/unix/1084551838/458)
+
 Sun,  4 Aug 2013 00:06:16  Tomoki AONO <aonoto at users.sourceforge.jp>
 
 	* Wnn/uum/jhlp.c:
