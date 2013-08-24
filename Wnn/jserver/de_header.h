@@ -1,5 +1,5 @@
 /*
- *  $Id: de_header.h,v 1.22 2011-04-10 16:51:16 aonoto Exp $
+ *  $Id: de_header.h,v 1.23 2013-08-24 14:24:31 aonoto Exp $
  */
 
 /*
@@ -11,7 +11,7 @@
  * Copyright OMRON Corporation. 1987, 1988, 1989, 1990, 1991, 1992, 1999
  * Copyright ASTEC, Inc. 1987, 1988, 1989, 1990, 1991, 1992
  * Copyright FreeWnn Project
- *                 1999, 2000, 2001, 2002, 2003, 2004, 2010, 2011
+ *                 1999, 2000, 2001, 2002, 2003, 2004, 2010, 2011, 2013
  *
  * Maintainer:  FreeWnn Project
  *
@@ -181,7 +181,7 @@ struct wnn_file
 /*
         external variables of daemon
 */
-GLOBAL char SER_VERSION[] GLOBAL_VAL(_SERVER_VERSION);
+GLOBAL char SER_VERSION[] GLOBAL_VAL(PACKAGE_STRING);
 
 GLOBAL CLIENT *client;
 GLOBAL int max_client GLOBAL_VAL(CL_MAX);
