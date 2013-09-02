@@ -1,5 +1,5 @@
 /*
- *  $Id: jhlp.c,v 1.25 2013-08-03 15:06:16 aonoto Exp $
+ *  $Id: jhlp.c,v 1.26 2013-09-02 11:01:40 itisango Exp $
  */
 
 /*
@@ -32,7 +32,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: jhlp.c,v 1.25 2013-08-03 15:06:16 aonoto Exp $";
+static char *rcs_id = "$Id: jhlp.c,v 1.26 2013-09-02 11:01:40 itisango Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -141,6 +141,8 @@ static char *rcs_id = "$Id: jhlp.c,v 1.25 2013-08-03 15:06:16 aonoto Exp $";
 #include <sys/eucioctl.h>
 #endif /* SVR4 */
 
+#include "etc.h"
+
 #define ERROR -1
 
 jmp_buf kk_env;
@@ -162,7 +164,7 @@ int need_utmp_clear = 0;
 
 static void save_signals (void);
 static void restore_signals (void);
-static RETSIGTYPE terminate_handler (void);
+static RETSIGTYPE terminate_handler (int);
 static void do_end (void);
 static void open_pty (void);
 static void open_pty_traditional (void);
@@ -412,7 +414,7 @@ main (int argc, char **argv)
   switch (init_uum ())
     {                           /* initialize of kana-kanji henkan */
     case -1:
-      terminate_handler ();
+      terminate_handler (-1);
       break;
     case -2:
       epilogue ();
@@ -1109,7 +1111,7 @@ j_term_p_init (int ttypfd)
 
 /** signal SIGCHLD を受けた後の処理をする。*/
 RETSIGTYPE
-chld_handler (void)
+chld_handler (int sig)
 {
 #ifdef HAVE_WAIT3
 #ifdef HAVE_UNION_WAIT
@@ -1168,7 +1170,7 @@ chld_handler (void)
 
 /** signal SIGTERM を受けた時の処理をする。*/
 static RETSIGTYPE
-terminate_handler (void)
+terminate_handler (int sig)
 {
   signal (SIGCHLD, SIG_IGN);
   epilogue_no_close ();
@@ -1182,7 +1184,7 @@ terminate_handler (void)
 
 #ifdef  SIGWINCH
 RETSIGTYPE
-resize_handler (void)
+resize_handler (int sig)
 {
   re_signal (SIGWINCH, resize_handler);
   change_size ();

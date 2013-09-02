@@ -1,5 +1,5 @@
 /*
- *  $Id: dic_head.c,v 1.5 2004-07-19 18:24:26 hiroo Exp $
+ *  $Id: dic_head.c,v 1.6 2013-09-02 11:01:39 itisango Exp $
  */
 
 /*
@@ -35,7 +35,10 @@
 #include "jh.h"
 #include "jdata.h"
 
-extern int create_file_header (), output_header_jt (), input_file_header (), input_header_jt (), input_header_hjt ();
+#include "jutil.h"
+#include "etc.h"
+
+/* extern int create_file_header (), output_header_jt (), input_file_header (), input_header_jt (), input_header_hjt ();  */
 
 int
 output_header (FILE* ofpter, struct JT* jtp, struct wnn_file_head* fhp)

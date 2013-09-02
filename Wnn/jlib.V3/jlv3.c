@@ -1,5 +1,5 @@
 /*
- *  $Id: jlv3.c,v 1.9 2002-07-14 04:26:57 hiroo Exp $
+ *  $Id: jlv3.c,v 1.10 2013-09-02 11:01:39 itisango Exp $
  */
 
 /*
@@ -152,8 +152,8 @@ jd_close (void)
   return (0);
 }
 
-int jd_begin ();
-static int henkan_rcv ();
+int jd_begin FRWNN_PARAMS((w_char *, int));
+static int henkan_rcv FRWNN_PARAMS((int, w_char *, int));
 
 /**     jd_reconv       **/
 int
@@ -355,7 +355,7 @@ jd_dicadd (fn, fn1, prio, hrdonly)
            /* READ ONLY SD && hind file is none */
              (js_access (jl_env (buf), fn, 4) != -1) && (js_access (jl_env (buf), fn1, 4) == -1))
     {
-      if ((dic_no = jl_dic_add (buf, fn, fn1, WNN_DIC_ADD_NOR, prio, WNN_DIC_RDONLY, WNN_DIC_RW, NULL, NULL, WNN_CREATE, NULL)) < 0)
+      if ((dic_no = jl_dic_add (buf, fn, fn1, WNN_DIC_ADD_NOR, prio, WNN_DIC_RDONLY, WNN_DIC_RW, NULL, NULL, (int (*) (const char *))WNN_CREATE, NULL)) < 0)
         return (-1);
       if (jl_dic_delete (buf, dic_no) < 0)
         return (-1);
@@ -365,7 +365,7 @@ jd_dicadd (fn, fn1, prio, hrdonly)
     {
       rdonly = WNN_DIC_RDONLY;
     }
-  if ((dic_no = jl_dic_add (buf, fn, fn1, WNN_DIC_ADD_NOR, prio, rdonly, hrdonly, NULL, NULL, WNN_CREATE, NULL)) < 0)
+  if ((dic_no = jl_dic_add (buf, fn, fn1, WNN_DIC_ADD_NOR, prio, rdonly, hrdonly, NULL, NULL, (int (*) (const char *))WNN_CREATE, NULL)) < 0)
     /*   pw_d  pw_h  err   mes */
     return (-1);
   if (js_dic_info (jl_env (buf), dic_no, &ret) < 0)
@@ -457,7 +457,7 @@ jd_wdel (ser_no, yomi)
   JD_WNN_DEAD return (jl_word_delete (buf, current_ud, ser_no));
 }
 
-static int oldh_to_newh ();
+static int oldh_to_newh FRWNN_PARAMS((int, unsigned short **));
 
 /**     jd_wreg         **/
 int
@@ -487,7 +487,7 @@ jd_wreg (kanji, yomi, bunpo)
 #endif
 }
 
-static int newh_to_oldh ();
+static int newh_to_oldh FRWNN_PARAMS((unsigned short));
 
 /**     jd_wsch         **/
 int

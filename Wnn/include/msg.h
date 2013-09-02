@@ -1,5 +1,5 @@
 /*
- *  $Id: msg.h,v 1.5 2005-04-10 15:26:37 aonoto Exp $
+ *  $Id: msg.h,v 1.6 2013-09-02 11:01:39 itisango Exp $
  */
 
 /*
@@ -64,8 +64,14 @@ struct msg_cat
 */
 #define DEF_LANG "ja_JP"
 
-extern struct msg_cat *msg_open ();
-extern char *msg_get ();
-extern void msg_close ();
+#if __STDC__
+#define FRWNN_PARAMS(paramlist)	paramlist
+#else
+#define FRWNN_PARAMS(paramlist)	()
+#endif
+
+extern struct msg_cat *msg_open FRWNN_PARAMS((char *, char *, const char *));
+extern char *msg_get FRWNN_PARAMS((struct msg_cat *, int id, char *, register char *lang));
+extern void msg_close FRWNN_PARAMS((register struct msg_cat *));
 
 #endif  /* WNN_MSG_H */

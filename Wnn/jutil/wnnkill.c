@@ -1,5 +1,5 @@
 /*
- *  $Id: wnnkill.c,v 1.10 2005-01-30 17:14:20 aonoto Exp $
+ *  $Id: wnnkill.c,v 1.11 2013-09-02 11:01:39 itisango Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
  */
 
 #ifndef lint
-static char *rcs_id = "$Id: wnnkill.c,v 1.10 2005-01-30 17:14:20 aonoto Exp $";
+static char *rcs_id = "$Id: wnnkill.c,v 1.11 2013-09-02 11:01:39 itisango Exp $";
 #endif /* lint */
 
 #ifdef HAVE_CONFIG_H
@@ -54,6 +54,9 @@ static char *rcs_id = "$Id: wnnkill.c,v 1.10 2005-01-30 17:14:20 aonoto Exp $";
 #include "commonhd.h"
 #include "wnn_config.h"
 #include "wnn_os.h"
+
+#include "jlib_hide.h"
+#include "etc.h"
 
 WNN_JSERVER_ID *js;
 struct wnn_ret_buf rb = { 0, NULL };
