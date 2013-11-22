@@ -1,5 +1,5 @@
 #
-#   $Id: Makefile.in,v 1.8 2013-11-08 18:54:44 aonoto Exp $
+#   $Id: Makefile.in,v 1.9 2013-11-22 10:53:01 aonoto Exp $
 #
 
 #
@@ -47,7 +47,7 @@ LINKS = Version bio.hd chimei.hd computer.hd fzk.attr fzk.con fzk.fzkattr fzk.ji
 
 WNNDICS = bio.u chimei.u computer.u jinmei.u kihon.u koyuu.u setsuji.u symbol.u tankan.u
 
-FZK_SRC=          fzk.master-.c          fzk.attr          fzk.jirattr          fzk.fzkattr          fzk.jircon          fzk.con          fzk.shuutan
+FZK_SRC=          fzk.master          fzk.attr          fzk.jirattr          fzk.fzkattr          fzk.jircon          fzk.con          fzk.shuutan
 
 DIC= 	bio.dic 	chimei.dic 	computer.dic 	jinmei.dic 	kihon.dic 	koyuu.dic 	setsuji.dic 	special.dic 	symbol.dic 	tankan.dic
 
@@ -325,13 +325,13 @@ fzk.master-.c: fzk.master
 	$(RM) $@
 	$(LN) $? $@
 
-std.fsrc: $(FZK_SRC)
+std.fsrc: fzk.master-.c $(FZK_SRC)
 	$(FZK_PP) fzk.master-.c > $@
 
-full.fsrc: $(FZK_SRC)
+full.fsrc: fzk.master-.c $(FZK_SRC)
 	$(FZK_PP) -DKANSAI fzk.master-.c > $@
 
-kougo.fsrc: $(FZK_SRC)
+kougo.fsrc: fzk.master-.c $(FZK_SRC)
 	$(FZK_PP) -DKOUGO fzk.master-.c > $@
 
 # additional rule from PubdicPlus/Makefile.in : by aono
